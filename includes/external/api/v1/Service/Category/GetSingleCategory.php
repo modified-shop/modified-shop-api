@@ -1,0 +1,67 @@
+<?php
+/* -----------------------------------------------------------------------------------------
+   $Id$
+
+   modified eCommerce Shopsoftware
+   http://www.modified-shop.org
+
+   Copyright (c) 2009 - 2021 [www.modified-shop.org]
+   -----------------------------------------------------------------------------------------
+   Released under the GNU General Public License
+   ---------------------------------------------------------------------------------------*/
+
+  namespace api\v1\Service\Category;
+
+  use api\v1\Action\CategoryAction;
+  use api\v1\Utility\Responder;
+  use Psr\Http\Message\ResponseInterface;
+  use Psr\Http\Message\ServerRequestInterface;
+
+  /**
+   * Action
+   */
+  final class GetSingleCategory
+  {
+      /**
+       * @var CategoryAction
+       */
+      private $categoryAction;
+
+      /**
+       * @var Responder
+       */
+      private $responder;
+
+      /**
+       * The constructor.
+       *
+       * @param CategoryAction $categoryAction The customer reader
+       * @param Responder $responder The responder
+       */
+      public function __construct(CategoryAction $categoryAction, Responder $responder)
+      {
+          $this->categoryAction = $categoryAction;
+          $this->responder = $responder;
+      }
+
+      /**
+       * Invoke.
+       *
+       * @param ServerRequestInterface $request The request
+       * @param ResponseInterface $response The response
+       * @param array<mixed> $args The route arguments
+       *
+       * @return ResponseInterface The response
+       */
+      public function __invoke(
+          ServerRequestInterface $request,
+          ResponseInterface $response,
+          array $args
+      ): ResponseInterface {
+          $categoryId = (int)$args['id'];
+
+          $result = $this->categoryAction->GetSingleCategory($categoryId);
+
+          return $this->responder->withJson($response, $result);
+      }
+  }
