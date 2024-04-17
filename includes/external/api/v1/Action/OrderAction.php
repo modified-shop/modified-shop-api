@@ -51,7 +51,7 @@
               throw new Exception(sprintf('Order not found: %s', $orderId));
           }
           
-          $order->info['transaction_id'] = $this->getTrasactionID($order->info['orders_id'], $order->info['payment_method']);
+          $order->info['transaction_id'] = $this->getTransactionID($order->info['orders_id'], $order->info['payment_method']);
           
           $result = [
             'info' => $order->info,
@@ -358,7 +358,7 @@
        *
        * @return string
        */
-      private function getTrasactionID(int $orderId, string $payment_method): string
+      private function getTransactionID(int $orderId, string $payment_method): string
       {
           $transaction_id = '';
 
