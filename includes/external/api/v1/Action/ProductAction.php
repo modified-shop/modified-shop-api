@@ -354,7 +354,243 @@
     
           return $string;  
       }
+	  /**
+	   * Insert a product by the given options.
+	   *
+	   * @param mixed[] $options
+	   *
+	   * @throws Exception
+	   *
+	   * @return array The product data
+	   */
+	  public function InsertProduct(array $options): array
+	  {
+		  /* Store passed in options overwriting any defaults */
+		  $this->hydrate($options);
 
+		  if (isset($this->options[TABLE_PRODUCTS])) {
+			  $products = $this->InsertUpdateProduct(0, $this->options[TABLE_PRODUCTS]);
+			  $productId = $products['products_id'];
+		  }
+
+		  if (!isset($productId)) {
+			  throw new Exception('Product ID required');
+		  } else {
+			  if (isset($this->options[TABLE_PRODUCTS_DESCRIPTION])) {
+				  $products_description = $this->InsertUpdateDescription($productId, $this->options[TABLE_PRODUCTS_DESCRIPTION]);
+			  }
+		  }
+
+		  return $this->GetSingleProduct($productId);
+	  }
+	  /**
+	   * Read a product by the given product id.
+	   *
+	   * @param int $productId The product id
+	   *
+	   * @throws Exception
+	   *
+	   * @return array The product data
+	   */
+	  public function GetSingleProduct(int $productId): array
+	  {
+		  // Input validation
+		  if (empty($productId)) {
+			  throw new Exception('Product ID required');
+		  }
+
+		  $result = [
+			  'products' => $this->getProduct($productId),
+			  'products_description' => $this->getProductDescription($productId),
+		  ];
+
+		  return $result;
+	  }
+
+	  /**
+	   * Read a Product by the given Product id.
+	   *
+	   * @param int $ProductId The Product id
+	   *
+	   * @throws Exception
+	   *
+	   * @return array The Product data
+	   */
+	  public function GetProduct(int $ProductId): array
+	  {
+		  // Input validation
+		  if (empty($ProductId)) {
+			  throw new Exception('Product ID required');
+		  }
+
+		  $Product_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_PRODUCTS."
+                                          WHERE products_id = '".(int)$ProductId."'");
+		  if (xtc_db_num_rows($Product_query) < 1) {
+			  throw new Exception(sprintf('Product not found: %s', $ProductId));
+		  } else {
+			  $Product = xtc_db_fetch_array($Product_query);
+		  }
+
+		  $result = $this->encode_request($Product);
+		  return $result;
+	  }
+
+	  /**
+	   * Read a product description by the given product id.
+	   *
+	   * @param int $productId The product id
+	   *
+	   * @throws Exception
+	   *
+	   * @return array The product data
+	   */
+	  public function GetProductDescription(int $productId): array
+	  {
+		  // Input validation
+		  if (empty($productId)) {
+			  throw new Exception('Product ID required');
+		  }
+
+		  $product_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_PRODUCTS_DESCRIPTION."
+                                          WHERE products_id = '".(int)$productId."'");
+		  if (xtc_db_num_rows($product_query) < 1) {
+			  throw new Exception(sprintf('Product description not found: %s', $productId));
+		  } else {
+			  $description = array();
+			  $products_description_query = xtc_db_query("SELECT pd.*,
+                                                                   l.code
+                                                              FROM ".TABLE_CATEGORIES_DESCRIPTION." cd
+                                                              JOIN ".TABLE_LANGUAGES." l
+                                                                   ON l.languages_id = pd.language_id
+                                                             WHERE pd.products_id = '".(int)$productId."'");
+			  while ($products_description = xtc_db_fetch_array($products_description_query)) {
+				  $code = $products_description['code'];
+				  unset($products_description['code']);
+
+				  $description[$code] = $products_description;
+			  }
+		  }
+
+		  $result = $this->encode_request($description);
+		  return $result;
+	  }
+
+
+	  /**
+	   * Insert or Update a product by the given product id.
+	   *
+	   * @param int $productId The product id
+	   * @param mixed[] $options
+	   *
+	   * @return array The product data
+	   */
+	  public function InsertUpdateProduct(int $productId, array $options): array
+	  {
+		  /* Store passed in options overwriting any defaults */
+		  $this->hydrate($options);
+
+		  if ($productId > 0) {
+			  $action = 'update';
+			  $products_query = xtc_db_query("SELECT *
+                                                  FROM ".TABLE_PRODUCTS."
+                                                 WHERE products_id = '".(int)$productId."'");
+			  if (xtc_db_num_rows($products_query) < 1) {
+				  throw new Exception(sprintf('Product not found: %s', $productId));
+			  } else {
+				  $products = xtc_db_fetch_array($products_query);
+				  $products['last_modified'] = 'now()';
+			  }
+		  } else {
+			  $action = 'insert';
+			  $products = $this->getDefaultTableValues(TABLE_PRODUCTS);
+			  $products['date_added'] = 'now()';
+		  }
+
+		  foreach ($products as $key => $value) {
+			  if (isset($this->options[$key])) {
+				  $products[$key] = $this->options[$key];
+			  }
+		  }
+
+		  // Input validation
+		  $this->checkTableData(TABLE_PRODUCTS, $products);
+		  unset($products['categories_id']);
+
+		  xtc_db_perform(TABLE_PRODUCTS, $products, $action, "categories_id = '".(int)$productId."'");
+		  if ($action == 'insert') {
+			  $productId = xtc_db_insert_id();
+		  }
+
+		  return $this->getProduct($productId);
+	  }
+
+	  /**
+	   * Insert or Update a product by the given product id.
+	   *
+	   * @param int $productId The product id
+	   * @param mixed[] $options
+	   *
+	   * @throws Exception
+	   *
+	   * @return array The product data
+	   */
+	  public function InsertUpdateDescription(int $productId, array $options): array
+	  {
+		  // Input validation
+		  if (empty($productId)) {
+			  throw new Exception('Product ID required');
+		  }
+
+		  /* Store passed in options overwriting any defaults */
+		  $this->hydrate($options);
+
+		  $products_query = xtc_db_query("SELECT *
+                                              FROM ".TABLE_PRODUCTS."
+                                             WHERE products_id = '".(int)$productId."'");
+		  if (xtc_db_num_rows($products_query) < 1) {
+			  throw new Exception(sprintf('Product not found: %s', $productId));
+		  } else {
+			  $languages_query = xtc_db_query("SELECT *
+                                                 FROM ".TABLE_LANGUAGES);
+			  while ($languages = xtc_db_fetch_array($languages_query)) {
+				  $products_description_query = xtc_db_query("SELECT *
+                                                                  FROM ".TABLE_PRODUCTS_DESCRIPTION."
+                                                                 WHERE products_id = '".(int)$productId."'
+                                                                   AND language_id = '".(int)$languages['languages_id']."'");
+				  if (xtc_db_num_rows($products_description_query) > 0) {
+					  $products_description = xtc_db_fetch_array($products_description_query);
+
+					  foreach ($products_description as $key => $value) {
+						  if (isset($this->options[$languages['code']][$key])) {
+							  $products_description[$key] = $this->options[$languages['code']][$key];
+						  }
+					  }
+
+					  // Input validation
+					  $this->checkTableData(TABLE_PRODUCTS_DESCRIPTION, $products_description);
+					  xtc_db_perform(TABLE_PRODUCTS_DESCRIPTION, $products_description, 'update', "products_id = '".(int)$productId."' AND language_id = '".(int)$languages['languages_id']."'");
+				  } elseif (isset($this->options[$languages['code']])) {
+					  $products_description = $this->getDefaultTableValues(TABLE_PRODUCTS_DESCRIPTION);
+					  $products_description['products_id'] = (int)$productId;
+					  $products_description['language_id'] = (int)$languages['languages_id'];
+
+					  foreach ($products_description as $key => $value) {
+						  if (isset($this->options[$languages['code']][$key])) {
+							  $products_description[$key] = $this->options[$languages['code']][$key];
+						  }
+					  }
+
+					  // Input validation
+					  $this->checkTableData(TABLE_PRODUCTS_DESCRIPTION, $products_description);
+					  xtc_db_perform(TABLE_PRODUCTS_DESCRIPTION, $products_description);
+				  }
+			  }
+		  }
+
+		  return $this->getProductDescription($productId);
+	  }
       /**
        * Hydrate options from given array.
        *
