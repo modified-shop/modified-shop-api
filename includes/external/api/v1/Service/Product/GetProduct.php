@@ -44,7 +44,7 @@
           $this->responder = $responder;
       }
 
-	  /* test */
+	  
       /**
        * Invoke.
        *
