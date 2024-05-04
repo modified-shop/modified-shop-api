@@ -24,12 +24,12 @@
   /**
    * Service.
    */
-  final class ProductAction
+  final class ProductAction extends BaseAction
   {
       /**
        * @var mixed[]
        */
-      private $options = [
+      protected $options = [
           "status" => null,
           "from" => null,
           "to" => null,
@@ -40,7 +40,7 @@
       /**
        * @var LoggerInterface
        */
-      private $logger;
+      protected $logger;
 
       /**
        * The constructor.
@@ -327,33 +327,7 @@
           
           $this->logger->info(sprintf('Product deleted successfully: %s', $productId));
       }
-      
-      /**
-       * encoding given array or string.
-       *
-       * @param mixed[] $data
-       *
-       * @return mixed
-       */
-      function encode_request($string) {
-          if (is_array($string)) {
-              foreach ($string as $key => $value) {
-                  $string[$key] = $this->encode_request($value);
-              }
-          } else {
-              if (!is_bool($string)) {
-                  $string = decode_htmlentities($string);
-                  $cur_encoding = mb_detect_encoding($string);
-                  if ($cur_encoding == "UTF-8" && mb_check_encoding($string, "UTF-8")) {
-                      return $string;
-                  } else {
-                      return mb_convert_encoding($string, "UTF-8", $_SESSION['language_charset']);
-                  }
-              }
-          }
-    
-          return $string;  
-      }
+
       /**
        * Insert a product by the given options.
        *
@@ -485,6 +459,7 @@
        * @param mixed[] $options
        *
        * @return array The product data
+       * @throws Exception
        */
       public function InsertUpdateProduct(int $productId, array $options): array
       {
@@ -523,7 +498,10 @@
               $productId = xtc_db_insert_id();
           }
 
-          return $this->getProduct($productId);
+          try {
+              return $this->getProduct($productId);
+          } catch (Exception $e) {
+          }
       }
 
       /**
@@ -591,28 +569,5 @@
 
           return $this->getProductDescription($productId);
       }
-      /**
-       * Hydrate options from given array.
-       *
-       * @param mixed[] $data
-       *
-       * @return void
-       */
-      private function hydrate(array $data = []): void
-      {
-          foreach ($data as $key => $value) {
-              /* https://github.com/facebook/hhvm/issues/6368 */
-              $key = str_replace(".", " ", $key);
-              $method = lcfirst(ucwords($key));
-              $method = str_replace(" ", "", $method);
-              if (method_exists($this, $method)) {
-                  /* Try to use setter */
-                  /** @phpstan-ignore-next-line */
-                  call_user_func([$this, $method], $value);
-              } else {
-                  /* Or fallback to setting option directly */
-                  $this->options[$key] = $value;
-              }
-          }
-      }
+      
   }
