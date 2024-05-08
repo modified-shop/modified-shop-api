@@ -61,24 +61,38 @@
               
               
               // customers
-              $app->get('/customers', \api\v1\Service\Customer\GetCustomers::class);
-              $app->get('/customer/{id}', \api\v1\Service\Customer\GetCustomer::class);
-              $app->get('/customer/{id}/address_book', \api\v1\Service\Customer\GetCustomerAddressBooks::class);
-              $app->get('/customer/{id}/address_book/{aid}', \api\v1\Service\Customer\GetCustomerAddressBook::class);
+              $app->get('/customers',                         \api\v1\Service\Customer\GetCustomers::class);
+              $app->get('/customer/{id}',                     \api\v1\Service\Customer\GetCustomer::class);
+              $app->get('/customer/{id}/address_book',        \api\v1\Service\Customer\GetCustomerAddressBooks::class);
+              $app->get('/customer/{id}/address_book/{aid}',  \api\v1\Service\Customer\GetCustomerAddressBook::class);
               
               // delete customers
-              $app->delete('/customers/{id}', \api\v1\Service\Customer\DeleteCustomer::class);
+              $app->delete('/customers/{id}',                 \api\v1\Service\Customer\DeleteCustomer::class);
                             
               
+              
               // products
-              $app->get('/products', \api\v1\Service\Product\GetProducts::class);
-              $app->get('/product/{id}', \api\v1\Service\Product\GetProduct::class);
-              $app->delete('/product/{id}', \api\v1\Service\Product\DeleteProduct::class);
+              $app->get('/products',                      \api\v1\Service\Product\GetProducts::class);
+              $app->get('/products/{id}',                 \api\v1\Service\Product\GetProduct::class);
+              
+              // insert products
+              $app->post('/products',                     \api\v1\Service\Product\InsertProduct::class);
+              $app->post('/products/products',            \api\v1\Service\Product\InsertUpdateProduct::class);
+              $app->post('/products/{id}/description',    \api\v1\Service\Product\InsertUpdateDescription::class);
+
+              // update products
+              $app->post('/products/{id}',                \api\v1\Service\Product\UpdateProduct::class);
+              $app->post('/products/{id}/products',       \api\v1\Service\Product\InsertUpdateProduct::class);
+              $app->post('/products/{id}/description',    \api\v1\Service\Product\InsertUpdateDescription::class);
+
+              // delete products
+              $app->delete('/product/{id}',               \api\v1\Service\Product\DeleteProduct::class);
+              
               
               
               // dhl
-              $app->get('/dhl/{id}', \api\v1\Service\Dhl\GetDhl::class);
-              $app->delete('/dhl/{id}', \api\v1\Service\Dhl\DeleteDhl::class);
+              $app->get('/dhl/{id}',                      \api\v1\Service\Dhl\GetDhl::class);
+              $app->delete('/dhl/{id}',                   \api\v1\Service\Dhl\DeleteDhl::class);
           }
       )->add(JwtAuthentication::class);
   };
