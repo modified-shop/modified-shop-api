@@ -434,11 +434,11 @@
           } else {
               $description = array();
               $products_description_query = xtc_db_query("SELECT pd.*,
-                                                                   l.code
-                                                              FROM ".TABLE_CATEGORIES_DESCRIPTION." cd
-                                                              JOIN ".TABLE_LANGUAGES." l
-                                                                   ON l.languages_id = pd.language_id
-                                                             WHERE pd.products_id = '".(int)$productId."'");
+                                                                 l.code
+                                                            FROM ".TABLE_CATEGORIES_DESCRIPTION." cd
+                                                            JOIN ".TABLE_LANGUAGES." l
+                                                                 ON l.languages_id = pd.language_id
+                                                           WHERE pd.products_id = '".(int)$productId."'");
               while ($products_description = xtc_db_fetch_array($products_description_query)) {
                   $code = $products_description['code'];
                   unset($products_description['code']);
@@ -491,17 +491,14 @@
 
           // Input validation
           $this->checkTableData(TABLE_PRODUCTS, $products);
-          unset($products['categories_id']);
+          unset($products['products_id']);
 
-          xtc_db_perform(TABLE_PRODUCTS, $products, $action, "categories_id = '".(int)$productId."'");
+          xtc_db_perform(TABLE_PRODUCTS, $products, $action, "products_id = '".(int)$productId."'");
           if ($action == 'insert') {
               $productId = xtc_db_insert_id();
           }
 
-          try {
-              return $this->getProduct($productId);
-          } catch (Exception $e) {
-          }
+          return $this->getProduct($productId);
       }
 
       /**
@@ -525,8 +522,8 @@
           $this->hydrate($options);
 
           $products_query = xtc_db_query("SELECT *
-                                              FROM ".TABLE_PRODUCTS."
-                                             WHERE products_id = '".(int)$productId."'");
+                                            FROM ".TABLE_PRODUCTS."
+                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($products_query) < 1) {
               throw new Exception(sprintf('Product not found: %s', $productId));
           } else {
@@ -534,9 +531,9 @@
                                                  FROM ".TABLE_LANGUAGES);
               while ($languages = xtc_db_fetch_array($languages_query)) {
                   $products_description_query = xtc_db_query("SELECT *
-                                                                  FROM ".TABLE_PRODUCTS_DESCRIPTION."
-                                                                 WHERE products_id = '".(int)$productId."'
-                                                                   AND language_id = '".(int)$languages['languages_id']."'");
+                                                                FROM ".TABLE_PRODUCTS_DESCRIPTION."
+                                                               WHERE products_id = '".(int)$productId."'
+                                                                 AND language_id = '".(int)$languages['languages_id']."'");
                   if (xtc_db_num_rows($products_description_query) > 0) {
                       $products_description = xtc_db_fetch_array($products_description_query);
 
