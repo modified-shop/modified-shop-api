@@ -63,8 +63,11 @@
           ];
           $secret = MODULE_SYSTEM_MODIFIED_API_SECRET;
           $token = JWT::encode($payload, $secret, 'HS256');
-          $data['token'] = $token;
-          $data['expires'] = $future->getTimeStamp();
+          $data = [
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'expires' => $future->getTimeStamp(),
+          ];
 
           // Build the HTTP response
           $response->getBody()->write((string)json_encode($data));
