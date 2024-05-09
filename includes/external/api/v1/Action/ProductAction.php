@@ -566,5 +566,56 @@
 
           return $this->getProductDescription($productId);
       }
-      
+
+      /**
+       * Insert or update images of a product by the given product id.
+       *
+       * @param int $productId The product id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function InsertUpdateImages(int $productId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $product_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_PRODUCTS."
+                                           WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($product_query) < 1) {
+              throw new Exception(sprintf('Product not found: %s', $productId));
+          } else {
+              define('_VALID_XTC', true);
+
+              // include needed classes
+              require_once (DIR_FS_CATALOG.DIR_ADMIN.'includes/classes/'.IMAGE_MANIPULATOR);
+
+              foreach ($this->images_type_array as $image_type) {
+                  if ($products_image = xtc_try_upload('products_image'.$image_type, DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/', '777', $this->accepted_image_files_extensions, $this->accepted_image_files_mime_types)) {
+                      $products_image_name = preg_replace('/[^\d\w\-\_\.]/', '', $products_image->filename);
+
+                      rename(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image->filename, DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image_name);
+
+                      //image chmod
+                      chmod(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image_name, 0644);
+
+                      xtc_db_query("UPDATE ".TABLE_PRODUCTS."
+                                       SET products_image".$image_type." = '".xtc_db_input($products_image_name)."'
+                                     WHERE products_id = '".(int)$productId."'");
+
+                      if (is_file(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/'.$products_image_name)) {
+                          unlink(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/'.$products_image_name);
+                      }
+
+                      $a = new \image_manipulation(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image_name, constant('CATEGORIES_IMAGE'.strtoupper($image_type).'_WIDTH'), constant('CATEGORIES_IMAGE'.strtoupper($image_type).'_HEIGHT'), DIR_FS_CATALOG.DIR_WS_IMAGES.'products/'.$products_image_name, IMAGE_QUALITY, '');
+                      $a->create();
+                  }
+              }
+          }
+      }
+
   }
