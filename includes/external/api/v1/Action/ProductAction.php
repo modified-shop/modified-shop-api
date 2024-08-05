@@ -357,6 +357,7 @@
 
           return $this->GetSingleProduct($productId);
       }
+      
       /**
        * Read a product by the given product id.
        *
@@ -450,7 +451,6 @@
           $result = $this->encode_request($description);
           return $result;
       }
-
 
       /**
        * Insert or Update a product by the given product id.
