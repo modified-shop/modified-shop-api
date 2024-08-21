@@ -86,7 +86,7 @@
               $app->post('/products/{id}/description',    \api\v1\Service\Product\InsertUpdateDescription::class);
 
               // delete products
-              $app->delete('/product/{id}',               \api\v1\Service\Product\DeleteProduct::class);
+              $app->delete('/products/{id}',               \api\v1\Service\Product\DeleteProduct::class);
               
               
               
