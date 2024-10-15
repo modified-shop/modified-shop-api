@@ -436,7 +436,7 @@
               $description = array();
               $products_description_query = xtc_db_query("SELECT pd.*,
                                                                  l.code
-                                                            FROM ".TABLE_CATEGORIES_DESCRIPTION." cd
+                                                            FROM ".TABLE_PRODUCTS_DESCRIPTION." pd
                                                             JOIN ".TABLE_LANGUAGES." l
                                                                  ON l.languages_id = pd.language_id
                                                            WHERE pd.products_id = '".(int)$productId."'");
