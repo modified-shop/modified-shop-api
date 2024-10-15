@@ -475,12 +475,12 @@
                   throw new Exception(sprintf('Product not found: %s', $productId));
               } else {
                   $products = xtc_db_fetch_array($products_query);
-                  $products['last_modified'] = 'now()';
+                  $products['products_last_modified'] = 'now()';
               }
           } else {
               $action = 'insert';
               $products = $this->getDefaultTableValues(TABLE_PRODUCTS);
-              $products['date_added'] = 'now()';
+              $products['products_date_added'] = 'now()';
           }
 
           foreach ($products as $key => $value) {
