@@ -201,25 +201,9 @@
                xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_CONTENT." WHERE products_id = '".(int)$productId."' AND (content_file = '".xtc_db_input($product_content['content_file'])."' OR content_file = '')");
             }
 
-            //delete products images
-            $product_image_query = xtc_db_query("SELECT products_image 
-                                                   FROM ".TABLE_PRODUCTS." 
-                                                  WHERE products_id = '".(int)$productId."'
-                                                    AND products_image != ''");
-            if (xtc_db_num_rows($product_image_query) > 0) {
-                $product_image = xtc_db_fetch_array($product_image_query);
-                
-                $duplicate_image_query = xtc_db_query("SELECT count(*) AS total 
-                                                         FROM ".TABLE_PRODUCTS." 
-                                                        WHERE products_image = '".xtc_db_input($product_image['products_image'])."'");
-                $duplicate_image = xtc_db_fetch_array($duplicate_image_query);
-                if ($duplicate_image['total'] < 2) {
-                    //xtc_del_image_file($product_image['products_image']);
-                }
-            }
-
-            //delete more images
-            $this->DeleteImage($productId, 0);
+            //delete images
+            $this->DeleteImage($productId);
+            $this->DeleteImages($productId, 0);
 
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS." WHERE products_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_DESCRIPTION." WHERE products_id = '".(int)$productId."'");
@@ -291,6 +275,39 @@
       }
 
       /**
+       * Delete a image by the given product id.
+       *
+       * @param int $productId The product id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteImage(int $productId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+          
+          $images_query = xtc_db_query("SELECT *
+                                          FROM ".TABLE_PRODUCTS."
+                                         WHERE products_id = '".(int)$productId."'
+                                           AND products_image != ''");
+          if (xtc_db_num_rows($images_query) < 1) {
+              throw new Exception(sprintf('Product image not found: %s', $productId));
+          } else {
+              $images = xtc_db_fetch_array($images_query);
+              
+              $this->deleteImageFile($images['products_image']);
+              
+              xtc_db_query("UPDATE ".TABLE_PRODUCTS." 
+                               SET products_image = ''
+                             WHERE products_id = '".(int)$productId."'");
+          }
+      }
+
+      /**
        * Delete a image by the given product id and image id.
        *
        * @param int $productId The product id
@@ -300,7 +317,7 @@
        *
        * @return void
        */
-      public function DeleteImage(int $productId, int $imageId): void
+      public function DeleteImages(int $productId, int $imageId): void
       {
           // Input validation
           if (empty($productId)) {
@@ -317,7 +334,7 @@
                                          WHERE products_id = '".(int)$productId."'
                                              ".$where);
           if (xtc_db_num_rows($images_query) < 1) {
-              throw new Exception(sprintf('Product images not found: %s', $productId));
+              throw new Exception(sprintf('Product more images not found: %s', $productId));
           } else {
               while ($images = xtc_db_fetch_array($images_query)) {
                   $this->deleteImageFile($images['image_name']);
@@ -552,7 +569,7 @@
           if (xtc_db_num_rows($product_query) < 1 && $Exception === true) {
               throw new Exception(sprintf('Product xsell not found: %s', $productId));
           } else {
-              $xsell = array();
+              $xsell = [];
               $products_xsell_query = xtc_db_query("SELECT *
                                                       FROM ".TABLE_PRODUCTS_XSELL."
                                                      WHERE products_id = '".(int)$productId."'
@@ -882,13 +899,22 @@
 
       private function deleteImageFile($image_name): void
       {
-        $duplicate_image_query = xtc_db_query("SELECT count(*) AS total 
-                                                 FROM ".TABLE_PRODUCTS_IMAGES." 
-                                                WHERE image_name = '".xtc_db_input($image_name)."'");
-        $duplicate_image = xtc_db_fetch_array($duplicate_image_query);
-        if ($duplicate_image['total'] < 2) {
-            //xtc_del_image_file($mo_images_values['image_name']);
-        }
+          $total = 0;
+          $product_image_query = xtc_db_query("SELECT COUNT(*) AS total 
+                                                 FROM ".TABLE_PRODUCTS." 
+                                                WHERE products_image = '".xtc_db_input($image_name)."'");
+          $product_image = xtc_db_fetch_array($product_image_query);
+          $total += $product_image['total'];
+
+          $more_image_query = xtc_db_query("SELECT COUNT(*) AS total 
+                                              FROM ".TABLE_PRODUCTS_IMAGES." 
+                                             WHERE image_name = '".xtc_db_input($image_name)."'");
+          $more_image = xtc_db_fetch_array($more_image_query);
+          $total += $more_image['total'];
+
+          if ($total < 2) {
+              //xtc_del_image_file($image_name);
+          }
       }
 
   }
