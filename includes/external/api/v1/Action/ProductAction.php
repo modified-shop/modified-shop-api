@@ -73,39 +73,40 @@
                                            FROM ".TABLE_PRODUCTS."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1) {
-            throw new Exception(sprintf('Product not found: %s', $productId));
+              throw new Exception(sprintf('Product not found: %s', $productId));
           } else {
-
-            $attributes = array();
-            $products_attributes_query = xtc_db_query("SELECT *
-                                                         FROM ".TABLE_PRODUCTS_ATTRIBUTES."
-                                                        WHERE products_id = '".(int)$productId."'
-                                                     ORDER BY sortorder, products_attributes_id");
-            while ($products_attributes = xtc_db_fetch_array($products_attributes_query)) {
-              $attributes[] = $products_attributes;
-            }
-
-            $tags = array();
-            $products_tags_query = xtc_db_query("SELECT *
-                                                   FROM ".TABLE_PRODUCTS_TAGS."
-                                                  WHERE products_id = '".(int)$productId."'
-                                               ORDER BY sort_order, products_tags_id");
-            while ($products_tags = xtc_db_fetch_array($products_tags_query)) {
-              $tags[] = $products_tags;
-            }
-
-          $result = [
-            'products' => $this->GetProduct($productId, false),
-            'products_description' => $this->GetProductDescription($productId, false),
-            'products_to_categories' => $this->GetProductCategories($productId, false),
-            'products_images' => $this->GetProductImages($productId, false),
-            'products_xsell' => $this->GetProductXsell($productId, false),
-            'products_attributes' => $attributes,
-            'products_tags' => $tags,
-          ];
-
-          $result = $this->encode_request($result);
-          return $result;
+  
+              $attributes = array();
+              $products_attributes_query = xtc_db_query("SELECT *
+                                                           FROM ".TABLE_PRODUCTS_ATTRIBUTES."
+                                                          WHERE products_id = '".(int)$productId."'
+                                                       ORDER BY sortorder, products_attributes_id");
+              while ($products_attributes = xtc_db_fetch_array($products_attributes_query)) {
+                $attributes[] = $products_attributes;
+              }
+  
+              $tags = array();
+              $products_tags_query = xtc_db_query("SELECT *
+                                                     FROM ".TABLE_PRODUCTS_TAGS."
+                                                    WHERE products_id = '".(int)$productId."'
+                                                 ORDER BY sort_order, products_tags_id");
+              while ($products_tags = xtc_db_fetch_array($products_tags_query)) {
+                $tags[] = $products_tags;
+              }
+  
+              $result = [
+                'products' => $this->GetProduct($productId, false),
+                'products_description' => $this->GetProductDescription($productId, false),
+                'products_to_categories' => $this->GetProductCategories($productId, false),
+                'products_images' => $this->GetProductImages($productId, false),
+                'products_xsell' => $this->GetProductXsell($productId, false),
+                'products_attributes' => $attributes,
+                'products_tags' => $tags,
+              ];
+    
+              $result = $this->encode_request($result);
+              return $result;
+          }
       }
 
       /**
@@ -137,7 +138,7 @@
           }
           
           if (count($conditions) > 0) {
-            $where = " WHERE ".implode(' AND ', $conditions);
+              $where = " WHERE ".implode(' AND ', $conditions);
           }
           
           $count_query = xtc_db_query("SELECT count(*) as total
@@ -333,7 +334,6 @@
           }
 
           $result = $this->getProductDetails($productId);
-
           return $result;
       }
 
