@@ -248,13 +248,12 @@
             $this->DeleteXsell($productId, 0);
             $this->DeleteSpecials($productId, 0);
             $this->DeleteAttributes($productId, 0);
+            $this->DeleteTags($productId, 0);
 
             //delete
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS." WHERE products_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_DESCRIPTION." WHERE products_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_XSELL." WHERE xsell_id = '".(int)$productId."'");
-    
-            xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_TAGS." WHERE products_id = '".(int)$productId."'");
 
             xtc_db_query("DELETE rd
                             FROM ".TABLE_REVIEWS_DESCRIPTION." rd
@@ -430,7 +429,7 @@
        * Delete a special by the given product id and specials id.
        *
        * @param int $productId The product id
-       * @param int $xsellId The xsell id
+       * @param int $specialsId The specials id
        *
        * @throws Exception
        *
@@ -467,7 +466,7 @@
        * Delete an attribute by the given product id and attributes id.
        *
        * @param int $productId The product id
-       * @param int $xsellId The xsell id
+       * @param int $attributesId The attributes id
        *
        * @throws Exception
        *
@@ -499,6 +498,43 @@
 
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD." 
                                       WHERE products_attributes_id = '".(int)$attributes['products_attributes_id']."'");
+              }
+          }
+      }
+
+      /**
+       * Delete a tag by the given product id and tags id.
+       *
+       * @param int $productId The product id
+       * @param int $tagsId The tags id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAttributes(int $productId, int $tagsId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $where = '';
+          if ($tagsId > 0) {
+              $where = "AND products_tags_id = '".(int)$tagsId."'";
+          }
+
+          $tags_query = xtc_db_query("SELECT *
+                                        FROM ".TABLE_PRODUCTS_TAGS."
+                                       WHERE products_id = '".(int)$productId."'
+                                             ".$where);
+          if (xtc_db_num_rows($tags_query) < 1) {
+              throw new Exception(sprintf('Product tags not found: %s', $productId));
+          } else {
+              while ($tags = xtc_db_fetch_array($tags_query)) {
+                  xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_TAGS." 
+                                      WHERE products_id = '".(int)$productId."'
+                                        AND products_tags_id = '".(int)$tags['products_tags_id']."'");
               }
           }
       }
