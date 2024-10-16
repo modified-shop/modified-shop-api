@@ -512,7 +512,7 @@
        *
        * @return void
        */
-      public function DeleteAttributes(int $productId, int $tagsId): void
+      public function DeleteTags(int $productId, int $tagsId): void
       {
           // Input validation
           if (empty($productId)) {
