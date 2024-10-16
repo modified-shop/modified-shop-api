@@ -94,7 +94,8 @@
               $app->put('/products/{id}/description',     \api\v1\Service\Product\InsertUpdateDescription::class);
 
               // delete products
-              $app->delete('/products/{id}',              \api\v1\Service\Product\DeleteProduct::class);
+              $app->delete('/products/{id}',                    \api\v1\Service\Product\DeleteProduct::class);
+              $app->delete('/products/{id}/categories/{cid}',   \api\v1\Service\Product\DeleteCategory::class);
               
               
               

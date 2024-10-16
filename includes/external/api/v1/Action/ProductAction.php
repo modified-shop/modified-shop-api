@@ -163,7 +163,7 @@
       }
       
       /**
-       * Delete an product by the given product id.
+       * Delete a product by the given product id.
        *
        * @param int $productId The product id
        *
@@ -268,6 +268,37 @@
           }
           
           $this->logger->info(sprintf('Product deleted successfully: %s', $productId));
+      }
+
+      /**
+       * Delete a category by the given product id and category id.
+       *
+       * @param int $productId The product id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteCategroy(int $productId, int $categoryId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $product_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_PRODUCTS_TO_CATEGORIES."
+                                          WHERE products_id = '".(int)$productId."'
+                                            AND categories_id = '".(int)$categoryId."'");
+          if (xtc_db_num_rows($product_query) < 1 && $Exception === true) {
+              throw new Exception(sprintf('Product categories not found: %s', $productId));
+          } else {
+              xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_TO_CATEGORIES." 
+                                  WHERE products_id = '".(int)$productId."'
+                                    AND categories_id = '".(int)$categoryId."'");
+              
+              $this->logger->info(sprintf('Product Category %s deleted successfully: %s', $categoryId, $productId));
+          }
       }
 
       /**
