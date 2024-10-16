@@ -80,6 +80,7 @@
               $app->get('/products/{id}/xsell',           \api\v1\Service\Product\GetProductXsell::class);
               $app->get('/products/{id}/attributes',      \api\v1\Service\Product\GetProductAttributes::class);
               $app->get('/products/{id}/tags',            \api\v1\Service\Product\GetProductTags::class);
+              $app->get('/products/{id}/specials',        \api\v1\Service\Product\GetProductSpecials::class);
               
               // insert products
               $app->post('/products',                     \api\v1\Service\Product\InsertProduct::class);

@@ -83,6 +83,7 @@
                   'products_xsell' => $this->GetProductXsell($productId, false),
                   'products_attributes' => $this->GetProductAttributes($productId, false),
                   'products_tags' => $this->GetProductTags($productId, false),
+                  'specials' => $this->GetProductSpecials($productId, false),
               ];
 
               $result = $this->encode_request($result);
@@ -552,7 +553,7 @@
                                            FROM ".TABLE_PRODUCTS_TAGS."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1 && $Exception === true) {
-              throw new Exception(sprintf('Product attributes not found: %s', $productId));
+              throw new Exception(sprintf('Product tags not found: %s', $productId));
           } else {
               $tags = [];
               $products_tags_query = xtc_db_query("SELECT *
@@ -565,6 +566,41 @@
           }
 
           $result = $this->encode_request($tags);
+          return $result;
+      }
+
+      /**
+       * Read a Product tags by the given Product id.
+       *
+       * @param int $productId The Product id
+       *
+       * @throws Exception
+       *
+       * @return array The Product data
+       */
+      public function GetProductSpecials(int $productId, $Exception = true): array
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $product_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_SPECIALS."
+                                          WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($product_query) < 1 && $Exception === true) {
+              throw new Exception(sprintf('Product specials not found: %s', $productId));
+          } else {
+              $specials = [];
+              $products_specials_query = xtc_db_query("SELECT *
+                                                         FROM ".TABLE_SPECIALS."
+                                                        WHERE products_id = '".(int)$productId."'");
+              while ($products_specials = xtc_db_fetch_array($products_specials_query)) {
+                  $specials[] = $products_specials;
+              }
+          }
+
+          $result = $this->encode_request($specials);
           return $result;
       }
 
