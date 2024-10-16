@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class DeleteCategroy
+  final class DeleteCategory
   {
       /**
        * @var ProductAction
@@ -61,7 +61,7 @@
           $productId = (int)$args['id'];
           $categoryId = (int)$args['cid'];
           
-          $result = $this->productAction->DeleteCategroy($productId, $categoryId);
+          $result = $this->productAction->DeleteCategory($productId, $categoryId);
 
           return $this->responder->withJson($response, $result);
       }

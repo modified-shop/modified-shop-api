@@ -279,7 +279,7 @@
        *
        * @return void
        */
-      public function DeleteCategroy(int $productId, int $categoryId): void
+      public function DeleteCategory(int $productId, int $categoryId): void
       {
           // Input validation
           if (empty($productId)) {
