@@ -106,7 +106,7 @@
               if (in_array('personal_offer', $with) !== false) {
                   $customers_statuses_array = xtc_get_customers_statuses();
                   foreach ($customers_statuses_array as $customers_status) {
-                      $result['personal_offer'][$customers_status['id']] = $this->GetProductPersonalOffer$productId, $customers_status['id'], false);
+                      $result['personal_offer'][$customers_status['id']] = $this->GetProductPersonalOffer($productId, $customers_status['id'], false);
                   }
               }
 
