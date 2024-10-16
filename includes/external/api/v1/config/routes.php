@@ -79,6 +79,7 @@
               $app->get('/products/{id}/images',          \api\v1\Service\Product\GetProductImages::class);
               $app->get('/products/{id}/xsell',           \api\v1\Service\Product\GetProductXsell::class);
               $app->get('/products/{id}/attributes',      \api\v1\Service\Product\GetProductAttributes::class);
+              $app->get('/products/{id}/tags',            \api\v1\Service\Product\GetProductTags::class);
               
               // insert products
               $app->post('/products',                     \api\v1\Service\Product\InsertProduct::class);
@@ -86,12 +87,12 @@
               $app->post('/products/{id}/description',    \api\v1\Service\Product\InsertUpdateDescription::class);
 
               // update products
-              $app->put('/products/{id}',                \api\v1\Service\Product\UpdateProduct::class);
-              $app->put('/products/{id}/products',       \api\v1\Service\Product\InsertUpdateProduct::class);
-              $app->put('/products/{id}/description',    \api\v1\Service\Product\InsertUpdateDescription::class);
+              $app->put('/products/{id}',                 \api\v1\Service\Product\UpdateProduct::class);
+              $app->put('/products/{id}/products',        \api\v1\Service\Product\InsertUpdateProduct::class);
+              $app->put('/products/{id}/description',     \api\v1\Service\Product\InsertUpdateDescription::class);
 
               // delete products
-              $app->delete('/products/{id}',               \api\v1\Service\Product\DeleteProduct::class);
+              $app->delete('/products/{id}',              \api\v1\Service\Product\DeleteProduct::class);
               
               
               
