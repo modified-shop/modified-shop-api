@@ -75,29 +75,6 @@
           if (xtc_db_num_rows($product_query) < 1) {
             throw new Exception(sprintf('Product not found: %s', $productId));
           } else {
-            $product = xtc_db_fetch_array($product_query);
-            
-            $description = array();
-            $products_description_query = xtc_db_query("SELECT pd.*,
-                                                               l.code
-                                                          FROM ".TABLE_PRODUCTS_DESCRIPTION." pd
-                                                          JOIN ".TABLE_LANGUAGES." l
-                                                         WHERE products_id = '".(int)$productId."'");
-            while ($products_description = xtc_db_fetch_array($products_description_query)) {
-              $code = $products_description['code'];
-              unset($products_description['code']);
-              
-              $description[$code] = $products_description;
-            }
-
-            $images = array();
-            $products_images_query = xtc_db_query("SELECT *
-                                                    FROM ".TABLE_PRODUCTS_IMAGES."
-                                                   WHERE products_id = '".(int)$productId."'
-                                                ORDER BY image_nr, image_id");
-            while ($products_images = xtc_db_fetch_array($products_images_query)) {
-              $images[] = $products_images;
-            }
 
             $attributes = array();
             $products_attributes_query = xtc_db_query("SELECT *
@@ -125,22 +102,13 @@
             while ($products_xsell = xtc_db_fetch_array($products_xsell_query)) {
               $xsell[] = $products_xsell;
             }
-
-            $categories = array();
-            $products_categories_query = xtc_db_query("SELECT *
-                                                         FROM ".TABLE_PRODUCTS_TO_CATEGORIES."
-                                                        WHERE products_id = '".(int)$productId."'
-                                                     ORDER BY categories_id");
-            while ($products_categories = xtc_db_fetch_array($products_categories_query)) {
-              $categories[] = $products_categories;
-            }
           }
           
           $result = [
-            'products' => $product,
-            'products_description' => $description,
-            'products_to_categories' => $categories,
-            'products_images' => $images,
+            'products' => $this->GetProduct($ProductId, false),
+            'products_description' => $this->GetProductDescription($productId, false),
+            'products_to_categories' => $this->GetProductCategories($ProductId, false),
+            'products_images' => $this->GetProductImages($ProductId, false),
             'products_attributes' => $attributes,
             'products_tags' => $tags,
             'products_xsell' => $xsell,
@@ -374,10 +342,7 @@
               throw new Exception('Product ID required');
           }
 
-          $result = [
-              'products' => $this->getProduct($productId),
-              'products_description' => $this->getProductDescription($productId),
-          ];
+          $result = $this->getProductDetails($productId);
 
           return $result;
       }
@@ -391,23 +356,23 @@
        *
        * @return array The Product data
        */
-      public function GetProduct(int $ProductId): array
+      public function GetProduct(int $ProductId, $Exception = true): array
       {
           // Input validation
           if (empty($ProductId)) {
               throw new Exception('Product ID required');
           }
 
-          $Product_query = xtc_db_query("SELECT *
+          $product_query = xtc_db_query("SELECT *
                                            FROM ".TABLE_PRODUCTS."
                                           WHERE products_id = '".(int)$ProductId."'");
-          if (xtc_db_num_rows($Product_query) < 1) {
+          if (xtc_db_num_rows($product_query) < 1 && $Exception === true) {
               throw new Exception(sprintf('Product not found: %s', $ProductId));
           } else {
-              $Product = xtc_db_fetch_array($Product_query);
+              $product = xtc_db_fetch_array($product_query);
           }
 
-          $result = $this->encode_request($Product);
+          $result = $this->encode_request($product);
           return $result;
       }
 
@@ -420,7 +385,7 @@
        *
        * @return array The product data
        */
-      public function GetProductDescription(int $productId): array
+      public function GetProductDescription(int $productId, $Exception = true): array
       {
           // Input validation
           if (empty($productId)) {
@@ -430,10 +395,10 @@
           $product_query = xtc_db_query("SELECT *
                                            FROM ".TABLE_PRODUCTS_DESCRIPTION."
                                           WHERE products_id = '".(int)$productId."'");
-          if (xtc_db_num_rows($product_query) < 1) {
+          if (xtc_db_num_rows($product_query) < 1 && $Exception === true) {
               throw new Exception(sprintf('Product description not found: %s', $productId));
           } else {
-              $description = array();
+              $description = [];
               $products_description_query = xtc_db_query("SELECT pd.*,
                                                                  l.code
                                                             FROM ".TABLE_PRODUCTS_DESCRIPTION." pd
@@ -449,6 +414,78 @@
           }
 
           $result = $this->encode_request($description);
+          return $result;
+      }
+
+      /**
+       * Read a Product categories by the given Product id.
+       *
+       * @param int $ProductId The Product id
+       *
+       * @throws Exception
+       *
+       * @return array The Product data
+       */
+      public function GetProductCategories(int $ProductId, $Exception = true): array
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $product_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_PRODUCTS_TO_CATEGORIES."
+                                          WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($product_query) < 1 && $Exception === true) {
+              throw new Exception(sprintf('Product categories not found: %s', $productId));
+          } else {
+              $categories = [];
+              $products_categories_query = xtc_db_query("SELECT *
+                                                           FROM ".TABLE_PRODUCTS_TO_CATEGORIES."
+                                                          WHERE products_id = '".(int)$productId."'
+                                                       ORDER BY categories_id");
+              while ($products_categories = xtc_db_fetch_array($products_categories_query)) {
+                  $categories[] = $products_categories;
+              }
+          }
+
+          $result = $this->encode_request($categories);
+          return $result;
+      }
+
+      /**
+       * Read a Product images by the given Product id.
+       *
+       * @param int $ProductId The Product id
+       *
+       * @throws Exception
+       *
+       * @return array The Product data
+       */
+      public function GetProductImages(int $ProductId, $Exception = true): array
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $product_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_PRODUCTS_IMAGES."
+                                          WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($product_query) < 1 && $Exception === true) {
+              throw new Exception(sprintf('Product images not found: %s', $productId));
+          } else {
+              $images = [];
+              $product_images_query = xtc_db_query("SELECT *
+                                                      FROM ".TABLE_PRODUCTS_IMAGES."
+                                                     WHERE products_id = '".(int)$ProductId."'
+                                                  ORDER BY image_nr, image_id");
+              while ($product_images = xtc_db_fetch_array($product_images_query)) {
+                  $images[] = $product_images;
+              }
+          }
+
+          $result = $this->encode_request($images);
           return $result;
       }
 
