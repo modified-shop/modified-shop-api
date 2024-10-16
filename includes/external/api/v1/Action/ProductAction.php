@@ -105,10 +105,10 @@
           }
           
           $result = [
-            'products' => $this->GetProduct($ProductId, false),
+            'products' => $this->GetProduct($productId, false),
             'products_description' => $this->GetProductDescription($productId, false),
-            'products_to_categories' => $this->GetProductCategories($ProductId, false),
-            'products_images' => $this->GetProductImages($ProductId, false),
+            'products_to_categories' => $this->GetProductCategories($productId, false),
+            'products_images' => $this->GetProductImages($productId, false),
             'products_attributes' => $attributes,
             'products_tags' => $tags,
             'products_xsell' => $xsell,
@@ -350,24 +350,24 @@
       /**
        * Read a Product by the given Product id.
        *
-       * @param int $ProductId The Product id
+       * @param int $productId The Product id
        *
        * @throws Exception
        *
        * @return array The Product data
        */
-      public function GetProduct(int $ProductId, $Exception = true): array
+      public function GetProduct(int $productId, $Exception = true): array
       {
           // Input validation
-          if (empty($ProductId)) {
+          if (empty($productId)) {
               throw new Exception('Product ID required');
           }
 
           $product_query = xtc_db_query("SELECT *
                                            FROM ".TABLE_PRODUCTS."
-                                          WHERE products_id = '".(int)$ProductId."'");
+                                          WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1 && $Exception === true) {
-              throw new Exception(sprintf('Product not found: %s', $ProductId));
+              throw new Exception(sprintf('Product not found: %s', $productId));
           } else {
               $product = xtc_db_fetch_array($product_query);
           }
@@ -420,13 +420,13 @@
       /**
        * Read a Product categories by the given Product id.
        *
-       * @param int $ProductId The Product id
+       * @param int $productId The Product id
        *
        * @throws Exception
        *
        * @return array The Product data
        */
-      public function GetProductCategories(int $ProductId, $Exception = true): array
+      public function GetProductCategories(int $productId, $Exception = true): array
       {
           // Input validation
           if (empty($productId)) {
@@ -456,13 +456,13 @@
       /**
        * Read a Product images by the given Product id.
        *
-       * @param int $ProductId The Product id
+       * @param int $productId The Product id
        *
        * @throws Exception
        *
        * @return array The Product data
        */
-      public function GetProductImages(int $ProductId, $Exception = true): array
+      public function GetProductImages(int $productId, $Exception = true): array
       {
           // Input validation
           if (empty($productId)) {
@@ -478,7 +478,7 @@
               $images = [];
               $product_images_query = xtc_db_query("SELECT *
                                                       FROM ".TABLE_PRODUCTS_IMAGES."
-                                                     WHERE products_id = '".(int)$ProductId."'
+                                                     WHERE products_id = '".(int)$productId."'
                                                   ORDER BY image_nr, image_id");
               while ($product_images = xtc_db_fetch_array($product_images_query)) {
                   $images[] = $product_images;
