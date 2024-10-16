@@ -96,6 +96,7 @@
               // delete products
               $app->delete('/products/{id}',                    \api\v1\Service\Product\DeleteProduct::class);
               $app->delete('/products/{id}/categories/{cid}',   \api\v1\Service\Product\DeleteCategory::class);
+              $app->delete('/products/{id}/images/{iid}',       \api\v1\Service\Product\DeleteImage::class);
               
               
               

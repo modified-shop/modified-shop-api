@@ -201,42 +201,32 @@
                xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_CONTENT." WHERE products_id = '".(int)$productId."' AND (content_file = '".xtc_db_input($product_content['content_file'])."' OR content_file = '')");
             }
 
+            //delete products images
             $product_image_query = xtc_db_query("SELECT products_image 
                                                    FROM ".TABLE_PRODUCTS." 
-                                                  WHERE products_id = '".(int)$productId."'");
-            $product_image = xtc_db_fetch_array($product_image_query);
-
-            $duplicate_image_query = xtc_db_query("SELECT count(*) AS total 
-                                                     FROM " . TABLE_PRODUCTS . " 
-                                                    WHERE products_image = '" . xtc_db_input($product_image['products_image']) . "'");
-            $duplicate_image = xtc_db_fetch_array($duplicate_image_query);
-
-            if ($duplicate_image['total'] < 2) {
-              //xtc_del_image_file($product_image['products_image']);
+                                                  WHERE products_id = '".(int)$productId."'
+                                                    AND products_image != ''");
+            if (xtc_db_num_rows($product_image_query) > 0) {
+                $product_image = xtc_db_fetch_array($product_image_query);
+                
+                $duplicate_image_query = xtc_db_query("SELECT count(*) AS total 
+                                                         FROM ".TABLE_PRODUCTS." 
+                                                        WHERE products_image = '".xtc_db_input($product_image['products_image'])."'");
+                $duplicate_image = xtc_db_fetch_array($duplicate_image_query);
+                if ($duplicate_image['total'] < 2) {
+                    //xtc_del_image_file($product_image['products_image']);
+                }
             }
 
             //delete more images
-            $mo_images_query = xtc_db_query("SELECT * 
-                                               FROM ".TABLE_PRODUCTS_IMAGES." 
-                                              WHERE products_id = '".(int)$productId."'");
-            while ($mo_images_values = xtc_db_fetch_array($mo_images_query)) {
-              $duplicate_more_image_query = xtc_db_query("SELECT count(*) AS total 
-                                                            FROM ".TABLE_PRODUCTS_IMAGES." 
-                                                           WHERE image_name = '".xtc_db_input($mo_images_values['image_name'])."'");
-              $duplicate_more_image = xtc_db_fetch_array($duplicate_more_image_query);
-              if ($duplicate_more_image['total'] < 2) {
-                //xtc_del_image_file($mo_images_values['image_name']);
-                xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_IMAGES_DESCRIPTION." WHERE image_id = '".(int)$mo_images_values['image_id']."'");
-              }
-            }
+            $this->DeleteImage($productId, 0);
 
-            xtc_db_query("DELETE FROM ".TABLE_SPECIALS." WHERE products_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS." WHERE products_id = '".(int)$productId."'");
+            xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_DESCRIPTION." WHERE products_id = '".(int)$productId."'");
+
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_XSELL." WHERE products_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_XSELL." WHERE xsell_id = '".(int)$productId."'");
-            xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_IMAGES." WHERE products_id = '".(int)$productId."'");
-            xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_TO_CATEGORIES." WHERE products_id = '".(int)$productId."'");
-            xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_DESCRIPTION." WHERE products_id = '".(int)$productId."'");
+            xtc_db_query("DELETE FROM ".TABLE_SPECIALS." WHERE products_id = '".(int)$productId."'");
     
             xtc_db_query("DELETE pad 
                             FROM ".TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD." pad
@@ -244,9 +234,6 @@
                                  ON pa.products_attributes_id = pad.products_attributes_id
                                     AND pa.products_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_ATTRIBUTES." WHERE products_id = '".(int)$productId."'");
-
-            xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_BASKET." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
-            xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_BASKET_ATTRIBUTES." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_TAGS." WHERE products_id = '".(int)$productId."'");
 
             xtc_db_query("DELETE rd
@@ -255,6 +242,9 @@
                                  ON r.reviews_id = rd.reviews_id
                                     AND r.products_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_REVIEWS." WHERE products_id = '".(int)$productId."'");
+
+            xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_BASKET." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
+            xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_BASKET_ATTRIBUTES." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
     
             if (defined('MODULE_WISHLIST_SYSTEM_STATUS') && MODULE_WISHLIST_SYSTEM_STATUS == 'true') {
               xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_WISHLIST." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
@@ -274,6 +264,7 @@
        * Delete a category by the given product id and category id.
        *
        * @param int $productId The product id
+       * @param int $categoryId The category id
        *
        * @throws Exception
        *
@@ -290,14 +281,55 @@
                                            FROM ".TABLE_PRODUCTS_TO_CATEGORIES."
                                           WHERE products_id = '".(int)$productId."'
                                             AND categories_id = '".(int)$categoryId."'");
-          if (xtc_db_num_rows($product_query) < 1 && $Exception === true) {
+          if (xtc_db_num_rows($product_query) < 1) {
               throw new Exception(sprintf('Product categories not found: %s', $productId));
           } else {
               xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_TO_CATEGORIES." 
                                   WHERE products_id = '".(int)$productId."'
                                     AND categories_id = '".(int)$categoryId."'");
-              
-              $this->logger->info(sprintf('Product Category %s deleted successfully: %s', $categoryId, $productId));
+          }
+      }
+
+      /**
+       * Delete a image by the given product id and image id.
+       *
+       * @param int $productId The product id
+       * @param int $imageId The image id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteImage(int $productId, int $imageId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+          
+          $where = '';
+          if ($imageId > 0) {
+              $where = "AND image_id = '".(int)$imageId."'";
+          }
+          
+          $images_query = xtc_db_query("SELECT *
+                                          FROM ".TABLE_PRODUCTS_IMAGES."
+                                         WHERE products_id = '".(int)$productId."'
+                                             ".$where);
+          if (xtc_db_num_rows($images_query) < 1) {
+              throw new Exception(sprintf('Product images not found: %s', $productId));
+          } else {
+              while ($images = xtc_db_fetch_array($images_query)) {
+                  $this->deleteImageFile($images['image_name']);
+                  
+                  xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_IMAGES." 
+                                      WHERE products_id = '".(int)$productId."'
+                                        AND image_id = '".(int)$imageId."'");
+
+                  xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_IMAGES_DESCRIPTION." 
+                                      WHERE products_id = '".(int)$productId."'
+                                        AND image_id = '".(int)$imageId."'");
+              }
           }
       }
 
@@ -355,6 +387,7 @@
        * Read a Product by the given Product id.
        *
        * @param int $productId The Product id
+       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -384,6 +417,7 @@
        * Read a product description by the given product id.
        *
        * @param int $productId The product id
+       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -425,6 +459,7 @@
        * Read a Product categories by the given Product id.
        *
        * @param int $productId The Product id
+       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -461,6 +496,7 @@
        * Read a Product images by the given Product id.
        *
        * @param int $productId The Product id
+       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -497,6 +533,7 @@
        * Read a Product xsell by the given Product id.
        *
        * @param int $productId The Product id
+       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -533,6 +570,7 @@
        * Read a Product attributes by the given Product id.
        *
        * @param int $productId The Product id
+       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -569,6 +607,7 @@
        * Read a Product tags by the given Product id.
        *
        * @param int $productId The Product id
+       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -605,6 +644,7 @@
        * Read a Product tags by the given Product id.
        *
        * @param int $productId The Product id
+       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -640,6 +680,7 @@
        * Read a Product tags by the given Product id.
        *
        * @param int $productId The Product id
+       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -837,6 +878,17 @@
                   }
               }
           }
+      }
+
+      private function deleteImageFile($image_name): void
+      {
+        $duplicate_image_query = xtc_db_query("SELECT count(*) AS total 
+                                                 FROM ".TABLE_PRODUCTS_IMAGES." 
+                                                WHERE image_name = '".xtc_db_input($image_name)."'");
+        $duplicate_image = xtc_db_fetch_array($duplicate_image_query);
+        if ($duplicate_image['total'] < 2) {
+            //xtc_del_image_file($mo_images_values['image_name']);
+        }
       }
 
   }
