@@ -171,7 +171,7 @@
        *
        * @return void
        */
-      public function deleteProduct(int $productId): void
+      public function DeleteProduct(int $productId): void
       {
           // Input validation
           if (empty($productId)) {
