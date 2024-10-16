@@ -388,6 +388,43 @@
       }
 
       /**
+       * Delete a special by the given product id and specials id.
+       *
+       * @param int $productId The product id
+       * @param int $xsellId The xsell id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteSpecials(int $productId, int $specialsId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $where = '';
+          if ($specialsId > 0) {
+              $where = "AND specials_id = '".(int)$specialsId."'";
+          }
+
+          $specials_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_SPECIALS."
+                                           WHERE products_id = '".(int)$productId."'
+                                                 ".$where);
+          if (xtc_db_num_rows($specials_query) < 1) {
+              throw new Exception(sprintf('Product specials not found: %s', $productId));
+          } else {
+              while ($specials = xtc_db_fetch_array($specials_query)) {
+                  xtc_db_query("DELETE FROM ".TABLE_SPECIALS." 
+                                      WHERE products_id = '".(int)$productId."'
+                                        AND specials_id = '".(int)$specials['specials_id']."'");
+              }
+          }
+      }
+
+      /**
        * Insert a product by the given options.
        *
        * @param mixed[] $options
