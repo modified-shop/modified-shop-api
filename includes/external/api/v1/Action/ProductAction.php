@@ -84,6 +84,7 @@
                   'products_attributes' => $this->GetProductAttributes($productId, false),
                   'products_tags' => $this->GetProductTags($productId, false),
                   'specials' => $this->GetProductSpecials($productId, false),
+                  'reviews' => $this->GetProductReviews($productId, false),
               ];
 
               $result = $this->encode_request($result);
@@ -601,6 +602,43 @@
           }
 
           $result = $this->encode_request($specials);
+          return $result;
+      }
+
+      /**
+       * Read a Product tags by the given Product id.
+       *
+       * @param int $productId The Product id
+       *
+       * @throws Exception
+       *
+       * @return array The Product data
+       */
+      public function GetProductReviews(int $productId, $Exception = true): array
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $product_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_REVIEWS."
+                                          WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($product_query) < 1 && $Exception === true) {
+              throw new Exception(sprintf('Product reviews not found: %s', $productId));
+          } else {
+              $reviews = [];
+              $products_reviews_query = xtc_db_query("SELECT *
+                                                         FROM ".TABLE_REVIEWS." r
+                                                         JOIN ".TABLE_REVIEWS_DESCRIPTION." rd
+                                                              ON r.reviews_id = rd.reviews_id
+                                                        WHERE r.products_id = '".(int)$productId."'");
+              while ($products_reviews = xtc_db_fetch_array($products_reviews_query)) {
+                  $reviews[] = $products_reviews;
+              }
+          }
+
+          $result = $this->encode_request($reviews);
           return $result;
       }
 

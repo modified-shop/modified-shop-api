@@ -81,6 +81,7 @@
               $app->get('/products/{id}/attributes',      \api\v1\Service\Product\GetProductAttributes::class);
               $app->get('/products/{id}/tags',            \api\v1\Service\Product\GetProductTags::class);
               $app->get('/products/{id}/specials',        \api\v1\Service\Product\GetProductSpecials::class);
+              $app->get('/products/{id}/reviews',         \api\v1\Service\Product\GetProductReviews::class);
               
               // insert products
               $app->post('/products',                     \api\v1\Service\Product\InsertProduct::class);
