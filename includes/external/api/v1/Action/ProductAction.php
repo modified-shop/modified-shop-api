@@ -711,7 +711,7 @@
                                                                FROM ".TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD."
                                                               WHERE products_attributes_id = '".(int)$products_attributes['products_attributes_id']."'");
                   if (xtc_db_num_rows($attributes_download_query) > 0) {
-                    $products_attributes['downloads'] = xtc_db_fetch_array($attributes_download_query);
+                    $products_attributes['attributes_downloads'] = xtc_db_fetch_array($attributes_download_query);
                   }
                   $attributes[] = $products_attributes;
               }
