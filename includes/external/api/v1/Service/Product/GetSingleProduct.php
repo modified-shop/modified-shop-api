@@ -58,9 +58,12 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
+          $params = $request->getQueryParams();
+          $params['path'] = $request->getUri()->getPath();
+
           $productId = (int)$args['id'];
 
-          $result = $this->productAction->GetSingleProduct($productId);
+          $result = $this->productAction->GetSingleProduct($productId, $params);
 
           return $this->responder->withJson($response, $result);
       }

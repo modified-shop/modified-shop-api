@@ -33,6 +33,7 @@
           "status" => null,
           "from" => null,
           "to" => null,
+          "with" => null,
           "page" => 1,
           "limit" => 10,
       ];
@@ -78,18 +79,58 @@
               $result = [
                   'products' => $this->GetProduct($productId, false),
                   'products_description' => $this->GetProductDescription($productId, false),
-                  'products_to_categories' => $this->GetProductCategories($productId, false),
-                  'products_images' => $this->GetProductImages($productId, false),
-                  'products_xsell' => $this->GetProductXsell($productId, false),
-                  'products_attributes' => $this->GetProductAttributes($productId, false),
-                  'products_tags' => $this->GetProductTags($productId, false),
-                  'specials' => $this->GetProductSpecials($productId, false),
-                  'reviews' => $this->GetProductReviews($productId, false),
               ];
+              
+              $with = explode(',', $this->options['with']);
+              if (in_array('categories', $with) !== false) {
+                  $result[]['products_to_categories'] = $this->GetProductCategories($productId, false),
+              }
+              if (in_array('images', $with) !== false) {
+                  $result[]['products_images'] = $this->GetProductImages($productId, false),
+              }
+              if (in_array('xsell', $with) !== false) {
+                  $result[]['products_xsell'] = $this->GetProductXsell($productId, false),
+              }
+              if (in_array('attributes', $with) !== false) {
+                  $result[]['products_attributes'] = $this->GetProductAttributes($productId, false),
+              }
+              if (in_array('tags', $with) !== false) {
+                  $result[]['products_tags'] = $this->GetProductTags($productId, false),
+              }
+              if (in_array('specials', $with) !== false) {
+                  $result[]['specials'] = $this->GetProductSpecials($productId, false),
+              }
+              if (in_array('reviews', $with) !== false) {
+                  $result[]['reviews'] = $this->GetProductReviews($productId, false),
+              }
 
               $result = $this->encode_request($result);
               return $result;
           }
+      }
+
+      /**
+       * Read a product by the given product id.
+       *
+       * @param int $productId The product id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The product data
+       */
+      public function GetSingleProduct(int $productId, $options): array
+      {
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $result = $this->getProductDetails($productId);
+          return $result;
       }
 
       /**
@@ -161,7 +202,7 @@
           
           return $result;
       }
-      
+
       /**
        * Delete a product by the given product id.
        *
@@ -451,27 +492,7 @@
               }
           }
 
-          return $this->GetSingleProduct($productId);
-      }
-      
-      /**
-       * Read a product by the given product id.
-       *
-       * @param int $productId The product id
-       *
-       * @throws Exception
-       *
-       * @return array The product data
-       */
-      public function GetSingleProduct(int $productId): array
-      {
-          // Input validation
-          if (empty($productId)) {
-              throw new Exception('Product ID required');
-          }
-
-          $result = $this->getProductDetails($productId);
-          return $result;
+          return $this->getProductDetails($productId);
       }
 
       /**
