@@ -208,7 +208,7 @@
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS." WHERE products_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_DESCRIPTION." WHERE products_id = '".(int)$productId."'");
 
-            xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_XSELL." WHERE products_id = '".(int)$productId."'");
+            $this->DeleteXsell($productId, 0);
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_XSELL." WHERE xsell_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_SPECIALS." WHERE products_id = '".(int)$productId."'");
     
@@ -346,6 +346,43 @@
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_IMAGES_DESCRIPTION." 
                                       WHERE products_id = '".(int)$productId."'
                                         AND image_id = '".(int)$images['image_id']."'");
+              }
+          }
+      }
+
+      /**
+       * Delete a xsell by the given product id and xsell id.
+       *
+       * @param int $productId The product id
+       * @param int $xsellId The xsell id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteXsell(int $productId, int $xsellId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $where = '';
+          if ($xsellId > 0) {
+              $where = "AND ID = '".(int)$xsellId."'";
+          }
+
+          $xsell_query = xtc_db_query("SELECT *
+                                         FROM ".TABLE_PRODUCTS_XSELL."
+                                        WHERE products_id = '".(int)$productId."'
+                                              ".$where);
+          if (xtc_db_num_rows($xsell_query) < 1) {
+              throw new Exception(sprintf('Product xsell not found: %s', $productId));
+          } else {
+              while ($xsell = xtc_db_fetch_array($xsell_query)) {
+                  xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_XSELL." 
+                                      WHERE products_id = '".(int)$productId."'
+                                        AND ID = '".(int)$xsell['ID']."'");
               }
           }
       }
@@ -897,6 +934,15 @@
           }
       }
 
+      /**
+       * Deletes an image by given name.
+       *
+       * @param string $image_name
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
       private function deleteImageFile($image_name): void
       {
           $total = 0;
