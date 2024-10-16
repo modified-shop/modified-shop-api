@@ -74,10 +74,10 @@
               // products
               $app->get('/products',                      \api\v1\Service\Product\GetProducts::class);
               $app->get('/products/{id}',                 \api\v1\Service\Product\GetProduct::class);
-              $app->get('/products/{id}description',      \api\v1\Service\Product\GetProductDescription::class);
-              $app->get('/products/{id}categories',       \api\v1\Service\Product\GetProductCategories::class);
-              $app->get('/products/{id}images',           \api\v1\Service\Product\GetProductImages::class);
-              $app->get('/products/{id}xsell',            \api\v1\Service\Product\GetProductXsell::class);
+              $app->get('/products/{id}/description',      \api\v1\Service\Product\GetProductDescription::class);
+              $app->get('/products/{id}/categories',       \api\v1\Service\Product\GetProductCategories::class);
+              $app->get('/products/{id}/images',           \api\v1\Service\Product\GetProductImages::class);
+              $app->get('/products/{id}/xsell',            \api\v1\Service\Product\GetProductXsell::class);
               
               // insert products
               $app->post('/products',                     \api\v1\Service\Product\InsertProduct::class);
