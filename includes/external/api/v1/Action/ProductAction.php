@@ -83,25 +83,25 @@
               
               $with = explode(',', $this->options['with']);
               if (in_array('categories', $with) !== false) {
-                  $result[]['products_to_categories'] = $this->GetProductCategories($productId, false),
+                  $result['products_to_categories'] = $this->GetProductCategories($productId, false);
               }
               if (in_array('images', $with) !== false) {
-                  $result[]['products_images'] = $this->GetProductImages($productId, false),
+                  $result['products_images'] = $this->GetProductImages($productId, false);
               }
               if (in_array('xsell', $with) !== false) {
-                  $result[]['products_xsell'] = $this->GetProductXsell($productId, false),
+                  $result['products_xsell'] = $this->GetProductXsell($productId, false);
               }
               if (in_array('attributes', $with) !== false) {
-                  $result[]['products_attributes'] = $this->GetProductAttributes($productId, false),
+                  $result['products_attributes'] = $this->GetProductAttributes($productId, false);
               }
               if (in_array('tags', $with) !== false) {
-                  $result[]['products_tags'] = $this->GetProductTags($productId, false),
+                  $result['products_tags'] = $this->GetProductTags($productId, false);
               }
               if (in_array('specials', $with) !== false) {
-                  $result[]['specials'] = $this->GetProductSpecials($productId, false),
+                  $result['specials'] = $this->GetProductSpecials($productId, false);
               }
               if (in_array('reviews', $with) !== false) {
-                  $result[]['reviews'] = $this->GetProductReviews($productId, false),
+                  $result['reviews'] = $this->GetProductReviews($productId, false);
               }
 
               $result = $this->encode_request($result);
