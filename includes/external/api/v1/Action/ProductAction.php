@@ -324,11 +324,11 @@
                   
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_IMAGES." 
                                       WHERE products_id = '".(int)$productId."'
-                                        AND image_id = '".(int)$imageId."'");
+                                        AND image_id = '".(int)$images['image_id']."'");
 
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_IMAGES_DESCRIPTION." 
                                       WHERE products_id = '".(int)$productId."'
-                                        AND image_id = '".(int)$imageId."'");
+                                        AND image_id = '".(int)$images['image_id']."'");
               }
           }
       }
