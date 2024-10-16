@@ -242,15 +242,14 @@
                xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_CONTENT." WHERE products_id = '".(int)$productId."' AND (content_file = '".xtc_db_input($product_content['content_file'])."' OR content_file = '')");
             }
 
-            //delete images
+            //delete details
             $this->DeleteImage($productId);
             $this->DeleteImages($productId, 0);
-
-
             $this->DeleteXsell($productId, 0);
             $this->DeleteSpecials($productId, 0);
             $this->DeleteAttributes($productId, 0);
 
+            //delete
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS." WHERE products_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_DESCRIPTION." WHERE products_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_XSELL." WHERE xsell_id = '".(int)$productId."'");
@@ -264,14 +263,17 @@
                                     AND r.products_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_REVIEWS." WHERE products_id = '".(int)$productId."'");
 
+            //delete cart
             xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_BASKET." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
             xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_BASKET_ATTRIBUTES." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
     
+            //delete wishlist
             if (defined('MODULE_WISHLIST_SYSTEM_STATUS') && MODULE_WISHLIST_SYSTEM_STATUS == 'true') {
               xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_WISHLIST." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
               xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_WISHLIST_ATTRIBUTES." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
             }
 
+            //delete personal offer
             $customers_statuses_array = xtc_get_customers_statuses();
             foreach ($customers_statuses_array as $customers_status) {
               xtc_db_query("DELETE FROM ".TABLE_PERSONAL_OFFERS_BY.$customers_status['id']." WHERE products_id = '".(int)$productId."'");
