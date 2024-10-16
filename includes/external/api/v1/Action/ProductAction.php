@@ -103,6 +103,12 @@
               if (in_array('reviews', $with) !== false) {
                   $result['reviews'] = $this->GetProductReviews($productId, false);
               }
+              if (in_array('personal_offer', $with) !== false) {
+                  $customers_statuses_array = xtc_get_customers_statuses();
+                  foreach ($customers_statuses_array as $customers_status) {
+                      $result['personal_offer'][$customers_status['id']] = $this->GetProductPersonalOffer$productId, $customers_status['id'], false);
+                  }
+              }
 
               $result = $this->encode_request($result);
               return $result;
@@ -858,7 +864,8 @@
               $specials = [];
               $products_specials_query = xtc_db_query("SELECT *
                                                          FROM ".TABLE_SPECIALS."
-                                                        WHERE products_id = '".(int)$productId."'");
+                                                        WHERE products_id = '".(int)$productId."'
+                                                     ORDER BY specials_id ASC");
               while ($products_specials = xtc_db_fetch_array($products_specials_query)) {
                   $specials[] = $products_specials;
               }
@@ -893,16 +900,57 @@
           } else {
               $reviews = [];
               $products_reviews_query = xtc_db_query("SELECT *
-                                                         FROM ".TABLE_REVIEWS." r
-                                                         JOIN ".TABLE_REVIEWS_DESCRIPTION." rd
-                                                              ON r.reviews_id = rd.reviews_id
-                                                        WHERE r.products_id = '".(int)$productId."'");
+                                                        FROM ".TABLE_REVIEWS." r
+                                                        JOIN ".TABLE_REVIEWS_DESCRIPTION." rd
+                                                             ON r.reviews_id = rd.reviews_id
+                                                       WHERE r.products_id = '".(int)$productId."'
+                                                    ORDER BY r.reviews_id ASC");
               while ($products_reviews = xtc_db_fetch_array($products_reviews_query)) {
                   $reviews[] = $products_reviews;
               }
           }
 
           $result = $this->encode_request($reviews);
+          return $result;
+      }
+
+      /**
+       * Read a Product personal offer by the given Product id.
+       *
+       * @param int $productId The Product id
+       * @param bool $Exception
+       *
+       * @throws Exception
+       *
+       * @return array The Product data
+       */
+      public function GetProductPersonalOffer(int $productId, int $statusId, $Exception = true): array
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+          if (empty($statusId)) {
+              throw new Exception('Status ID required');
+          }
+
+          $product_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_PERSONAL_OFFERS_BY.$statusId."
+                                          WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($product_query) < 1 && $Exception === true) {
+              throw new Exception(sprintf('Product personal offer not found: %s', $productId));
+          } else {
+              $personal_offer = [];
+              $products_personal_offer_query = xtc_db_query("SELECT *
+                                                               FROM ".TABLE_PERSONAL_OFFERS_BY.$statusId."
+                                                              WHERE products_id = '".(int)$productId."'
+                                                           ORDER BY price_id ASC");
+              while ($products_personal_offer = xtc_db_fetch_array($products_personal_offer_query)) {
+                  $personal_offer[] = $products_personal_offer;
+              }
+          }
+
+          $result = $this->encode_request($personal_offer);
           return $result;
       }
 
@@ -923,8 +971,8 @@
           if ($productId > 0) {
               $action = 'update';
               $products_query = xtc_db_query("SELECT *
-                                                  FROM ".TABLE_PRODUCTS."
-                                                 WHERE products_id = '".(int)$productId."'");
+                                                FROM ".TABLE_PRODUCTS."
+                                               WHERE products_id = '".(int)$productId."'");
               if (xtc_db_num_rows($products_query) < 1) {
                   throw new Exception(sprintf('Product not found: %s', $productId));
               } else {
