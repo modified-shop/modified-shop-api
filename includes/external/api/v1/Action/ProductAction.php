@@ -930,7 +930,7 @@
           if (empty($productId)) {
               throw new Exception('Product ID required');
           }
-          if (xtc_not_null($statusId)) {
+          if (!xtc_not_null($statusId)) {
               throw new Exception('Status ID required');
           }
 
