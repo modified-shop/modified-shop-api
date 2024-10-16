@@ -100,6 +100,7 @@
               $app->delete('/products/{id}/images/{iid}',       \api\v1\Service\Product\DeleteImages::class);
               $app->delete('/products/{id}/xsell/{xid}',        \api\v1\Service\Product\DeleteXsell::class);
               $app->delete('/products/{id}/specials/{sid}',     \api\v1\Service\Product\DeleteSpecials::class);
+              $app->delete('/products/{id}/attributes/{aid}',   \api\v1\Service\Product\DeleteAttributes::class);
               
               
               

@@ -246,19 +246,15 @@
             $this->DeleteImage($productId);
             $this->DeleteImages($productId, 0);
 
-            xtc_db_query("DELETE FROM ".TABLE_PRODUCTS." WHERE products_id = '".(int)$productId."'");
-            xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_DESCRIPTION." WHERE products_id = '".(int)$productId."'");
 
             $this->DeleteXsell($productId, 0);
+            $this->DeleteSpecials($productId, 0);
+            $this->DeleteAttributes($productId, 0);
+
+            xtc_db_query("DELETE FROM ".TABLE_PRODUCTS." WHERE products_id = '".(int)$productId."'");
+            xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_DESCRIPTION." WHERE products_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_XSELL." WHERE xsell_id = '".(int)$productId."'");
-            xtc_db_query("DELETE FROM ".TABLE_SPECIALS." WHERE products_id = '".(int)$productId."'");
     
-            xtc_db_query("DELETE pad 
-                            FROM ".TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD." pad
-                            JOIN ".TABLE_PRODUCTS_ATTRIBUTES." pa 
-                                 ON pa.products_attributes_id = pad.products_attributes_id
-                                    AND pa.products_id = '".(int)$productId."'");
-            xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_ATTRIBUTES." WHERE products_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_TAGS." WHERE products_id = '".(int)$productId."'");
 
             xtc_db_query("DELETE rd
@@ -461,6 +457,46 @@
                   xtc_db_query("DELETE FROM ".TABLE_SPECIALS." 
                                       WHERE products_id = '".(int)$productId."'
                                         AND specials_id = '".(int)$specials['specials_id']."'");
+              }
+          }
+      }
+
+      /**
+       * Delete an attribute by the given product id and attributes id.
+       *
+       * @param int $productId The product id
+       * @param int $xsellId The xsell id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAttributes(int $productId, int $attributesId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $where = '';
+          if ($attributesId > 0) {
+              $where = "AND products_attributes_id = '".(int)$attributesId."'";
+          }
+
+          $attributes_query = xtc_db_query("SELECT *
+                                              FROM ".TABLE_PRODUCTS_ATTRIBUTES."
+                                             WHERE products_id = '".(int)$productId."'
+                                                   ".$where);
+          if (xtc_db_num_rows($attributes_query) < 1) {
+              throw new Exception(sprintf('Product attributes not found: %s', $productId));
+          } else {
+              while ($attributes = xtc_db_fetch_array($attributes_query)) {
+                  xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_ATTRIBUTES." 
+                                      WHERE products_id = '".(int)$productId."'
+                                        AND products_attributes_id = '".(int)$attributes['products_attributes_id']."'");
+
+                  xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD." 
+                                      WHERE products_attributes_id = '".(int)$attributes['products_attributes_id']."'");
               }
           }
       }
