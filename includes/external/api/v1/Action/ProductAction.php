@@ -142,32 +142,24 @@
                                                                WHERE products_id = '".(int)$productId."'
                                                                  AND language_id = '".(int)$languages['languages_id']."'");
                   if (xtc_db_num_rows($products_description_query) > 0) {
+                      $action = 'update';
                       $products_description = xtc_db_fetch_array($products_description_query);
-
-                      foreach ($products_description as $key => $value) {
-                          if (isset($this->options[$languages['code']][$key])) {
-                              $products_description[$key] = $this->options[$languages['code']][$key];
-                          }
-                      }
-
-                      // Input validation
-                      $this->checkTableData(TABLE_PRODUCTS_DESCRIPTION, $products_description);
-                      xtc_db_perform(TABLE_PRODUCTS_DESCRIPTION, $products_description, 'update', "products_id = '".(int)$productId."' AND language_id = '".(int)$languages['languages_id']."'");
                   } elseif (isset($this->options[$languages['code']])) {
+                      $action = 'insert';
                       $products_description = $this->getDefaultTableValues(TABLE_PRODUCTS_DESCRIPTION);
                       $products_description['products_id'] = (int)$productId;
                       $products_description['language_id'] = (int)$languages['languages_id'];
-
-                      foreach ($products_description as $key => $value) {
-                          if (isset($this->options[$languages['code']][$key])) {
-                              $products_description[$key] = $this->options[$languages['code']][$key];
-                          }
-                      }
-
-                      // Input validation
-                      $this->checkTableData(TABLE_PRODUCTS_DESCRIPTION, $products_description);
-                      xtc_db_perform(TABLE_PRODUCTS_DESCRIPTION, $products_description);
                   }
+
+                  foreach ($products_description as $key => $value) {
+                      if (isset($this->options[$languages['code']][$key])) {
+                          $products_description[$key] = $this->options[$languages['code']][$key];
+                      }
+                  }
+
+                  // Input validation
+                  $this->checkTableData(TABLE_PRODUCTS_DESCRIPTION, $products_description);
+                  xtc_db_perform(TABLE_PRODUCTS_DESCRIPTION, $products_description, $action, "products_id = '".(int)$productId."' AND language_id = '".(int)$languages['languages_id']."'");
               }
           }
 

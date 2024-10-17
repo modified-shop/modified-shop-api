@@ -134,6 +134,8 @@
               $value = '';
               if ($default['Default'] != '') {
                   $value = $default['Default'];
+              } elseif (strtolower($default['Null']) == 'yes') {
+                  $value = 'null';
               } elseif (strtolower($default['Null']) == 'no'
                         && (strpos(strtolower($default['Type']), 'int') !== false
                             || strpos(strtolower($default['Type']), 'decimal') !== false
@@ -163,6 +165,7 @@
               $default_array[$default['Field']] = [
                 'type' => ((strpos($default['Type'], '(') !== false) ? substr($default['Type'], 0, strpos($default['Type'], '(')) : $default['Type']),
                 'length' => (int)preg_replace('/[^\d]/', '', $default['Type']),
+                'null' => strtolower($default['Null']),
               ];
           }
           
@@ -186,6 +189,7 @@
           foreach ($default_array as $key => $info) {
               if (strpos($info['type'], 'int') !== false
                   && is_numeric($data[$key]) === false
+                  && $info['null'] == 'no'
                   )
               {
                   $error[$key][] = sprintf('Not expected format: %s', $info['type']);
