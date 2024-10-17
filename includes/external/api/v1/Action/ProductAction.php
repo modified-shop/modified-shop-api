@@ -54,6 +54,9 @@
               if (isset($this->options[TABLE_PRODUCTS_DESCRIPTION])) {
                   $products_description = $this->InsertUpdateDescription($productId, $this->options[TABLE_PRODUCTS_DESCRIPTION]);
               }
+              if (isset($this->options[TABLE_PRODUCTS_TO_CATEGORIES])) {
+                  $products_description = $this->InsertUpdateCategories($productId, $this->options[TABLE_PRODUCTS_TO_CATEGORIES]);
+              }
           }
 
           return $this->getProductDetails($productId);
@@ -164,6 +167,57 @@
           }
 
           return $this->getProductDescription($productId);
+      }
+
+      /**
+       * Insert or Update a category by the given product id.
+       *
+       * @param int $productId The product id
+       * @param mixed[] $options
+       *
+       * @return array The product data
+       * @throws Exception
+       */
+      public function InsertUpdateCategories(int $productId, array $options): array
+      {
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $products_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_PRODUCTS."
+                                           WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($products_query) < 1) {
+              throw new Exception(sprintf('Product not found: %s', $productId));
+          } else {
+              if (!isset($this->options['categories_id'])) {
+                  throw new Exception(sprintf('Category ID required'));
+              } else {
+                  $categories_query = xtc_db_query("SELECT *
+                                                      FROM ".TABLE_PRODUCTS_TO_CATEGORIES."
+                                                     WHERE products_id = '".(int)$productId."'
+                                                       AND categories_id = '".(int)$this->options['categories_id']."'");
+                  if (xtc_db_num_rows($categories_query) < 1) {
+                      $action = 'update';
+                      $categories = xtc_db_fetch_array($categories_query);
+                  } else {
+                      $action = 'insert';
+                      $categories = $this->getDefaultTableValues(TABLE_PRODUCTS_TO_CATEGORIES);
+                      $categories['products_id'] = (int)$productId;
+                  }
+              }
+          }
+
+          foreach ($categories as $key => $value) {
+              if (isset($this->options[$key])) {
+                  $categories[$key] = $this->options[$key];
+              }
+          }
+
+          // Input validation
+          $this->checkTableData(TABLE_PRODUCTS_TO_CATEGORIES, $categories);
+          xtc_db_perform(TABLE_PRODUCTS_TO_CATEGORIES, $categories, $action, "products_id = '".(int)$productId."' AND categories_id = '".(int)$this->options['categories_id']."'");
+
+          return $this->GetProductCategories($productId);
       }
 
       /**

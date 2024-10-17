@@ -92,11 +92,13 @@
               $app->post('/products',                           \api\v1\Service\Product\InsertProduct::class);
               $app->post('/products/products',                  \api\v1\Service\Product\InsertUpdateProduct::class);
               $app->post('/products/{id}/description',          \api\v1\Service\Product\InsertUpdateDescription::class);
+              $app->post('/products/{id}/categories',           \api\v1\Service\Product\InsertUpdateCategories::class);
 
               // update products
               $app->put('/products/{id}',                       \api\v1\Service\Product\UpdateProduct::class);
               $app->put('/products/{id}/products',              \api\v1\Service\Product\InsertUpdateProduct::class);
               $app->put('/products/{id}/description',           \api\v1\Service\Product\InsertUpdateDescription::class);
+              $app->put('/products/{id}/categories',            \api\v1\Service\Product\InsertUpdateCategories::class);
 
               // delete products
               $app->delete('/products/{id}',                                \api\v1\Service\Product\DeleteProduct::class);
