@@ -259,6 +259,12 @@
             $this->DeleteAttributes($productId, 0);
             $this->DeleteTags($productId, 0);
 
+            //delete personal offer
+            $customers_statuses_array = xtc_get_customers_statuses();
+            foreach ($customers_statuses_array as $customers_status) {
+                $this->DeletePersonalOffer($productId, $customers_status['id'], 0);
+            }
+
             //delete
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS." WHERE products_id = '".(int)$productId."'");
             xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_DESCRIPTION." WHERE products_id = '".(int)$productId."'");
@@ -279,12 +285,6 @@
             if (defined('MODULE_WISHLIST_SYSTEM_STATUS') && MODULE_WISHLIST_SYSTEM_STATUS == 'true') {
               xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_WISHLIST." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
               xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_WISHLIST_ATTRIBUTES." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
-            }
-
-            //delete personal offer
-            $customers_statuses_array = xtc_get_customers_statuses();
-            foreach ($customers_statuses_array as $customers_status) {
-              xtc_db_query("DELETE FROM ".TABLE_PERSONAL_OFFERS_BY.$customers_status['id']." WHERE products_id = '".(int)$productId."'");
             }
           }
           
@@ -544,6 +544,47 @@
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_TAGS." 
                                       WHERE products_id = '".(int)$productId."'
                                         AND products_tags_id = '".(int)$tags['products_tags_id']."'");
+              }
+          }
+      }
+
+      /**
+       * Delete a personal offer by the given product id and price id.
+       *
+       * @param int $productId The product id
+       * @param int $statusId The status id
+       * @param int $priceId The price id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeletePersonalOffer(int $productId, int $statusId, int $priceId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+          if (!xtc_not_null($statusId)) {
+              throw new Exception('Status ID required');
+          }
+
+          $where = '';
+          if ($priceId > 0) {
+              $where = "AND price_id = '".(int)$priceId."'";
+          }
+
+          $personal_offer_query = xtc_db_query("SELECT *
+                                                  FROM ".TABLE_PERSONAL_OFFERS_BY.$statusId."
+                                                 WHERE products_id = '".(int)$productId."'
+                                                       ".$where);
+          if (xtc_db_num_rows($personal_offer_query) < 1) {
+              throw new Exception(sprintf('Product personal offer not found: %s', $productId));
+          } else {
+              while ($personal_offer = xtc_db_fetch_array($personal_offer_query)) {
+                  xtc_db_query("DELETE FROM ".TABLE_PERSONAL_OFFERS_BY.$statusId."
+                                      WHERE products_id = '".(int)$productId."'
+                                        AND price_id = '".(int)$personal_offer['price_id']."'");
               }
           }
       }

@@ -95,14 +95,15 @@
               $app->put('/products/{id}/description',           \api\v1\Service\Product\InsertUpdateDescription::class);
 
               // delete products
-              $app->delete('/products/{id}',                    \api\v1\Service\Product\DeleteProduct::class);
-              $app->delete('/products/{id}/categories/{cid}',   \api\v1\Service\Product\DeleteCategory::class);
-              $app->delete('/products/{id}/image',              \api\v1\Service\Product\DeleteImage::class);
-              $app->delete('/products/{id}/images/{iid}',       \api\v1\Service\Product\DeleteImages::class);
-              $app->delete('/products/{id}/xsell/{xid}',        \api\v1\Service\Product\DeleteXsell::class);
-              $app->delete('/products/{id}/specials/{sid}',     \api\v1\Service\Product\DeleteSpecials::class);
-              $app->delete('/products/{id}/attributes/{aid}',   \api\v1\Service\Product\DeleteAttributes::class);
-              $app->delete('/products/{id}/tags/{tid}',         \api\v1\Service\Product\DeleteTags::class);
+              $app->delete('/products/{id}',                                \api\v1\Service\Product\DeleteProduct::class);
+              $app->delete('/products/{id}/categories/{cid}',               \api\v1\Service\Product\DeleteCategory::class);
+              $app->delete('/products/{id}/image',                          \api\v1\Service\Product\DeleteImage::class);
+              $app->delete('/products/{id}/images/{iid}',                   \api\v1\Service\Product\DeleteImages::class);
+              $app->delete('/products/{id}/xsell/{xid}',                    \api\v1\Service\Product\DeleteXsell::class);
+              $app->delete('/products/{id}/attributes/{aid}',               \api\v1\Service\Product\DeleteAttributes::class);
+              $app->delete('/products/{id}/tags/{tid}',                     \api\v1\Service\Product\DeleteTags::class);
+              $app->delete('/products/{id}/specials/{sid}',                 \api\v1\Service\Product\DeleteSpecials::class);
+              $app->delete('/products/{id}/personal_offer/{cid}/{pid}',     \api\v1\Service\Product\DeletePersonalOffer::class);
               
               
               
