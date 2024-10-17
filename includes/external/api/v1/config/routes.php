@@ -49,25 +49,25 @@
 
               // get orders
               $app->get('/orders',                        \api\v1\Service\Order\GetAllOrders::class);
-              $app->get('/order/{id}',                    \api\v1\Service\Order\GetSingleOrder::class);
+              $app->get('/orders/{id}',                   \api\v1\Service\Order\GetSingleOrder::class);
               
               // update orders
-              $app->post('/order/status/{id}',            \api\v1\Service\Order\UpdateOrderStatus::class);
-              $app->post('/order/tracking/{id}',          \api\v1\Service\Order\InsertOrderTracking::class);
+              $app->post('/orders/status/{id}',           \api\v1\Service\Order\UpdateOrderStatus::class);
+              $app->post('/orders/tracking/{id}',         \api\v1\Service\Order\InsertOrderTracking::class);
 
               // delete orders
-              $app->delete('/order/{id}',                 \api\v1\Service\Order\DeleteOrder::class);
+              $app->delete('/orders/{id}',                \api\v1\Service\Order\DeleteOrder::class);
               
               
               
               // customers
-              $app->get('/customers',                         \api\v1\Service\Customer\GetCustomers::class);
-              $app->get('/customer/{id}',                     \api\v1\Service\Customer\GetCustomer::class);
-              $app->get('/customer/{id}/address_book',        \api\v1\Service\Customer\GetCustomerAddressBooks::class);
-              $app->get('/customer/{id}/address_book/{aid}',  \api\v1\Service\Customer\GetCustomerAddressBook::class);
+              $app->get('/customers',                           \api\v1\Service\Customer\GetCustomers::class);
+              $app->get('/customers/{id}',                      \api\v1\Service\Customer\GetCustomer::class);
+              $app->get('/customers/{id}/address_book',         \api\v1\Service\Customer\GetCustomerAddressBooks::class);
+              $app->get('/customers/{id}/address_book/{aid}',   \api\v1\Service\Customer\GetCustomerAddressBook::class);
               
               // delete customers
-              $app->delete('/customers/{id}',                 \api\v1\Service\Customer\DeleteCustomer::class);
+              $app->delete('/customers/{id}',                   \api\v1\Service\Customer\DeleteCustomer::class);
                             
               
               
