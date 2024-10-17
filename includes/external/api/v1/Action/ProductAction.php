@@ -30,39 +30,6 @@
       use ProductDeleteAction;
 
       /**
-       * @var mixed[]
-       */
-      protected $options = [
-          "status" => null,
-          "from" => null,
-          "to" => null,
-          "with" => null,
-          "page" => 1,
-          "limit" => 10,
-      ];
-
-      /**
-       * @var LoggerInterface
-       */
-      protected $logger;
-
-      /**
-       * @var Excetion
-       */
-      protected $Excetion = true;
-
-      /**
-       * The constructor.
-       *
-       * @param LoggerHandler $LoggerHandler The logger factory
-       */
-      public function __construct(
-          LoggerHandler $LoggerHandler
-      ) {
-          $this->logger = $LoggerHandler->createLogger();
-      }
-
-      /**
        * Insert a product by the given options.
        *
        * @param mixed[] $options

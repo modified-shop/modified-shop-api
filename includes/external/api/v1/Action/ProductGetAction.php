@@ -83,7 +83,6 @@
                   }
               }
 
-              $result = $this->encode_request($result);
               return $result;
           }
       }

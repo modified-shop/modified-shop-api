@@ -62,7 +62,7 @@
               
               // customers
               $app->get('/customers',                           \api\v1\Service\Customer\GetCustomers::class);
-              $app->get('/customers/{id}',                      \api\v1\Service\Customer\GetCustomer::class);
+              $app->get('/customers/{id}',                      \api\v1\Service\Customer\GetSingleCustomer::class);
               $app->get('/customers/{id}/address_book',         \api\v1\Service\Customer\GetCustomerAddressBooks::class);
               $app->get('/customers/{id}/address_book/{aid}',   \api\v1\Service\Customer\GetCustomerAddressBook::class);
               
@@ -83,7 +83,7 @@
               $app->get('/products/{id}/content',               \api\v1\Service\Product\GetProductContent::class);
               $app->get('/products/{id}/specials',              \api\v1\Service\Product\GetProductSpecials::class);
               $app->get('/products/{id}/reviews',               \api\v1\Service\Product\GetProductReviews::class);
-              $app->get('/products/{id}/personal_offer/{cid}',  \api\v1\Service\Product\GetProductPersonalOffer::class);
+              $app->get('/products/{id}/offer/{cid}',           \api\v1\Service\Product\GetProductPersonalOffer::class);
               
               // insert products
               $app->post('/products',                           \api\v1\Service\Product\InsertProduct::class);
@@ -106,7 +106,7 @@
               $app->delete('/products/{id}/content/{cid}',                  \api\v1\Service\Product\DeleteContents::class);
               $app->delete('/products/{id}/specials/{sid}',                 \api\v1\Service\Product\DeleteSpecials::class);
               $app->delete('/products/{id}/reviews/{rid}',                  \api\v1\Service\Product\DeleteReviews::class);
-              $app->delete('/products/{id}/personal_offer/{cid}/{pid}',     \api\v1\Service\Product\DeletePersonalOffer::class);
+              $app->delete('/products/{id}/offer/{cid}/{pid}',              \api\v1\Service\Product\DeletePersonalOffer::class);
               
               
               
