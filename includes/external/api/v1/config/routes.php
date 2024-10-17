@@ -63,6 +63,9 @@
               // customers
               $app->get('/customers',                           \api\v1\Service\Customer\GetCustomers::class);
               $app->get('/customers/{id}',                      \api\v1\Service\Customer\GetSingleCustomer::class);
+              $app->get('/customers/{id}/info',                 \api\v1\Service\Customer\getCustomerInfo::class);
+              $app->get('/customers/{id}/ip',                   \api\v1\Service\Customer\getCustomerIp::class);
+              $app->get('/customers/{id}/memo',                 \api\v1\Service\Customer\getCustomerMemos::class);
               $app->get('/customers/{id}/address_book',         \api\v1\Service\Customer\GetCustomerAddressBooks::class);
               $app->get('/customers/{id}/address_book/{aid}',   \api\v1\Service\Customer\GetCustomerAddressBook::class);
               
