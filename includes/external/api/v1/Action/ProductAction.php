@@ -180,6 +180,11 @@
        */
       public function InsertUpdateCategories(int $productId, array $options): array
       {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
 
@@ -204,18 +209,18 @@
                       $categories = $this->getDefaultTableValues(TABLE_PRODUCTS_TO_CATEGORIES);
                       $categories['products_id'] = (int)$productId;
                   }
+
+                  foreach ($categories as $key => $value) {
+                      if (isset($this->options[$key])) {
+                          $categories[$key] = $this->options[$key];
+                      }
+                  }
+
+                  // Input validation
+                  $this->checkTableData(TABLE_PRODUCTS_TO_CATEGORIES, $categories);
+                  xtc_db_perform(TABLE_PRODUCTS_TO_CATEGORIES, $categories, $action, "products_id = '".(int)$productId."' AND categories_id = '".(int)$this->options['categories_id']."'");
               }
           }
-
-          foreach ($categories as $key => $value) {
-              if (isset($this->options[$key])) {
-                  $categories[$key] = $this->options[$key];
-              }
-          }
-
-          // Input validation
-          $this->checkTableData(TABLE_PRODUCTS_TO_CATEGORIES, $categories);
-          xtc_db_perform(TABLE_PRODUCTS_TO_CATEGORIES, $categories, $action, "products_id = '".(int)$productId."' AND categories_id = '".(int)$this->options['categories_id']."'");
 
           return $this->GetProductCategories($productId);
       }
