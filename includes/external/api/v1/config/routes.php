@@ -80,6 +80,7 @@
               $app->get('/products/{id}/xsell',                 \api\v1\Service\Product\GetProductXsell::class);
               $app->get('/products/{id}/attributes',            \api\v1\Service\Product\GetProductAttributes::class);
               $app->get('/products/{id}/tags',                  \api\v1\Service\Product\GetProductTags::class);
+              $app->get('/products/{id}/content',               \api\v1\Service\Product\GetProductContent::class);
               $app->get('/products/{id}/specials',              \api\v1\Service\Product\GetProductSpecials::class);
               $app->get('/products/{id}/reviews',               \api\v1\Service\Product\GetProductReviews::class);
               $app->get('/products/{id}/personal_offer/{cid}',  \api\v1\Service\Product\GetProductPersonalOffer::class);
@@ -102,7 +103,9 @@
               $app->delete('/products/{id}/xsell/{xid}',                    \api\v1\Service\Product\DeleteXsell::class);
               $app->delete('/products/{id}/attributes/{aid}',               \api\v1\Service\Product\DeleteAttributes::class);
               $app->delete('/products/{id}/tags/{tid}',                     \api\v1\Service\Product\DeleteTags::class);
+              $app->delete('/products/{id}/content/{cid}',                  \api\v1\Service\Product\DeleteContents::class);
               $app->delete('/products/{id}/specials/{sid}',                 \api\v1\Service\Product\DeleteSpecials::class);
+              $app->delete('/products/{id}/reviews/{rid}',                  \api\v1\Service\Product\DeleteReviews::class);
               $app->delete('/products/{id}/personal_offer/{cid}/{pid}',     \api\v1\Service\Product\DeletePersonalOffer::class);
               
               

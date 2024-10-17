@@ -105,13 +105,16 @@
               if (in_array('tags', $with) !== false) {
                   $result['products_tags'] = $this->GetProductTags($productId);
               }
+              if (in_array('content', $with) !== false) {
+                  $result['products_content'] = $this->GetProductContent($productId);
+              }
               if (in_array('specials', $with) !== false) {
                   $result['specials'] = $this->GetProductSpecials($productId);
               }
               if (in_array('reviews', $with) !== false) {
                   $result['reviews'] = $this->GetProductReviews($productId);
               }
-              if (in_array('personal_offer', $with) !== false) {
+              if (in_array('offer', $with) !== false) {
                   $customers_statuses_array = xtc_get_customers_statuses();
                   foreach ($customers_statuses_array as $customers_status) {
                       $result['personal_offer'][] = [
@@ -245,23 +248,6 @@
               // disable Excetion
               $this->Excetion = false;
 
-              $product_content_query = xtc_db_query("SELECT content_file 
-                                                       FROM ".TABLE_PRODUCTS_CONTENT." 
-                                                      WHERE products_id = '".(int)$productId."'");
-              while ($product_content = xtc_db_fetch_array($product_content_query)) {
-                 $duplicate_content_query = xtc_db_query("SELECT count(*) AS total 
-                                                            FROM ".TABLE_PRODUCTS_CONTENT." 
-                                                           WHERE content_file = '".xtc_db_input($product_content['content_file'])."' 
-                                                             AND products_id != '".(int)$productId."'");
-                 $duplicate_content = xtc_db_fetch_array($duplicate_content_query);
-                 if ($duplicate_content['total'] == 0) {
-                   if (is_file(DIR_FS_CATALOG.'media/products/'.$product_content['content_file'])) {
-                     unlink(DIR_FS_CATALOG.'media/products/'.$product_content['content_file']);
-                   }
-                 }
-                 xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_CONTENT." WHERE products_id = '".(int)$productId."' AND (content_file = '".xtc_db_input($product_content['content_file'])."' OR content_file = '')");
-              }
-  
               //delete details
               $this->DeleteImage($productId);
               $this->DeleteImages($productId, 0);
@@ -270,29 +256,24 @@
               $this->DeleteAttributes($productId, 0);
               $this->DeleteTags($productId, 0);
               $this->DeleteCategory($productId, 0);
-  
+              $this->DeleteContents($productId, 0);
+              $this->DeleteReviews($productId, 0);
+
               //delete personal offer
               $customers_statuses_array = xtc_get_customers_statuses();
               foreach ($customers_statuses_array as $customers_status) {
                   $this->DeletePersonalOffer($productId, $customers_status['id'], 0);
               }
-  
+
               //delete
               xtc_db_query("DELETE FROM ".TABLE_PRODUCTS." WHERE products_id = '".(int)$productId."'");
               xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_DESCRIPTION." WHERE products_id = '".(int)$productId."'");
               xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_XSELL." WHERE xsell_id = '".(int)$productId."'");
-  
-              xtc_db_query("DELETE rd
-                              FROM ".TABLE_REVIEWS_DESCRIPTION." rd
-                              JOIN ".TABLE_REVIEWS." r
-                                   ON r.reviews_id = rd.reviews_id
-                                      AND r.products_id = '".(int)$productId."'");
-              xtc_db_query("DELETE FROM ".TABLE_REVIEWS." WHERE products_id = '".(int)$productId."'");
-  
+
               //delete cart
               xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_BASKET." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
               xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_BASKET_ATTRIBUTES." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
-      
+
               //delete wishlist
               if (defined('MODULE_WISHLIST_SYSTEM_STATUS') && MODULE_WISHLIST_SYSTEM_STATUS == 'true') {
                   xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_WISHLIST." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
@@ -568,6 +549,55 @@
       }
 
       /**
+       * Delete a special by the given product id and specials id.
+       *
+       * @param int $productId The product id
+       * @param int $specialsId The specials id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteContents(int $productId, int $contentId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $where = '';
+          if ($contentId > 0) {
+              $where = "AND content_id = '".(int)$contentId."'";
+          }
+
+          $content_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_PRODUCTS_CONTENT."
+                                          WHERE products_id = '".(int)$productId."'
+                                                ".$where);
+          if (xtc_db_num_rows($content_query) < 1 && $this->Excetion === true) {
+              throw new Exception(sprintf('Product content not found: %s', $productId));
+          } else {
+              while ($content = xtc_db_fetch_array($content_query)) {
+                  $duplicate_content_query = xtc_db_query("SELECT COUNT(*) AS total 
+                                                             FROM ".TABLE_PRODUCTS_CONTENT." 
+                                                            WHERE content_file = '".xtc_db_input($content['content_file'])."' 
+                                                              AND products_id != '".(int)$productId."'");
+                  $duplicate_content = xtc_db_fetch_array($duplicate_content_query);
+                  if ($duplicate_content['total'] == 0
+                      && is_file(DIR_FS_CATALOG.'media/products/'.$content['content_file'])
+                      )
+                  {
+                     unlink(DIR_FS_CATALOG.'media/products/'.$content['content_file']);
+                  }
+
+                  xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_CONTENT." 
+                                      WHERE products_id = '".(int)$productId."'
+                                        AND content_id = '".(int)$specials['content_id']."'");
+              }
+          }
+      }
+
+      /**
        * Delete a personal offer by the given product id and price id.
        *
        * @param int $productId The product id
@@ -604,6 +634,46 @@
                   xtc_db_query("DELETE FROM ".TABLE_PERSONAL_OFFERS_BY.$statusId."
                                       WHERE products_id = '".(int)$productId."'
                                         AND price_id = '".(int)$personal_offer['price_id']."'");
+              }
+          }
+      }
+
+      /**
+       * Delete a review by the given product id and reviews id.
+       *
+       * @param int $productId The product id
+       * @param int $reviewsId The reviews id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteReviews(int $productId, int $reviewsId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $where = '';
+          if ($reviewsId > 0) {
+              $where = "AND reviews_id = '".(int)$reviewsId."'";
+          }
+
+          $reviews_query = xtc_db_query("SELECT *
+                                                  FROM ".TABLE_REVIEWS."
+                                                 WHERE products_id = '".(int)$productId."'
+                                                       ".$where);
+          if (xtc_db_num_rows($reviews_query) < 1 && $this->Excetion === true) {
+              throw new Exception(sprintf('Product personal offer not found: %s', $productId));
+          } else {
+              while ($reviews = xtc_db_fetch_array($reviews_query)) {
+                  xtc_db_query("DELETE FROM ".TABLE_REVIEWS."
+                                      WHERE products_id = '".(int)$productId."'
+                                        AND reviews_id = '".(int)$reviews['reviews_id']."'");
+
+                  xtc_db_query("DELETE FROM ".TABLE_REVIEWS_DESCRIPTION."
+                                      WHERE reviews_id = '".(int)$reviews['reviews_id']."'");
               }
           }
       }
@@ -903,7 +973,44 @@
       }
 
       /**
-       * Read a Product tags by the given Product id.
+       * Read a Product content by the given Product id.
+       *
+       * @param int $productId The Product id
+       * @param bool $Exception
+       *
+       * @throws Exception
+       *
+       * @return array The Product data
+       */
+      public function GetProductContent(int $productId): array
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $content = [];
+          $product_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_PRODUCTS_CONTENT."
+                                          WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($product_query) < 1 && $this->Excetion === true) {
+              throw new Exception(sprintf('Product tags not found: %s', $productId));
+          } else {
+              $products_content_query = xtc_db_query("SELECT *
+                                                     FROM ".TABLE_PRODUCTS_CONTENT."
+                                                    WHERE products_id = '".(int)$productId."'
+                                                 ORDER BY sort_order, content_id");
+              while ($products_content = xtc_db_fetch_array($products_content_query)) {
+                  $content[] = $products_content;
+              }
+          }
+
+          $result = $this->encode_request($content);
+          return $result;
+      }
+
+      /**
+       * Read a Product specials by the given Product id.
        *
        * @param int $productId The Product id
        * @param bool $Exception
@@ -940,7 +1047,7 @@
       }
 
       /**
-       * Read a Product tags by the given Product id.
+       * Read a Product reviews by the given Product id.
        *
        * @param int $productId The Product id
        * @param bool $Exception
