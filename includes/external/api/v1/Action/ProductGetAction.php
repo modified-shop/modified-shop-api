@@ -67,20 +67,14 @@
               if (in_array('content', $with) !== false) {
                   $result['products_content'] = $this->GetProductContent($productId);
               }
+              if (in_array('offer', $with) !== false) {
+                  $result['personal_offer'] =  $this->GetProductPersonalOffer($productId);
+              }
               if (in_array('specials', $with) !== false) {
                   $result['specials'] = $this->GetProductSpecials($productId);
               }
               if (in_array('reviews', $with) !== false) {
                   $result['reviews'] = $this->GetProductReviews($productId);
-              }
-              if (in_array('offer', $with) !== false) {
-                  $customers_statuses_array = xtc_get_customers_statuses();
-                  foreach ($customers_statuses_array as $customers_status) {
-                      $result['personal_offer'][] = [
-                        'id' => $customers_status['id'],
-                        'data' => $this->GetProductPersonalOffer($productId, $customers_status['id']),
-                      ];
-                  }
               }
 
               return $result;
@@ -185,7 +179,6 @@
        * Read a Product by the given Product id.
        *
        * @param int $productId The Product id
-       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -216,7 +209,6 @@
        * Read a product description by the given product id.
        *
        * @param int $productId The product id
-       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -258,7 +250,6 @@
        * Read a Product categories by the given Product id.
        *
        * @param int $productId The Product id
-       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -295,7 +286,6 @@
        * Read a Product images by the given Product id.
        *
        * @param int $productId The Product id
-       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -332,7 +322,6 @@
        * Read a Product xsell by the given Product id.
        *
        * @param int $productId The Product id
-       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -369,7 +358,6 @@
        * Read a Product attributes by the given Product id.
        *
        * @param int $productId The Product id
-       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -412,7 +400,6 @@
        * Read a Product tags by the given Product id.
        *
        * @param int $productId The Product id
-       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -449,7 +436,6 @@
        * Read a Product content by the given Product id.
        *
        * @param int $productId The Product id
-       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -486,7 +472,6 @@
        * Read a Product specials by the given Product id.
        *
        * @param int $productId The Product id
-       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -523,7 +508,6 @@
        * Read a Product reviews by the given Product id.
        *
        * @param int $productId The Product id
-       * @param bool $Exception
        *
        * @throws Exception
        *
@@ -562,13 +546,51 @@
        * Read a Product personal offer by the given Product id.
        *
        * @param int $productId The Product id
-       * @param bool $Exception
        *
        * @throws Exception
        *
        * @return array The Product data
        */
-      public function GetProductPersonalOffer(int $productId, int $statusId): array
+      public function GetProductPersonalOffer(int $productId): array
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $personal_offer = [];
+          $customers_statuses_array = xtc_get_customers_statuses();
+          foreach ($customers_statuses_array as $customers_status) {
+              $offer = [];
+              $products_personal_offer_query = xtc_db_query("SELECT *
+                                                               FROM ".TABLE_PERSONAL_OFFERS_BY.$customers_status['id']."
+                                                              WHERE products_id = '".(int)$productId."'
+                                                           ORDER BY price_id ASC");
+              while ($products_personal_offer = xtc_db_fetch_array($products_personal_offer_query)) {
+                  $offer[] = $products_personal_offer;
+              }
+
+              $personal_offer[] = [
+                'id' => $customers_status['id'],
+                'data' => $offer,
+              ];
+          }
+
+          $result = $this->encode_request($personal_offer);
+          return $result;
+      }
+
+      /**
+       * Read a Product personal offer by the given Product id and Status id.
+       *
+       * @param int $productId The Product id
+       * @param int $statusId The Status id
+       *
+       * @throws Exception
+       *
+       * @return array The Product data
+       */
+      public function GetProductPersonalOfferByStatus(int $productId, int $statusId): array
       {
           // Input validation
           if (empty($productId)) {
