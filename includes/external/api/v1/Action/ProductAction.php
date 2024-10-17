@@ -592,7 +592,7 @@
 
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_CONTENT." 
                                       WHERE products_id = '".(int)$productId."'
-                                        AND content_id = '".(int)$specials['content_id']."'");
+                                        AND content_id = '".(int)$content['content_id']."'");
               }
           }
       }
