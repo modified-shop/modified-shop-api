@@ -86,7 +86,7 @@
               $app->get('/products/{id}/content',               \api\v1\Service\Product\GetProductContent::class);
               $app->get('/products/{id}/specials',              \api\v1\Service\Product\GetProductSpecials::class);
               $app->get('/products/{id}/reviews',               \api\v1\Service\Product\GetProductReviews::class);
-              $app->get('/products/{id}/offer/{cid}',           \api\v1\Service\Product\GetProductPersonalOffer::class);
+              $app->get('/products/{id}/offer',                 \api\v1\Service\Product\GetProductPersonalOffer::class);
               
               // insert products
               $app->post('/products',                           \api\v1\Service\Product\InsertProduct::class);
