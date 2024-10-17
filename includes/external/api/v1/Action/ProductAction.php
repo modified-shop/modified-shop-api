@@ -144,7 +144,7 @@
                   if (xtc_db_num_rows($products_description_query) > 0) {
                       $action = 'update';
                       $products_description = xtc_db_fetch_array($products_description_query);
-                  } elseif (isset($this->options[$languages['code']])) {
+                  } else {
                       $action = 'insert';
                       $products_description = $this->getDefaultTableValues(TABLE_PRODUCTS_DESCRIPTION);
                       $products_description['products_id'] = (int)$productId;
