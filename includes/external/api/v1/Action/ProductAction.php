@@ -196,7 +196,7 @@
                                                       FROM ".TABLE_PRODUCTS_TO_CATEGORIES."
                                                      WHERE products_id = '".(int)$productId."'
                                                        AND categories_id = '".(int)$this->options['categories_id']."'");
-                  if (xtc_db_num_rows($categories_query) < 1) {
+                  if (xtc_db_num_rows($categories_query) > 0) {
                       $action = 'update';
                       $categories = xtc_db_fetch_array($categories_query);
                   } else {
