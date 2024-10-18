@@ -33,9 +33,9 @@
        * @var mixed[]
        */
       protected $images_type_array = [
-        'mini',
-        'thumbnail',
         'popup',
+        'info',
+        'thumbnail',
         'mini',
         'midi',
       ];
@@ -272,11 +272,11 @@
                   chmod(DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image_name, 0644);
 
                   xtc_db_query("UPDATE ".TABLE_PRODUCTS."
-                                   SET products_image".$image_type." = '".xtc_db_input($products_image_name)."'
+                                   SET products_image = '".xtc_db_input($products_image_name)."'
                                  WHERE products_id = '".(int)$productId."'");
 
                   foreach ($this->images_type_array as $image_type) {
-                      $a = new \image_manipulation(DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image_name, constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_WIDTH'), constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_HEIGHT'), DIR_FS_CATALOG.DIR_WS_IMAGES.'products/'.strtolower($image_type).'_images/'.$products_image_name, IMAGE_QUALITY, '');
+                      $a = new \image_manipulation(DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image_name, constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_WIDTH'), constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_HEIGHT'), DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/'.strtolower($image_type).'_images/'.$products_image_name, IMAGE_QUALITY, '');
                       $a->create();
                   }
               }
@@ -330,7 +330,8 @@
 
               if ($products_image = xtc_try_upload('image_name', DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/', '777', $this->accepted_image_files_extensions, $this->accepted_image_files_mime_types)) {
                   $products_image_name = preg_replace('/[^\d\w\-\_\.]/', '', $products_image->filename);
-
+                  $this->options['image_name'] = $products_image_name;
+                  
                   rename(DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image->filename, DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image_name);
 
                   //image chmod
@@ -347,7 +348,7 @@
                   xtc_db_perform(TABLE_PRODUCTS_IMAGES, $images, $action, $where);
 
                   foreach ($this->images_type_array as $image_type) {
-                      $a = new \image_manipulation(DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image_name, constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_WIDTH'), constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_HEIGHT'), DIR_FS_CATALOG.DIR_WS_IMAGES.'products/'.strtolower($image_type).'_images/'.$products_image_name, IMAGE_QUALITY, '');
+                      $a = new \image_manipulation(DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image_name, constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_WIDTH'), constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_HEIGHT'), DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/'.strtolower($image_type).'_images/'.$products_image_name, IMAGE_QUALITY, '');
                       $a->create();
                   }
               }
