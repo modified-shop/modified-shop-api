@@ -658,6 +658,81 @@
       }
 
       /**
+       * Insert or Update a product content by the given product id.
+       *
+       * @param int $productId The product id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The product data
+       */
+      public function InsertUpdateContent(int $productId, array $options): array
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $products_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_PRODUCTS."
+                                           WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($products_query) < 1) {
+              throw new Exception(sprintf('Product not found: %s', $productId));
+          } else {
+              $languages_query = xtc_db_query("SELECT *
+                                                 FROM ".TABLE_LANGUAGES);
+              while ($languages = xtc_db_fetch_array($languages_query)) {
+                  $where = '';
+                  if (isset($this->options['content_id'])) {
+                      $where = "AND content_id = '".(int)$this->options['content_id']."'";
+                      $content_query = xtc_db_query("SELECT *
+                                                       FROM ".TABLE_PRODUCTS_CONTENT."
+                                                      WHERE products_id = '".(int)$productId."'
+                                                        AND ".$where);
+                      if (xtc_db_num_rows($content_query) < 1) {
+                          throw new Exception(sprintf('Content ID invalid'));
+                      } else {
+                          $action = 'update';
+                          $content = xtc_db_fetch_array($content_query);
+                      }
+                  } else {
+                      $action = 'insert';
+                      $content = $this->getDefaultTableValues(TABLE_PRODUCTS_CONTENT);
+                      $content['products_id'] = (int)$productId;
+                  }
+
+                  foreach ($content as $key => $value) {
+                      if (isset($this->options[$languages['code']][$key])) {
+                          $content[$key] = $this->options[$languages['code']][$key];
+                      }
+                  }
+
+                  // Input validation
+                  $this->checkTableData(TABLE_PRODUCTS_CONTENT, $content);
+                  xtc_db_perform(TABLE_PRODUCTS_CONTENT, $content, $action, "products_id = '".(int)$productId."' ".$where);
+
+                  if ($content_file = xtc_try_upload('['.$languages['code'].']content_file', DIR_FS_CATALOG.'media/content/', '777', $this->accepted_extfile_extensions, $this->accepted_extfile_mime_types)) {
+                      $content_file_name = preg_replace('/[^\d\w\-\_\.]/', '', $content_file->filename);
+                      
+                      rename(DIR_FS_CATALOG.'media/content/'.$products_image->filename, DIR_FS_CATALOG.'media/content/'.$content_file_name);
+                      copy(DIR_FS_CATALOG.'media/content/'.$content_file_name, DIR_FS_CATALOG.'media/content/backup/'.$content_file_name);
+    
+                      //image chmod
+                      chmod(DIR_FS_CATALOG.'media/content/'.$content_file_name, 0644);
+                  }
+              }
+          
+          
+          }
+
+          return $this->GetProductContent($productId);
+      }
+
+      /**
        * Insert or Update a product specials by the given product id.
        *
        * @param int $productId The product id
