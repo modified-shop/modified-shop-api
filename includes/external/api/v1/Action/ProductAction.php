@@ -692,7 +692,7 @@
                       $content_query = xtc_db_query("SELECT *
                                                        FROM ".TABLE_PRODUCTS_CONTENT."
                                                       WHERE products_id = '".(int)$productId."'
-                                                        AND ".$where);
+                                                            ".$where);
                       if (xtc_db_num_rows($content_query) < 1) {
                           throw new Exception(sprintf('Content ID invalid'));
                       } else {
