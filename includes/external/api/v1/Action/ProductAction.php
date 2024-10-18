@@ -532,13 +532,13 @@
                   } else {
                       $action = 'update';
                       $specials = xtc_db_fetch_array($specials_query);
-                      $products['specials_last_modified'] = 'now()';
+                      $specials['specials_last_modified'] = 'now()';
                   }
               } else {
                   $action = 'insert';
                   $specials = $this->getDefaultTableValues(TABLE_SPECIALS);
                   $specials['products_id'] = (int)$productId;
-                  $products['specials_date_added'] = 'now()';
+                  $specials['specials_date_added'] = 'now()';
               }
 
               foreach ($specials as $key => $value) {
