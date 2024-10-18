@@ -80,6 +80,7 @@
               $app->get('/products/{id}/description',           \api\v1\Service\Product\GetProductDescription::class);
               $app->get('/products/{id}/categories',            \api\v1\Service\Product\GetProductCategories::class);
               $app->get('/products/{id}/images',                \api\v1\Service\Product\GetProductImages::class);
+              $app->get('/products/{id}/images/description',    \api\v1\Service\Product\GetProductImagesDescription::class);
               $app->get('/products/{id}/xsell',                 \api\v1\Service\Product\GetProductXsell::class);
               $app->get('/products/{id}/attributes',            \api\v1\Service\Product\GetProductAttributes::class);
               $app->get('/products/{id}/tags',                  \api\v1\Service\Product\GetProductTags::class);
@@ -89,24 +90,27 @@
               $app->get('/products/{id}/offer',                 \api\v1\Service\Product\GetProductPersonalOffer::class);
               
               // insert products
-              $app->post('/products',                           \api\v1\Service\Product\InsertProduct::class);
-              $app->post('/products/products',                  \api\v1\Service\Product\InsertUpdateProduct::class);
-              $app->post('/products/{id}/description',          \api\v1\Service\Product\InsertUpdateDescription::class);
-              $app->post('/products/{id}/categories',           \api\v1\Service\Product\InsertUpdateCategories::class);
-              $app->post('/products/{id}/image',                \api\v1\Service\Product\InsertUpdateImage::class);
-              $app->post('/products/{id}/images',               \api\v1\Service\Product\InsertUpdateImages::class);
+              $app->post('/products',                                 \api\v1\Service\Product\InsertProduct::class);
+              $app->post('/products/products',                        \api\v1\Service\Product\InsertUpdateProduct::class);
+              $app->post('/products/{id}/description',                \api\v1\Service\Product\InsertUpdateDescription::class);
+              $app->post('/products/{id}/categories',                 \api\v1\Service\Product\InsertUpdateCategories::class);
+              $app->post('/products/{id}/image',                      \api\v1\Service\Product\InsertUpdateImage::class);
+              $app->post('/products/{id}/images',                     \api\v1\Service\Product\InsertUpdateImages::class);
+              $app->post('/products/{id}/images/{iid}/description',   \api\v1\Service\Product\InsertUpdateImagesDescription::class);
 
               // update products
-              $app->put('/products/{id}',                       \api\v1\Service\Product\UpdateProduct::class);
-              $app->put('/products/{id}/products',              \api\v1\Service\Product\InsertUpdateProduct::class);
-              $app->put('/products/{id}/description',           \api\v1\Service\Product\InsertUpdateDescription::class);
-              $app->put('/products/{id}/categories',            \api\v1\Service\Product\InsertUpdateCategories::class);
+              $app->put('/products/{id}',                             \api\v1\Service\Product\UpdateProduct::class);
+              $app->put('/products/{id}/products',                    \api\v1\Service\Product\InsertUpdateProduct::class);
+              $app->put('/products/{id}/description',                 \api\v1\Service\Product\InsertUpdateDescription::class);
+              $app->put('/products/{id}/categories',                  \api\v1\Service\Product\InsertUpdateCategories::class);
+              $app->put('/products/{id}/images/{iid}/description',    \api\v1\Service\Product\InsertUpdateImagesDescription::class);
 
               // delete products
               $app->delete('/products/{id}',                                \api\v1\Service\Product\DeleteProduct::class);
               $app->delete('/products/{id}/categories/{cid}',               \api\v1\Service\Product\DeleteCategory::class);
               $app->delete('/products/{id}/image',                          \api\v1\Service\Product\DeleteImage::class);
               $app->delete('/products/{id}/images/{iid}',                   \api\v1\Service\Product\DeleteImages::class);
+              $app->delete('/products/{id}/images/{iid}/description',       \api\v1\Service\Product\DeleteImagesDescription::class);
               $app->delete('/products/{id}/xsell/{xid}',                    \api\v1\Service\Product\DeleteXsell::class);
               $app->delete('/products/{id}/attributes/{aid}',               \api\v1\Service\Product\DeleteAttributes::class);
               $app->delete('/products/{id}/tags/{tid}',                     \api\v1\Service\Product\DeleteTags::class);

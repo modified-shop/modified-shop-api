@@ -310,11 +310,61 @@
                                                      WHERE products_id = '".(int)$productId."'
                                                   ORDER BY image_nr, image_id");
               while ($product_images = xtc_db_fetch_array($product_images_query)) {
+                  $product_images = array_merge($product_images, $this->GetProductImagesDescription($productId, $product_images['image_id']));
+
                   $images[] = $product_images;
               }
           }
 
           $result = $this->encode_request($images);
+          return $result;
+      }
+
+      /**
+       * Read a Product image description by the given Product id and image id.
+       *
+       * @param int $productId The Product id
+       *
+       * @throws Exception
+       *
+       * @return array The Product data
+       */
+      public function GetProductImagesDescription(int $productId, int $imageId = 0): array
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $where = '';
+          if ($imageId > 0) {
+              $where = "pid.image_id = '".(int)$imageId."'";
+          }
+
+          $description = [];
+          $product_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_PRODUCTS_IMAGES."
+                                          WHERE products_id = '".(int)$productId."'
+                                                ".str_replace('pid.', '', $where));
+          if (xtc_db_num_rows($product_query) < 1 && $this->Excetion === true) {
+              throw new Exception(sprintf('Product images not found: %s', $productId));
+          } else {
+              $image_description_query = xtc_db_query("SELECT pid.*
+                                                              l.code
+                                                         FROM ".TABLE_PRODUCTS_IMAGES_DESCRIPTION." pid
+                                                         JOIN ".TABLE_LANGUAGES." l
+                                                              ON l.languages_id = pid.language_id
+                                                        WHERE pid.products_id = '".(int)$productId."'
+                                                              ".$where);
+              while ($image_description = xtc_db_fetch_array($image_description_query)) {
+                  $code = $image_description['code'];
+                  unset($image_description['code']);
+
+                  $description[$code] = $image_description;
+              }
+          }
+
+          $result = $this->encode_request($description);
           return $result;
       }
 

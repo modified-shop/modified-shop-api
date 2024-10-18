@@ -79,8 +79,9 @@
        * @param int $productId The product id
        * @param mixed[] $options
        *
-       * @return array The product data
        * @throws Exception
+       *
+       * @return array The product data
        */
       public function InsertUpdateProduct(int $productId, array $options): array
       {
@@ -186,8 +187,9 @@
        * @param int $productId The product id
        * @param mixed[] $options
        *
-       * @return array The product data
        * @throws Exception
+       *
+       * @return array The product data
        */
       public function InsertUpdateCategories(int $productId, array $options): array
       {
@@ -243,7 +245,7 @@
        *
        * @throws Exception
        *
-       * @return void
+       * @return array The product data
        */
       public function InsertUpdateImage(int $productId): void
       {
@@ -281,6 +283,8 @@
                   }
               }
           }
+
+          return $this->getProduct($productId);
       }
 
       /**
@@ -290,7 +294,7 @@
        *
        * @throws Exception
        *
-       * @return void
+       * @return array The product data
        */
       public function InsertUpdateImages(int $productId, array $options): void
       {
@@ -308,6 +312,11 @@
           if (xtc_db_num_rows($products_query) < 1) {
               throw new Exception(sprintf('Product not found: %s', $productId));
           } else {
+              define('_VALID_XTC', true);
+
+              // include needed classes
+              require_once (DIR_FS_CATALOG.DIR_ADMIN.'includes/classes/'.IMAGE_MANIPULATOR);
+
               $where = '';
               if (isset($this->options['image_nr'])) {
                   $where = "products_id = '".(int)$productId."' AND image_nr = '".(int)$this->options['image_nr']."'";
@@ -328,6 +337,18 @@
                   $images['products_id'] = (int)$productId;
               }
 
+              foreach ($images as $key => $value) {
+                  if (isset($this->options[$key])) {
+                      $images[$key] = $this->options[$key];
+                  }
+              }
+
+              // Input validation
+              $this->checkTableData(TABLE_PRODUCTS_IMAGES, $images);
+              xtc_db_perform(TABLE_PRODUCTS_IMAGES, $images, $action, $where);
+
+              $this->InsertUpdateImagesDescription($productId, $options):
+              
               if ($products_image = xtc_try_upload('image_name', DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/', '777', $this->accepted_image_files_extensions, $this->accepted_image_files_mime_types)) {
                   $products_image_name = preg_replace('/[^\d\w\-\_\.]/', '', $products_image->filename);
                   $this->options['image_name'] = $products_image_name;
@@ -337,16 +358,6 @@
                   //image chmod
                   chmod(DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image_name, 0644);
 
-                  foreach ($images as $key => $value) {
-                      if (isset($this->options[$key])) {
-                          $images[$key] = $this->options[$key];
-                      }
-                  }
-
-                  // Input validation
-                  $this->checkTableData(TABLE_PRODUCTS_IMAGES, $images);
-                  xtc_db_perform(TABLE_PRODUCTS_IMAGES, $images, $action, $where);
-
                   foreach ($this->images_type_array as $image_type) {
                       $a = new \image_manipulation(DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image_name, constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_WIDTH'), constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_HEIGHT'), DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/'.strtolower($image_type).'_images/'.$products_image_name, IMAGE_QUALITY, '');
                       $a->create();
@@ -354,6 +365,70 @@
               }
 
           }
+
+          return $this->GetProductImages($productId);
+      }
+
+      /**
+       * Insert or update more images of a product by the given product id and image nr.
+       *
+       * @param int $productId The product id
+       *
+       * @throws Exception
+       *
+       * @return array The product data
+       */
+      public function InsertUpdateImagesDescription(int $productId, array $options): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $product_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_PRODUCTS_IMAGES."
+                                          WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($product_query) < 1 && $this->Excetion === true) {
+              throw new Exception(sprintf('Product images not found: %s', $productId));
+          } else {
+              if (!isset($this->options['image_id'])) {
+                  throw new Exception(sprintf('Image ID required'));
+              } else {
+                  $languages_query = xtc_db_query("SELECT *
+                                                     FROM ".TABLE_LANGUAGES);
+                  while ($languages = xtc_db_fetch_array($languages_query)) {
+                      $image_description_query = xtc_db_query("SELECT *
+                                                                 FROM ".TABLE_PRODUCTS_IMAGES_DESCRIPTION."
+                                                                WHERE products_id = '".(int)$productId."'
+                                                                  AND image_id = '".(int)$this->options['image_id']."'
+                                                                  AND language_id = '".(int)$languages['languages_id']."'");
+                      if (xtc_db_num_rows($image_description_query) > 0) {
+                          $action = 'update';
+                          $image_description = xtc_db_fetch_array($image_description_query);
+                      } else {
+                          $action = 'insert';
+                          $image_description = $this->getDefaultTableValues(TABLE_PRODUCTS_IMAGES_DESCRIPTION);
+                          $image_description['products_id'] = (int)$productId;
+                          $image_description['language_id'] = (int)$languages['languages_id'];
+                      }
+
+                      foreach ($image_description as $key => $value) {
+                          if (isset($this->options[$languages['code']][$key])) {
+                              $image_description[$key] = $this->options[$languages['code']][$key];
+                          }
+                      }
+
+                      // Input validation
+                      $this->checkTableData(TABLE_PRODUCTS_IMAGES_DESCRIPTION, $image_description);
+                      xtc_db_perform(TABLE_PRODUCTS_IMAGES_DESCRIPTION, $image_description, $action, "products_id = '".(int)$productId."' AND image_id = '".(int)$this->options['image_id']."' AND language_id = '".(int)$languages['languages_id']."'");
+                  }
+              }
+          }
+
+          return $this->GetProductImagesDescription($productId);
       }
 
   }

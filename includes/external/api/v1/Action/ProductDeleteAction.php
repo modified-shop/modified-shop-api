@@ -180,11 +180,45 @@
           } else {
               while ($images = xtc_db_fetch_array($images_query)) {
                   $this->deleteImageFile($images['image_name']);
+                  $this->DeleteImagesDescription($productId, $images['image_id']);
                   
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_IMAGES." 
                                       WHERE products_id = '".(int)$productId."'
                                         AND image_id = '".(int)$images['image_id']."'");
+              }
+          }
+      }
 
+      /**
+       * Delete a image by the given product id and image id.
+       *
+       * @param int $productId The product id
+       * @param int $imageId The image id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteImages(int $productId, int $imageId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+          
+          $where = '';
+          if ($imageId > 0) {
+              $where = "AND image_id = '".(int)$imageId."'";
+          }
+          
+          $images_query = xtc_db_query("SELECT *
+                                          FROM ".TABLE_PRODUCTS_IMAGES."
+                                         WHERE products_id = '".(int)$productId."'
+                                             ".$where);
+          if (xtc_db_num_rows($images_query) < 1 && $this->Excetion === true) {
+              throw new Exception(sprintf('Product more images not found: %s', $productId));
+          } else {
+              while ($images = xtc_db_fetch_array($images_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_IMAGES_DESCRIPTION." 
                                       WHERE products_id = '".(int)$productId."'
                                         AND image_id = '".(int)$images['image_id']."'");
