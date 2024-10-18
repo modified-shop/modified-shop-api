@@ -341,7 +341,7 @@
 
           $where = '';
           if ($imageId > 0) {
-              $where = "pid.image_id = '".(int)$imageId."'";
+              $where = "AND pid.image_id = '".(int)$imageId."'";
           }
 
           $description = [];
@@ -352,7 +352,7 @@
           if (xtc_db_num_rows($product_query) < 1 && $this->Excetion === true) {
               throw new Exception(sprintf('Product images not found: %s', $productId));
           } else {
-              $image_description_query = xtc_db_query("SELECT pid.*
+              $image_description_query = xtc_db_query("SELECT pid.*,
                                                               l.code
                                                          FROM ".TABLE_PRODUCTS_IMAGES_DESCRIPTION." pid
                                                          JOIN ".TABLE_LANGUAGES." l
