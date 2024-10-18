@@ -687,8 +687,8 @@
                                                  FROM ".TABLE_LANGUAGES);
               while ($languages = xtc_db_fetch_array($languages_query)) {
                   $where = '';
-                  if (isset($this->options['content_id'])) {
-                      $where = "AND content_id = '".(int)$this->options['content_id']."'";
+                  if (isset($this->options[$languages['code']]['content_id'])) {
+                      $where = "AND content_id = '".(int)$this->options[$languages['code']]['content_id']."'";
                       $content_query = xtc_db_query("SELECT *
                                                        FROM ".TABLE_PRODUCTS_CONTENT."
                                                       WHERE products_id = '".(int)$productId."'
