@@ -247,7 +247,7 @@
        *
        * @return array The product data
        */
-      public function InsertUpdateImage(int $productId): void
+      public function InsertUpdateImage(int $productId): array
       {
           // Input validation
           if (empty($productId)) {
@@ -296,7 +296,7 @@
        *
        * @return array The product data
        */
-      public function InsertUpdateImages(int $productId, array $options): void
+      public function InsertUpdateImages(int $productId, array $options): array
       {
           // Input validation
           if (empty($productId)) {
@@ -378,7 +378,7 @@
        *
        * @return array The product data
        */
-      public function InsertUpdateImagesDescription(int $productId, array $options): void
+      public function InsertUpdateImagesDescription(int $productId, array $options): array
       {
           // Input validation
           if (empty($productId)) {
