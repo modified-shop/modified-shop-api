@@ -522,7 +522,7 @@
           } else {
               $where = '';
               if (isset($this->options['specials_id'])) {
-                  $where = "AND xsell_id = '".(int)$this->options['specials_id']."'";
+                  $where = "AND specials_id = '".(int)$this->options['specials_id']."'";
                   $specials_query = xtc_db_query("SELECT *
                                                     FROM ".TABLE_SPECIALS."
                                                    WHERE products_id = '".(int)$productId."'
@@ -532,11 +532,13 @@
                   } else {
                       $action = 'update';
                       $specials = xtc_db_fetch_array($specials_query);
+                      $products['specials_last_modified'] = 'now()';
                   }
               } else {
                   $action = 'insert';
                   $specials = $this->getDefaultTableValues(TABLE_SPECIALS);
                   $specials['products_id'] = (int)$productId;
+                  $products['specials_date_added'] = 'now()';
               }
 
               foreach ($specials as $key => $value) {
