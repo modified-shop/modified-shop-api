@@ -438,7 +438,7 @@
       }
 
       /**
-       * Insert or Update a product by the given product id.
+       * Insert or Update a product xsell by the given product id.
        *
        * @param int $productId The product id
        * @param mixed[] $options
@@ -492,6 +492,65 @@
           }
 
           return $this->GetProductXsell($productId);
+      }
+
+      /**
+       * Insert or Update a product specials by the given product id.
+       *
+       * @param int $productId The product id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The product data
+       */
+      public function InsertUpdateSpecials(int $productId, array $options): array
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $products_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_PRODUCTS."
+                                           WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($products_query) < 1) {
+              throw new Exception(sprintf('Product not found: %s', $productId));
+          } else {
+              $where = '';
+              if (isset($this->options['specials_id'])) {
+                  $where = "AND xsell_id = '".(int)$this->options['specials_id']."'";
+                  $specials_query = xtc_db_query("SELECT *
+                                                    FROM ".TABLE_SPECIALS."
+                                                   WHERE products_id = '".(int)$productId."'
+                                                         ".$where);
+                  if (xtc_db_num_rows($specials_query) < 1) {
+                      throw new Exception(sprintf('Specials ID invalid'));
+                  } else {
+                      $action = 'update';
+                      $specials = xtc_db_fetch_array($specials_query);
+                  }
+              } else {
+                  $action = 'insert';
+                  $specials = $this->getDefaultTableValues(TABLE_SPECIALS);
+                  $specials['products_id'] = (int)$productId;
+              }
+
+              foreach ($specials as $key => $value) {
+                  if (isset($this->options[$key])) {
+                      $specials[$key] = $this->options[$key];
+                  }
+              }
+
+              // Input validation
+              $this->checkTableData(TABLE_SPECIALS, $specials);
+              xtc_db_perform(TABLE_SPECIALS, $specials, $action, "products_id = '".(int)$productId."' ".$where);
+          }
+
+          return $this->GetProductSpecials($productId);
       }
 
   }
