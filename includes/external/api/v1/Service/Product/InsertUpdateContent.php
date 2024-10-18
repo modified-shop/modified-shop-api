@@ -59,8 +59,9 @@
           array $args
       ): ResponseInterface {
           $productId = (int)$args['id'];
+          $data = (array)$request->getParsedBody();
           
-          $result = $this->productAction->InsertUpdateContent($productId);
+          $result = $this->productAction->InsertUpdateContent($productId, $data);
 
           return $this->responder->withJson($response, $result);
       }
