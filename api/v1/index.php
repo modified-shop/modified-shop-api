@@ -12,6 +12,10 @@
 
   include (dirname(__FILE__).'/../../includes/application_top_callback.php');
   
+  // needed constants
+  define('DIR_FS_ADMIN', DIR_FS_CATALOG.DIR_ADMIN);
+  
+  // credentials
   defined('MODULE_SYSTEM_MODIFIED_API_SECRET')  OR define('MODULE_SYSTEM_MODIFIED_API_SECRET', 'supersecretkeyyoushouldnotcommittogithub');
   defined('MODULE_SYSTEM_MODIFIED_API_USER')    OR define('MODULE_SYSTEM_MODIFIED_API_USER', 'admin');
   defined('MODULE_SYSTEM_MODIFIED_API_PASS')    OR define('MODULE_SYSTEM_MODIFIED_API_PASS', 'admin');
