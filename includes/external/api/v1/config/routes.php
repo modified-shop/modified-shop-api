@@ -100,6 +100,7 @@
               $app->post('/products/{id}/xsell',                      \api\v1\Service\Product\InsertUpdateXsell::class);
               $app->post('/products/{id}/attributes',                 \api\v1\Service\Product\InsertUpdateAttributes::class);
               $app->post('/products/{id}/tags',                       \api\v1\Service\Product\InsertUpdateTags::class);
+              $app->post('/products/{id}/content',                    \api\v1\Service\Product\InsertUpdateContent::class);
               $app->post('/products/{id}/specials',                   \api\v1\Service\Product\InsertUpdateSpecials::class);
               $app->post('/products/{id}/offer',                      \api\v1\Service\Product\InsertUpdatePersonalOffer::class);
 

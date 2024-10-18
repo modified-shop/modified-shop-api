@@ -55,6 +55,12 @@
       protected $accepted_image_files_mime_types = array("image/jpeg","image/gif","image/png","image/bmp");
 
       /**
+       * @var accepted_image_files
+       */
+      protected $accepted_extfile_extensions = array("xls","xla","hlp","chm","ppt","ppz","pps","pot","doc","dot","pdf","rtf");
+      protected $accepted_extfile_mime_types = array("application/msexcel","application/mshelp","application/mspowerpoint","application/msword","application/pdf","application/rtf");
+
+      /**
        * @var LoggerInterface
        */
       protected $logger;
