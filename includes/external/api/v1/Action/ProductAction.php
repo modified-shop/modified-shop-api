@@ -350,7 +350,7 @@
               if (!isset($options['image_id'])) {
                 $options['image_id'] = xtc_db_insert_id();
               }
-              $this->InsertUpdateImagesDescription($productId, $options);
+              $this->InsertUpdateImagesDescription($productId, $options['image_id'], $options);
               
               if ($products_image = xtc_try_upload('image_name', DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/', '777', $this->accepted_image_files_extensions, $this->accepted_image_files_mime_types)) {
                   $products_image_name = preg_replace('/[^\d\w\-\_\.]/', '', $products_image->filename);
@@ -381,11 +381,14 @@
        *
        * @return array The product data
        */
-      public function InsertUpdateImagesDescription(int $productId, array $options): array
+      public function InsertUpdateImagesDescription(int $productId, int $imageId, array $options): array
       {
           // Input validation
           if (empty($productId)) {
               throw new Exception('Product ID required');
+          }
+          if (empty($imageId)) {
+              throw new Exception('Image ID required');
           }
 
           /* Store passed in options overwriting any defaults */
@@ -397,41 +400,38 @@
           if (xtc_db_num_rows($product_query) < 1 && $this->Excetion === true) {
               throw new Exception(sprintf('Product images not found: %s', $productId));
           } else {
-              if (!isset($this->options['image_id'])) {
-                  throw new Exception(sprintf('Image ID required'));
-              } else {
-                  $languages_query = xtc_db_query("SELECT *
-                                                     FROM ".TABLE_LANGUAGES);
-                  while ($languages = xtc_db_fetch_array($languages_query)) {
-                      $image_description_query = xtc_db_query("SELECT *
-                                                                 FROM ".TABLE_PRODUCTS_IMAGES_DESCRIPTION."
-                                                                WHERE products_id = '".(int)$productId."'
-                                                                  AND image_id = '".(int)$this->options['image_id']."'
-                                                                  AND language_id = '".(int)$languages['languages_id']."'");
-                      if (xtc_db_num_rows($image_description_query) > 0) {
-                          $action = 'update';
-                          $image_description = xtc_db_fetch_array($image_description_query);
-                      } else {
-                          $action = 'insert';
-                          $image_description = $this->getDefaultTableValues(TABLE_PRODUCTS_IMAGES_DESCRIPTION);
-                          $image_description['products_id'] = (int)$productId;
-                          $image_description['language_id'] = (int)$languages['languages_id'];
-                      }
-
-                      foreach ($image_description as $key => $value) {
-                          if (isset($this->options[$languages['code']][$key])) {
-                              $image_description[$key] = $this->options[$languages['code']][$key];
-                          }
-                      }
-
-                      // Input validation
-                      $this->checkTableData(TABLE_PRODUCTS_IMAGES_DESCRIPTION, $image_description);
-                      xtc_db_perform(TABLE_PRODUCTS_IMAGES_DESCRIPTION, $image_description, $action, "products_id = '".(int)$productId."' AND image_id = '".(int)$this->options['image_id']."' AND language_id = '".(int)$languages['languages_id']."'");
+              $languages_query = xtc_db_query("SELECT *
+                                                 FROM ".TABLE_LANGUAGES);
+              while ($languages = xtc_db_fetch_array($languages_query)) {
+                  $image_description_query = xtc_db_query("SELECT *
+                                                             FROM ".TABLE_PRODUCTS_IMAGES_DESCRIPTION."
+                                                            WHERE products_id = '".(int)$productId."'
+                                                              AND image_id = '".(int)$imageId."'
+                                                              AND language_id = '".(int)$languages['languages_id']."'");
+                  if (xtc_db_num_rows($image_description_query) > 0) {
+                      $action = 'update';
+                      $image_description = xtc_db_fetch_array($image_description_query);
+                  } else {
+                      $action = 'insert';
+                      $image_description = $this->getDefaultTableValues(TABLE_PRODUCTS_IMAGES_DESCRIPTION);
+                      $image_description['products_id'] = (int)$productId;
+                      $image_description['image_id'] = (int)$imageId;
+                      $image_description['language_id'] = (int)$languages['languages_id'];
                   }
+
+                  foreach ($image_description as $key => $value) {
+                      if (isset($this->options[$languages['code']][$key])) {
+                          $image_description[$key] = $this->options[$languages['code']][$key];
+                      }
+                  }
+
+                  // Input validation
+                  $this->checkTableData(TABLE_PRODUCTS_IMAGES_DESCRIPTION, $image_description);
+                  xtc_db_perform(TABLE_PRODUCTS_IMAGES_DESCRIPTION, $image_description, $action, "products_id = '".(int)$productId."' AND image_id = '".(int)$imageId."' AND language_id = '".(int)$languages['languages_id']."'");
               }
           }
 
-          return $this->GetProductImagesDescription($productId);
+          return $this->GetProductImagesDescription($productId, $imageId);
       }
 
   }

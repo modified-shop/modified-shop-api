@@ -59,9 +59,10 @@
           array $args
       ): ResponseInterface {
           $productId = (int)$args['id'];
+          $imageId = (int)$args['iid'];
           $data = (array)$request->getParsedBody();
                     
-          $this->productAction->InsertUpdateImagesDescription($productId, $data);
+          $this->productAction->InsertUpdateImagesDescription($productId, $imageId, $data);
 
           return $this->responder->withJson($response)->withStatus(204);
       }
