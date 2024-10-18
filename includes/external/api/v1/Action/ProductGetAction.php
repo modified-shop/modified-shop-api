@@ -625,7 +625,7 @@
               }
 
               $personal_offer[] = [
-                'id' => $customers_status['id'],
+                'status_id' => $customers_status['id'],
                 'data' => $offer,
               ];
           }

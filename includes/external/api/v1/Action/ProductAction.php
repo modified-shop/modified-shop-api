@@ -555,4 +555,67 @@
           return $this->GetProductSpecials($productId);
       }
 
+      /**
+       * Insert or Update a product offer by the given product id.
+       *
+       * @param int $productId The product id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The product data
+       */
+      public function InsertUpdatePersonalOffer(int $productId, array $options): array
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $products_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_PRODUCTS."
+                                           WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($products_query) < 1) {
+              throw new Exception(sprintf('Product not found: %s', $productId));
+          } else {
+              if (!isset($this->options['status_id'])) {
+                  throw new Exception('Status ID required');
+              } else {
+                  $where = '';
+                  if (isset($this->options['price_id'])) {
+                      $where = "AND price_id = '".(int)$this->options['price_id']."'";
+                      $personal_offer_query = xtc_db_query("SELECT *
+                                                              FROM ".TABLE_PERSONAL_OFFERS_BY.$this->options['status_id']."
+                                                             WHERE products_id = '".(int)$productId."'
+                                                                   ".$where);
+                      if (xtc_db_num_rows($personal_offer_query) < 1) {
+                          throw new Exception(sprintf('Price ID invalid'));
+                      } else {
+                          $action = 'update';
+                          $personal_offer = xtc_db_fetch_array($personal_offer_query);
+                      }
+                  } else {
+                      $action = 'insert';
+                      $personal_offer = $this->getDefaultTableValues(TABLE_PERSONAL_OFFERS_BY.$this->options['status_id']);
+                      $personal_offer['products_id'] = (int)$productId;
+                  }
+    
+                  foreach ($personal_offer as $key => $value) {
+                      if (isset($this->options[$key])) {
+                          $personal_offer[$key] = $this->options[$key];
+                      }
+                  }
+    
+                  // Input validation
+                  $this->checkTableData(TABLE_PERSONAL_OFFERS_BY.$this->options['status_id'], $personal_offer);
+                  xtc_db_perform(TABLE_PERSONAL_OFFERS_BY.$this->options['status_id'], $personal_offer, $action, "products_id = '".(int)$productId."' ".$where);
+              }
+          }
+
+          return $this->GetProductPersonalOffer($productId);
+      }
+
   }
