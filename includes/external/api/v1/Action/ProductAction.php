@@ -30,6 +30,17 @@
       use ProductDeleteAction;
 
       /**
+       * @var mixed[]
+       */
+      protected $images_type_array = [
+        'mini',
+        'thumbnail',
+        'popup',
+        'mini',
+        'midi',
+      ];
+
+      /**
        * Insert a product by the given options.
        *
        * @param mixed[] $options
@@ -226,7 +237,7 @@
       }
 
       /**
-       * Insert or update images of a product by the given product id.
+       * Insert or update image of a product by the given product id.
        *
        * @param int $productId The product id
        *
@@ -234,7 +245,7 @@
        *
        * @return void
        */
-      public function InsertUpdateImages(int $productId): void
+      public function InsertUpdateImage(int $productId): void
       {
           // Input validation
           if (empty($productId)) {
@@ -252,27 +263,95 @@
               // include needed classes
               require_once (DIR_FS_CATALOG.DIR_ADMIN.'includes/classes/'.IMAGE_MANIPULATOR);
 
-              foreach ($this->images_type_array as $image_type) {
-                  if ($products_image = xtc_try_upload('products_image'.$image_type, DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/', '777', $this->accepted_image_files_extensions, $this->accepted_image_files_mime_types)) {
-                      $products_image_name = preg_replace('/[^\d\w\-\_\.]/', '', $products_image->filename);
+              if ($products_image = xtc_try_upload('products_image', DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/', '777', $this->accepted_image_files_extensions, $this->accepted_image_files_mime_types)) {
+                  $products_image_name = preg_replace('/[^\d\w\-\_\.]/', '', $products_image->filename);
 
-                      rename(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image->filename, DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image_name);
+                  rename(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image->filename, DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image_name);
 
-                      //image chmod
-                      chmod(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image_name, 0644);
+                  //image chmod
+                  chmod(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image_name, 0644);
 
-                      xtc_db_query("UPDATE ".TABLE_PRODUCTS."
-                                       SET products_image".$image_type." = '".xtc_db_input($products_image_name)."'
-                                     WHERE products_id = '".(int)$productId."'");
+                  xtc_db_query("UPDATE ".TABLE_PRODUCTS."
+                                   SET products_image".$image_type." = '".xtc_db_input($products_image_name)."'
+                                 WHERE products_id = '".(int)$productId."'");
 
-                      if (is_file(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/'.$products_image_name)) {
-                          unlink(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/'.$products_image_name);
-                      }
-
-                      $a = new \image_manipulation(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image_name, constant('CATEGORIES_IMAGE'.strtoupper($image_type).'_WIDTH'), constant('CATEGORIES_IMAGE'.strtoupper($image_type).'_HEIGHT'), DIR_FS_CATALOG.DIR_WS_IMAGES.'products/'.$products_image_name, IMAGE_QUALITY, '');
+                  foreach ($this->images_type_array as $image_type) {
+                      $a = new \image_manipulation(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image_name, constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_WIDTH'), constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_HEIGHT'), DIR_FS_CATALOG.DIR_WS_IMAGES.'products/'.strtolower($image_type).'_images/'.$products_image_name, IMAGE_QUALITY, '');
                       $a->create();
                   }
               }
+          }
+      }
+
+      /**
+       * Insert or update more images of a product by the given product id and image nr.
+       *
+       * @param int $productId The product id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function InsertUpdateImages(int $productId, array $options): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $products_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_PRODUCTS."
+                                           WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($products_query) < 1) {
+              throw new Exception(sprintf('Product not found: %s', $productId));
+          } else {
+              $where = '';
+              if (isset($this->options['image_nr'])) {
+                  $where = "products_id = '".(int)$productId."' AND image_nr = '".(int)$this->options['image_nr']."'";
+                  $images_query = xtc_db_query("SELECT *
+                                                  FROM ".TABLE_PRODUCTS_IMAGES."
+                                                 WHERE ".$where);
+                  if (xtc_db_num_rows($images_query) > 0) {
+                      $action = 'update';
+                      $images = xtc_db_fetch_array($images_query);
+                  } else {
+                      $action = 'insert';
+                      $images = $this->getDefaultTableValues(TABLE_PRODUCTS_IMAGES);
+                      $images['products_id'] = (int)$productId;
+                  }
+              } else {
+                  $action = 'insert';
+                  $images = $this->getDefaultTableValues(TABLE_PRODUCTS_IMAGES);
+                  $images['products_id'] = (int)$productId;
+              }
+
+              if ($products_image = xtc_try_upload('image_name', DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/', '777', $this->accepted_image_files_extensions, $this->accepted_image_files_mime_types)) {
+                  $products_image_name = preg_replace('/[^\d\w\-\_\.]/', '', $products_image->filename);
+
+                  rename(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image->filename, DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image_name);
+
+                  //image chmod
+                  chmod(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image_name, 0644);
+
+                  foreach ($images as $key => $value) {
+                      if (isset($this->options[$key])) {
+                          $images[$key] = $this->options[$key];
+                      }
+                  }
+
+                  // Input validation
+                  $this->checkTableData(TABLE_PRODUCTS_IMAGES, $images);
+                  xtc_db_perform(TABLE_PRODUCTS_IMAGES, $images, $action, $where);
+
+                  foreach ($this->images_type_array as $image_type) {
+                      $a = new \image_manipulation(DIR_FS_CATALOG.DIR_WS_IMAGES.'products/original_images/'.$products_image_name, constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_WIDTH'), constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_HEIGHT'), DIR_FS_CATALOG.DIR_WS_IMAGES.'products/'.strtolower($image_type).'_images/'.$products_image_name, IMAGE_QUALITY, '');
+                      $a->create();
+                  }
+              }
+
           }
       }
 

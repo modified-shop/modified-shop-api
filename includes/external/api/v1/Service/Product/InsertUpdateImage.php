@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class InsertUpdateImages
+  final class InsertUpdateImage
   {
       /**
        * @var ProductAction
@@ -59,10 +59,9 @@
           array $args
       ): ResponseInterface {
           $productId = (int)$args['id'];
-          $data = (array)$request->getParsedBody();
-                    
-          $this->productAction->InsertUpdateImages($productId, $data);
+          
+          $result = $this->productAction->InsertUpdateImage($productId);
 
-          return $this->responder->withJson($response)->withStatus(204);
+          return $this->responder->withJson($response, $result);
       }
   }
