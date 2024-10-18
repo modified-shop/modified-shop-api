@@ -437,4 +437,61 @@
           return $this->GetProductImagesDescription($productId, $imageId);
       }
 
+      /**
+       * Insert or Update a product by the given product id.
+       *
+       * @param int $productId The product id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The product data
+       */
+      public function InsertUpdateXsell(int $productId, array $options): array
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $products_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_PRODUCTS."
+                                           WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($products_query) < 1) {
+              throw new Exception(sprintf('Product not found: %s', $productId));
+          } else {
+              if (!isset($this->options['xsell_id'])) {
+                  throw new Exception(sprintf('Xsell ID required'));
+              } else {
+                  $xsell_query = xtc_db_query("SELECT *
+                                                 FROM ".TABLE_PRODUCTS_XSELL."
+                                                WHERE products_id = '".(int)$productId."'
+                                                  AND xsell_id = '".(int)$this->options['xsell_id']."'");
+                  if (xtc_db_num_rows($xsell_query) > 0) {
+                      $action = 'update';
+                      $xsell = xtc_db_fetch_array($xsell_query);
+                  } else {
+                      $action = 'insert';
+                      $xsell = $this->getDefaultTableValues(TABLE_PRODUCTS_XSELL);
+                      $xsell['products_id'] = (int)$productId;
+                  }
+
+                  foreach ($xsell as $key => $value) {
+                      if (isset($this->options[$key])) {
+                          $xsell[$key] = $this->options[$key];
+                      }
+                  }
+
+                  // Input validation
+                  $this->checkTableData(TABLE_PRODUCTS_XSELL, $xsell);
+                  xtc_db_perform(TABLE_PRODUCTS_XSELL, $xsell, $action, "products_id = '".(int)$productId."' AND xsell_id = '".(int)$this->options['xsell_id']."'");
+              }
+          }
+
+          return $this->GetProductXsell($productId);
+      }
+
   }

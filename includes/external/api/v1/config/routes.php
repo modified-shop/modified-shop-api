@@ -97,6 +97,7 @@
               $app->post('/products/{id}/image',                      \api\v1\Service\Product\InsertUpdateImage::class);
               $app->post('/products/{id}/images',                     \api\v1\Service\Product\InsertUpdateImages::class);
               $app->post('/products/{id}/images/{iid}/description',   \api\v1\Service\Product\InsertUpdateImagesDescription::class);
+              $app->post('/products/{id}/xsell',                      \api\v1\Service\Product\InsertUpdateXsell::class);
 
               // update products
               $app->put('/products/{id}',                             \api\v1\Service\Product\UpdateProduct::class);
@@ -104,6 +105,7 @@
               $app->put('/products/{id}/description',                 \api\v1\Service\Product\InsertUpdateDescription::class);
               $app->put('/products/{id}/categories',                  \api\v1\Service\Product\InsertUpdateCategories::class);
               $app->put('/products/{id}/images/{iid}/description',    \api\v1\Service\Product\InsertUpdateImagesDescription::class);
+              $app->put('/products/{id}/xsell',                       \api\v1\Service\Product\InsertUpdateXsell::class);
 
               // delete products
               $app->delete('/products/{id}',                                \api\v1\Service\Product\DeleteProduct::class);
