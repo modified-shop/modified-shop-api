@@ -98,6 +98,7 @@
               $app->post('/products/{id}/images',                     \api\v1\Service\Product\InsertUpdateImages::class);
               $app->post('/products/{id}/images/{iid}/description',   \api\v1\Service\Product\InsertUpdateImagesDescription::class);
               $app->post('/products/{id}/xsell',                      \api\v1\Service\Product\InsertUpdateXsell::class);
+              $app->post('/products/{id}/attributes',                 \api\v1\Service\Product\InsertUpdateAttributes::class);
               $app->post('/products/{id}/specials',                   \api\v1\Service\Product\InsertUpdateSpecials::class);
               $app->post('/products/{id}/offer',                      \api\v1\Service\Product\InsertUpdatePersonalOffer::class);
 
@@ -108,6 +109,7 @@
               $app->put('/products/{id}/categories',                  \api\v1\Service\Product\InsertUpdateCategories::class);
               $app->put('/products/{id}/images/{iid}/description',    \api\v1\Service\Product\InsertUpdateImagesDescription::class);
               $app->put('/products/{id}/xsell',                       \api\v1\Service\Product\InsertUpdateXsell::class);
+              $app->put('/products/{id}/attributes',                  \api\v1\Service\Product\InsertUpdateAttributes::class);
               $app->put('/products/{id}/specials',                    \api\v1\Service\Product\InsertUpdateSpecials::class);
               $app->put('/products/{id}/offer',                       \api\v1\Service\Product\InsertUpdatePersonalOffer::class);
 

@@ -495,6 +495,91 @@
       }
 
       /**
+       * Insert or Update a product attributes by the given product id.
+       *
+       * @param int $productId The product id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The product data
+       */
+      public function InsertUpdateAttributes(int $productId, array $options): array
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $products_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_PRODUCTS."
+                                           WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($products_query) < 1) {
+              throw new Exception(sprintf('Product not found: %s', $productId));
+          } else {
+              if (!isset($this->options['options_id']) || !isset($this->options['options_values_id'])) {
+                  throw new Exception('Options ID and Options Values ID required');
+              } else {
+                  $options_query = xtc_db_query("SELECT *
+                                                   FROM ".TABLE_PRODUCTS_OPTIONS."
+                                                  WHERE options_id = '".(int)$this->options['options_id']."'");
+                  if (xtc_db_num_rows($options_query) < 1) {
+                      throw new Exception(sprintf('Options ID invalid'));
+                  }
+                  
+                  $values_query = xtc_db_query("SELECT *
+                                                  FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
+                                                 WHERE products_options_values_id = '".(int)$this->options['options_values_id']."'");
+                  if (xtc_db_num_rows($options_query) < 1) {
+                      throw new Exception(sprintf('Options Values ID invalid'));
+                  }
+
+                  $options_values_query = xtc_db_query("SELECT *
+                                                          FROM ".TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS."
+                                                         WHERE products_options_id = '".(int)$this->options['options_id']."'
+                                                           AND products_options_values_id = '".(int)$this->options['options_values_id']."'");
+                  if (xtc_db_num_rows($options_query) < 1) {
+                      throw new Exception(sprintf('Options ID and Options Values ID invalid'));
+                  }
+                  
+                  $where = '';
+                  if (isset($this->options['products_attributes_id'])) {
+                      $where = "AND products_attributes_id = '".(int)$this->options['products_attributes_id']."'";
+                      $attributes_query = xtc_db_query("SELECT *
+                                                          FROM ".TABLE_PRODUCTS_ATTRIBUTES."
+                                                         WHERE products_id = '".(int)$productId."'
+                                                               ".$where);
+                      if (xtc_db_num_rows($attributes_query) < 1) {
+                          throw new Exception(sprintf('Attributes ID invalid'));
+                      } else {
+                          $action = 'update';
+                          $attributes = xtc_db_fetch_array($attributes_query);
+                      }
+                  } else {
+                      $action = 'insert';
+                      $attributes = $this->getDefaultTableValues(TABLE_PRODUCTS_ATTRIBUTES);
+                      $attributes['products_id'] = (int)$productId;
+                  }
+    
+                  foreach ($attributes as $key => $value) {
+                      if (isset($this->options[$key])) {
+                          $attributes[$key] = $this->options[$key];
+                      }
+                  }
+    
+                  // Input validation
+                  $this->checkTableData(TABLE_PRODUCTS_ATTRIBUTES, $attributes);
+                  xtc_db_perform(TABLE_PRODUCTS_ATTRIBUTES, $attributes, $action, "products_id = '".(int)$productId."' ".$where);
+              }
+          }
+
+          return $this->GetProductAttributes($productId);
+      }
+
+      /**
        * Insert or Update a product specials by the given product id.
        *
        * @param int $productId The product id
