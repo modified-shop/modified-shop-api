@@ -618,7 +618,7 @@
                   $values_query = xtc_db_query("SELECT *
                                                   FROM ".TABLE_PRODUCTS_TAGS_VALUES."
                                                  WHERE options_id = '".(int)$this->options['options_id']."'
-                                                   AND values_id = '".(int)$this->options['options_values_id']."'");
+                                                   AND values_id = '".(int)$this->options['values_id']."'");
                   if (xtc_db_num_rows($values_query) < 1) {
                       throw new Exception(sprintf('Values ID invalid'));
                   }
