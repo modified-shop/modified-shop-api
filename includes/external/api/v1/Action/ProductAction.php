@@ -580,6 +580,84 @@
       }
 
       /**
+       * Insert or Update a product tags by the given product id.
+       *
+       * @param int $productId The product id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The product data
+       */
+      public function InsertUpdateTags(int $productId, array $options): array
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $products_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_PRODUCTS."
+                                           WHERE products_id = '".(int)$productId."'");
+          if (xtc_db_num_rows($products_query) < 1) {
+              throw new Exception(sprintf('Product not found: %s', $productId));
+          } else {
+              if (!isset($this->options['options_id']) || !isset($this->options['values_id'])) {
+                  throw new Exception('Options ID and Values ID required');
+              } else {
+                  $options_query = xtc_db_query("SELECT *
+                                                   FROM ".TABLE_PRODUCTS_TAGS_OPTIONS."
+                                                  WHERE options_id = '".(int)$this->options['options_id']."'");
+                  if (xtc_db_num_rows($options_query) < 1) {
+                      throw new Exception(sprintf('Options ID invalid'));
+                  }
+                  
+                  $values_query = xtc_db_query("SELECT *
+                                                  FROM ".TABLE_PRODUCTS_TAGS_VALUES."
+                                                 WHERE options_id = '".(int)$this->options['options_id']."'
+                                                   AND values_id = '".(int)$this->options['options_values_id']."'");
+                  if (xtc_db_num_rows($values_query) < 1) {
+                      throw new Exception(sprintf('Values ID invalid'));
+                  }
+                  
+                  $where = '';
+                  if (isset($this->options['products_tags_id'])) {
+                      $where = "AND products_tags_id = '".(int)$this->options['products_tags_id']."'";
+                      $tags_query = xtc_db_query("SELECT *
+                                                    FROM ".TABLE_PRODUCTS_TAGS."
+                                                   WHERE products_id = '".(int)$productId."'
+                                                         ".$where);
+                      if (xtc_db_num_rows($tags_query) < 1) {
+                          throw new Exception(sprintf('Tags ID invalid'));
+                      } else {
+                          $action = 'update';
+                          $tags = xtc_db_fetch_array($tags_query);
+                      }
+                  } else {
+                      $action = 'insert';
+                      $tags = $this->getDefaultTableValues(TABLE_PRODUCTS_TAGS);
+                      $tags['products_id'] = (int)$productId;
+                  }
+    
+                  foreach ($tags as $key => $value) {
+                      if (isset($this->options[$key])) {
+                          $tags[$key] = $this->options[$key];
+                      }
+                  }
+    
+                  // Input validation
+                  $this->checkTableData(TABLE_PRODUCTS_TAGS, $tags);
+                  xtc_db_perform(TABLE_PRODUCTS_TAGS, $tags, $action, "products_id = '".(int)$productId."' ".$where);
+              }
+          }
+
+          return $this->GetProductTags($productId);
+      }
+
+      /**
        * Insert or Update a product specials by the given product id.
        *
        * @param int $productId The product id
