@@ -313,6 +313,7 @@
                                                      WHERE products_id = '".(int)$productId."'
                                                   ORDER BY image_nr, image_id");
               while ($product_images = xtc_db_fetch_array($product_images_query)) {
+                  $this->Excetion = false;
                   $product_images = array_merge($product_images, $this->GetProductImagesDescription($productId, $product_images['image_id']));
 
                   $images[] = $product_images;
