@@ -318,8 +318,9 @@
               require_once (DIR_FS_CATALOG.DIR_ADMIN.'includes/classes/'.IMAGE_MANIPULATOR);
 
               $where = '';
-              if (isset($this->options['image_nr'])) {
-                  $where = "products_id = '".(int)$productId."' AND image_nr = '".(int)$this->options['image_nr']."'";
+              if (isset($this->options['image_id'])) {
+                  $imageId = (int)$this->options['image_id'];
+                  $where = "products_id = '".(int)$productId."' AND image_id = '".(int)$imageId."'";
                   $images_query = xtc_db_query("SELECT *
                                                   FROM ".TABLE_PRODUCTS_IMAGES."
                                                  WHERE ".$where);
@@ -347,26 +348,28 @@
               $this->checkTableData(TABLE_PRODUCTS_IMAGES, $images);
               xtc_db_perform(TABLE_PRODUCTS_IMAGES, $images, $action, $where);
               
-              if (!isset($options['image_id'])) {
-                $options['image_id'] = xtc_db_insert_id();
+              if (!isset($imageId)) {
+                $imageId = xtc_db_insert_id();
               }
-              $this->InsertUpdateImagesDescription($productId, $options['image_id'], $options);
+              $this->InsertUpdateImagesDescription($productId, $imageId, $options);
               
               if ($products_image = xtc_try_upload('image_name', DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/', '777', $this->accepted_image_files_extensions, $this->accepted_image_files_mime_types)) {
                   $products_image_name = preg_replace('/[^\d\w\-\_\.]/', '', $products_image->filename);
-                  $this->options['image_name'] = $products_image_name;
                   
                   rename(DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image->filename, DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image_name);
 
                   //image chmod
                   chmod(DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image_name, 0644);
 
+                  xtc_db_query("UPDATE ".TABLE_PRODUCTS_IMAGES."
+                                   SET image_name = '".xtc_db_input($products_image_name)."'
+                                 WHERE image_id = '".(int)$imageId."'");
+
                   foreach ($this->images_type_array as $image_type) {
                       $a = new \image_manipulation(DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image_name, constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_WIDTH'), constant('PRODUCT_IMAGE_'.strtoupper($image_type).'_HEIGHT'), DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/'.strtolower($image_type).'_images/'.$products_image_name, IMAGE_QUALITY, '');
                       $a->create();
                   }
               }
-
           }
 
           return $this->GetProductImages($productId);
