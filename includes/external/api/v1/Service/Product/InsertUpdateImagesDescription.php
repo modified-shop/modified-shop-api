@@ -62,8 +62,8 @@
           $imageId = (int)$args['iid'];
           $data = (array)$request->getParsedBody();
                     
-          $this->productAction->InsertUpdateImagesDescription($productId, $imageId, $data);
+          $result = $this->productAction->InsertUpdateImagesDescription($productId, $imageId, $data);
 
-          return $this->responder->withJson($response)->withStatus(204);
+          return $this->responder->withJson($response, $result);
       }
   }
