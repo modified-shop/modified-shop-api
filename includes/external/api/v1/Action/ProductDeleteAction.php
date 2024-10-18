@@ -180,6 +180,8 @@
           } else {
               while ($images = xtc_db_fetch_array($images_query)) {
                   $this->deleteImageFile($images['image_name']);
+                  
+                  $this->Excetion = false;
                   $this->DeleteImagesDescription($productId, $images['image_id']);
                   
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_IMAGES." 
@@ -190,7 +192,7 @@
       }
 
       /**
-       * Delete a image by the given product id and image id.
+       * Delete a image description by the given product id and image id.
        *
        * @param int $productId The product id
        * @param int $imageId The image id
@@ -199,7 +201,7 @@
        *
        * @return void
        */
-      public function DeleteImages(int $productId, int $imageId): void
+      public function DeleteImagesDescription(int $productId, int $imageId): void
       {
           // Input validation
           if (empty($productId)) {

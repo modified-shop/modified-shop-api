@@ -347,7 +347,7 @@
               $this->checkTableData(TABLE_PRODUCTS_IMAGES, $images);
               xtc_db_perform(TABLE_PRODUCTS_IMAGES, $images, $action, $where);
 
-              $this->InsertUpdateImagesDescription($productId, $options):
+              $this->InsertUpdateImagesDescription($productId, $options);
               
               if ($products_image = xtc_try_upload('image_name', DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/', '777', $this->accepted_image_files_extensions, $this->accepted_image_files_mime_types)) {
                   $products_image_name = preg_replace('/[^\d\w\-\_\.]/', '', $products_image->filename);
