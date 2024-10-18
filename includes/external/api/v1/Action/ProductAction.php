@@ -525,7 +525,7 @@
               } else {
                   $options_query = xtc_db_query("SELECT *
                                                    FROM ".TABLE_PRODUCTS_OPTIONS."
-                                                  WHERE options_id = '".(int)$this->options['options_id']."'");
+                                                  WHERE products_options_id = '".(int)$this->options['options_id']."'");
                   if (xtc_db_num_rows($options_query) < 1) {
                       throw new Exception(sprintf('Options ID invalid'));
                   }
@@ -533,7 +533,7 @@
                   $values_query = xtc_db_query("SELECT *
                                                   FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
                                                  WHERE products_options_values_id = '".(int)$this->options['options_values_id']."'");
-                  if (xtc_db_num_rows($options_query) < 1) {
+                  if (xtc_db_num_rows($values_query) < 1) {
                       throw new Exception(sprintf('Options Values ID invalid'));
                   }
 
@@ -541,7 +541,7 @@
                                                           FROM ".TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS."
                                                          WHERE products_options_id = '".(int)$this->options['options_id']."'
                                                            AND products_options_values_id = '".(int)$this->options['options_values_id']."'");
-                  if (xtc_db_num_rows($options_query) < 1) {
+                  if (xtc_db_num_rows($options_values_query) < 1) {
                       throw new Exception(sprintf('Options ID and Options Values ID invalid'));
                   }
                   
