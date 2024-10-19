@@ -724,7 +724,7 @@
                   if ($content_file = xtc_try_upload(array($languages['code'] => 'content_file'), DIR_FS_CATALOG.'media/content/', '777', array_merge($this->accepted_image_extensions, $this->accepted_file_extensions, $this->accepted_extfile_extensions, $this->accepted_audio_extensions, $this->accepted_movie_extensions, $this->accepted_compressed_extensions), array_merge($this->accepted_image_mime_types, $this->accepted_file_mime_types, $this->accepted_extfile_mime_types, $this->accepted_audio_mime_types, $this->accepted_movie_mime_types, $this->accepted_compressed_mime_types))) {
                       $content_file_name = preg_replace('/[^\d\w\-\_\.]/', '', $content_file->filename);
                       
-                      rename(DIR_FS_CATALOG.'media/content/'.$products_image->filename, DIR_FS_CATALOG.'media/content/'.$content_file_name);
+                      rename(DIR_FS_CATALOG.'media/content/'.$content_file->filename, DIR_FS_CATALOG.'media/content/'.$content_file_name);
                       copy(DIR_FS_CATALOG.'media/content/'.$content_file_name, DIR_FS_CATALOG.'media/content/backup/'.$content_file_name);
     
                       //image chmod
@@ -734,9 +734,7 @@
                                        SET content_file = '".xtc_db_input($content_file_name)."'
                                      WHERE content_id = '".(int)$contentId."'");
                   }
-              }
-          
-          
+              }          
           }
 
           return $this->GetProductContent($productId);
