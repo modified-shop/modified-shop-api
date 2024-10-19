@@ -265,7 +265,7 @@
               // include needed classes
               require_once (DIR_FS_CATALOG.DIR_ADMIN.'includes/classes/'.IMAGE_MANIPULATOR);
 
-              if ($products_image = xtc_try_upload('products_image', DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/', '777', $this->accepted_image_files_extensions, $this->accepted_image_files_mime_types)) {
+              if ($products_image = xtc_try_upload('products_image', DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/', '777', $this->accepted_image_extensions, $this->accepted_image_mime_types)) {
                   $products_image_name = preg_replace('/[^\d\w\-\_\.]/', '', $products_image->filename);
 
                   rename(DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image->filename, DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image_name);
@@ -353,7 +353,7 @@
               }
               $this->InsertUpdateImagesDescription($productId, $imageId, $options);
               
-              if ($products_image = xtc_try_upload('image_name', DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/', '777', $this->accepted_image_files_extensions, $this->accepted_image_files_mime_types)) {
+              if ($products_image = xtc_try_upload('image_name', DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/', '777', $this->accepted_image_extensions, $this->accepted_image_mime_types)) {
                   $products_image_name = preg_replace('/[^\d\w\-\_\.]/', '', $products_image->filename);
                   
                   rename(DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image->filename, DIR_FS_CATALOG.DIR_WS_IMAGES.'product_images/original_images/'.$products_image_name);
@@ -688,7 +688,8 @@
               while ($languages = xtc_db_fetch_array($languages_query)) {
                   $where = '';
                   if (isset($this->options[$languages['code']]['content_id'])) {
-                      $where = "AND content_id = '".(int)$this->options[$languages['code']]['content_id']."'";
+                      $contentId = (int)$this->options[$languages['code']]['content_id'];
+                      $where = "AND content_id = '".(int)$contentId."'";
                       $content_query = xtc_db_query("SELECT *
                                                        FROM ".TABLE_PRODUCTS_CONTENT."
                                                       WHERE products_id = '".(int)$productId."'
@@ -703,6 +704,7 @@
                       $action = 'insert';
                       $content = $this->getDefaultTableValues(TABLE_PRODUCTS_CONTENT);
                       $content['products_id'] = (int)$productId;
+                      $content['languages_id'] = (int)$languages['languages_id'];
                   }
 
                   foreach ($content as $key => $value) {
@@ -714,8 +716,12 @@
                   // Input validation
                   $this->checkTableData(TABLE_PRODUCTS_CONTENT, $content);
                   xtc_db_perform(TABLE_PRODUCTS_CONTENT, $content, $action, "products_id = '".(int)$productId."' ".$where);
-
-                  if ($content_file = xtc_try_upload('['.$languages['code'].']content_file', DIR_FS_CATALOG.'media/content/', '777', $this->accepted_extfile_extensions, $this->accepted_extfile_mime_types)) {
+                  
+                  if (!isset($contentId)) {
+                      $contentId = xtc_db_insert_id();
+                  }
+                  
+                  if ($content_file = xtc_try_upload(array($languages['code'] => 'content_file'), DIR_FS_CATALOG.'media/content/', '777', array_merge($this->accepted_image_extensions, $this->accepted_file_extensions, $this->accepted_extfile_extensions, $this->accepted_audio_extensions, $this->accepted_movie_extensions, $this->accepted_compressed_extensions), array_merge($this->accepted_image_mime_types, $this->accepted_file_mime_types, $this->accepted_extfile_mime_types, $this->accepted_audio_mime_types, $this->accepted_movie_mime_types, $this->accepted_compressed_mime_types))) {
                       $content_file_name = preg_replace('/[^\d\w\-\_\.]/', '', $content_file->filename);
                       
                       rename(DIR_FS_CATALOG.'media/content/'.$products_image->filename, DIR_FS_CATALOG.'media/content/'.$content_file_name);
@@ -723,6 +729,10 @@
     
                       //image chmod
                       chmod(DIR_FS_CATALOG.'media/content/'.$content_file_name, 0644);
+
+                      xtc_db_query("UPDATE ".TABLE_PRODUCTS_CONTENT."
+                                       SET content_file = '".xtc_db_input($content_file_name)."'
+                                     WHERE content_id = '".(int)$contentId."'");
                   }
               }
           
