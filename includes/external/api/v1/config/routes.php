@@ -42,7 +42,7 @@
               $app->put('/categories/{id}',                     \api\v1\Service\Category\UpdateCategory::class);
               $app->put('/categories/{id}/categories',          \api\v1\Service\Category\InsertUpdateCategory::class);
               $app->put('/categories/{id}/description',         \api\v1\Service\Category\InsertUpdateDescription::class);
-              $app->post('/categories/{id}/products',           \api\v1\Service\Category\InsertUpdateProducts::class);
+              $app->put('/categories/{id}/products',            \api\v1\Service\Category\InsertUpdateProducts::class);
 
               // delete categories
               $app->delete('/categories/{id}',                  \api\v1\Service\Category\DeleteCategory::class);
