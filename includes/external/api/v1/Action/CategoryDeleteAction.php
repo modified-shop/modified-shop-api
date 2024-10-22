@@ -57,15 +57,52 @@
                       throw new Exception(sprintf('Category can not get deleted due to connected products: %s', $count));
                   } else {
                       $this->DeleteImages($categoryId);
-
+                      $this->DeleteProduct($categoryId, 0);
+                      
                       xtc_db_query("DELETE FROM ".TABLE_CATEGORIES." WHERE categories_id = '".(int)$categoryId."'");
                       xtc_db_query("DELETE FROM ".TABLE_CATEGORIES_DESCRIPTION." WHERE categories_id = '".(int)$categoryId."'");
-                      xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_TO_CATEGORIES." WHERE categories_id = '".(int)$categoryId."'");
-
+                      
                       $this->logger->info(sprintf('Category deleted successfully: %s', $categoryId));
                   }
               }
           }          
+      }
+
+      /**
+       * Delete a product by the given category id and product id.
+       *
+       * @param int $categoryId The category id
+       * @param int $productId The product id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteProduct(int $categoryId, int $productId): void
+      {
+          // Input validation
+          if (empty($categoryId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $where = '';
+          if ($productId > 0) {
+              $where = "AND products_id = '".(int)$productId."'";
+          }
+
+          $category_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_PRODUCTS_TO_CATEGORIES."
+                                          WHERE categories_id = '".(int)$categoryId."'
+                                                ".$where);
+          if (xtc_db_num_rows($category_query) < 1 && $this->Excetion === true) {
+              throw new Exception(sprintf('Category products not found: %s', $categoryId));
+          } else {
+              while ($category = xtc_db_fetch_array($category_query)) {
+                  xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_TO_CATEGORIES." 
+                                      WHERE categories_id = '".(int)$categoryId."'
+                                        AND products_id = '".(int)$category['products_id']."'");
+              }
+          }
       }
 
       /**
