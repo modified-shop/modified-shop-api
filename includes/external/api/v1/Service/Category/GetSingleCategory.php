@@ -58,12 +58,9 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
-          $params = $request->getQueryParams();
-          $params['path'] = $request->getUri()->getPath();
-
           $categoryId = (int)$args['id'];
 
-          $result = $this->categoryAction->GetSingleCategory($categoryId, $params);
+          $result = $this->categoryAction->GetSingleCategory($categoryId);
 
           return $this->responder->withJson($response, $result);
       }

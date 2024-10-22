@@ -20,9 +20,6 @@
    */
   final class CategoryAction extends BaseAction
   {
-      use CategoryGetAction;
-      use CategoryDeleteAction;
-
       /**
        * @var mixed[]
        */
@@ -32,6 +29,173 @@
         '_mobile'
       ];
 
+      /**
+       * Read a category by the given category id.
+       *
+       * @param int $categoryId The category id
+       *
+       * @throws Exception
+       *
+       * @return array The category data
+       */
+      public function GetSingleCategory(int $categoryId): array
+      {
+          // Input validation
+          if (empty($categoryId)) {
+              throw new Exception('Category ID required');
+          }
+                    
+          $result = [
+              'categories' => $this->getCategory($categoryId),
+              'categories_description' => $this->getCategoryDescription($categoryId),
+          ];
+          
+          return $result;
+      }
+
+      /**
+       * Read a category by the given category id.
+       *
+       * @param int $categoryId The category id
+       *
+       * @throws Exception
+       *
+       * @return array The category data
+       */
+      public function GetCategory(int $categoryId): array
+      {
+          // Input validation
+          if (empty($categoryId)) {
+              throw new Exception('Category ID required');
+          }
+          
+          $category_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_CATEGORIES."
+                                          WHERE categories_id = '".(int)$categoryId."'");
+          if (xtc_db_num_rows($category_query) < 1) {
+              throw new Exception(sprintf('Category not found: %s', $categoryId));
+          } else {
+              $category = xtc_db_fetch_array($category_query);
+          }
+          
+          $result = $this->encode_request($category);
+          return $result;
+      }
+
+      /**
+       * Read a category description by the given category id.
+       *
+       * @param int $categoryId The category id
+       *
+       * @throws Exception
+       *
+       * @return array The category data
+       */
+      public function GetCategoryDescription(int $categoryId): array
+      {
+          // Input validation
+          if (empty($categoryId)) {
+              throw new Exception('Category ID required');
+          }
+          
+          $category_query = xtc_db_query("SELECT *
+                                           FROM ".TABLE_CATEGORIES_DESCRIPTION."
+                                          WHERE categories_id = '".(int)$categoryId."'");
+          if (xtc_db_num_rows($category_query) < 1) {
+              throw new Exception(sprintf('Category description not found: %s', $categoryId));
+          } else {
+              $description = array();
+              $categories_description_query = xtc_db_query("SELECT cd.*,
+                                                                   l.code
+                                                              FROM ".TABLE_CATEGORIES_DESCRIPTION." cd
+                                                              JOIN ".TABLE_LANGUAGES." l
+                                                                   ON l.languages_id = cd.language_id
+                                                             WHERE cd.categories_id = '".(int)$categoryId."'");
+              while ($categories_description = xtc_db_fetch_array($categories_description_query)) {
+                  $code = $categories_description['code'];
+                  unset($categories_description['code']);
+              
+                  $description[$code] = $categories_description;
+              }
+          }
+          
+          $result = $this->encode_request($description);
+          return $result;
+      }
+
+      /**
+       * Read categorys by given conditions
+       *
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The category data
+       */
+      public function GetAllCategories($options): array
+      {          
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+          
+          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
+          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
+          
+          $conditions = [];
+          if (preg_replace('/[^\d\,]/', '', $this->options['status']) != '') {
+              $conditions[] = " categories_status IN (".preg_replace('/[^\d\,]/', '', $this->options['status']).") ";
+          }
+          if (preg_replace('/[^\d\,]/', '', $this->options['parent']) != '') {
+              $conditions[] = " parent_id IN (".preg_replace('/[^\d\,]/', '', $this->options['parent']).") ";
+          }
+          if ((int)$this->options['from'] > 0) {
+              $conditions[] = " date_added >= '".date('Y-m-d H:i:s', (int)$this->options['from'])."' ";
+          }
+          if ((int)$this->options['to'] > 0) {
+              $conditions[] = " date_added <= '".date('Y-m-d H:i:s', (int)$this->options['to'])."' ";
+          }
+          
+          if (count($conditions) > 0) {
+            $where = " WHERE ".implode(' AND ', $conditions);
+          }
+                                              
+          $count_query = xtc_db_query("SELECT count(*) as total
+                                         FROM ".TABLE_CATEGORIES."
+                                              ".$where);
+          $count = xtc_db_fetch_array($count_query);
+          
+          if ($count['total'] < 1) {
+              throw new Exception('no Category found');
+          }
+          
+          $data = [];
+          $categories_query = xtc_db_query("SELECT categories_id
+                                              FROM ".TABLE_CATEGORIES."
+                                                   ".$where."
+                                          ORDER BY categories_id ASC
+                                             LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
+          while ($categories = xtc_db_fetch_array($categories_query)) {
+              $data[] = $this->GetSingleCategory($categories['categories_id']);
+          }
+          
+          $result = [
+              'paging' => [
+                  'total' => $count['total']
+              ],
+              'data' => $data
+          ];
+          
+          if ($count['total'] > count($data)) {
+              if ($this->options['page'] > 1) {
+                  $result['paging']['prev'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] - 1);
+              }
+              if (((($this->options['page'] - 1) * $this->options['limit']) + $this->options['limit']) < $count['total']) {
+                  $result['paging']['next'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] + 1);
+              }
+          }
+          
+          return $result;
+      }
+      
       /**
        * Insert a category by the given options.
        *
@@ -264,6 +428,103 @@
                   }
               }
           }
+      }
+
+      /**
+       * Delete a image by the given category id.
+       *
+       * @param int $categoryId The category id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteImages(int $categoryId): void
+      {
+          // Input validation
+          if (empty($categoryId)) {
+              throw new Exception('Category ID required');
+          }
+
+          $category_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_CATEGORIES."
+                                           WHERE categories_id = '".(int)$categoryId."'");
+          if (xtc_db_num_rows($category_query) < 1) {
+              throw new Exception(sprintf('Category not found: %s', $categoryId));
+          } else {
+              $category_image_query = xtc_db_query("SELECT *
+                                                      FROM ".TABLE_CATEGORIES." 
+                                                     WHERE categories_id = '".(int)$categoryId."'");
+              $category_image = xtc_db_fetch_array($category_image_query);
+
+              foreach ($this->images_type_array as $image_type) {
+                  $duplicate_image_query = xtc_db_query("SELECT count(*) AS total 
+                                                           FROM ".TABLE_CATEGORIES." 
+                                                          WHERE categories_image".$image_type." = '".xtc_db_input($category_image['categories_image'.$image_type])."'");
+                  $duplicate_image = xtc_db_fetch_array($duplicate_image_query);
+
+                  if ($duplicate_image['total'] < 2) {
+                      xtc_db_query("UPDATE ".TABLE_CATEGORIES."
+                                       SET categories_image".$image_type." = ''
+                                     WHERE categories_id = '".(int)$categoryId."'");
+
+                      if (is_file(DIR_FS_CATALOG.DIR_WS_IMAGES.'categories/'.$category_image['categories_image'.$image_type])) {
+                          unlink(DIR_FS_CATALOG.DIR_WS_IMAGES.'categories/'.$category_image['categories_image'.$image_type]);
+                      }
+                      if (is_file(DIR_FS_CATALOG.DIR_WS_IMAGES.'categories/original_images/'.$category_image['categories_image'.$image_type])) {
+                          unlink(DIR_FS_CATALOG.DIR_WS_IMAGES.'categories/original_images/'.$category_image['categories_image'.$image_type]);
+                      }        
+                  }
+              }
+          }
+      }
+      
+      /**
+       * Delete a category by the given category id.
+       *
+       * @param int $categoryId The category id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteCategory(int $categoryId): void
+      {
+          // Input validation
+          if (empty($categoryId)) {
+              throw new Exception('Category ID required');
+          }
+
+          $category_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_CATEGORIES."
+                                           WHERE categories_id = '".(int)$categoryId."'");
+          if (xtc_db_num_rows($category_query) < 1) {
+              throw new Exception(sprintf('Category not found: %s', $categoryId));
+          } else {
+              $subcategories_query = xtc_db_query("SELECT *
+                                                     FROM ".TABLE_CATEGORIES."
+                                                    WHERE parent_id = '".(int)$categoryId."'");
+              $count = xtc_db_num_rows($subcategories_query);
+              if ($count > 0) {
+                  throw new Exception(sprintf('Category can not get deleted due to connected categories: %s', $count));
+              } else {
+                  $products_query = xtc_db_query("SELECT *
+                                                    FROM ".TABLE_PRODUCTS_TO_CATEGORIES." 
+                                                   WHERE categories_id = '".(int)$categoryId."'");
+                  $count = xtc_db_num_rows($products_query);
+                  if ($count > 0) {
+                      throw new Exception(sprintf('Category can not get deleted due to connected products: %s', $count));
+                  } else {
+                      $this->DeleteImages($categoryId);
+
+                      xtc_db_query("DELETE FROM ".TABLE_CATEGORIES." WHERE categories_id = '".(int)$categoryId."'");
+                      xtc_db_query("DELETE FROM ".TABLE_CATEGORIES_DESCRIPTION." WHERE categories_id = '".(int)$categoryId."'");
+                      xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_TO_CATEGORIES." WHERE categories_id = '".(int)$categoryId."'");
+
+                      $this->logger->info(sprintf('Category deleted successfully: %s', $categoryId));
+                  }
+              }
+          }          
       }
       
   }

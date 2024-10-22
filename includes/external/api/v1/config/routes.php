@@ -25,11 +25,10 @@
           function (RouteCollectorProxy $app) {
           
               // get categories
-              $app->get('/categories',                    \api\v1\Service\Category\GetCategories::class);
+              $app->get('/categories',                    \api\v1\Service\Category\GetAllCategories::class);
               $app->get('/categories/{id}',               \api\v1\Service\Category\GetSingleCategory::class);
               $app->get('/categories/{id}/categories',    \api\v1\Service\Category\GetCategory::class);
               $app->get('/categories/{id}/description',   \api\v1\Service\Category\GetCategoryDescription::class);
-              $app->get('/categories/{id}/products',      \api\v1\Service\Category\GetCategoryProducts::class);
 
               // insert categories
               $app->post('/categories',                   \api\v1\Service\Category\InsertCategory::class);

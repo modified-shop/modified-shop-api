@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class GetCategoryProducts
+  final class GetAllCategories
   {
       /**
        * @var CategoryAction
@@ -58,9 +58,10 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
-          $categoryId = (int)$args['id'];
-
-          $result = $this->categoryAction->GetCategoryProducts($categoryId);
+          $params = $request->getQueryParams();
+          $params['path'] = $request->getUri()->getPath();
+          
+          $result = $this->categoryAction->GetAllCategories($params);
 
           return $this->responder->withJson($response, $result);
       }
