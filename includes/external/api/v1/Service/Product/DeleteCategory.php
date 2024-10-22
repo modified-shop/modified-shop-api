@@ -61,8 +61,8 @@
           $productId = (int)$args['id'];
           $categoryId = (int)$args['cid'];
           
-          $result = $this->productAction->DeleteCategory($productId, $categoryId);
+          $this->productAction->DeleteCategory($productId, $categoryId);
 
-          return $this->responder->withJson($response, $result);
+          return $this->responder->withJson($response)->withStatus(204);
       }
   }

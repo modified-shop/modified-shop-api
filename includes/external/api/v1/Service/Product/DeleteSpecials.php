@@ -61,8 +61,8 @@
           $productId = (int)$args['id'];
           $specialsId = (int)$args['sid'];
           
-          $result = $this->productAction->DeleteSpecials($productId, $specialsId);
+          $this->productAction->DeleteSpecials($productId, $specialsId);
 
-          return $this->responder->withJson($response, $result);
+          return $this->responder->withJson($response)->withStatus(204);
       }
   }

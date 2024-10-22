@@ -61,8 +61,8 @@
           $productId = (int)$args['id'];
           $xsellId = (int)$args['xid'];
           
-          $result = $this->productAction->DeleteXsell($productId, $xsellId);
+          $this->productAction->DeleteXsell($productId, $xsellId);
 
-          return $this->responder->withJson($response, $result);
+          return $this->responder->withJson($response)->withStatus(204);
       }
   }

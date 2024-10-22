@@ -61,8 +61,8 @@
           $productId = (int)$args['id'];
           $reviewsId = (int)$args['rid'];
           
-          $result = $this->productAction->DeleteReviews($productId, $reviewsId);
+          $this->productAction->DeleteReviews($productId, $reviewsId);
 
-          return $this->responder->withJson($response, $result);
+          return $this->responder->withJson($response)->withStatus(204);
       }
   }

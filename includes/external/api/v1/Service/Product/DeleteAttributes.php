@@ -61,8 +61,8 @@
           $productId = (int)$args['id'];
           $attributesId = (int)$args['aid'];
           
-          $result = $this->productAction->DeleteAttributes($productId, $attributesId);
+          $this->productAction->DeleteAttributes($productId, $attributesId);
 
-          return $this->responder->withJson($response, $result);
+          return $this->responder->withJson($response)->withStatus(204);
       }
   }

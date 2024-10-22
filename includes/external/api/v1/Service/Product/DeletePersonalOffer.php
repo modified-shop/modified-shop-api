@@ -62,8 +62,8 @@
           $statusId = (int)$args['cid'];
           $priceId = (int)$args['pid'];
           
-          $result = $this->productAction->DeletePersonalOffer($productId, $statusId, $priceId);
+          $this->productAction->DeletePersonalOffer($productId, $statusId, $priceId);
 
-          return $this->responder->withJson($response, $result);
+          return $this->responder->withJson($response)->withStatus(204);
       }
   }

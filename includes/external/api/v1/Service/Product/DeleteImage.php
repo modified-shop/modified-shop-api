@@ -61,8 +61,8 @@
           $productId = (int)$args['id'];
           $imageId = (int)$args['iid'];
           
-          $result = $this->productAction->DeleteImage($productId, $imageId);
+          $this->productAction->DeleteImage($productId, $imageId);
 
-          return $this->responder->withJson($response, $result);
+          return $this->responder->withJson($response)->withStatus(204);
       }
   }

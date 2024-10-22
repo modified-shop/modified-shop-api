@@ -60,8 +60,8 @@
       ): ResponseInterface {
           $productId = (int)$args['id'];
           
-          $result = $this->productAction->DeleteProduct($productId);
+          $this->productAction->DeleteProduct($productId);
 
-          return $this->responder->withJson($response, $result);
+          return $this->responder->withJson($response)->withStatus(204);
       }
   }

@@ -59,8 +59,9 @@
           array $args
       ): ResponseInterface {
           $categoryId = (int)$args['id'];
+          $productId = (int)$args['pid'];
           
-          $this->categoryAction->DeleteProduct($categoryId);
+          $this->categoryAction->DeleteProduct($categoryId, $productId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }

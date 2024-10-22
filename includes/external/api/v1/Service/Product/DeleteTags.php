@@ -61,8 +61,8 @@
           $productId = (int)$args['id'];
           $tagsId = (int)$args['tid'];
           
-          $result = $this->productAction->DeleteTags($productId, $tagsId);
+          $this->productAction->DeleteTags($productId, $tagsId);
 
-          return $this->responder->withJson($response, $result);
+          return $this->responder->withJson($response)->withStatus(204);
       }
   }
