@@ -10,9 +10,9 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------------------------*/
 
-  namespace api\v1\Service\Product;
+  namespace api\v1\Service\Customer;
 
-  use api\v1\Action\ProductAction;
+  use api\v1\Action\CustomerAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
@@ -20,12 +20,12 @@
   /**
    * Action
    */
-  final class DeleteProduct
+  final class getCustomerInfo
   {
       /**
-       * @var ProductAction
+       * @var CustomerAction
        */
-      private $productAction;
+      private $customerAction;
 
       /**
        * @var Responder
@@ -35,12 +35,12 @@
       /**
        * The constructor.
        *
-       * @param ProductAction $productAction The customer reader
+       * @param CustomerAction $customerAction The customer reader
        * @param Responder $responder The responder
        */
-      public function __construct(ProductAction $productAction, Responder $responder)
+      public function __construct(CustomerAction $customerAction, Responder $responder)
       {
-          $this->productAction = $productAction;
+          $this->customerAction = $customerAction;
           $this->responder = $responder;
       }
 
@@ -58,9 +58,9 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
-          $productId = (int)$args['id'];
-          
-          $result = $this->productAction->DeleteProduct($productId);
+          $customerId = (int)$args['id'];
+
+          $result = $this->customerAction->getCustomerInfo($customerId);
 
           return $this->responder->withJson($response, $result);
       }

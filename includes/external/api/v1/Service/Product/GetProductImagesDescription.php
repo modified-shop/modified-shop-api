@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class GetProduct
+  final class GetProductImagesDescription
   {
       /**
        * @var ProductAction
@@ -44,7 +44,6 @@
           $this->responder = $responder;
       }
 
-	  
       /**
        * Invoke.
        *
@@ -61,7 +60,7 @@
       ): ResponseInterface {
           $productId = (int)$args['id'];
 
-          $result = $this->productAction->getProductDetails($productId);
+          $result = $this->productAction->GetProductImagesDescription($productId);
 
           return $this->responder->withJson($response, $result);
       }

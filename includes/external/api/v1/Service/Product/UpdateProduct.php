@@ -10,9 +10,9 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------------------------*/
 
-  namespace api\v1\Service\Customer;
+  namespace api\v1\Service\Product;
 
-  use api\v1\Action\CustomerAction;
+  use api\v1\Action\ProductAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
@@ -20,12 +20,12 @@
   /**
    * Action
    */
-  final class GetCustomer
+  final class UpdateProduct
   {
       /**
-       * @var CustomerAction
+       * @var productAction
        */
-      private $customerAction;
+      private $productAction;
 
       /**
        * @var Responder
@@ -35,12 +35,12 @@
       /**
        * The constructor.
        *
-       * @param CustomerAction $customerAction The customer reader
+       * @param ProductAction $productAction The customer reader
        * @param Responder $responder The responder
        */
-      public function __construct(CustomerAction $customerAction, Responder $responder)
+      public function __construct(ProductAction $productAction, Responder $responder)
       {
-          $this->customerAction = $customerAction;
+          $this->productAction = $productAction;
           $this->responder = $responder;
       }
 
@@ -58,10 +58,11 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
-          $customerId = (int)$args['id'];
-
-          $result = $this->customerAction->getCustomerDetails($customerId);
-
+          $productId = $args['id'];
+          $data = (array)$request->getParsedBody();
+                    
+          $result = $this->productAction->UpdateProduct($productId, $data);
+          
           return $this->responder->withJson($response, $result);
       }
   }

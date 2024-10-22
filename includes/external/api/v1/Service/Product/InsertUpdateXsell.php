@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class DeleteProduct
+  final class InsertUpdateXsell
   {
       /**
        * @var ProductAction
@@ -59,8 +59,9 @@
           array $args
       ): ResponseInterface {
           $productId = (int)$args['id'];
-          
-          $result = $this->productAction->DeleteProduct($productId);
+          $data = (array)$request->getParsedBody();
+                    
+          $result = $this->productAction->InsertUpdateXsell($productId, $data);
 
           return $this->responder->withJson($response, $result);
       }

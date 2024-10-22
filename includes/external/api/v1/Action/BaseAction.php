@@ -38,15 +38,36 @@
           "parent" => null,
           "from" => null,
           "to" => null,
+          "with" => null,
           "page" => 1,
           "limit" => 10,
       ];
 
       /**
-       * @var accepted_image_files
+       * @var Excetion
        */
-      protected $accepted_image_files_extensions = array("jpg","jpeg","jpe","gif","png","bmp","tiff","tif","bmp");
-      protected $accepted_image_files_mime_types = array("image/jpeg","image/gif","image/png","image/bmp");
+      protected $Excetion = true;
+
+      /**
+       * @var accepted files
+       */
+      protected $accepted_image_extensions = array("jpg","jpeg","jpe","gif","png","tiff","tif","bmp","svg");
+      protected $accepted_image_mime_types = array("image/jpeg","image/gif","image/png","image/bmp","image/svg","image/svg+xml");
+      
+      protected $accepted_file_extensions = array("txt","csv","tsv");
+      protected $accepted_file_mime_types = array("text/plain","text/csv","text/comma-separated-values","text/tab-separated-values");
+      
+      protected $accepted_extfile_extensions = array("xls","xla","hlp","chm","ppt","ppz","pps","pot","doc","dot","pdf","rtf");
+      protected $accepted_extfile_mime_types = array("application/msexcel","application/mshelp","application/mspowerpoint","application/msword","application/pdf","application/rtf");
+      
+      protected $accepted_audio_extensions = array("au","snd","mp2","rpm","stream","wav");
+      protected $accepted_audio_mime_types = array("audio/basic","audio/x-mpeg","audio/x-pn-realaudio-plugin","audio/x-qt-stream","audio/x-wav");
+      
+      protected $accepted_movie_extensions = array("mpeg","mpg","mpe","qt","mov","avi","movie");
+      protected $accepted_movie_mime_types = array("video/mpeg","video/quicktime","video/x-msvideo","video/x-sgi-movie");
+      
+      protected $accepted_compressed_extensions = array("tar","zip","rar","7z","cab");
+      protected $accepted_compressed_mime_types = array("application/x-tar","application/zip","application/x-rar-compressed","application/x-7z-compressed","application/vnd.ms-cab-compressed");
 
       /**
        * @var LoggerInterface
@@ -128,6 +149,8 @@
               $value = '';
               if ($default['Default'] != '') {
                   $value = $default['Default'];
+              } elseif (strtolower($default['Null']) == 'yes') {
+                  $value = 'null';
               } elseif (strtolower($default['Null']) == 'no'
                         && (strpos(strtolower($default['Type']), 'int') !== false
                             || strpos(strtolower($default['Type']), 'decimal') !== false
@@ -157,6 +180,7 @@
               $default_array[$default['Field']] = [
                 'type' => ((strpos($default['Type'], '(') !== false) ? substr($default['Type'], 0, strpos($default['Type'], '(')) : $default['Type']),
                 'length' => (int)preg_replace('/[^\d]/', '', $default['Type']),
+                'null' => strtolower($default['Null']),
               ];
           }
           
@@ -180,6 +204,7 @@
           foreach ($default_array as $key => $info) {
               if (strpos($info['type'], 'int') !== false
                   && is_numeric($data[$key]) === false
+                  && $info['null'] == 'no'
                   )
               {
                   $error[$key][] = sprintf('Not expected format: %s', $info['type']);

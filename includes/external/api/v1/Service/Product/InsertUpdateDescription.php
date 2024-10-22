@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class DeleteProduct
+  final class InsertUpdateDescription
   {
       /**
        * @var ProductAction
@@ -58,10 +58,14 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
-          $productId = (int)$args['id'];
-          
-          $result = $this->productAction->DeleteProduct($productId);
+          $productId = ((isset($args['id'])) ? (int)$args['id'] : 0);
+          $data = (array)$request->getParsedBody();
+                    
+          $result = $this->productAction->InsertUpdateDescription($productId, $data);
 
-          return $this->responder->withJson($response, $result);
+          if ($productId > 0) {
+              return $this->responder->withJson($response, $result);
+          }
+          return $this->responder->withJson($response, $result)->withStatus(201);
       }
   }

@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class DeleteProduct
+  final class DeleteImage
   {
       /**
        * @var ProductAction
@@ -59,8 +59,9 @@
           array $args
       ): ResponseInterface {
           $productId = (int)$args['id'];
+          $imageId = (int)$args['iid'];
           
-          $result = $this->productAction->DeleteProduct($productId);
+          $result = $this->productAction->DeleteImage($productId, $imageId);
 
           return $this->responder->withJson($response, $result);
       }

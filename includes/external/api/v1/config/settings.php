@@ -41,7 +41,7 @@
 
   // JWT
   $settings['jwt'] = [
-      'secret' => 'supersecretkeyyoushouldnotcommittogithub',
+      'secret' => MODULE_SYSTEM_MODIFIED_API_SECRET,
       'algorithm' => 'HS256',
       'secure' => true,
   ];

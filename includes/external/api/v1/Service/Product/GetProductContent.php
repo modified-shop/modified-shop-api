@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class DeleteProduct
+  final class GetProductContent
   {
       /**
        * @var ProductAction
@@ -44,6 +44,7 @@
           $this->responder = $responder;
       }
 
+	  
       /**
        * Invoke.
        *
@@ -59,8 +60,8 @@
           array $args
       ): ResponseInterface {
           $productId = (int)$args['id'];
-          
-          $result = $this->productAction->DeleteProduct($productId);
+
+          $result = $this->productAction->GetProductContent($productId);
 
           return $this->responder->withJson($response, $result);
       }

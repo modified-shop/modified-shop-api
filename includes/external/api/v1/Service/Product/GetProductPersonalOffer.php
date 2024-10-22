@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class DeleteProduct
+  final class GetProductPersonalOffer
   {
       /**
        * @var ProductAction
@@ -59,8 +59,9 @@
           array $args
       ): ResponseInterface {
           $productId = (int)$args['id'];
-          
-          $result = $this->productAction->DeleteProduct($productId);
+          $statusId = (int)$args['cid'];
+
+          $result = $this->productAction->GetProductPersonalOffer($productId, $statusId);
 
           return $this->responder->withJson($response, $result);
       }
