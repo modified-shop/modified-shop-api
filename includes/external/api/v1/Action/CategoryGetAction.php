@@ -51,7 +51,7 @@
               ];         
 
               $with = explode(',', $this->options['with']);
-              if (in_array('categories', $with) !== false) {
+              if (in_array('products', $with) !== false) {
                   $result['products_to_categories'] = $this->GetCategoryProducts($categoryId);
               }
                
