@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class InsertUpdateDescription
+  final class InsertUpdateProducts
   {
       /**
        * @var CategoryAction
@@ -61,7 +61,7 @@
           $categoryId = ((isset($args['id'])) ? (int)$args['id'] : 0);
           $data = (array)$request->getParsedBody();
                     
-          $result = $this->categoryAction->InsertUpdateDescription($categoryId, $data);
+          $result = $this->categoryAction->InsertUpdateProducts($categoryId, $data);
 
           return $this->responder->withJson($response, $result);
       }

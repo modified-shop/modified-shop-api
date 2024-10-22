@@ -216,6 +216,61 @@
       }
 
       /**
+       * Insert or Update a category product by the given category id.
+       *
+       * @param int $categoryId The category id
+       * @param mixed[] $options
+       *
+       * @return array The category data
+       */
+      public function InsertUpdateProducts(int $categoryId, array $options): array
+      {
+          // Input validation
+          if (empty($categoryId)) {
+              throw new Exception('Category ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $categories_query = xtc_db_query("SELECT *
+                                              FROM ".TABLE_CATEGORIES."
+                                             WHERE categories_id = '".(int)$categoryId."'");
+          if (xtc_db_num_rows($categories_query) < 1) {
+              throw new Exception(sprintf('Category not found: %s', $categoryId));
+          } else {
+              if (!isset($this->options['products_id'])) {
+                  throw new Exception(sprintf('Product ID required'));
+              } else {
+                  $products_query = xtc_db_query("SELECT *
+                                                    FROM ".TABLE_PRODUCTS_TO_CATEGORIES."
+                                                   WHERE categories_id = '".(int)$categoryId."'
+                                                     AND products_id = '".(int)$this->options['products_id']."'");
+                  if (xtc_db_num_rows($products_query) > 0) {
+                      $action = 'update';
+                      $products = xtc_db_fetch_array($products_query);
+                  } else {
+                      $action = 'insert';
+                      $products = $this->getDefaultTableValues(TABLE_PRODUCTS_TO_CATEGORIES);
+                      $products['categories_id'] = (int)$categoryId;
+                  }
+
+                  foreach ($products as $key => $value) {
+                      if (isset($this->options[$key])) {
+                          $products[$key] = $this->options[$key];
+                      }
+                  }
+
+                  // Input validation
+                  $this->checkTableData(TABLE_PRODUCTS_TO_CATEGORIES, $products);
+                  xtc_db_perform(TABLE_PRODUCTS_TO_CATEGORIES, $products, $action, "categories_id = '".(int)$categoryId."' AND products_id = '".(int)$this->options['products_id']."'");
+              }
+          }
+
+          return $this->GetCategoryProducts($categoryId);
+      }
+
+      /**
        * Insert or update images of a category by the given category id.
        *
        * @param int $categoryId The category id

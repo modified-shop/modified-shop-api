@@ -60,8 +60,8 @@
       ): ResponseInterface {
           $categoryId = (int)$args['id'];
                     
-          $this->categoryAction->InsertUpdateImages($categoryId);
+          $result = $this->categoryAction->InsertUpdateImages($categoryId);
 
-          return $this->responder->withJson($response)->withStatus(204);
+          return $this->responder->withJson($response, $result);
       }
   }
