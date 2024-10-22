@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class GetSingleCategory
+  final class GetCategories
   {
       /**
        * @var CategoryAction
@@ -60,10 +60,8 @@
       ): ResponseInterface {
           $params = $request->getQueryParams();
           $params['path'] = $request->getUri()->getPath();
-
-          $categoryId = (int)$args['id'];
-
-          $result = $this->categoryAction->GetSingleCategory($categoryId, $params);
+          
+          $result = $this->categoryAction->GetCategories($params);
 
           return $this->responder->withJson($response, $result);
       }
