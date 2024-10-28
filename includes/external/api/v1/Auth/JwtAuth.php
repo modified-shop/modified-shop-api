@@ -72,6 +72,6 @@
           // Build the HTTP response
           $response->getBody()->write((string)json_encode($data));
 
-          return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
+          return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
       }
   }
