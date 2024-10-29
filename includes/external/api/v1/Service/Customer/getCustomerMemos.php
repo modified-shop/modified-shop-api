@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class getCustomerMemos
+  final class GetCustomerMemos
   {
       /**
        * @var CustomerAction
@@ -60,7 +60,7 @@
       ): ResponseInterface {
           $customerId = (int)$args['id'];
 
-          $result = $this->customerAction->getCustomerMemos($customerId);
+          $result = $this->customerAction->GetCustomerMemos($customerId);
 
           return $this->responder->withJson($response, $result);
       }

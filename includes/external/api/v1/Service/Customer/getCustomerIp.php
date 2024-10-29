@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class getCustomerIp
+  final class GetCustomerIp
   {
       /**
        * @var CustomerAction
@@ -60,7 +60,7 @@
       ): ResponseInterface {
           $customerId = (int)$args['id'];
 
-          $result = $this->customerAction->getCustomerIp($customerId);
+          $result = $this->customerAction->GetCustomerIp($customerId);
 
           return $this->responder->withJson($response, $result);
       }

@@ -49,13 +49,13 @@
     
               $with = explode(',', $this->options['with']);
               if (in_array('info', $with) !== false) {
-                  $result['customers_info'] = $this->getCustomerInfo($customerId);
+                  $result['customers_info'] = $this->GetCustomerInfo($customerId);
               }
               if (in_array('ip', $with) !== false) {
-                  $result['customers_ip'] = $this->getCustomerIp($customerId);
+                  $result['customers_ip'] = $this->GetCustomerIp($customerId);
               }
               if (in_array('memo', $with) !== false) {
-                  $result['customers_memo'] = $this->getCustomerMemos($customerId);
+                  $result['customers_memo'] = $this->GetCustomerMemos($customerId);
               }
               if (in_array('address', $with) !== false) {
                   $result['address_book'] = $this->getCustomerAddressBooks($customerId);
@@ -202,7 +202,7 @@
        *
        * @return array The customer data
        */
-      public function getCustomerInfo(int $customerId): array
+      public function GetCustomerInfo(int $customerId): array
       {
           // Input validation
           if (empty($customerId)) {
@@ -232,7 +232,7 @@
        *
        * @return array The customer data
        */
-      public function getCustomerIp(int $customerId): array
+      public function GetCustomerIp(int $customerId): array
       {
           // Input validation
           if (empty($customerId)) {
@@ -351,7 +351,7 @@
        *
        * @return array The memo data
        */
-      public function getCustomerMemos(int $customerId): array
+      public function GetCustomerMemos(int $customerId): array
       {
           // Input validation
           if (empty($customerId)) {
