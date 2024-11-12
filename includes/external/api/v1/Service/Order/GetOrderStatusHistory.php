@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class GetAllOrders
+  final class GetOrderStatusHistory
   {
       /**
        * @var OrderAction
@@ -58,10 +58,9 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
-          $params = $request->getQueryParams();
-          $params['path'] = $request->getUri()->getPath();
-          
-          $result = $this->orderAction->GetAllOrders($params);
+          $orderId = (int)$args['id'];
+
+          $result = $this->orderAction->GetOrderStatusHistory($orderId);
 
           return $this->responder->withJson($response, $result);
       }

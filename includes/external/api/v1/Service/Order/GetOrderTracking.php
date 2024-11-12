@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class GetOrder
+  final class GetOrderTracking
   {
       /**
        * @var OrderAction
@@ -60,7 +60,7 @@
       ): ResponseInterface {
           $orderId = (int)$args['id'];
 
-          $result = $this->orderAction->getOrderDetails($orderId);
+          $result = $this->orderAction->GetOrderTracking($orderId);
 
           return $this->responder->withJson($response, $result);
       }

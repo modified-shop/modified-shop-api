@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class GetSingleOrder
+  final class GetOrderTotal
   {
       /**
        * @var OrderAction
@@ -58,12 +58,9 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
-          $params = $request->getQueryParams();
-          $params['path'] = $request->getUri()->getPath();
-
           $orderId = (int)$args['id'];
 
-          $result = $this->orderAction->GetSingleOrder($orderId, $params);
+          $result = $this->orderAction->GetOrderTotal($orderId);
 
           return $this->responder->withJson($response, $result);
       }
