@@ -12,7 +12,8 @@
 
   namespace api\v1\Action;
 
-  use api\v1\Action\BaseAction;
+  use api\v1\Utility\LoggerHandler;
+  use Psr\Log\LoggerInterface;
   use Exception;
 
   // include needed classes
@@ -21,7 +22,7 @@
 
   // include needed functions
   require_once(DIR_FS_INC.'xtc_remove_order.inc.php');
-  require_once(DIR_FS_INC.'xtc_catalog_href_link.inc.php');
+  //require_once(DIR_FS_INC.'xtc_catalog_href_link.inc.php');
   require_once(DIR_FS_INC.'get_tracking_link.inc.php');
 
   /**
