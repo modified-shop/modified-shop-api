@@ -216,7 +216,7 @@
           if (xtc_db_num_rows($customer_query) < 1 && $this->Excetion === true) {
               throw new Exception(sprintf('Customer not found: %s', $customerId));
           } else {
-              $info = xtc_db_fetch_array($customers_info_query);
+              $info = xtc_db_fetch_array($customer_query);
           }
 
           $result = $this->encode_request($info);
