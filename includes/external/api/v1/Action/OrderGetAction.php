@@ -40,7 +40,7 @@
           $order_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_ORDERS."
                                         WHERE orders_id = '".(int)$orderId."'");
-          if (xtc_db_num_rows($customer_query) < 1) {
+          if (xtc_db_num_rows($order_query) < 1) {
               throw new Exception(sprintf('Order not found: %s', $orderId));
           } else {            
               // disable Excetion
