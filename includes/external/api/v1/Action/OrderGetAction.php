@@ -52,18 +52,18 @@
     
               $with = explode(',', $this->options['with']);
               if (in_array('products', $with) !== false) {
-                  $result['orders_products'] = $this->GetOrderProducts($customerId);
-                  $result['orders_products_attributes'] = $this->GetOrderProductsAttributes($customerId);
-                  $result['orders_products_download'] = $this->GetOrderProductsDownload($customerId);
+                  $result['orders_products'] = $this->GetOrderProducts($orderId);
+                  $result['orders_products_attributes'] = $this->GetOrderProductsAttributes($orderId);
+                  $result['orders_products_download'] = $this->GetOrderProductsDownload($orderId);
               }
               if (in_array('history', $with) !== false) {
-                  $result['orders_status_history'] = $this->GetOrderStatusHistory($customerId);
+                  $result['orders_status_history'] = $this->GetOrderStatusHistory($orderId);
               }
               if (in_array('total', $with) !== false) {
-                  $result['orders_total'] = $this->GetOrderTotal($customerId);
+                  $result['orders_total'] = $this->GetOrderTotal($orderId);
               }
               if (in_array('tracking', $with) !== false) {
-                  $result['orders_tracking'] = $this->GetOrderTracking($customerId);
+                  $result['orders_tracking'] = $this->GetOrderTracking($orderId);
               }
               
               return $result;
