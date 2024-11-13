@@ -205,47 +205,7 @@
 
           return $this->options['tracking'];
       }
-      
-      /**
-       * Delete an order by the given order id.
-       *
-       * @param int $orderId The order id
-       * @param mixed[] $options
-       *
-       * @throws Exception
-       *
-       * @return void
-       */
-      public function DeleteOrder(int $orderId, array $options): void
-      {
-          // Input validation
-          if (empty($orderId)) {
-              throw new Exception('Order ID required');
-          }
-
-          $order = new \order($orderId);
-
-          if (!isset($order->info['orders_id'])) {
-              throw new Exception(sprintf('Order not found: %s', $orderId));
-          }
-
-          /* Store passed in options overwriting any defaults */
-          $this->hydrate($options);
-          
-          $restock = false;
-          if (isset($this->options['restock'])) {
-              $restock = (($this->options['restock'] == 1) ? 'on' : false);
-          }
-          $activate = true;
-          if (isset($this->options['activate'])) {
-              $activate = (($this->options['activate'] == 1) ? true : false);
-          }
-                    
-          xtc_remove_order($orderId, $restock, $activate);
-          
-          $this->logger->info(sprintf('Order deleted successfully: %s', $orderId));
-      }
-      
+            
       /**
        * Delete an order by the given order id.
        *
