@@ -16,8 +16,17 @@
   $app->get('/customers/{id}/info',                 \api\v1\Service\Customer\GetCustomerInfo::class);
   $app->get('/customers/{id}/ip',                   \api\v1\Service\Customer\GetCustomerIp::class);
   $app->get('/customers/{id}/memo',                 \api\v1\Service\Customer\GetCustomerMemos::class);
-  $app->get('/customers/{id}/address_book',         \api\v1\Service\Customer\GetCustomerAddressBooks::class);
+  $app->get('/customers/{id}/memo',                 \api\v1\Service\Customer\GetCustomerMemos::class);
+  $app->get('/customers/{id}/status_history',       \api\v1\Service\Customer\GetCustomerStatusHistory::class);
   $app->get('/customers/{id}/address_book/{aid}',   \api\v1\Service\Customer\GetCustomerAddressBook::class);
+  $app->get('/customers/{id}/basket',               \api\v1\Service\Customer\GetCustomerBasket::class);
+  $app->get('/customers/{id}/wishlist',             \api\v1\Service\Customer\GetCustomerWishlist::class);
   
   // delete customers
-  $app->delete('/customers/{id}',                   \api\v1\Service\Customer\DeleteCustomer::class);
+  $app->delete('/customers/{id}',                       \api\v1\Service\Customer\DeleteCustomer::class);
+  $app->delete('/customers/{id}/info',                  \api\v1\Service\Customer\DeleteInfo::class);
+  $app->delete('/customers/{id}/ip/{iid}',              \api\v1\Service\Customer\DeleteIp::class);
+  $app->delete('/customers/{id}/memo/{mid}',            \api\v1\Service\Customer\DeleteMemo::class);
+  $app->delete('/customers/{id}/address_book/{aid}',    \api\v1\Service\Customer\DeleteAddressBook::class);
+  $app->delete('/customers/{id}/basket/{bid}',          \api\v1\Service\Customer\DeleteBasket::class);
+  $app->delete('/customers/{id}/wishlist/{bid}',        \api\v1\Service\Customer\DeleteWishlist::class);

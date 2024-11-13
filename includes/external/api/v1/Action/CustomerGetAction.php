@@ -57,8 +57,17 @@
               if (in_array('memo', $with) !== false) {
                   $result['customers_memo'] = $this->GetCustomerMemos($customerId);
               }
+              if (in_array('history', $with) !== false) {
+                  $result['customers_status_history'] = $this->GetCustomerStatusHistory($customerId);
+              }
               if (in_array('address', $with) !== false) {
                   $result['address_book'] = $this->GetCustomerAddressBooks($customerId);
+              }
+              if (in_array('basket', $with) !== false) {
+                  $result['customers_basket'] = $this->GetCustomerBasket($customerId);
+              }
+              if (in_array('wishlist', $with) !== false) {
+                  $result['customers_wishlist'] = $this->GetCustomerWishlist($customerId);
               }
               
               return $result;
@@ -260,6 +269,78 @@
       }
 
       /**
+       * Read an customer memo by the given customer id.
+       *
+       * @param int $customerId The customer id
+       *
+       * @throws Exception
+       *
+       * @return array The memo data
+       */
+      public function GetCustomerMemos(int $customerId): array
+      {
+          // Input validation
+          if (empty($customerId)) {
+              throw new Exception('Customer ID required');
+          }
+          
+          $memo = [];
+          $customer_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_CUSTOMERS_MEMO."
+                                           WHERE customers_id = '".(int)$customerId."'");
+          if (xtc_db_num_rows($customer_query) < 1) {
+            throw new Exception(sprintf('Customer memo not found: %s', $customerId));
+          } else {
+            $customers_memo_query = xtc_db_query("SELECT *
+                                                    FROM ".TABLE_CUSTOMERS_MEMO."
+                                                   WHERE customers_id = '".(int)$customerId."'
+                                                ORDER BY memo_id ASC");
+            while ($customers_memo = xtc_db_fetch_array($customers_memo_query)) {
+              $memo[] = $customers_memo;
+            }
+          }
+
+          $result = $this->encode_request($memo);
+          return $result;
+      }
+
+      /**
+       * Read a customer status history by the given customer id.
+       *
+       * @param int $customerId The customer id
+       *
+       * @throws Exception
+       *
+       * @return array The customer data
+       */
+      public function GetCustomerStatusHistory(int $customerId): array
+      {
+          // Input validation
+          if (empty($customerId)) {
+              throw new Exception('Customer ID required');
+          }
+
+          $status_history = [];
+          $customer_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_CUSTOMERS_STATUS_HISTORY."
+                                           WHERE customers_id = '".(int)$customerId."'");
+          if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
+              throw new Exception(sprintf('Customer status history not found: %s', $customerId));
+          } else {
+              $customers_status_history_query = xtc_db_query("SELECT *
+                                                                FROM ".TABLE_CUSTOMERS_STATUS_HISTORY."
+                                                               WHERE customers_id = '".(int)$customerId."'
+                                                            ORDER BY customers_status_history_id");
+              while ($customers_status_history = xtc_db_fetch_array($customers_status_history_query)) {
+                  $status_history[] = $customers_status_history;
+              }
+          }
+
+          $result = $this->encode_request($status_history);
+          return $result;          
+      }
+
+      /**
        * Read a customer address book by the given customer id.
        *
        * @param int $customerId The customer id
@@ -275,7 +356,7 @@
               throw new Exception('Customer ID required');
           }
           
-          $address_book_array = [];
+          $address_books = [];
           $customer_query = xtc_db_query("SELECT *
                                             FROM ".TABLE_ADDRESS_BOOK."
                                            WHERE customers_id = '".(int)$customerId."'");
@@ -287,11 +368,11 @@
                                                    WHERE customers_id = '".(int)$customerId."'
                                                 ORDER BY address_book_id ASC");
               while ($address_book = xtc_db_fetch_array($address_book_query)) {
-                  $address_book_array[] = $this->GetCustomerAddressBook($customerId, $address_book['address_book_id']);
+                  $address_books[] = $this->GetCustomerAddressBook($customerId, $address_book['address_book_id']);
               }
           }
 
-          $result = $this->encode_request($address_book_array);
+          $result = $this->encode_request($address_books);
           return $result;
       }
 
@@ -344,39 +425,95 @@
       }
 
       /**
-       * Read an customer memo by the given customer id.
+       * Read a customer basket by the given customer id.
        *
        * @param int $customerId The customer id
        *
        * @throws Exception
        *
-       * @return array The memo data
+       * @return array The customer data
        */
-      public function GetCustomerMemos(int $customerId): array
+      public function GetCustomerBasket(int $customerId): array
       {
           // Input validation
           if (empty($customerId)) {
               throw new Exception('Customer ID required');
           }
-          
-          $memo = [];
+
+          $basket = [];
           $customer_query = xtc_db_query("SELECT *
-                                            FROM ".TABLE_CUSTOMERS_MEMO."
+                                            FROM ".TABLE_CUSTOMERS_BASKET."
                                            WHERE customers_id = '".(int)$customerId."'");
-          if (xtc_db_num_rows($customer_query) < 1) {
-            throw new Exception(sprintf('Customer memo not found: %s', $customerId));
+          if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
+              throw new Exception(sprintf('Customer basket not found: %s', $customerId));
           } else {
-            $customers_memo_query = xtc_db_query("SELECT *
-                                                    FROM ".TABLE_CUSTOMERS_MEMO."
-                                                   WHERE customers_id = '".(int)$customerId."'
-                                                ORDER BY memo_id ASC");
-            while ($customers_memo = xtc_db_fetch_array($customers_memo_query)) {
-              $memo[] = $customers_memo;
-            }
+              $customers_basket_query = xtc_db_query("SELECT *
+                                                        FROM ".TABLE_CUSTOMERS_BASKET."
+                                                       WHERE customers_id = '".(int)$customerId."'
+                                                    ORDER BY customers_basket_id");
+              while ($customers_basket = xtc_db_fetch_array($customers_basket_query)) {
+                  $customers_basket['attributes'] = [];
+                  $customers_basket_attributes_query = xtc_db_query("SELECT *
+                                                                       FROM ".TABLE_CUSTOMERS_BASKET_ATTRIBUTES."
+                                                                      WHERE customers_id = '".(int)$customerId."'
+                                                                        AND products_id = '".xtc_db_input($customers_basket['products_id'])."'
+                                                                   ORDER BY customers_basket_attributes_id");
+                  while ($customers_basket_attributes = xtc_db_fetch_array($customers_basket_attributes_query)) {
+                      $customers_basket['attributes'][] = $customers_basket_attributes;
+                  }
+                  
+                  $basket[] = $customers_status_history;
+              }
           }
 
-          $result = $this->encode_request($memo);
-          return $result;
+          $result = $this->encode_request($basket);
+          return $result;          
+      }
+
+      /**
+       * Read a customer basket by the given customer id.
+       *
+       * @param int $customerId The customer id
+       *
+       * @throws Exception
+       *
+       * @return array The customer data
+       */
+      public function GetCustomerWishlist(int $customerId): array
+      {
+          // Input validation
+          if (empty($customerId)) {
+              throw new Exception('Customer ID required');
+          }
+
+          $wishlist = [];
+          $customer_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_CUSTOMERS_WISHLIST."
+                                           WHERE customers_id = '".(int)$customerId."'");
+          if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
+              throw new Exception(sprintf('Customer wishlist not found: %s', $customerId));
+          } else {
+              $customers_wishlist_query = xtc_db_query("SELECT *
+                                                        FROM ".TABLE_CUSTOMERS_WISHLIST."
+                                                       WHERE customers_id = '".(int)$customerId."'
+                                                    ORDER BY customers_basket_id");
+              while ($customers_wishlist = xtc_db_fetch_array($customers_wishlist_query)) {
+                  $customers_wishlist['attributes'] = [];
+                  $customers_wishlist_attributes_query = xtc_db_query("SELECT *
+                                                                       FROM ".TABLE_CUSTOMERS_WISHLIST_ATTRIBUTES."
+                                                                      WHERE customers_id = '".(int)$customerId."'
+                                                                        AND products_id = '".xtc_db_input($customers_wishlist['products_id'])."'
+                                                                   ORDER BY customers_basket_attributes_id");
+                  while ($customers_wishlist_attributes = xtc_db_fetch_array($customers_wishlist_attributes_query)) {
+                      $customers_wishlist['attributes'][] = $customers_wishlist_attributes;
+                  }
+                  
+                  $wishlist[] = $customers_status_history;
+              }
+          }
+
+          $result = $this->encode_request($wishlist);
+          return $result;          
       }
       
   }
