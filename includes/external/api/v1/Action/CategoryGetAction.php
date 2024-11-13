@@ -110,7 +110,7 @@
                                           ORDER BY categories_id ASC
                                              LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($categories = xtc_db_fetch_array($categories_query)) {
-              $data[] = $this->GetSingleCategory($categories['categories_id']);
+              $data[] = $this->getCategoryDetails($categories['categories_id']);
           }
           
           $result = [
