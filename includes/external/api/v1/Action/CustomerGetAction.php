@@ -291,7 +291,7 @@
           $customer_query = xtc_db_query("SELECT *
                                             FROM ".TABLE_CUSTOMERS_MEMO."
                                            WHERE customers_id = '".(int)$customerId."'");
-          if (xtc_db_num_rows($customer_query) < 1) {
+          if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
             throw new Exception(sprintf('Customer memo not found: %s', $customerId));
           } else {
             $customers_memo_query = xtc_db_query("SELECT *
