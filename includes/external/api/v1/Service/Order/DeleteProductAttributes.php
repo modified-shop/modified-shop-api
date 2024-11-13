@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class DeleteOrder
+  final class DeleteProductAttributes
   {
       /**
        * @var OrderAction
@@ -59,8 +59,9 @@
           array $args
       ): ResponseInterface {
           $orderId = (int)$args['id'];
+          $orderProductsAttributesId = (int)$args['aid'];
           
-          $this->orderAction->DeleteOrder($orderId);
+          $this->orderAction->DeleteProductAttributes($orderId, $orderProductsAttributesId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }
