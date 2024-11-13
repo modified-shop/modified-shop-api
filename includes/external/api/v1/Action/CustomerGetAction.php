@@ -465,7 +465,7 @@
                       $customers_basket['attributes'][] = $customers_basket_attributes;
                   }
                   
-                  $basket[] = $customers_status_history;
+                  $basket[] = $customers_basket;
               }
           }
 
@@ -511,7 +511,7 @@
                       $customers_wishlist['attributes'][] = $customers_wishlist_attributes;
                   }
                   
-                  $wishlist[] = $customers_status_history;
+                  $wishlist[] = $customers_wishlist;
               }
           }
 
