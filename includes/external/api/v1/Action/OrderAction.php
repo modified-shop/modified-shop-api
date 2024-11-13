@@ -31,6 +31,7 @@
   final class OrderAction extends BaseAction
   {
       use OrderGetAction;
+      use OrderDeleteAction;
 
       /**
        * Set order status by the given order id.
