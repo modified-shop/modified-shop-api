@@ -47,6 +47,7 @@
               $this->DeleteInfo($customerId);
               $this->DeleteIp($customerId, 0);
               $this->DeleteMemo($customerId, 0);
+              $this->DeleteStatusHistory($customerId, 0);
               $this->DeleteBasket($customerId, 0);
               $this->DeleteWishlist($customerId, 0);
 
@@ -190,6 +191,43 @@
                   xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_MEMO." 
                                       WHERE customers_id = '".(int)$customerId."'
                                         AND memo_id = '".(int)$customer['memo_id']."'");
+              }
+          }
+      }
+
+      /**
+       * Delete a customer history by the given customer id and status history id.
+       *
+       * @param int $customerId The customer id
+       * @param int $customerStatusHistoryId The status history id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteStatusHistory(int $customerId, int $customerStatusHistoryId): void
+      {
+          // Input validation
+          if (empty($customerId)) {
+              throw new Exception('Customer ID required');
+          }
+
+          $where = '';
+          if ($customerStatusHistoryId > 0) {
+              $where = "AND customers_status_history_id = '".(int)$customerStatusHistoryId."'";
+          }
+
+          $customer_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_CUSTOMERS_STATUS_HISTORY."
+                                           WHERE customers_id = '".(int)$customerId."'
+                                                 ".$where);
+          if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
+              throw new Exception(sprintf('Customer status history not found: %s', $customerId));
+          } else {
+              while ($customer = xtc_db_fetch_array($customer_query)) {
+                  xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_STATUS_HISTORY." 
+                                      WHERE customers_id = '".(int)$customerId."'
+                                        AND customers_status_history_id = '".(int)$customer['customers_status_history_id']."'");
               }
           }
       }
