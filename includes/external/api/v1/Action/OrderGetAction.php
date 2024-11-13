@@ -43,8 +43,8 @@
           if (xtc_db_num_rows($order_query) < 1) {
               throw new Exception(sprintf('Order not found: %s', $orderId));
           } else {            
-              // disable Excetion
-              $this->Excetion = false;
+              // disable Exception
+              $this->throw_exception = false;
               
               $result = [
                   'orders' => $this->GetOrder($orderId),
@@ -184,7 +184,7 @@
           $order_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_ORDERS."
                                         WHERE orders_id = '".(int)$orderId ."'");
-          if (xtc_db_num_rows($order_query) < 1 && $this->Excetion === true) {
+          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Order not found: %s', $orderId));
           } else {
               $order = xtc_db_fetch_array($order_query);
@@ -214,7 +214,7 @@
           $order_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_ORDERS_PRODUCTS."
                                         WHERE orders_id = '".(int)$orderId."'");
-          if (xtc_db_num_rows($order_query) < 1 && $this->Excetion === true) {
+          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Order products not found: %s', $orderId));
           } else {
               $orders_products_query = xtc_db_query("SELECT *
@@ -250,7 +250,7 @@
           $order_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_ORDERS_PRODUCTS_ATTRIBUTES."
                                         WHERE orders_id = '".(int)$orderId."'");
-          if (xtc_db_num_rows($order_query) < 1 && $this->Excetion === true) {
+          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Order products attributes not found: %s', $orderId));
           } else {
               $orders_products_attributes_query = xtc_db_query("SELECT *
@@ -286,7 +286,7 @@
           $order_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_ORDERS_PRODUCTS_DOWNLOAD."
                                         WHERE orders_id = '".(int)$orderId."'");
-          if (xtc_db_num_rows($order_query) < 1 && $this->Excetion === true) {
+          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Order products download not found: %s', $orderId));
           } else {
               $orders_products_download_query = xtc_db_query("SELECT *
@@ -322,7 +322,7 @@
           $order_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_ORDERS_STATUS_HISTORY."
                                         WHERE orders_id = '".(int)$orderId."'");
-          if (xtc_db_num_rows($order_query) < 1 && $this->Excetion === true) {
+          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Order status history not found: %s', $orderId));
           } else {
               $orders_status_history_query = xtc_db_query("SELECT *
@@ -358,7 +358,7 @@
           $order_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_ORDERS_TOTAL."
                                         WHERE orders_id = '".(int)$orderId."'");
-          if (xtc_db_num_rows($order_query) < 1 && $this->Excetion === true) {
+          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Order total not found: %s', $orderId));
           } else {
               $orders_total_query = xtc_db_query("SELECT *
@@ -394,7 +394,7 @@
           $order_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_ORDERS_TRACKING."
                                         WHERE orders_id = '".(int)$orderId."'");
-          if (xtc_db_num_rows($order_query) < 1 && $this->Excetion === true) {
+          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Order tracking not found: %s', $orderId));
           } else {
               $orders_total_query = xtc_db_query("SELECT *

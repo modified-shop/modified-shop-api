@@ -61,7 +61,7 @@
           $params = $request->getQueryParams();
           $params['path'] = $request->getUri()->getPath();
           
-          $result = $this->orderAction->getOrders($params);
+          $result = $this->orderAction->GetOrders($params);
 
           return $this->responder->withJson($response, $result);
       }

@@ -27,7 +27,7 @@
        *
        * @return void
        */
-      public function deleteCustomer(int $customerId): void
+      public function DeleteCustomer(int $customerId): void
       {
           // Input validation
           if (empty($customerId)) {

@@ -94,7 +94,7 @@
                                            FROM ".TABLE_PRODUCTS_TO_CATEGORIES."
                                           WHERE categories_id = '".(int)$categoryId."'
                                                 ".$where);
-          if (xtc_db_num_rows($category_query) < 1 && $this->Excetion === true) {
+          if (xtc_db_num_rows($category_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Category products not found: %s', $categoryId));
           } else {
               while ($category = xtc_db_fetch_array($category_query)) {

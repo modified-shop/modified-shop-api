@@ -40,11 +40,11 @@
           if (xtc_db_num_rows($customer_query) < 1) {
               throw new Exception(sprintf('Customer not found: %s', $customerId));
           } else {            
-              // disable Excetion
-              $this->Excetion = false;
+              // disable Exception
+              $this->throw_exception = false;
               
               $result = [
-                  'customers' => $this->getCustomer($customerId),
+                  'customers' => $this->GetCustomer($customerId),
               ];
     
               $with = explode(',', $this->options['with']);
@@ -58,7 +58,7 @@
                   $result['customers_memo'] = $this->GetCustomerMemos($customerId);
               }
               if (in_array('address', $with) !== false) {
-                  $result['address_book'] = $this->getCustomerAddressBooks($customerId);
+                  $result['address_book'] = $this->GetCustomerAddressBooks($customerId);
               }
               
               return $result;
@@ -98,7 +98,7 @@
        *
        * @return array The customer data
        */
-      public function getCustomers($options): array
+      public function GetCustomers($options): array
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
@@ -168,7 +168,7 @@
        *
        * @return array The customer data
        */
-      public function getCustomer(int $customerId): array
+      public function GetCustomer(int $customerId): array
       {
           // Input validation
           if (empty($customerId)) {
@@ -179,7 +179,7 @@
           $customer_query = xtc_db_query("SELECT *
                                             FROM ".TABLE_CUSTOMERS."
                                            WHERE customers_id = '".(int)$customerId."'");
-          if (xtc_db_num_rows($customer_query) < 1 && $this->Excetion === true) {
+          if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Customer not found: %s', $customerId));
           } else {
               $customer = xtc_db_fetch_array($customer_query);
@@ -213,8 +213,8 @@
           $customer_query = xtc_db_query("SELECT *
                                             FROM ".TABLE_CUSTOMERS_INFO."
                                            WHERE customers_info_id = '".(int)$customerId."'");
-          if (xtc_db_num_rows($customer_query) < 1 && $this->Excetion === true) {
-              throw new Exception(sprintf('Customer not found: %s', $customerId));
+          if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
+              throw new Exception(sprintf('Customer info not found: %s', $customerId));
           } else {
               $info = xtc_db_fetch_array($customer_query);
           }
@@ -243,12 +243,13 @@
           $customer_query = xtc_db_query("SELECT *
                                             FROM ".TABLE_CUSTOMERS_IP."
                                            WHERE customers_id = '".(int)$customerId."'");
-          if (xtc_db_num_rows($customer_query) < 1 && $this->Excetion === true) {
-              throw new Exception(sprintf('Customer not found: %s', $customerId));
+          if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
+              throw new Exception(sprintf('Customer ip not found: %s', $customerId));
           } else {
               $customers_ip_query = xtc_db_query("SELECT *
                                                     FROM ".TABLE_CUSTOMERS_IP."
-                                                   WHERE customers_id = '".(int)$customerId."'");
+                                                   WHERE customers_id = '".(int)$customerId."'
+                                                ORDER BY customers_ip_id");
               while ($customers_ip = xtc_db_fetch_array($customers_ip_query)) {
                   $ip[] = $customers_ip;
               }
@@ -267,7 +268,7 @@
        *
        * @return array The address book data
        */
-      public function getCustomerAddressBooks(int $customerId): array
+      public function GetCustomerAddressBooks(int $customerId): array
       {
           // Input validation
           if (empty($customerId)) {
@@ -276,17 +277,17 @@
           
           $address_book_array = [];
           $customer_query = xtc_db_query("SELECT *
-                                            FROM ".TABLE_CUSTOMERS."
+                                            FROM ".TABLE_ADDRESS_BOOK."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1) {
-              throw new Exception(sprintf('Customer not found: %s', $customerId));
+              throw new Exception(sprintf('Customer addresses not found: %s', $customerId));
           } else {
               $address_book_query = xtc_db_query("SELECT address_book_id
                                                     FROM ".TABLE_ADDRESS_BOOK." ab
                                                    WHERE customers_id = '".(int)$customerId."'
                                                 ORDER BY address_book_id ASC");
               while ($address_book = xtc_db_fetch_array($address_book_query)) {
-                  $address_book_array[] = $this->getCustomerAddressBook($customerId, $address_book['address_book_id']);
+                  $address_book_array[] = $this->GetCustomerAddressBook($customerId, $address_book['address_book_id']);
               }
           }
 
@@ -304,7 +305,7 @@
        *
        * @return array The address book data
        */
-      public function getCustomerAddressBook(int $customerId, int $addressBookId): array
+      public function GetCustomerAddressBook(int $customerId, int $addressBookId): array
       {
           // Input validation
           if (empty($customerId)) {
@@ -316,10 +317,10 @@
           }
           
           $customer_query = xtc_db_query("SELECT *
-                                            FROM ".TABLE_CUSTOMERS."
+                                            FROM ".TABLE_ADDRESS_BOOK."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1) {
-              throw new Exception(sprintf('Customer not found: %s', $customerId));
+              throw new Exception(sprintf('Customer address not found: %s', $customerId));
           } else {
               $address_book_query = xtc_db_query("SELECT ab.*,
                                                          c.countries_name,
@@ -360,10 +361,10 @@
           
           $memo = [];
           $customer_query = xtc_db_query("SELECT *
-                                            FROM ".TABLE_CUSTOMERS."
+                                            FROM ".TABLE_CUSTOMERS_MEMO."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1) {
-            throw new Exception(sprintf('Customer not found: %s', $customerId));
+            throw new Exception(sprintf('Customer memo not found: %s', $customerId));
           } else {
             $customers_memo_query = xtc_db_query("SELECT *
                                                     FROM ".TABLE_CUSTOMERS_MEMO."

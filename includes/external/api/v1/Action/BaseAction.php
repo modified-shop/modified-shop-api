@@ -46,7 +46,7 @@
       /**
        * @var Excetion
        */
-      protected $Excetion = true;
+      protected $throw_exception = true;
 
       /**
        * @var accepted files
