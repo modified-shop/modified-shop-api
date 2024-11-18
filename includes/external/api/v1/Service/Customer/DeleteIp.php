@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -60,6 +61,11 @@
       ): ResponseInterface {
           $customerId = (int)$args['id'];
           $customerIpId = (int)$args['iid'];
+
+          // Input validation
+          if (empty($customerIpId)) {
+              throw new Exception('Customer ip ID required');
+          }
           
           $this->customerAction->DeleteIp($customerId, $customerIpId);
 

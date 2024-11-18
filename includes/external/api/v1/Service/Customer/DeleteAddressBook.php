@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -61,6 +62,11 @@
           $customerId = (int)$args['id'];
           $addressBookId = (int)$args['aid'];
           
+          // Input validation
+          if (empty($addressBookId)) {
+              throw new Exception('Address book ID required');
+          }
+
           $this->customerAction->DeleteAddressBook($customerId, $addressBookId);
 
           return $this->responder->withJson($response)->withStatus(204);

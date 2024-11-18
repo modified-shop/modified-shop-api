@@ -25,9 +25,15 @@
   // delete customers
   $app->delete('/customers/{id}',                         \api\v1\Service\Customer\DeleteCustomer::class);
   $app->delete('/customers/{id}/info',                    \api\v1\Service\Customer\DeleteInfo::class);
+  $app->delete('/customers/{id}/ip',                      \api\v1\Service\Customer\DeleteAllIp::class);
   $app->delete('/customers/{id}/ip/{iid}',                \api\v1\Service\Customer\DeleteIp::class);
+  $app->delete('/customers/{id}/memo',                    \api\v1\Service\Customer\DeleteAllMemo::class);
   $app->delete('/customers/{id}/memo/{mid}',              \api\v1\Service\Customer\DeleteMemo::class);
+  $app->delete('/customers/{id}/status_history/',         \api\v1\Service\Customer\DeleteAllStatusHistory::class);
   $app->delete('/customers/{id}/status_history/{sid}',    \api\v1\Service\Customer\DeleteStatusHistory::class);
+  $app->delete('/customers/{id}/address_book',            \api\v1\Service\Customer\DeleteAllAddressBook::class);
   $app->delete('/customers/{id}/address_book/{aid}',      \api\v1\Service\Customer\DeleteAddressBook::class);
+  $app->delete('/customers/{id}/basket',                  \api\v1\Service\Customer\DeleteAllBasket::class);
   $app->delete('/customers/{id}/basket/{bid}',            \api\v1\Service\Customer\DeleteBasket::class);
+  $app->delete('/customers/{id}/wishlist',                \api\v1\Service\Customer\DeleteAllWishlist::class);
   $app->delete('/customers/{id}/wishlist/{bid}',          \api\v1\Service\Customer\DeleteWishlist::class);

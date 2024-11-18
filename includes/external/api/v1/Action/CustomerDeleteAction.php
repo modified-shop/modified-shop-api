@@ -46,55 +46,18 @@
               // disable Exception
               $this->throw_exception = false;
 
-              $this->DeleteAddressBook($customerId, 0);
               $this->DeleteInfo($customerId);
-              $this->DeleteIp($customerId, 0);
-              $this->DeleteMemo($customerId, 0);
-              $this->DeleteStatusHistory($customerId, 0);
-              $this->DeleteBasket($customerId, 0);
-              $this->DeleteWishlist($customerId, 0);
+              $this->DeleteAllIp($customerId);
+              $this->DeleteAllMemo($customerId);
+              $this->DeleteAllStatusHistory($customerId);
+              $this->DeleteAllAddressBook($customerId);
+              $this->DeleteAllBasket($customerId);
+              $this->DeleteAllWishlist($customerId);
 
               xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS." WHERE customers_id = '".(int)$customerId."'");
           }
           
           $this->logger->info(sprintf('Customer deleted successfully: %s', $customerId));
-      }
-
-      /**
-       * Delete a customer address book by the given customer id and address book id.
-       *
-       * @param int $customerId The customer id
-       * @param int $addressBookId The address book id
-       *
-       * @throws Exception
-       *
-       * @return void
-       */
-      public function DeleteAddressBook(int $customerId, int $addressBookId): void
-      {
-          // Input validation
-          if (empty($customerId)) {
-              throw new Exception('Customer ID required');
-          }
-
-          $where = '';
-          if ($addressBookId > 0) {
-              $where = "AND address_book_id = '".(int)$addressBookId."'";
-          }
-
-          $customer_query = xtc_db_query("SELECT *
-                                            FROM ".TABLE_ADDRESS_BOOK."
-                                           WHERE customers_id = '".(int)$customerId."'
-                                                 ".$where);
-          if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Customer address book not found: %s', $customerId));
-          } else {
-              while ($customer = xtc_db_fetch_array($customer_query)) {
-                  xtc_db_query("DELETE FROM ".TABLE_ADDRESS_BOOK." 
-                                      WHERE customers_id = '".(int)$customerId."'
-                                        AND address_book_id = '".(int)$customer['address_book_id']."'");
-              }
-          }
       }
 
       /**
@@ -162,6 +125,25 @@
       }
 
       /**
+       * Delete all customer address book by the given customer id.
+       *
+       * @param int $customerId The customer id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllIp(int $customerId): void
+      {
+          // Input validation
+          if (empty($customerId)) {
+              throw new Exception('Customer ID required');
+          }
+
+          $this->DeleteIp(int $customerId, 0);
+      }
+
+      /**
        * Delete a customer memo by the given customer id and memo id.
        *
        * @param int $customerId The customer id
@@ -199,6 +181,25 @@
       }
 
       /**
+       * Delete all customer memo by the given customer id.
+       *
+       * @param int $customerId The customer id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllMemo(int $customerId): void
+      {
+          // Input validation
+          if (empty($customerId)) {
+              throw new Exception('Customer ID required');
+          }
+
+          $this->DeleteMemo($customerId, 0);
+      }
+
+      /**
        * Delete a customer history by the given customer id and status history id.
        *
        * @param int $customerId The customer id
@@ -233,6 +234,81 @@
                                         AND customers_status_history_id = '".(int)$customer['customers_status_history_id']."'");
               }
           }
+      }
+
+      /**
+       * Delete all customer history by the given customer id.
+       *
+       * @param int $customerId The customer id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllStatusHistory(int $customerId): void
+      {
+          // Input validation
+          if (empty($customerId)) {
+              throw new Exception('Customer ID required');
+          }
+
+          $this->DeleteStatusHistory($customerId, 0);
+      }
+
+      /**
+       * Delete a customer address book by the given customer id and address book id.
+       *
+       * @param int $customerId The customer id
+       * @param int $addressBookId The address book id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAddressBook(int $customerId, int $addressBookId): void
+      {
+          // Input validation
+          if (empty($customerId)) {
+              throw new Exception('Customer ID required');
+          }
+
+          $where = '';
+          if ($addressBookId > 0) {
+              $where = "AND address_book_id = '".(int)$addressBookId."'";
+          }
+
+          $customer_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_ADDRESS_BOOK."
+                                           WHERE customers_id = '".(int)$customerId."'
+                                                 ".$where);
+          if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
+              throw new Exception(sprintf('Customer address book not found: %s', $customerId));
+          } else {
+              while ($customer = xtc_db_fetch_array($customer_query)) {
+                  xtc_db_query("DELETE FROM ".TABLE_ADDRESS_BOOK." 
+                                      WHERE customers_id = '".(int)$customerId."'
+                                        AND address_book_id = '".(int)$customer['address_book_id']."'");
+              }
+          }
+      }
+
+      /**
+       * Delete all customer address book by the given customer id.
+       *
+       * @param int $customerId The customer id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllAddressBook(int $customerId): void
+      {
+          // Input validation
+          if (empty($customerId)) {
+              throw new Exception('Customer ID required');
+          }
+
+          $this->DeleteAddressBook($customerId, 0);
       }
 
       /**
@@ -277,6 +353,25 @@
       }
 
       /**
+       * Delete all customer basket by the given customer id.
+       *
+       * @param int $customerId The customer id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllBasket(int $customerId, int $customersBasketId): void
+      {
+          // Input validation
+          if (empty($customerId)) {
+              throw new Exception('Customer ID required');
+          }
+
+          $this->DeleteBasket($customerId, 0);
+      }
+
+      /**
        * Delete a customer wishlist by the given customer id and customer basket id.
        *
        * @param int $customerId The customer id
@@ -315,6 +410,25 @@
                                         AND products_id = '".xtc_db_input($customer['products_id'])."'");
               }
           }
+      }
+
+      /**
+       * Delete all customer wishlist by the given customer id.
+       *
+       * @param int $customerId The customer id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllWishlist(int $customerId): void
+      {
+          // Input validation
+          if (empty($customerId)) {
+              throw new Exception('Customer ID required');
+          }
+
+          $this->DeleteWishlist($customerId, 0);
       }
 
   }

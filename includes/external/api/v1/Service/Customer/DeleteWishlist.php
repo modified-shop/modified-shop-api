@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -60,6 +61,11 @@
       ): ResponseInterface {
           $customerId = (int)$args['id'];
           $customersBasketId = (int)$args['bid'];
+
+          // Input validation
+          if (empty($customersBasketId)) {
+              throw new Exception('Customer basket ID required');
+          }
           
           $this->customerAction->DeleteWishlist($customerId, $customersBasketId);
 

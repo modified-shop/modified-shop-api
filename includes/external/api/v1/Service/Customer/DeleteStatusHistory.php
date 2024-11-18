@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -60,8 +61,13 @@
       ): ResponseInterface {
           $customerId = (int)$args['id'];
           $customerStatusHistoryId = (int)$args['sid'];
+
+          // Input validation
+          if (empty($customerStatusHistoryId)) {
+              throw new Exception('Customer status history ID required');
+          }
           
-          $this->customerAction->DeleteStatusHistory($customerStatusHistoryId);
+          $this->customerAction->DeleteStatusHistory($customerId, $customerStatusHistoryId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }

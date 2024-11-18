@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -60,6 +61,11 @@
       ): ResponseInterface {
           $customerId = (int)$args['id'];
           $memoId = (int)$args['mid'];
+
+          // Input validation
+          if (empty($memoId)) {
+              throw new Exception('Memo ID required');
+          }
           
           $this->customerAction->DeleteMemo($customerId, $memoId);
 
