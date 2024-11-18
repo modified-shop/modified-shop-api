@@ -59,9 +59,8 @@
           array $args
       ): ResponseInterface {
           $customerId = (int)$args['id'];
-          $customerStatusHistoryId = (int)$args['sid'];
           
-          $this->customerAction->DeleteAllStatusHistory($customerStatusHistoryId);
+          $this->customerAction->DeleteAllStatusHistory($customerId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }

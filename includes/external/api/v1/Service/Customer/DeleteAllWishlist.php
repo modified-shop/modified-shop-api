@@ -59,9 +59,8 @@
           array $args
       ): ResponseInterface {
           $customerId = (int)$args['id'];
-          $customersBasketId = (int)$args['bid'];
           
-          $this->customerAction->DeleteAllWishlist($customerId, $customersBasketId);
+          $this->customerAction->DeleteAllWishlist($customerId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }

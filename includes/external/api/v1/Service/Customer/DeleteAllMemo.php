@@ -59,9 +59,8 @@
           array $args
       ): ResponseInterface {
           $customerId = (int)$args['id'];
-          $memoId = (int)$args['mid'];
           
-          $this->customerAction->DeleteAllMemo($customerId, $memoId);
+          $this->customerAction->DeleteAllMemo($customerId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }

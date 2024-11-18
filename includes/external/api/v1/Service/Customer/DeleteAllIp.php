@@ -59,9 +59,8 @@
           array $args
       ): ResponseInterface {
           $customerId = (int)$args['id'];
-          $customerIpId = (int)$args['iid'];
           
-          $this->customerAction->DeleteAllIp($customerId, $customerIpId);
+          $this->customerAction->DeleteAllIp($customerId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }
