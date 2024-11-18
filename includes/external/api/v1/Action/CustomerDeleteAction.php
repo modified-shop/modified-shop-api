@@ -361,7 +361,7 @@
        *
        * @return void
        */
-      public function DeleteAllBasket(int $customerId, int $customersBasketId): void
+      public function DeleteAllBasket(int $customerId): void
       {
           // Input validation
           if (empty($customerId)) {
