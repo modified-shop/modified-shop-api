@@ -29,7 +29,7 @@
   $app->delete('/customers/{id}/ip/{iid}',                \api\v1\Service\Customer\DeleteIp::class);
   $app->delete('/customers/{id}/memo',                    \api\v1\Service\Customer\DeleteAllMemo::class);
   $app->delete('/customers/{id}/memo/{mid}',              \api\v1\Service\Customer\DeleteMemo::class);
-  $app->delete('/customers/{id}/status_history/',         \api\v1\Service\Customer\DeleteAllStatusHistory::class);
+  $app->delete('/customers/{id}/status_history',          \api\v1\Service\Customer\DeleteAllStatusHistory::class);
   $app->delete('/customers/{id}/status_history/{sid}',    \api\v1\Service\Customer\DeleteStatusHistory::class);
   $app->delete('/customers/{id}/address_book',            \api\v1\Service\Customer\DeleteAllAddressBook::class);
   $app->delete('/customers/{id}/address_book/{aid}',      \api\v1\Service\Customer\DeleteAddressBook::class);
