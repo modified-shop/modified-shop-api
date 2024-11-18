@@ -222,83 +222,31 @@
                                                       WHERE orders_id = '".(int)$orderId."'
                                                    ORDER BY orders_products_id");
               while ($orders_products = xtc_db_fetch_array($orders_products_query)) {
+                  $orders_products['attributes'] = [];
+                  $orders_products_attributes_query = xtc_db_query("SELECT *
+                                                                      FROM ".TABLE_ORDERS_PRODUCTS_ATTRIBUTES."
+                                                                     WHERE orders_id = '".(int)$orderId."'
+                                                                       AND orders_products_id  = '".(int)$orders_products['orders_products_id']."'
+                                                                  ORDER BY orders_products_attributes_id");
+                  while ($orders_products_attributes = xtc_db_fetch_array($orders_products_attributes_query)) {
+                      $orders_products['attributes'][] = $orders_products_attributes;
+                  }
+
+                  $orders_products['download'] = [];
+                  $orders_products_download_query = xtc_db_query("SELECT *
+                                                                    FROM ".TABLE_ORDERS_PRODUCTS_DOWNLOAD."
+                                                                   WHERE orders_id = '".(int)$orderId."'
+                                                                     AND orders_products_id  = '".(int)$orders_products['orders_products_id']."'
+                                                                ORDER BY orders_products_download_id");
+                  while ($orders_products_download = xtc_db_fetch_array($orders_products_download_query)) {
+                      $orders_products['download'][] = $orders_products_download;
+                  }
+                 
                   $products[] = $orders_products;
               }
           }
 
           $result = $this->encode_request($products);
-          return $result;          
-      }
-
-      /**
-       * Read a order products attributes by the given order id.
-       *
-       * @param int $orderId The order id
-       *
-       * @throws Exception
-       *
-       * @return array The order data
-       */
-      public function GetOrderProductsAttributes(int $orderId): array
-      {
-          // Input validation
-          if (empty($orderId)) {
-              throw new Exception('Order ID required');
-          }
-
-          $products_attributes = [];
-          $order_query = xtc_db_query("SELECT *
-                                         FROM ".TABLE_ORDERS_PRODUCTS_ATTRIBUTES."
-                                        WHERE orders_id = '".(int)$orderId."'");
-          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Order products attributes not found: %s', $orderId));
-          } else {
-              $orders_products_attributes_query = xtc_db_query("SELECT *
-                                                                  FROM ".TABLE_ORDERS_PRODUCTS_ATTRIBUTES."
-                                                                 WHERE orders_id = '".(int)$orderId."'
-                                                              ORDER BY orders_products_attributes_id");
-              while ($orders_products_attributes = xtc_db_fetch_array($orders_products_attributes_query)) {
-                  $products_attributes[] = $orders_products_attributes;
-              }
-          }
-
-          $result = $this->encode_request($products_attributes);
-          return $result;          
-      }
-
-      /**
-       * Read a order products download by the given order id.
-       *
-       * @param int $orderId The order id
-       *
-       * @throws Exception
-       *
-       * @return array The order data
-       */
-      public function GetOrderProductsDownload(int $orderId): array
-      {
-          // Input validation
-          if (empty($orderId)) {
-              throw new Exception('Order ID required');
-          }
-
-          $products_download = [];
-          $order_query = xtc_db_query("SELECT *
-                                         FROM ".TABLE_ORDERS_PRODUCTS_DOWNLOAD."
-                                        WHERE orders_id = '".(int)$orderId."'");
-          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Order products download not found: %s', $orderId));
-          } else {
-              $orders_products_download_query = xtc_db_query("SELECT *
-                                                                FROM ".TABLE_ORDERS_PRODUCTS_DOWNLOAD."
-                                                               WHERE orders_id = '".(int)$orderId."'
-                                                            ORDER BY orders_products_download_id");
-              while ($orders_products_download = xtc_db_fetch_array($orders_products_download_query)) {
-                  $products_download[] = $orders_products_download;
-              }
-          }
-
-          $result = $this->encode_request($products_download);
           return $result;          
       }
 

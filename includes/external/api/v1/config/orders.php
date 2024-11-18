@@ -14,8 +14,6 @@
   $app->get('/orders',                              \api\v1\Service\Order\GetOrders::class);
   $app->get('/orders/{id}',                         \api\v1\Service\Order\GetSingleOrder::class);
   $app->get('/orders/{id}/products',                \api\v1\Service\Order\GetOrderProducts::class);
-  $app->get('/orders/{id}/products_attributes',     \api\v1\Service\Order\GetOrderProductsAttributes::class);
-  $app->get('/orders/{id}/products_download',       \api\v1\Service\Order\GetOrderProductsDownload::class);
   $app->get('/orders/{id}/status_history',          \api\v1\Service\Order\GetOrderStatusHistory::class);
   $app->get('/orders/{id}/total',                   \api\v1\Service\Order\GetOrderTotal::class);
   $app->get('/orders/{id}/tracking',                \api\v1\Service\Order\GetOrderTracking::class);
