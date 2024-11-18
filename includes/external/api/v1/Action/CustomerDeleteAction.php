@@ -140,7 +140,7 @@
               throw new Exception('Customer ID required');
           }
 
-          $this->DeleteIp(int $customerId, 0);
+          $this->DeleteIp($customerId, 0);
       }
 
       /**
