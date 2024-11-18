@@ -58,7 +58,7 @@
                       throw new Exception(sprintf('Category can not get deleted due to connected products: %s', $count));
                   } else {
                       $this->DeleteImages($categoryId);
-                      $this->DeleteProduct($categoryId, 0);
+                      $this->DeleteAllProducts($categoryId);
                       
                       xtc_db_query("DELETE FROM ".TABLE_CATEGORIES." WHERE categories_id = '".(int)$categoryId."'");
                       xtc_db_query("DELETE FROM ".TABLE_CATEGORIES_DESCRIPTION." WHERE categories_id = '".(int)$categoryId."'");
@@ -104,6 +104,25 @@
                                         AND products_id = '".(int)$category['products_id']."'");
               }
           }
+      }
+
+      /**
+       * Delete all product by the given category id.
+       *
+       * @param int $categoryId The category id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllProducts(int $categoryId): void
+      {
+          // Input validation
+          if (empty($categoryId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $this->DeleteProduct($categoryId, 0);
       }
 
       /**

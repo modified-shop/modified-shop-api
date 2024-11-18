@@ -21,7 +21,7 @@
   /**
    * Action
    */
-  final class DeleteProduct
+  final class DeleteAllProducts
   {
       /**
        * @var CategoryAction
@@ -60,14 +60,8 @@
           array $args
       ): ResponseInterface {
           $categoryId = (int)$args['id'];
-          $productId = (int)$args['pid'];
-
-          // Input validation
-          if (empty($productId)) {
-              throw new Exception('Product ID required');
-          }
           
-          $this->categoryAction->DeleteProduct($categoryId, $productId);
+          $this->categoryAction->DeleteAllProducts($categoryId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }

@@ -32,5 +32,6 @@
 
   // delete categories
   $app->delete('/categories/{id}',                  \api\v1\Service\Category\DeleteCategory::class);
+  $app->delete('/categories/{id}/products',         \api\v1\Service\Category\DeleteAllProducts::class);
   $app->delete('/categories/{id}/products/{pid}',   \api\v1\Service\Category\DeleteProduct::class);
   $app->delete('/categories/{id}/images',           \api\v1\Service\Category\DeleteImages::class);
