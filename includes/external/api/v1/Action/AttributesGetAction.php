@@ -80,7 +80,10 @@
           $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                     
           $count_query = xtc_db_query("SELECT count(*) as total
-                                         FROM ".TABLE_PRODUCTS_OPTIONS);
+                                         FROM ".TABLE_PRODUCTS_OPTIONS."
+                                     GROUP BY products_options_id 
+                                     ORDER BY total DESC 
+                                        LIMIT 1");
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
@@ -90,7 +93,8 @@
           $data = [];
           $options_query = xtc_db_query("SELECT products_options_id
                                            FROM ".TABLE_PRODUCTS_OPTIONS."
-                                       ORDER BY products_options_sortorder DESC, products_options_id
+                                       GROUP BY products_options_id 
+                                       ORDER BY products_options_sortorder, products_options_id
                                           LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($options = xtc_db_fetch_array($options_query)) {
               $data[] = $this->GetSingleOption($options['products_options_id']);
@@ -174,7 +178,10 @@
           $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                     
           $count_query = xtc_db_query("SELECT count(*) as total
-                                         FROM ".TABLE_PRODUCTS_OPTIONS_VALUES);
+                                         FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
+                                     GROUP BY products_options_values_id 
+                                     ORDER BY total DESC 
+                                        LIMIT 1");
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
@@ -184,7 +191,7 @@
           $data = [];
           $values_query = xtc_db_query("SELECT products_options_values_id
                                           FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
-                                      ORDER BY products_options_values_sortorder DESC, products_options_values_id
+                                      ORDER BY products_options_values_sortorder, products_options_values_id
                                          LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($values = xtc_db_fetch_array($values_query)) {
               $data[] = $this->GetSingleValue($values['products_options_values_id']);
