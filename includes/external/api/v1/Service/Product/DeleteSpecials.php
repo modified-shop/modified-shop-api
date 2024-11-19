@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -61,6 +62,11 @@
           $productId = (int)$args['id'];
           $specialsId = (int)$args['sid'];
           
+          // Input validation
+          if (empty($specialsId)) {
+              throw new Exception('Special ID required');
+          }
+
           $this->productAction->DeleteSpecials($productId, $specialsId);
 
           return $this->responder->withJson($response)->withStatus(204);

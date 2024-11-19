@@ -16,12 +16,11 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
-  use Exception;
 
   /**
    * Action
    */
-  final class DeleteTags
+  final class DeleteAllPersonalOffer
   {
       /**
        * @var ProductAction
@@ -60,14 +59,9 @@
           array $args
       ): ResponseInterface {
           $productId = (int)$args['id'];
-          $tagsId = (int)$args['tid'];
+          $statusId = (int)$args['cid'];
           
-          // Input validation
-          if (empty($tagsId)) {
-              throw new Exception('Tag ID required');
-          }
-
-          $this->productAction->DeleteTags($productId, $tagsId);
+          $this->productAction->DeleteAllPersonalOffer($productId, $statusId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }

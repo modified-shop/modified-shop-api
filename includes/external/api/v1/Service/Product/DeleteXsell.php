@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -61,6 +62,11 @@
           $productId = (int)$args['id'];
           $xsellId = (int)$args['xid'];
           
+          // Input validation
+          if (empty($xsellId)) {
+              throw new Exception('Xsell ID required');
+          }
+
           $this->productAction->DeleteXsell($productId, $xsellId);
 
           return $this->responder->withJson($response)->withStatus(204);

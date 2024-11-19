@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -61,6 +62,11 @@
           $productId = (int)$args['id'];
           $imageId = (int)$args['iid'];
           
+          // Input validation
+          if (empty($imageId)) {
+              throw new Exception('Image ID required');
+          }
+
           $this->productAction->DeleteImages($productId, $imageId);
 
           return $this->responder->withJson($response)->withStatus(204);

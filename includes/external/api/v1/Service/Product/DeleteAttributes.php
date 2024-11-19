@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -61,6 +62,11 @@
           $productId = (int)$args['id'];
           $attributesId = (int)$args['aid'];
           
+          // Input validation
+          if (empty($attributesId)) {
+              throw new Exception('Attribute ID required');
+          }
+
           $this->productAction->DeleteAttributes($productId, $attributesId);
 
           return $this->responder->withJson($response)->withStatus(204);

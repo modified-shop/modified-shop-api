@@ -48,25 +48,19 @@
 
               //delete details
               $this->DeleteImage($productId);
-              $this->DeleteImages($productId, 0);
-              $this->DeleteXsell($productId, 0);
-              $this->DeleteSpecials($productId, 0);
-              $this->DeleteAttributes($productId, 0);
-              $this->DeleteTags($productId, 0);
-              $this->DeleteCategory($productId, 0);
-              $this->DeleteContents($productId, 0);
-              $this->DeleteReviews($productId, 0);
-
-              //delete personal offer
-              $customers_statuses_array = xtc_get_customers_statuses();
-              foreach ($customers_statuses_array as $customers_status) {
-                  $this->DeletePersonalOffer($productId, $customers_status['id'], 0);
-              }
+              $this->DeleteAllImages($productId);
+              $this->DeleteAllXsell($productId);
+              $this->DeleteAllSpecials($productId);
+              $this->DeleteAllAttributes($productId);
+              $this->DeleteAllTags($productId);
+              $this->DeleteAllCategory($productId);
+              $this->DeleteAllContents($productId);
+              $this->DeleteAllReviews($productId);
+              $this->DeleteAllPersonalOffers($productId);
 
               //delete
               xtc_db_query("DELETE FROM ".TABLE_PRODUCTS." WHERE products_id = '".(int)$productId."'");
               xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_DESCRIPTION." WHERE products_id = '".(int)$productId."'");
-              xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_XSELL." WHERE xsell_id = '".(int)$productId."'");
 
               //delete cart
               xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_BASKET." WHERE products_id = '" . (int)$productId . "' OR products_id LIKE '" . (int)$productId . "{%'");
@@ -195,6 +189,25 @@
       }
 
       /**
+       * Delete all image by the given product id.
+       *
+       * @param int $productId The product id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllImages(int $productId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+          
+          $this->DeleteImages($productId, 0);
+      }
+
+      /**
        * Delete a image description by the given product id and image id.
        *
        * @param int $productId The product id
@@ -269,6 +282,25 @@
       }
 
       /**
+       * Delete all xsell by the given product id.
+       *
+       * @param int $productId The product id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllXsell(int $productId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $this->DeleteXsell($productId, 0);
+      }
+
+      /**
        * Delete a special by the given product id and specials id.
        *
        * @param int $productId The product id
@@ -303,6 +335,25 @@
                                         AND specials_id = '".(int)$specials['specials_id']."'");
               }
           }
+      }
+
+      /**
+       * Delete a special by the given product id.
+       *
+       * @param int $productId The product id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllSpecials(int $productId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $this->DeleteSpecials($productId, 0);
       }
 
       /**
@@ -346,6 +397,25 @@
       }
 
       /**
+       * Delete all attributes by the given product id.
+       *
+       * @param int $productId The product id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllAttributes(int $productId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $this->DeleteAttributes($productId, 0);
+      }
+
+      /**
        * Delete a tag by the given product id and tags id.
        *
        * @param int $productId The product id
@@ -383,10 +453,29 @@
       }
 
       /**
-       * Delete a special by the given product id and specials id.
+       * Delete all tags by the given product id.
        *
        * @param int $productId The product id
-       * @param int $specialsId The specials id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllTags(int $productId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $this->DeleteTags($productId, 0);
+      }
+
+      /**
+       * Delete a content by the given product id and content id.
+       *
+       * @param int $productId The product id
+       * @param int $contentId The content id
        *
        * @throws Exception
        *
@@ -432,7 +521,26 @@
       }
 
       /**
-       * Delete a personal offer by the given product id and price id.
+       * Delete all contents by the given product id.
+       *
+       * @param int $productId The product id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllContents(int $productId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $this->DeleteContents($productId, 0);
+      }
+
+      /**
+       * Delete a personal offer by the given product id, status id and price id.
        *
        * @param int $productId The product id
        * @param int $statusId The status id
@@ -473,6 +581,51 @@
       }
 
       /**
+       * Delete all personal offer by the given product id and status id.
+       *
+       * @param int $productId The product id
+       * @param int $statusId The status id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllPersonalOffer(int $productId, int $statusId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+          if (!xtc_not_null($statusId)) {
+              throw new Exception('Status ID required');
+          }
+
+          $this->DeletePersonalOffer($productId, $statusId, 0);
+      }
+
+      /**
+       * Delete all personal offer by the given product id.
+       *
+       * @param int $productId The product id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllPersonalOffers(int $productId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $customers_statuses_array = xtc_get_customers_statuses();
+          foreach ($customers_statuses_array as $customers_status) {
+              $this->DeleteAllPersonalOffer($productId, $customers_status['id']);
+          }
+      }
+
+      /**
        * Delete a review by the given product id and reviews id.
        *
        * @param int $productId The product id
@@ -495,9 +648,9 @@
           }
 
           $reviews_query = xtc_db_query("SELECT *
-                                                  FROM ".TABLE_REVIEWS."
-                                                 WHERE products_id = '".(int)$productId."'
-                                                       ".$where);
+                                           FROM ".TABLE_REVIEWS."
+                                          WHERE products_id = '".(int)$productId."'
+                                                ".$where);
           if (xtc_db_num_rows($reviews_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Product personal offer not found: %s', $productId));
           } else {
@@ -510,6 +663,25 @@
                                       WHERE reviews_id = '".(int)$reviews['reviews_id']."'");
               }
           }
+      }
+
+      /**
+       * Delete all reviews by the given product id.
+       *
+       * @param int $productId The product id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllReviews(int $productId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $this->DeleteReviews($productId, 0);
       }
 
       /**

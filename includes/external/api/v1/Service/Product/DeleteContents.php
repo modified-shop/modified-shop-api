@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -61,6 +62,11 @@
           $productId = (int)$args['id'];
           $contentId = (int)$args['cid'];
           
+          // Input validation
+          if (empty($contentId)) {
+              throw new Exception('Content ID required');
+          }
+
           $this->productAction->DeleteContents($productId, $contentId);
 
           return $this->responder->withJson($response)->withStatus(204);

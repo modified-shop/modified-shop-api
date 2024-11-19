@@ -54,14 +54,24 @@
 
   // delete products
   $app->delete('/products/{id}',                                \api\v1\Service\Product\DeleteProduct::class);
+  $app->delete('/products/{id}/categories',                     \api\v1\Service\Product\DeleteAllCategory::class);
   $app->delete('/products/{id}/categories/{cid}',               \api\v1\Service\Product\DeleteCategory::class);
   $app->delete('/products/{id}/image',                          \api\v1\Service\Product\DeleteImage::class);
+  $app->delete('/products/{id}/images',                         \api\v1\Service\Product\DeleteAllImages::class);
   $app->delete('/products/{id}/images/{iid}',                   \api\v1\Service\Product\DeleteImages::class);
   $app->delete('/products/{id}/images/{iid}/description',       \api\v1\Service\Product\DeleteImagesDescription::class);
+  $app->delete('/products/{id}/xsell',                          \api\v1\Service\Product\DeleteAllXsell::class);
   $app->delete('/products/{id}/xsell/{xid}',                    \api\v1\Service\Product\DeleteXsell::class);
+  $app->delete('/products/{id}/attributes',                     \api\v1\Service\Product\DeleteAllAttributes::class);
   $app->delete('/products/{id}/attributes/{aid}',               \api\v1\Service\Product\DeleteAttributes::class);
+  $app->delete('/products/{id}/tags',                           \api\v1\Service\Product\DeleteAllTags::class);
   $app->delete('/products/{id}/tags/{tid}',                     \api\v1\Service\Product\DeleteTags::class);
+  $app->delete('/products/{id}/content',                        \api\v1\Service\Product\DeleteAllContents::class);
   $app->delete('/products/{id}/content/{cid}',                  \api\v1\Service\Product\DeleteContents::class);
+  $app->delete('/products/{id}/specials',                       \api\v1\Service\Product\DeleteAllSpecials::class);
   $app->delete('/products/{id}/specials/{sid}',                 \api\v1\Service\Product\DeleteSpecials::class);
+  $app->delete('/products/{id}/reviews',                        \api\v1\Service\Product\DeleteAllReviews::class);
   $app->delete('/products/{id}/reviews/{rid}',                  \api\v1\Service\Product\DeleteReviews::class);
+  $app->delete('/products/{id}/offer',                          \api\v1\Service\Product\DeleteAllPersonalOffers::class);
+  $app->delete('/products/{id}/offer/{cid}',                    \api\v1\Service\Product\DeleteAllPersonalOffer::class);
   $app->delete('/products/{id}/offer/{cid}/{pid}',              \api\v1\Service\Product\DeletePersonalOffer::class);

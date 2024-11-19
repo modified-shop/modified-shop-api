@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -61,6 +62,11 @@
           $productId = (int)$args['id'];
           $categoryId = (int)$args['cid'];
           
+          // Input validation
+          if (empty($categoryId)) {
+              throw new Exception('Category ID required');
+          }
+
           $this->productAction->DeleteCategory($productId, $categoryId);
 
           return $this->responder->withJson($response)->withStatus(204);

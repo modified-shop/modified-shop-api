@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -62,6 +63,11 @@
           $statusId = (int)$args['cid'];
           $priceId = (int)$args['pid'];
           
+          // Input validation
+          if (empty($priceId)) {
+              throw new Exception('Price ID required');
+          }
+
           $this->productAction->DeletePersonalOffer($productId, $statusId, $priceId);
 
           return $this->responder->withJson($response)->withStatus(204);
