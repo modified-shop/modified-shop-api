@@ -26,8 +26,6 @@
        *
        * @param int $customerId The customer id
        *
-       * @throws Exception
-       *
        * @return void
        */
       public function DeleteCustomer(int $customerId): void

@@ -26,8 +26,6 @@
        *
        * @param int $orderId The order id
        *
-       * @throws Exception
-       *
        * @return void
        */
       public function DeleteOrder(int $orderId): void

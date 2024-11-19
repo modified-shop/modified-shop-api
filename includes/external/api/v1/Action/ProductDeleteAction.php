@@ -26,8 +26,6 @@
        *
        * @param int $productId The product id
        *
-       * @throws Exception
-       *
        * @return void
        */
       public function DeleteProduct(int $productId): void
@@ -608,9 +606,7 @@
        * Delete all personal offer by the given product id.
        *
        * @param int $productId The product id
-       *
-       * @throws Exception
-       *
+       *       *
        * @return void
        */
       public function DeleteAllPersonalOffers(int $productId): void

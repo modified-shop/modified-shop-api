@@ -26,8 +26,6 @@
        *
        * @param int $categoryId The category id
        *
-       * @throws Exception
-       *
        * @return void
        */
       public function DeleteCategory(int $categoryId): void
