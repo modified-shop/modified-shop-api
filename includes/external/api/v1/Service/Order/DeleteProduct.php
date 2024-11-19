@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -60,6 +61,11 @@
       ): ResponseInterface {
           $orderId = (int)$args['id'];
           $orderProductsId = (int)$args['pid'];
+
+          // Input validation
+          if (empty($orderProductsId)) {
+              throw new Exception('Order products ID required');
+          }
           
           $this->orderAction->DeleteProduct($orderId, $orderProductsId);
 

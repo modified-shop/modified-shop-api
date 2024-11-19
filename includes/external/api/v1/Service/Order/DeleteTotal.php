@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -60,7 +61,12 @@
       ): ResponseInterface {
           $orderId = (int)$args['id'];
           $orderTotalId = (int)$args['tid'];
-          
+ 
+           // Input validation
+          if (empty($orderTotalId)) {
+              throw new Exception('Order total ID required');
+          }
+         
           $this->orderAction->DeleteTotal($orderId, $orderTotalId);
 
           return $this->responder->withJson($response)->withStatus(204);

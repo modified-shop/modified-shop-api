@@ -46,12 +46,10 @@
               // disable Exception
               $this->throw_exception = false;
               
-              $this->DeleteProduct($orderId, 0);
-              $this->DeleteProductAttributes($orderId, 0);
-              $this->DeleteProductDownload($orderId, 0);
-              $this->DeleteStatusHistory($orderId, 0);
-              $this->DeleteTotal($orderId, 0);
-              $this->DeleteTracking($orderId, 0);
+              $this->DeleteAllProduct($orderId);
+              $this->DeleteAllStatusHistory($orderId);
+              $this->DeleteAllTotal($orderId);
+              $this->DeleteAllTracking($orderId);
 
               //delete
               xtc_db_query("DELETE FROM ".TABLE_ORDERS." WHERE orders_id = '".(int)$orderId."'");
@@ -90,11 +88,38 @@
               throw new Exception(sprintf('Order products not found: %s', $orderId));
           } else {
               while ($order = xtc_db_fetch_array($order_query)) {
+                  xtc_db_query("DELETE FROM ".TABLE_ORDERS_PRODUCTS_ATTRIBUTES." 
+                                      WHERE orders_id = '".(int)$orderId."'
+                                        AND orders_products_id = '".(int)$order['orders_products_id']."'");
+
+                  xtc_db_query("DELETE FROM ".TABLE_ORDERS_PRODUCTS_DOWNLOAD." 
+                                      WHERE orders_id = '".(int)$orderId."'
+                                        AND orders_products_id = '".(int)$order['orders_products_id']."'");
+
                   xtc_db_query("DELETE FROM ".TABLE_ORDERS_PRODUCTS." 
                                       WHERE orders_id = '".(int)$orderId."'
                                         AND orders_products_id = '".(int)$order['orders_products_id']."'");
               }
           }
+      }
+
+      /**
+       * Delete all product by the given order id.
+       *
+       * @param int $orderId The order id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllProduct(int $orderId): void
+      {
+          // Input validation
+          if (empty($orderId)) {
+              throw new Exception('Order ID required');
+          }
+
+          $this->DeleteProduct($orderId, 0);
       }
 
       /**
@@ -209,6 +234,25 @@
       }
 
       /**
+       * Delete all status history by the given order id.
+       *
+       * @param int $orderId The order id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllStatusHistory(int $orderId): void
+      {
+          // Input validation
+          if (empty($orderId)) {
+              throw new Exception('Order ID required');
+          }
+
+          $this->DeleteStatusHistory($orderId, 0);
+      }
+
+      /**
        * Delete a order total by the given order id and order total id.
        *
        * @param int $orderId The order id
@@ -246,6 +290,25 @@
       }
 
       /**
+       * Delete all order total by the given order id.
+       *
+       * @param int $orderId The order id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllTotal(int $orderId): void
+      {
+          // Input validation
+          if (empty($orderId)) {
+              throw new Exception('Order ID required');
+          }
+
+          $this->DeleteTotal($orderId, 0);
+      }
+
+      /**
        * Delete a order tracking by the given order id and tracking id.
        *
        * @param int $orderId The order id
@@ -280,6 +343,25 @@
                                         AND tracking_id = '".(int)$order['tracking_id']."'");
               }
           }
+      }
+
+      /**
+       * Delete all order tracking by the given order id.
+       *
+       * @param int $orderId The order id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllTracking(int $orderId): void
+      {
+          // Input validation
+          if (empty($orderId)) {
+              throw new Exception('Order ID required');
+          }
+
+          $this->DeleteTracking($orderId, 0);
       }
 
   }

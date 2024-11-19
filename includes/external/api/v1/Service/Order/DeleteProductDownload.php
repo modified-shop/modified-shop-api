@@ -16,6 +16,7 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
@@ -60,6 +61,11 @@
       ): ResponseInterface {
           $orderId = (int)$args['id'];
           $orderProductsDownloadId = (int)$args['did'];
+
+          // Input validation
+          if (empty($orderProductsDownloadId)) {
+              throw new Exception('Order products download ID required');
+          }
           
           $this->orderAction->DeleteProductDownload($orderId, $orderProductsDownloadId);
 

@@ -16,12 +16,11 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
-  use Exception;
 
   /**
    * Action
    */
-  final class DeleteStatusHistory
+  final class DeleteAllTotal
   {
       /**
        * @var OrderAction
@@ -60,14 +59,8 @@
           array $args
       ): ResponseInterface {
           $orderId = (int)$args['id'];
-          $orderStatusHistoryId = (int)$args['hid'];
-
-          // Input validation
-          if (empty($orderStatusHistoryId)) {
-              throw new Exception('Order status history ID required');
-          }
           
-          $this->orderAction->DeleteStatusHistory($orderId, $orderStatusHistoryId);
+          $this->orderAction->DeleteAllTotal($orderId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }
