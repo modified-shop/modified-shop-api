@@ -22,6 +22,20 @@
   $app->get('/customers/{id}/basket',               \api\v1\Service\Customer\GetCustomerBasket::class);
   $app->get('/customers/{id}/wishlist',             \api\v1\Service\Customer\GetCustomerWishlist::class);
   
+  // insert customers
+  $app->post('/customers',                          \api\v1\Service\Customer\InsertCustomer::class);
+  $app->post('/customers/customers',                \api\v1\Service\Customer\InsertUpdateCustomer::class);
+  $app->post('/customers/info',                     \api\v1\Service\Customer\InsertUpdateInfo::class);
+  $app->post('/customers/memo',                     \api\v1\Service\Customer\InsertUpdateMemo::class);
+  $app->post('/customers/address_book',             \api\v1\Service\Customer\InsertUpdateAddressBook::class);
+
+  // update customers
+  $app->put('/customers',                           \api\v1\Service\Customer\InsertCustomer::class);
+  $app->put('/customers/customers',                 \api\v1\Service\Customer\InsertUpdateCustomer::class);
+  $app->put('/customers/info',                      \api\v1\Service\Customer\InsertUpdateInfo::class);
+  $app->put('/customers/memo',                      \api\v1\Service\Customer\InsertUpdateMemo::class);
+  $app->put('/customers/address_book',              \api\v1\Service\Customer\InsertUpdateAddressBook::class);
+
   // delete customers
   $app->delete('/customers/{id}',                         \api\v1\Service\Customer\DeleteCustomer::class);
   $app->delete('/customers/{id}/info',                    \api\v1\Service\Customer\DeleteInfo::class);
