@@ -252,7 +252,7 @@
                                                         FROM ".TABLE_ADDRESS_BOOK."
                                                        WHERE customers_id = '".(int)$customerId."'
                                                              ".$where);
-                  if (xtc_db_num_rows($$address_book_query) < 1) {
+                  if (xtc_db_num_rows($address_book_query) < 1) {
                       throw new Exception(sprintf('Address book ID invalid'));
                   } else {
                       $action = 'update';
