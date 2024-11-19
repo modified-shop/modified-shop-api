@@ -191,6 +191,7 @@
           $data = [];
           $values_query = xtc_db_query("SELECT products_options_values_id
                                           FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
+                                      GROUP BY products_options_values_id 
                                       ORDER BY products_options_values_sortorder, products_options_values_id
                                          LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($values = xtc_db_fetch_array($values_query)) {
