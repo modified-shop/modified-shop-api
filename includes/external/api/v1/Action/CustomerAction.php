@@ -47,10 +47,10 @@
               throw new Exception('Customer ID required');
           } else {
               if (isset($this->options[TABLE_CUSTOMERS_INFO])) {
-                  $products_description = $this->InsertUpdateInfo($customerId, $this->options[TABLE_CUSTOMERS_INFO]);
+                  $customers_info = $this->InsertUpdateInfo($customerId, $this->options[TABLE_CUSTOMERS_INFO]);
               }
               if (isset($this->options[TABLE_ADDRESS_BOOK])) {
-                  $products_description = $this->InsertUpdateAddressBook($customerId, $this->options[TABLE_ADDRESS_BOOK]);
+                  $address_book = $this->InsertUpdateAddressBook($customerId, $this->options[TABLE_ADDRESS_BOOK]);
               }
           }
 
