@@ -176,9 +176,10 @@
               throw new Exception(sprintf('Product more images not found: %s', $productId));
           } else {
               while ($images = xtc_db_fetch_array($images_query)) {
-                  $this->deleteImageFile($images['image_name']);
-                  
+                  // disable Exception
                   $this->throw_exception = false;
+
+                  $this->deleteImageFile($images['image_name']);                  
                   $this->DeleteImagesDescription($productId, $images['image_id']);
                   
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_IMAGES." 
@@ -618,6 +619,9 @@
           if (empty($productId)) {
               throw new Exception('Product ID required');
           }
+
+          // disable Exception
+          $this->throw_exception = false;
 
           $customers_statuses_array = xtc_get_customers_statuses();
           foreach ($customers_statuses_array as $customers_status) {
