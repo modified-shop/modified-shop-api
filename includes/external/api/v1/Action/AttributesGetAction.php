@@ -79,12 +79,10 @@
           if ($this->options['limit'] > 50) $this->options['limit'] = 50;
           $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                     
-          $count_query = xtc_db_query("SELECT count(*) as total
+          $count_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_PRODUCTS_OPTIONS."
-                                     GROUP BY products_options_id 
-                                     ORDER BY total DESC 
-                                        LIMIT 1");
-          $count = xtc_db_fetch_array($count_query);
+                                     GROUP BY products_options_id");
+          $count = xtc_db_num_rows($count_query);
           
           if ($count['total'] < 1) {
               throw new Exception('no Product options found');
@@ -177,12 +175,10 @@
           if ($this->options['limit'] > 50) $this->options['limit'] = 50;
           $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                     
-          $count_query = xtc_db_query("SELECT count(*) as total
+          $count_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
-                                     GROUP BY products_options_values_id 
-                                     ORDER BY total DESC 
-                                        LIMIT 1");
-          $count = xtc_db_fetch_array($count_query);
+                                     GROUP BY products_options_values_id");
+          $count = xtc_db_num_rows($count_query);
           
           if ($count['total'] < 1) {
               throw new Exception('no Product options found');
