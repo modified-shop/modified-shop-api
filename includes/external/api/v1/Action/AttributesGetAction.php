@@ -115,4 +115,98 @@
           return $result;
       }
 
+      /**
+       * Read an value by the given value id.
+       *
+       * @param int $valueId The value id
+       *
+       * @throws Exception
+       *
+       * @return array The value data
+       */
+      public function GetSingleValue(int $valueId): array
+      {
+          // Input validation
+          if (empty($valueId)) {
+              throw new Exception('Option ID required');
+          }
+          
+          $value = [];
+          $value_query = xtc_db_query("SELECT *
+                                         FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
+                                        WHERE products_options_values_id = '".(int)$valueId."'");
+          if (xtc_db_num_rows($value_query) < 1) {
+              throw new Exception(sprintf('Option not found: %s', $valueId));
+          } else {
+              $values_query = xtc_db_query("SELECT pov.*,
+                                                   l.code
+                                              FROM ".TABLE_PRODUCTS_OPTIONS_VALUES." pov
+                                              JOIN ".TABLE_LANGUAGES." l
+                                                   ON l.languages_id = pov.language_id
+                                             WHERE pov.products_options_values_id = '".(int)$valueId."'");
+              while ($values = xtc_db_fetch_array($values_query)) {
+                  $code = $values['code'];
+                  unset($values['code']);
+
+                  $value[$code] = $values;
+              }
+          }
+
+          $result = $this->encode_request($value);
+          return $result;          
+      }
+
+      /**
+       * Read value by given conditions
+       *
+       * @param mixed[] $values
+       *
+       * @throws Exception
+       *
+       * @return array The value data
+       */
+      public function GetValues($options): array
+      {          
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+          
+          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
+          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
+                    
+          $count_query = xtc_db_query("SELECT count(*) as total
+                                         FROM ".TABLE_PRODUCTS_OPTIONS_VALUES);
+          $count = xtc_db_fetch_array($count_query);
+          
+          if ($count['total'] < 1) {
+              throw new Exception('no Product options found');
+          }
+          
+          $data = [];
+          $values_query = xtc_db_query("SELECT products_options_values_id
+                                          FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
+                                      ORDER BY products_options_values_sortorder DESC, products_options_values_id
+                                         LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
+          while ($values = xtc_db_fetch_array($values_query)) {
+              $data[] = $this->GetSingleValue($values['products_options_values_id']);
+          }
+          
+          $result = [
+              'paging' => [
+                  'total' => $count['total']
+              ],
+              'data' => $data
+          ];
+          
+          if ($count['total'] > count($data)) {
+              if ($this->options['page'] > 1) {
+                  $result['paging']['prev'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] - 1);
+              }
+              if (((($this->options['page'] - 1) * $this->options['limit']) + $this->options['limit']) < $count['total']) {
+                  $result['paging']['next'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] + 1);
+              }
+          }
+          
+          return $result;
+      }
+
   }
