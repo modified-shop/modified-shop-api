@@ -32,6 +32,9 @@
 
               // products
               include __DIR__ . '/products.php';
+
+              // attributes
+              include __DIR__ . '/attributes.php';
               
               // orders
               include __DIR__ . '/orders.php';
