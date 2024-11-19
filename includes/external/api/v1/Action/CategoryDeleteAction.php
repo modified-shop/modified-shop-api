@@ -57,6 +57,9 @@
                   if ($count > 0) {
                       throw new Exception(sprintf('Category can not get deleted due to connected products: %s', $count));
                   } else {
+                      // disable Exception
+                      $this->throw_exception = false;
+
                       $this->DeleteImages($categoryId);
                       $this->DeleteAllProducts($categoryId);
                       
