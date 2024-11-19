@@ -97,7 +97,7 @@
 
           // Input validation
           $this->checkTableData(TABLE_CUSTOMERS, $customer);
-          unset($products['products_id']);
+          unset($customer['customers_id']);
 
           xtc_db_perform(TABLE_CUSTOMERS, $customer, $action, "customers_id = '".(int)$customerId."'");
           if ($action == 'insert') {
@@ -145,9 +145,9 @@
                   $customers_info['customers_info_id'] = (int)$customerId;
               }
 
-              foreach ($customer as $key => $value) {
+              foreach ($customers_info as $key => $value) {
                   if (isset($this->options[$key])) {
-                      $customer[$key] = $this->options[$key];
+                      $customers_info[$key] = $this->options[$key];
                   }
               }
 
