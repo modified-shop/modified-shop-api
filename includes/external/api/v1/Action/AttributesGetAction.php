@@ -84,7 +84,7 @@
                                      GROUP BY products_options_id");
           $count = xtc_db_num_rows($count_query);
           
-          if ($count['total'] < 1) {
+          if ($count < 1) {
               throw new Exception('no Product options found');
           }
           
@@ -100,16 +100,16 @@
           
           $result = [
               'paging' => [
-                  'total' => $count['total']
+                  'total' => $count
               ],
               'data' => $data
           ];
           
-          if ($count['total'] > count($data)) {
+          if ($count > count($data)) {
               if ($this->options['page'] > 1) {
                   $result['paging']['prev'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] - 1);
               }
-              if (((($this->options['page'] - 1) * $this->options['limit']) + $this->options['limit']) < $count['total']) {
+              if (((($this->options['page'] - 1) * $this->options['limit']) + $this->options['limit']) < $count) {
                   $result['paging']['next'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] + 1);
               }
           }
@@ -180,7 +180,7 @@
                                      GROUP BY products_options_values_id");
           $count = xtc_db_num_rows($count_query);
           
-          if ($count['total'] < 1) {
+          if ($count < 1) {
               throw new Exception('no Product options found');
           }
           
@@ -196,16 +196,16 @@
           
           $result = [
               'paging' => [
-                  'total' => $count['total']
+                  'total' => $count
               ],
               'data' => $data
           ];
           
-          if ($count['total'] > count($data)) {
+          if ($count > count($data)) {
               if ($this->options['page'] > 1) {
                   $result['paging']['prev'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] - 1);
               }
-              if (((($this->options['page'] - 1) * $this->options['limit']) + $this->options['limit']) < $count['total']) {
+              if (((($this->options['page'] - 1) * $this->options['limit']) + $this->options['limit']) < $count) {
                   $result['paging']['next'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] + 1);
               }
           }
