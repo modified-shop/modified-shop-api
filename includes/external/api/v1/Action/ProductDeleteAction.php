@@ -112,6 +112,25 @@
       }
 
       /**
+       * Delete all category by the given product id.
+       *
+       * @param int $productId The product id
+       *
+       * @throws Exception
+       *
+       * @return void
+       */
+      public function DeleteAllCategory(int $productId): void
+      {
+          // Input validation
+          if (empty($productId)) {
+              throw new Exception('Product ID required');
+          }
+
+          $this->DeleteCategory($productId, 0);
+      }
+
+      /**
        * Delete a image by the given product id.
        *
        * @param int $productId The product id
