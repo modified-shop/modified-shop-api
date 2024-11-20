@@ -12,7 +12,7 @@
 
   namespace api\v1\Service\Order;
 
-  use api\v1\Action\OrderAction;
+  use api\v1\Action\Order\OrderAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;

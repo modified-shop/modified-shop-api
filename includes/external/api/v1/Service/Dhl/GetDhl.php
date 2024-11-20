@@ -12,7 +12,7 @@
 
   namespace api\v1\Service\Dhl;
 
-  use api\v1\Action\DhlAction;
+  use api\v1\Action\Dhl\DhlAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;

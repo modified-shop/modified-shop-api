@@ -12,7 +12,7 @@
 
   namespace api\v1\Service\Product;
 
-  use api\v1\Action\ProductAction;
+  use api\v1\Action\Product\ProductAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;

@@ -12,7 +12,7 @@
 
   namespace api\v1\Service\Category;
 
-  use api\v1\Action\CategoryAction;
+  use api\v1\Action\Category\CategoryAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;

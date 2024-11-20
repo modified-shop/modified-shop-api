@@ -12,7 +12,7 @@
 
   namespace api\v1\Service\Customer;
 
-  use api\v1\Action\CustomerAction;
+  use api\v1\Action\Customer\CustomerAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
