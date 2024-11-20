@@ -132,7 +132,7 @@
       {
           // Input validation
           if (empty($valueId)) {
-              throw new Exception('Option ID required');
+              throw new Exception('Value ID required');
           }
           
           $value = [];

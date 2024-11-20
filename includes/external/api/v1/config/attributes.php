@@ -14,15 +14,24 @@
   $app->get('/attributes/options',                    \api\v1\Service\Attributes\GetOptions::class);
   $app->get('/attributes/options/{id}',               \api\v1\Service\Attributes\GetSingleOption::class);
 
-  // delete attributes
+  // insert options
+  $app->post('/attributes/options',                   \api\v1\Service\Attributes\InsertOption::class);
+  $app->post('/attributes/options/{id}',              \api\v1\Service\Attributes\InsertUpdateOption::class);
+
+  // update options
+  $app->put('/attributes/options/{id}',               \api\v1\Service\Attributes\InsertUpdateOption::class);
+
+  // delete Attributes
   $app->delete('/attributes/options/{id}',            \api\v1\Service\Attributes\DeleteOption::class);
+
 
   // values
   $app->get('/attributes/values',                     \api\v1\Service\Attributes\GetValues::class);
   $app->get('/attributes/values/{id}',                \api\v1\Service\Attributes\GetSingleValue::class);
 
-  // delete attributes
+  // delete values
   $app->delete('/attributes/values/{id}',             \api\v1\Service\Attributes\DeleteValue::class);
+
 
   // attributes
   $app->get('/attributes/{id}',                       \api\v1\Service\Attributes\GetAttributes::class);
