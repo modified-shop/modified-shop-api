@@ -51,23 +51,23 @@
       /**
        * @var accepted files
        */
-      protected $accepted_image_extensions = array("jpg","jpeg","jpe","gif","png","tiff","tif","bmp","svg");
-      protected $accepted_image_mime_types = array("image/jpeg","image/gif","image/png","image/bmp","image/svg","image/svg+xml");
+      protected $accepted_image_extensions = ["jpg","jpeg","jpe","gif","png","tiff","tif","bmp","svg"];
+      protected $accepted_image_mime_types = ["image/jpeg","image/gif","image/png","image/bmp","image/svg","image/svg+xml"];
       
-      protected $accepted_file_extensions = array("txt","csv","tsv");
-      protected $accepted_file_mime_types = array("text/plain","text/csv","text/comma-separated-values","text/tab-separated-values");
+      protected $accepted_file_extensions = ["txt","csv","tsv"];
+      protected $accepted_file_mime_types = ["text/plain","text/csv","text/comma-separated-values","text/tab-separated-values"];
       
-      protected $accepted_extfile_extensions = array("xls","xla","hlp","chm","ppt","ppz","pps","pot","doc","dot","pdf","rtf");
-      protected $accepted_extfile_mime_types = array("application/msexcel","application/mshelp","application/mspowerpoint","application/msword","application/pdf","application/rtf");
+      protected $accepted_extfile_extensions = ["xls","xla","hlp","chm","ppt","ppz","pps","pot","doc","dot","pdf","rtf"];
+      protected $accepted_extfile_mime_types = ["application/msexcel","application/mshelp","application/mspowerpoint","application/msword","application/pdf","application/rtf"];
       
-      protected $accepted_audio_extensions = array("au","snd","mp2","rpm","stream","wav");
-      protected $accepted_audio_mime_types = array("audio/basic","audio/x-mpeg","audio/x-pn-realaudio-plugin","audio/x-qt-stream","audio/x-wav");
+      protected $accepted_audio_extensions = ["au","snd","mp2","rpm","stream","wav"];
+      protected $accepted_audio_mime_types = ["audio/basic","audio/x-mpeg","audio/x-pn-realaudio-plugin","audio/x-qt-stream","audio/x-wav"];
       
-      protected $accepted_movie_extensions = array("mpeg","mpg","mpe","qt","mov","avi","movie");
-      protected $accepted_movie_mime_types = array("video/mpeg","video/quicktime","video/x-msvideo","video/x-sgi-movie");
+      protected $accepted_movie_extensions = ["mpeg","mpg","mpe","qt","mov","avi","movie"];
+      protected $accepted_movie_mime_types = ["video/mpeg","video/quicktime","video/x-msvideo","video/x-sgi-movie"];
       
-      protected $accepted_compressed_extensions = array("tar","zip","rar","7z","cab");
-      protected $accepted_compressed_mime_types = array("application/x-tar","application/zip","application/x-rar-compressed","application/x-7z-compressed","application/vnd.ms-cab-compressed");
+      protected $accepted_compressed_extensions = ["tar","zip","rar","7z","cab"];
+      protected $accepted_compressed_mime_types = ["application/x-tar","application/zip","application/x-rar-compressed","application/x-7z-compressed","application/vnd.ms-cab-compressed"];
 
       /**
        * @var LoggerInterface

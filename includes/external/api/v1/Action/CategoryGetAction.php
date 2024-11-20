@@ -207,7 +207,7 @@
           if (xtc_db_num_rows($category_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Category description not found: %s', $categoryId));
           } else {
-              $description = array();
+              $description = [];
               $categories_description_query = xtc_db_query("SELECT cd.*,
                                                                    l.code
                                                               FROM ".TABLE_CATEGORIES_DESCRIPTION." cd
