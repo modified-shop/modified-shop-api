@@ -71,7 +71,7 @@
        *
        * @return array The options data
        */
-      public function GetOptions($options): array
+      public function GetOptions(array $options): array
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
@@ -169,7 +169,7 @@
        *
        * @return array The value data
        */
-      public function GetValues($options): array
+      public function GetValues(array $options): array
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
@@ -227,7 +227,7 @@
        *
        * @return array The attributes data
        */
-      public function GetAttributes(int $optionId, $options): array
+      public function GetAttributes(int $optionId, array $options): array
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);

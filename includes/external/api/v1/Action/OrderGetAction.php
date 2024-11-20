@@ -78,7 +78,7 @@
        *
        * @return array The order data
        */
-      public function GetSingleOrder(int $orderId, $options): array
+      public function GetSingleOrder(int $orderId, array $options): array
       {
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
@@ -101,7 +101,7 @@
        *
        * @return array The order data
        */
-      public function GetOrders($options): array
+      public function GetOrders(array $options): array
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);

@@ -94,7 +94,7 @@
        *
        * @return array The product data
        */
-      public function GetSingleProduct(int $productId, $options): array
+      public function GetSingleProduct(int $productId, array $options): array
       {
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
@@ -117,7 +117,7 @@
        *
        * @return array The product data
        */
-      public function GetProducts($options): array
+      public function GetProducts(array $options): array
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);

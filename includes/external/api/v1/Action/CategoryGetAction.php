@@ -69,7 +69,7 @@
        *
        * @return array The category data
        */
-      public function GetCategories($options): array
+      public function GetCategories(array $options): array
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
@@ -142,7 +142,7 @@
        *
        * @return array The category data
        */
-      public function GetSingleCategory(int $categoryId, $options): array
+      public function GetSingleCategory(int $categoryId, array $options): array
       {
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);

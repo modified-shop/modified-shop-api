@@ -87,7 +87,7 @@
        *
        * @return array The customer data
        */
-      public function GetSingleCustomer(int $customerId, $options): array
+      public function GetSingleCustomer(int $customerId, array $options): array
       {
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
@@ -110,7 +110,7 @@
        *
        * @return array The customer data
        */
-      public function GetCustomers($options): array
+      public function GetCustomers(array $options): array
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
