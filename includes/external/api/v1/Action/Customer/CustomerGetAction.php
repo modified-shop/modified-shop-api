@@ -130,6 +130,7 @@
               $conditions[] = " customers_date_added <= '".date('Y-m-d H:i:s', (int)$this->options['to'])."' ";
           }
           
+          $where = '';
           if (count($conditions) > 0) {
             $where = " WHERE ".implode(' AND ', $conditions);
           }
