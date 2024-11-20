@@ -79,10 +79,10 @@
           $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
           
           $conditions = [];
-          if (preg_replace('/[^\d\,]/', '', $this->options['status']) != '') {
+          if (isset($this->options['status']) && preg_replace('/[^\d\,]/', '', $this->options['status']) != '') {
               $conditions[] = " categories_status IN (".preg_replace('/[^\d\,]/', '', $this->options['status']).") ";
           }
-          if (preg_replace('/[^\d\,]/', '', $this->options['parent']) != '') {
+          if (isset($this->options['parent']) && preg_replace('/[^\d\,]/', '', $this->options['parent']) != '') {
               $conditions[] = " parent_id IN (".preg_replace('/[^\d\,]/', '', $this->options['parent']).") ";
           }
           if ((int)$this->options['from'] > 0) {

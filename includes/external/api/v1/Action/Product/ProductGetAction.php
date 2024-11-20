@@ -127,7 +127,7 @@
           $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
           
           $conditions = [];
-          if (!empty(preg_replace('/[^\d\,]/', '', $this->options['status']))) {
+          if (isset($this->options['status']) && !empty(preg_replace('/[^\d\,]/', '', $this->options['status']))) {
               $conditions[] = " products_status IN (".preg_replace('/[^\d\,]/', '', $this->options['status']).") ";
           }
           if ((int)$this->options['from'] > 0) {
