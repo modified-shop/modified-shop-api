@@ -29,6 +29,13 @@
   $app->get('/attributes/values',                     \api\v1\Service\Attributes\GetValues::class);
   $app->get('/attributes/values/{id}',                \api\v1\Service\Attributes\GetSingleValue::class);
 
+  // insert values
+  $app->post('/attributes/values',                    \api\v1\Service\Attributes\InsertValue::class);
+  $app->post('/attributes/values/{id}',               \api\v1\Service\Attributes\InsertUpdateValue::class);
+
+  // update values
+  $app->put('/attributes/values/{id}',                \api\v1\Service\Attributes\InsertUpdateValue::class);
+
   // delete values
   $app->delete('/attributes/values/{id}',             \api\v1\Service\Attributes\DeleteValue::class);
 
