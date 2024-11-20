@@ -238,7 +238,7 @@
               xtc_db_perform(TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS, $option);
           }
 
-          return $this->GetAttributes($optionId);
+          return $this->GetAttributes($optionId, $options);
       }
 
   }
