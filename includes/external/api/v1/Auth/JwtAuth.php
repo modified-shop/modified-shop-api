@@ -59,7 +59,7 @@
               'iat' => $now->getTimeStamp(),
               'exp' => $future->getTimeStamp(),
               'jti' => $jti,
-              'sub' => $server['PHP_AUTH_USER']
+              'sub' => ((isset($server['PHP_AUTH_USER'])) ? $server['PHP_AUTH_USER'] : ''),
           ];
           $secret = MODULE_SYSTEM_MODIFIED_API_SECRET;
           $token = JWT::encode($payload, $secret, 'HS256');
