@@ -99,7 +99,7 @@
                   $string[$key] = $this->encode_request($value);
               }
           } else {
-              if (!is_bool($string)) {
+              if (!is_bool($string) && xtc_not_null($string)) {
                   $string = decode_htmlentities($string);
                   $cur_encoding = mb_detect_encoding($string);
                   if ($cur_encoding == "UTF-8" && mb_check_encoding($string, "UTF-8")) {

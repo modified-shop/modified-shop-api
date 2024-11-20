@@ -50,28 +50,30 @@
               $result = [
                   'customers' => $this->GetCustomer($customerId),
               ];
-    
-              $with = explode(',', $this->options['with']);
-              if (in_array('info', $with) !== false) {
-                  $result['customers_info'] = $this->GetCustomerInfo($customerId);
-              }
-              if (in_array('ip', $with) !== false) {
-                  $result['customers_ip'] = $this->GetCustomerIp($customerId);
-              }
-              if (in_array('memo', $with) !== false) {
-                  $result['customers_memo'] = $this->GetCustomerMemos($customerId);
-              }
-              if (in_array('history', $with) !== false) {
-                  $result['customers_status_history'] = $this->GetCustomerStatusHistory($customerId);
-              }
-              if (in_array('address', $with) !== false) {
-                  $result['address_book'] = $this->GetCustomerAddressBooks($customerId);
-              }
-              if (in_array('basket', $with) !== false) {
-                  $result['customers_basket'] = $this->GetCustomerBasket($customerId);
-              }
-              if (in_array('wishlist', $with) !== false) {
-                  $result['customers_wishlist'] = $this->GetCustomerWishlist($customerId);
+              
+              if (isset($this->options['with'])) {
+                  $with = explode(',', $this->options['with']);
+                  if (in_array('info', $with) !== false) {
+                      $result['customers_info'] = $this->GetCustomerInfo($customerId);
+                  }
+                  if (in_array('ip', $with) !== false) {
+                      $result['customers_ip'] = $this->GetCustomerIp($customerId);
+                  }
+                  if (in_array('memo', $with) !== false) {
+                      $result['customers_memo'] = $this->GetCustomerMemos($customerId);
+                  }
+                  if (in_array('history', $with) !== false) {
+                      $result['customers_status_history'] = $this->GetCustomerStatusHistory($customerId);
+                  }
+                  if (in_array('address', $with) !== false) {
+                      $result['address_book'] = $this->GetCustomerAddressBooks($customerId);
+                  }
+                  if (in_array('basket', $with) !== false) {
+                      $result['customers_basket'] = $this->GetCustomerBasket($customerId);
+                  }
+                  if (in_array('wishlist', $with) !== false) {
+                      $result['customers_wishlist'] = $this->GetCustomerWishlist($customerId);
+                  }
               }
               
               return $result;

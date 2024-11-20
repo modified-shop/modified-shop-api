@@ -51,12 +51,14 @@
                   'categories' => $this->GetCategory($categoryId),
                   'categories_description' => $this->GetCategoryDescription($categoryId),
               ];         
-
-              $with = explode(',', $this->options['with']);
-              if (in_array('products', $with) !== false) {
-                  $result['products_to_categories'] = $this->GetCategoryProducts($categoryId);
+              
+              if (isset($this->options['with'])) {
+                  $with = explode(',', $this->options['with']);
+                  if (in_array('products', $with) !== false) {
+                      $result['products_to_categories'] = $this->GetCategoryProducts($categoryId);
+                  }
               }
-               
+              
               return $result;
           }
       }

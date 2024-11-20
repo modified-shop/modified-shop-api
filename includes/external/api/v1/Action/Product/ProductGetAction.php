@@ -52,33 +52,35 @@
                   'products_description' => $this->GetProductDescription($productId),
               ];
               
-              $with = explode(',', $this->options['with']);
-              if (in_array('categories', $with) !== false) {
-                  $result['products_to_categories'] = $this->GetProductCategories($productId);
-              }
-              if (in_array('images', $with) !== false) {
-                  $result['products_images'] = $this->GetProductImages($productId);
-              }
-              if (in_array('xsell', $with) !== false) {
-                  $result['products_xsell'] = $this->GetProductXsell($productId);
-              }
-              if (in_array('attributes', $with) !== false) {
-                  $result['products_attributes'] = $this->GetProductAttributes($productId);
-              }
-              if (in_array('tags', $with) !== false) {
-                  $result['products_tags'] = $this->GetProductTags($productId);
-              }
-              if (in_array('content', $with) !== false) {
-                  $result['products_content'] = $this->GetProductContent($productId);
-              }
-              if (in_array('offer', $with) !== false) {
-                  $result['personal_offer'] =  $this->GetProductPersonalOffer($productId);
-              }
-              if (in_array('specials', $with) !== false) {
-                  $result['specials'] = $this->GetProductSpecials($productId);
-              }
-              if (in_array('reviews', $with) !== false) {
-                  $result['reviews'] = $this->GetProductReviews($productId);
+              if (isset($this->options['with'])) {
+                  $with = explode(',', $this->options['with']);
+                  if (in_array('categories', $with) !== false) {
+                      $result['products_to_categories'] = $this->GetProductCategories($productId);
+                  }
+                  if (in_array('images', $with) !== false) {
+                      $result['products_images'] = $this->GetProductImages($productId);
+                  }
+                  if (in_array('xsell', $with) !== false) {
+                      $result['products_xsell'] = $this->GetProductXsell($productId);
+                  }
+                  if (in_array('attributes', $with) !== false) {
+                      $result['products_attributes'] = $this->GetProductAttributes($productId);
+                  }
+                  if (in_array('tags', $with) !== false) {
+                      $result['products_tags'] = $this->GetProductTags($productId);
+                  }
+                  if (in_array('content', $with) !== false) {
+                      $result['products_content'] = $this->GetProductContent($productId);
+                  }
+                  if (in_array('offer', $with) !== false) {
+                      $result['personal_offer'] =  $this->GetProductPersonalOffer($productId);
+                  }
+                  if (in_array('specials', $with) !== false) {
+                      $result['specials'] = $this->GetProductSpecials($productId);
+                  }
+                  if (in_array('reviews', $with) !== false) {
+                      $result['reviews'] = $this->GetProductReviews($productId);
+                  }
               }
 
               return $result;
