@@ -163,7 +163,7 @@
       /**
        * Read value by given conditions
        *
-       * @param mixed[] $values
+       * @param mixed[] $options
        *
        * @throws Exception
        *
@@ -221,12 +221,13 @@
        * Read all values by the given option id.
        *
        * @param int $optionId The option id
+       * @param mixed[] $options
        *
        * @throws Exception
        *
        * @return array The attributes data
        */
-      public function GetAttributes(int $optionId): array
+      public function GetAttributes(int $optionId, $options): array
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);

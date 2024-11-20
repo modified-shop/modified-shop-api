@@ -58,9 +58,12 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
+          $params = $request->getQueryParams();
+          $params['path'] = $request->getUri()->getPath();
+
           $optionId = (int)$args['id'];
 
-          $result = $this->attributesAction->GetAttributes($optionId);
+          $result = $this->attributesAction->GetAttributes($optionId, $params);
 
           return $this->responder->withJson($response, $result);
       }
