@@ -145,7 +145,7 @@
                                                  WHERE language_id = '".(int)$languages['languages_id']."'
                                                        ".$where);
                   if (xtc_db_num_rows($values_query) < 1) {
-                      $values = 'insert';
+                      $action = 'insert';
                       $values = $this->getDefaultTableValues(TABLE_PRODUCTS_OPTIONS_VALUES);
                       $values['products_options_values_id'] = $valueId;
                       $values['language_id'] = (int)$languages['languages_id'];
@@ -179,7 +179,7 @@
               xtc_db_perform(TABLE_PRODUCTS_OPTIONS_VALUES, $values, $action, "language_id = '".(int)$languages['languages_id']."' ".$where);
           }
 
-          return $this->GetSingleOption($valueId);
+          return $this->GetSingleValue($valueId);
       }
 
   }
