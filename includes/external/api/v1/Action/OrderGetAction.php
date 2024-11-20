@@ -53,8 +53,6 @@
               $with = explode(',', $this->options['with']);
               if (in_array('products', $with) !== false) {
                   $result['orders_products'] = $this->GetOrderProducts($orderId);
-                  $result['orders_products_attributes'] = $this->GetOrderProductsAttributes($orderId);
-                  $result['orders_products_download'] = $this->GetOrderProductsDownload($orderId);
               }
               if (in_array('history', $with) !== false) {
                   $result['orders_status_history'] = $this->GetOrderStatusHistory($orderId);
