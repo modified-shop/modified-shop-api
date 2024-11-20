@@ -43,6 +43,9 @@
   // attributes
   $app->get('/attributes/{id}',                       \api\v1\Service\Attributes\GetAttributes::class);
 
+  // insert attributes
+  $app->post('/attributes/{id}',                      \api\v1\Service\Attributes\InsertAttributes::class);
+
   // delete attributes
   $app->delete('/attributes/{id}/values',             \api\v1\Service\Attributes\DeleteAllAttributes::class);
   $app->delete('/attributes/{id}/values/{vid}',       \api\v1\Service\Attributes\DeleteAttributes::class);

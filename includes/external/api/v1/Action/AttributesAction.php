@@ -52,6 +52,11 @@
        */
       public function InsertUpdateOption(int $optionId, array $options): array
       {
+          // Input validation
+          if (empty($optionId)) {
+              throw new Exception('Option ID required');
+          }
+
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
 
@@ -131,6 +136,11 @@
        */
       public function InsertUpdateValue(int $valueId, array $options): array
       {
+          // Input validation
+          if (empty($valueId)) {
+              throw new Exception('Value ID required');
+          }
+
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
 
@@ -180,6 +190,55 @@
           }
 
           return $this->GetSingleValue($valueId);
+      }
+
+      /**
+       * Insert a value for an option by given option id.
+       *
+       * @param int $optionId The option id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The value data
+       */
+      public function InsertAttributes(int $optionId, array $options): array
+      {
+          // Input validation
+          if (empty($optionId)) {
+              throw new Exception('Option ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+          
+          if (!isset($this->options['products_options_values_id'])) {
+              throw new Exception(sprintf('Value ID required'));
+          } else {
+              $option = [];
+              $option_value_query = xtc_db_query("SELECT *
+                                                    FROM ".TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS."
+                                                   WHERE products_options_id = '".(int)$optionId."'
+                                                     AND products_options_values_id = '".(int)$this->options['products_options_values_id']."'");
+              if (xtc_db_num_rows($option_value_query) > 0) {
+                  throw new Exception(sprintf('Value ID already exists'));
+              } else {
+                  $option = $this->getDefaultTableValues(TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS);
+                  $option['products_options_id'] = $optionId;
+              }
+
+              foreach ($option as $key => $value) {
+                  if (isset($this->options[$key])) {
+                      $option[$key] = $this->options[$key];
+                  }
+              }
+
+              // Input validation
+              $this->checkTableData(TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS, $option);
+              xtc_db_perform(TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS, $option);
+          }
+
+          return $this->GetAttributes($optionId);
       }
 
   }
