@@ -150,7 +150,7 @@
                       $values['products_options_values_id'] = $valueId;
                       $values['language_id'] = (int)$languages['languages_id'];
                   } else {
-                      $values = 'update';
+                      $action = 'update';
                       $values = xtc_db_fetch_array($values_query);
                   }
               } else {
