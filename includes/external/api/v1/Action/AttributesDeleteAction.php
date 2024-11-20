@@ -35,7 +35,7 @@
       {
           // Input validation
           if (empty($optionId)) {
-              throw new Exception('Product ID required');
+              throw new Exception('Option ID required');
           }
 
           $where = '';
