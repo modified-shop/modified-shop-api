@@ -87,7 +87,7 @@
           ];
           
           if ($count['total'] < 1) {
-              throw new Exception('no Product options found');
+              throw new Exception('no Options found');
           }
           
           $data = [];
@@ -140,7 +140,7 @@
                                          FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
                                         WHERE products_options_values_id = '".(int)$valueId."'");
           if (xtc_db_num_rows($value_query) < 1) {
-              throw new Exception(sprintf('Option not found: %s', $valueId));
+              throw new Exception(sprintf('Value not found: %s', $valueId));
           } else {
               $values_query = xtc_db_query("SELECT pov.*,
                                                    l.code
@@ -185,7 +185,7 @@
           ];
           
           if ($count['total'] < 1) {
-              throw new Exception('no Product options found');
+              throw new Exception('no Values found');
           }
           
           $data = [];
@@ -241,7 +241,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Product attributes found');
+              throw new Exception('no Attributes found');
           }
           
           $data = [];
