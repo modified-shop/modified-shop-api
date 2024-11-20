@@ -10,6 +10,9 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------------------------*/
 
+  // attributes
+  $app->get('/attributes/{id}',                       \api\v1\Service\Attributes\GetAttributes::class);
+
   // options
   $app->get('/attributes/options',                    \api\v1\Service\Attributes\GetOptions::class);
   $app->get('/attributes/options/{id}',               \api\v1\Service\Attributes\GetSingleOption::class);

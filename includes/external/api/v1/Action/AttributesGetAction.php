@@ -82,9 +82,11 @@
           $count_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_PRODUCTS_OPTIONS."
                                      GROUP BY products_options_id");
-          $count = xtc_db_num_rows($count_query);
+          $count = [
+              'total' => xtc_db_num_rows($count_query)
+          ];
           
-          if ($count < 1) {
+          if ($count['total'] < 1) {
               throw new Exception('no Product options found');
           }
           
@@ -100,16 +102,16 @@
           
           $result = [
               'paging' => [
-                  'total' => $count
+                  'total' => $count['total']
               ],
               'data' => $data
           ];
           
-          if ($count > count($data)) {
+          if ($count['total'] > count($data)) {
               if ($this->options['page'] > 1) {
                   $result['paging']['prev'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] - 1);
               }
-              if (((($this->options['page'] - 1) * $this->options['limit']) + $this->options['limit']) < $count) {
+              if (((($this->options['page'] - 1) * $this->options['limit']) + $this->options['limit']) < $count['total']) {
                   $result['paging']['next'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] + 1);
               }
           }
@@ -178,9 +180,11 @@
           $count_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
                                      GROUP BY products_options_values_id");
-          $count = xtc_db_num_rows($count_query);
+          $count = [
+              'total' => xtc_db_num_rows($count_query)
+          ];
           
-          if ($count < 1) {
+          if ($count['total'] < 1) {
               throw new Exception('no Product options found');
           }
           
@@ -196,16 +200,74 @@
           
           $result = [
               'paging' => [
-                  'total' => $count
+                  'total' => $count['total']
               ],
               'data' => $data
           ];
           
-          if ($count > count($data)) {
+          if ($count['total'] > count($data)) {
               if ($this->options['page'] > 1) {
                   $result['paging']['prev'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] - 1);
               }
-              if (((($this->options['page'] - 1) * $this->options['limit']) + $this->options['limit']) < $count) {
+              if (((($this->options['page'] - 1) * $this->options['limit']) + $this->options['limit']) < $count['total']) {
+                  $result['paging']['next'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] + 1);
+              }
+          }
+          
+          return $result;
+      }
+
+      /**
+       * Read all values by the given option id.
+       *
+       * @param int $optionId The option id
+       *
+       * @throws Exception
+       *
+       * @return array The attributes data
+       */
+      public function GetAttributes(int $optionId): array
+      {          
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+          
+          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
+          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
+                    
+          $count_query = xtc_db_query("SELECT count(*) as total
+                                         FROM ".TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS."
+                                        WHERE products_options_id = '".(int)$optionId."'");
+          $count = xtc_db_fetch_array($count_query);
+          
+          if ($count['total'] < 1) {
+              throw new Exception('no Product attributes found');
+          }
+          
+          $data = [];
+          $values_query = xtc_db_query("SELECT pov2po.*
+                                          FROM ".TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS." pov2po
+                                          JOIN ".TABLE_PRODUCTS_OPTIONS_VALUES." pov
+                                               ON pov2po.products_options_values_id  = pov.products_options_values_id 
+                                         WHERE pov2po.products_options_id = '".(int)$optionId."'
+                                      GROUP BY pov2po.products_options_values_id 
+                                      ORDER BY pov.products_options_values_sortorder, pov2po.products_options_values_id
+                                         LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
+          while ($values = xtc_db_fetch_array($values_query)) {              
+              $data[] = array_merge($values, $this->GetSingleValue($values['products_options_values_id']));
+          }
+          
+          $result = [
+              'paging' => [
+                  'total' => $count['total']
+              ],
+              'data' => $data
+          ];
+          
+          if ($count['total'] > count($data)) {
+              if ($this->options['page'] > 1) {
+                  $result['paging']['prev'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] - 1);
+              }
+              if (((($this->options['page'] - 1) * $this->options['limit']) + $this->options['limit']) < $count['total']) {
                   $result['paging']['next'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] + 1);
               }
           }
