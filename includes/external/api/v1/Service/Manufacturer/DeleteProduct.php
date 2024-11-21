@@ -21,7 +21,7 @@
   /**
    * Action
    */
-  final class DeleteCategory
+  final class DeleteProduct
   {
       /**
        * @var ManufacturerAction
@@ -67,7 +67,7 @@
               throw new Exception('Product ID required');
           }
 
-          $this->manufacturerAction->DeleteCategory($manufacturerId, $productId);
+          $this->manufacturerAction->DeleteProduct($manufacturerId, $productId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }

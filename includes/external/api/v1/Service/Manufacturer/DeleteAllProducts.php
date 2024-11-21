@@ -20,7 +20,7 @@
   /**
    * Action
    */
-  final class DeleteAllCategory
+  final class DeleteAllProducts
   {
       /**
        * @var ManufacturerAction
@@ -60,7 +60,7 @@
       ): ResponseInterface {
           $manufacturerId = (int)$args['id'];
           
-          $this->manufacturerAction->DeleteAllCategory($manufacturerId);
+          $this->manufacturerAction->DeleteAllProducts($manufacturerId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }
