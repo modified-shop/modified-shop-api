@@ -61,13 +61,13 @@
        * Delete a manufacturer by the given manufacturer id and manufacturer id.
        *
        * @param int $manufacturerId The manufacturer id
-       * @param int $manufacturerId The manufacturer id
+       * @param int $productId The product id
        *
        * @throws Exception
        *
        * @return void
        */
-      public function DeleteProduct(int $manufacturerId, int $manufacturerId): void
+      public function DeleteProduct(int $manufacturerId, int $productId): void
       {
           // Input validation
           if (empty($manufacturerId)) {
@@ -76,7 +76,7 @@
 
           $where = '';
           if ($manufacturerId > 0) {
-              $where = "AND manufacturers_id = '".(int)$manufacturerId."'";
+              $where = "AND products_id = '".(int)$productId."'";
           }
 
           $manufacturer_query = xtc_db_query("SELECT *
@@ -84,12 +84,12 @@
                                                WHERE manufacturers_id = '".(int)$manufacturerId."'
                                                      ".$where);
           if (xtc_db_num_rows($manufacturer_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Manufacturer manufacturers not found: %s', $manufacturerId));
+              throw new Exception(sprintf('Manufacturer product not found: %s', $manufacturerId));
           } else {
               while ($manufacturer = xtc_db_fetch_array($manufacturer_query)) {
                   xtc_db_query("UPDATE ".TABLE_PRODUCTS." 
                                    SET manufacturers_id = '0'
-                                 WHERE manufacturers_id = '".(int)$manufacturer['manufacturers_id']."'");
+                                 WHERE products_id = '".(int)$manufacturer['products_id']."'");
               }
           }
       }
