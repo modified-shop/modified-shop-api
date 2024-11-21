@@ -75,7 +75,7 @@
           }
 
           $where = '';
-          if ($manufacturerId > 0) {
+          if ($productId > 0) {
               $where = "AND products_id = '".(int)$productId."'";
           }
 
