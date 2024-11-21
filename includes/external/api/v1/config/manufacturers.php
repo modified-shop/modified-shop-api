@@ -14,7 +14,7 @@
   $app->get('/manufacturers',                            \api\v1\Service\Manufacturer\GetManufacturers::class);
   $app->get('/manufacturers/{id}',                       \api\v1\Service\Manufacturer\GetSingleManufacturer::class);
   $app->get('/manufacturers/{id}/description',           \api\v1\Service\Manufacturer\GetManufacturerDescription::class);
-  $app->get('/manufacturers/{id}/products',              \api\v1\Service\Manufacturer\GetManufacturerCategories::class);
+  $app->get('/manufacturers/{id}/products',              \api\v1\Service\Manufacturer\GetManufacturerProducts::class);
   
   // insert manufacturers
   $app->post('/manufacturers',                           \api\v1\Service\Manufacturer\InsertManufacturer::class);

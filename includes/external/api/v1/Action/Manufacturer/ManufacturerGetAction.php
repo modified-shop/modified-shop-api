@@ -133,7 +133,7 @@
           $manufacturers_query = xtc_db_query("SELECT manufacturers_id
                                                  FROM ".TABLE_MANUFACTURERS."
                                                       ".$where."
-                                             ORDER BY manufacturers_date_added DESC
+                                             ORDER BY date_added DESC
                                                 LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($manufacturers = xtc_db_fetch_array($manufacturers_query)) {
               $data[] = $this->getManufacturerDetails($manufacturers['manufacturers_id']);
