@@ -211,12 +211,12 @@
           if (xtc_db_num_rows($manufacturer_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Manufacturer description not found: %s', $manufacturerId));
           } else {
-              $manufacturers_description_query = xtc_db_query("SELECT pd.*,
+              $manufacturers_description_query = xtc_db_query("SELECT mi.*,
                                                                       l.code
-                                                                 FROM ".TABLE_MANUFACTURERS_INFO." pd
+                                                                 FROM ".TABLE_MANUFACTURERS_INFO." mi
                                                                  JOIN ".TABLE_LANGUAGES." l
-                                                                      ON l.languages_id = pd.language_id
-                                                                WHERE pd.manufacturers_id = '".(int)$manufacturerId."'");
+                                                                      ON l.languages_id = mi.languages_id
+                                                                WHERE mi.manufacturers_id = '".(int)$manufacturerId."'");
               while ($manufacturers_description = xtc_db_fetch_array($manufacturers_description_query)) {
                   $code = $manufacturers_description['code'];
                   unset($manufacturers_description['code']);
