@@ -252,7 +252,8 @@
           if (xtc_db_num_rows($manufacturer_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Manufacturer products not found: %s', $manufacturerId));
           } else {
-              $manufacturers_products_query = xtc_db_query("SELECT *
+              $manufacturers_products_query = xtc_db_query("SELECT products_id,
+                                                                   manufacturers_id
                                                               FROM ".TABLE_PRODUCTS."
                                                              WHERE manufacturers_id = '".(int)$manufacturerId."'
                                                           ORDER BY products_id");
