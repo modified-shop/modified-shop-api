@@ -33,6 +33,9 @@
               // products
               include __DIR__ . '/products.php';
 
+              // manufacturers
+              include __DIR__ . '/manufacturers.php';
+
               // attributes
               include __DIR__ . '/attributes.php';
               
