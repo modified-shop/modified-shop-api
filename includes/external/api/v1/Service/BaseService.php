@@ -24,9 +24,10 @@
       /**
        * check API access.
        *
-       * @param mixed[] $class
+       * @param ServerRequestInterface $request The request
+       * @param ResponseInterface $response The response
        *
-       * @return bool
+       * @return void
        */
       protected function CheckAccess(
           ServerRequestInterface $request,

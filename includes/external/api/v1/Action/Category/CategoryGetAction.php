@@ -39,8 +39,8 @@
           }
           
           $category_query = xtc_db_query("SELECT *
-                                           FROM ".TABLE_CATEGORIES."
-                                          WHERE categories_id = '".(int)$categoryId."'");
+                                            FROM ".TABLE_CATEGORIES."
+                                           WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($category_query) < 1) {
               throw new Exception(sprintf('Category not found: %s', $categoryId));
           } else {
@@ -177,8 +177,8 @@
           }
           
           $category_query = xtc_db_query("SELECT *
-                                           FROM ".TABLE_CATEGORIES."
-                                          WHERE categories_id = '".(int)$categoryId."'");
+                                            FROM ".TABLE_CATEGORIES."
+                                           WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($category_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Category not found: %s', $categoryId));
           } else {
@@ -206,8 +206,8 @@
           }
           
           $category_query = xtc_db_query("SELECT *
-                                           FROM ".TABLE_CATEGORIES_DESCRIPTION."
-                                          WHERE categories_id = '".(int)$categoryId."'");
+                                            FROM ".TABLE_CATEGORIES_DESCRIPTION."
+                                           WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($category_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Category description not found: %s', $categoryId));
           } else {
@@ -248,8 +248,8 @@
           
           $products = [];
           $category_query = xtc_db_query("SELECT *
-                                           FROM ".TABLE_CATEGORIES."
-                                          WHERE categories_id = '".(int)$categoryId."'");
+                                            FROM ".TABLE_CATEGORIES."
+                                           WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($category_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Category products not found: %s', $categoryId));
           } else {

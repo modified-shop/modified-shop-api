@@ -37,8 +37,8 @@
           }
 
           $product_query = xtc_db_query("SELECT *
-                                            FROM ".TABLE_PRODUCTS."
-                                           WHERE products_id = '".(int)$productId."'");
+                                           FROM ".TABLE_PRODUCTS."
+                                          WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1) {
             throw new Exception(sprintf('Product not found: %s', $productId));
           } else {

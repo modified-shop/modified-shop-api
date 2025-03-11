@@ -155,10 +155,10 @@
           
           $data = [];
           $products_query = xtc_db_query("SELECT products_id
-                                             FROM ".TABLE_PRODUCTS."
-                                                  ".$where."
-                                         ORDER BY products_date_added DESC
-                                            LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
+                                            FROM ".TABLE_PRODUCTS."
+                                                 ".$where."
+                                        ORDER BY products_date_added DESC
+                                           LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($products = xtc_db_fetch_array($products_query)) {
               $data[] = $this->getProductDetails($products['products_id']);
           }

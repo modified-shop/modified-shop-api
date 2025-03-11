@@ -40,8 +40,8 @@
           
           $option = [];
           $option_query = xtc_db_query("SELECT *
-                                           FROM ".TABLE_PRODUCTS_OPTIONS."
-                                          WHERE products_options_id = '".(int)$optionId."'");
+                                          FROM ".TABLE_PRODUCTS_OPTIONS."
+                                         WHERE products_options_id = '".(int)$optionId."'");
           if (xtc_db_num_rows($option_query) < 1) {
               throw new Exception(sprintf('Option not found: %s', $optionId));
           } else {
