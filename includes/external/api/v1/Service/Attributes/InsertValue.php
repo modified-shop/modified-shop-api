@@ -12,6 +12,7 @@
 
   namespace api\v1\Service\Attributes;
 
+  use api\v1\Service\BaseService;
   use api\v1\Action\Attributes\AttributesAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
@@ -20,7 +21,7 @@
   /**
    * Action
    */
-  final class InsertValue
+  final class InsertValue extends BaseService
   {
       /**
        * @var AttributesAction
@@ -58,6 +59,8 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
+          $this->CheckAccess($request, $response);
+
           $data = (array)$request->getParsedBody();
                     
           $result = $this->attributesAction->InsertValue($data);

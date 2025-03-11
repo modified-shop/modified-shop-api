@@ -12,6 +12,7 @@
 
   namespace api\v1\Service\Product;
 
+  use api\v1\Service\BaseService;
   use api\v1\Action\Product\ProductAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
@@ -20,7 +21,7 @@
   /**
    * Action
    */
-  final class InsertProduct
+  final class InsertProduct extends BaseService
   {
       /**
        * @var ProductAction
@@ -58,6 +59,8 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
+          $this->CheckAccess($request, $response);
+
           $data = (array)$request->getParsedBody();
                     
           $result = $this->productAction->InsertProduct($data);

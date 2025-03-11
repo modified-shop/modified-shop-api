@@ -12,6 +12,7 @@
 
   namespace api\v1\Service\Dhl;
 
+  use api\v1\Service\BaseService;
   use api\v1\Action\Dhl\DhlAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
@@ -20,7 +21,7 @@
   /**
    * Action
    */
-  final class GetDhl
+  final class GetDhl extends BaseService
   {
       /**
        * @var DhlAction
@@ -58,6 +59,8 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
+          $this->CheckAccess($request, $response);
+
           $orderId = (int)$args['id'];
           $params = $request->getQueryParams();
 

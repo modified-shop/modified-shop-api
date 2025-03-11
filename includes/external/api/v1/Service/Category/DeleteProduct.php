@@ -12,6 +12,7 @@
 
   namespace api\v1\Service\Category;
 
+  use api\v1\Service\BaseService;
   use api\v1\Action\Category\CategoryAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
@@ -21,7 +22,7 @@
   /**
    * Action
    */
-  final class DeleteProduct
+  final class DeleteProduct extends BaseService
   {
       /**
        * @var CategoryAction
@@ -59,6 +60,8 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
+          $this->CheckAccess($request, $response);
+
           $categoryId = (int)$args['id'];
           $productId = (int)$args['pid'];
 

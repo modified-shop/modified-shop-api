@@ -12,6 +12,7 @@
 
   namespace api\v1\Service\Manufacturer;
 
+  use api\v1\Service\BaseService;
   use api\v1\Action\Manufacturer\ManufacturerAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
@@ -20,7 +21,7 @@
   /**
    * Action
    */
-  final class GetManufacturers
+  final class GetManufacturers extends BaseService
   {
       /**
        * @var ManufacturerAction
@@ -58,6 +59,8 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
+          $this->CheckAccess($request, $response);
+
           $params = $request->getQueryParams();
           $params['path'] = $request->getUri()->getPath();
           

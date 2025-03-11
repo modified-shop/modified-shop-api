@@ -104,15 +104,15 @@
       },
 
       JwtAuthentication::class => function (ContainerInterface $container) {
-          if (!defined('MODULE_SYSTEM_MODIFIED_API_SECRET')
-              || empty(MODULE_SYSTEM_MODIFIED_API_SECRET)
+          if (!defined('MODULE_API_ACCESS_SECRET')
+              || empty(MODULE_API_ACCESS_SECRET)
               )
           {
               throw new \RuntimeException("modified API not installed");
           }
 
           return new JwtAuthentication([
-              'secret' => MODULE_SYSTEM_MODIFIED_API_SECRET,
+              'secret' => MODULE_API_ACCESS_SECRET,
               'error' => function ($response, $arguments) {              
                   $data = [
                     'error' => [

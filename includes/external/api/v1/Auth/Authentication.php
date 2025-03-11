@@ -72,17 +72,23 @@ declare(strict_types=1);
           }
 
           /* If array of users was passed in options create an authenticator */
-          if (defined('MODULE_SYSTEM_MODIFIED_API_USER') 
-              && !empty(MODULE_SYSTEM_MODIFIED_API_USER)
-              && defined('MODULE_SYSTEM_MODIFIED_API_PASS')
-              && !empty(MODULE_SYSTEM_MODIFIED_API_PASS)
+          if (defined('MODULE_API_ACCESS_STATUS')
+              && MODULE_API_ACCESS_STATUS == 'true'
               )
           {
-              $this->options["authenticator"] = new ArrayAuthenticator([
-                  "users" => [
-                    MODULE_SYSTEM_MODIFIED_API_USER => MODULE_SYSTEM_MODIFIED_API_PASS
-                  ]
-              ]);
+              $access_query = xtc_db_query("SELECT *
+                                              FROM ".TABLE_CUSTOMERS." c
+                                              JOIN `api_access` aa
+                                                   ON c.customers_id = aa.customers_id");
+              if (xtc_db_num_rows($access_query) > 0) {
+                  $users = [];
+                  while ($access = xtc_db_fetch_array($access_query)) {
+                      $users[$access['customers_email_address']] = $access['customers_password'];
+                  }
+                  $this->options["authenticator"] = new ArrayAuthenticator([
+                      "users" => $users
+                  ]);
+              }
           }
 
           /* There must be an authenticator either passed via options */

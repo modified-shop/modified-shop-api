@@ -12,6 +12,7 @@
 
   namespace api\v1\Service\Category;
 
+  use api\v1\Service\BaseService;
   use api\v1\Action\Category\CategoryAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
@@ -20,7 +21,7 @@
   /**
    * Action
    */
-  final class InsertUpdateCategory
+  final class InsertUpdateCategory extends BaseService
   {
       /**
        * @var CategoryAction
@@ -58,6 +59,8 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
+          $this->CheckAccess($request, $response);
+
           $categoryId = ((isset($args['id'])) ? (int)$args['id'] : 0);
           $data = (array)$request->getParsedBody();
                     

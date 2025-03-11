@@ -69,10 +69,11 @@ final class ArrayAuthenticator implements AuthenticatorInterface
         if (!isset($this->options["users"][$user])) {
             return false;
         }
-
+        
         if (self::isHash($this->options["users"][$user])) {
-            /* Hashed password. */
-            return password_verify($password, $this->options["users"][$user]);
+            // Check that password is good
+            require_once (DIR_FS_INC.'xtc_validate_password.inc.php');
+            return xtc_validate_password($password, $this->options["users"][$user]);
         } else {
             /* Cleartext password. */
             return $this->options["users"][$user] === $password;

@@ -12,6 +12,7 @@
 
   namespace api\v1\Service\Customer;
 
+  use api\v1\Service\BaseService;
   use api\v1\Action\Customer\CustomerAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
@@ -21,7 +22,7 @@
   /**
    * Action
    */
-  final class DeleteIp
+  final class DeleteIp extends BaseService
   {
       /**
        * @var CustomerAction
@@ -59,6 +60,8 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
+          $this->CheckAccess($request, $response);
+
           $customerId = (int)$args['id'];
           $customerIpId = (int)$args['iid'];
 

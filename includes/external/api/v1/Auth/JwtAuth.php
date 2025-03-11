@@ -44,11 +44,18 @@
           ResponseInterface $response,
           array $args = []
       ): ResponseInterface {
-          if (!defined('MODULE_SYSTEM_MODIFIED_API_SECRET')
-              || empty(MODULE_SYSTEM_MODIFIED_API_SECRET)
+          if (!defined('MODULE_API_ACCESS_SECRET')
+              || empty(MODULE_API_ACCESS_SECRET)
               )
           {
               throw new \RuntimeException("modified API not installed");
+          }
+
+          if ($user = $request->getHeaderLine("user")) {
+              $usr = $user;
+          }
+          if ($user = $request->getHeaderLine("username")) {
+              $usr = $user;
           }
           
           $now = new \DateTime();
@@ -59,9 +66,10 @@
               'iat' => $now->getTimeStamp(),
               'exp' => $future->getTimeStamp(),
               'jti' => $jti,
+              'usr' => $usr,
               'sub' => ((isset($server['PHP_AUTH_USER'])) ? $server['PHP_AUTH_USER'] : ''),
           ];
-          $secret = MODULE_SYSTEM_MODIFIED_API_SECRET;
+          $secret = MODULE_API_ACCESS_SECRET;
           $token = JWT::encode($payload, $secret, 'HS256');
           $data = [
             'access_token' => $token,

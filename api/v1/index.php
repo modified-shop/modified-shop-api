@@ -14,12 +14,7 @@
   
   // needed constants
   define('DIR_FS_ADMIN', DIR_FS_CATALOG.DIR_ADMIN);
-  
-  // credentials
-  defined('MODULE_SYSTEM_MODIFIED_API_SECRET')  OR define('MODULE_SYSTEM_MODIFIED_API_SECRET', 'supersecretkeyyoushouldnotcommittogithub');
-  defined('MODULE_SYSTEM_MODIFIED_API_USER')    OR define('MODULE_SYSTEM_MODIFIED_API_USER', 'admin');
-  defined('MODULE_SYSTEM_MODIFIED_API_PASS')    OR define('MODULE_SYSTEM_MODIFIED_API_PASS', 'admin');
-  
+    
   // file upload
   defined('ERROR_DESTINATION_DOES_NOT_EXIST')   OR define('ERROR_DESTINATION_DOES_NOT_EXIST', 'Error: Destination does not exist.');
   defined('ERROR_DESTINATION_NOT_WRITEABLE')    OR define('ERROR_DESTINATION_NOT_WRITEABLE', 'Error: Destination is not writeable.');

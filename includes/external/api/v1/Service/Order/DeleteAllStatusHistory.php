@@ -12,6 +12,7 @@
 
   namespace api\v1\Service\Order;
 
+  use api\v1\Service\BaseService;
   use api\v1\Action\Order\OrderAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
@@ -20,7 +21,7 @@
   /**
    * Action
    */
-  final class DeleteAllStatusHistory
+  final class DeleteAllStatusHistory extends BaseService
   {
       /**
        * @var OrderAction
@@ -58,6 +59,8 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
+          $this->CheckAccess($request, $response);
+
           $orderId = (int)$args['id'];
           
           $this->orderAction->DeleteAllStatusHistory($orderId);

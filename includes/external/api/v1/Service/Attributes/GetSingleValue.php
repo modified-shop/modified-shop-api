@@ -12,6 +12,7 @@
 
   namespace api\v1\Service\Attributes;
 
+  use api\v1\Service\BaseService;
   use api\v1\Action\Attributes\AttributesAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
@@ -20,7 +21,7 @@
   /**
    * Action
    */
-  final class GetSingleValue
+  final class GetSingleValue extends BaseService
   {
       /**
        * @var AttributesAction
@@ -58,6 +59,8 @@
           ResponseInterface $response,
           array $args
       ): ResponseInterface {
+          $this->CheckAccess($request, $response);
+
           $valueId = (int)$args['id'];
 
           $result = $this->attributesAction->GetSingleValue($valueId);

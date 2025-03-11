@@ -41,7 +41,7 @@
 
   // JWT
   $settings['jwt'] = [
-      'secret' => MODULE_SYSTEM_MODIFIED_API_SECRET,
+      'secret' => ((defined('MODULE_API_ACCESS_SECRET')) ? MODULE_API_ACCESS_SECRET : 'supersecretkeyyoushouldnottellanyone'),
       'algorithm' => 'HS256',
       'secure' => true,
   ];
