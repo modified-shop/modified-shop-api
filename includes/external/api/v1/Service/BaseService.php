@@ -27,6 +27,8 @@
        * @param ServerRequestInterface $request The request
        * @param ResponseInterface $response The response
        *
+       * @throws Exception
+       *
        * @return void
        */
       protected function CheckAccess(

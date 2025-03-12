@@ -359,5 +359,54 @@
           $result = $this->encode_request($total);
           return $result;          
       }
+
+      /**
+       * Read a order transaction by the given order id.
+       *
+       * @param int $orderId The order id
+       * @param string $payment_method 
+       *
+       * @return string
+       */
+      private function getTransactionID(int $orderId, string $payment_method): string
+      {
+          $transaction_id = '';
+
+          switch ($payment_method) {
+            case 'paypal':
+            case 'paypalacdc':
+            case 'paypalapplepay':
+            case 'paypalbancontact':
+            case 'paypalblik':
+            case 'paypalcard':
+            case 'paypalcart':
+            case 'paypalclassic':
+            case 'paypaleps':
+            case 'paypalexpress':
+            case 'paypalgiropay':
+            case 'paypalgooglepay':
+            case 'paypalideal':
+            case 'paypallink':
+            case 'paypalmybank':
+            case 'paypalplus':
+            case 'paypalpluslink':
+            case 'paypalprzelewy':
+            case 'paypalpui':
+            case 'paypalsepa':
+            case 'paypalsubscription':
+            case 'paypalsofort':
+            case 'paypaltrustly':
+              $check_query = xtc_db_query("SELECT *
+                                             FROM `paypal_payment`
+                                            WHERE orders_id = '".(int)$orderId."'");
+              if (xtc_db_num_rows($check_query) > 0) {
+                $check = xtc_db_fetch_array($check_query);
+                $transaction_id = (string)$check['transaction_id'];
+              }
+              break;
+          }
+          
+          return $transaction_id;
+      }
       
   }

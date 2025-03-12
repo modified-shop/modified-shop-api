@@ -21,7 +21,7 @@
   /**
    * Action
    */
-  final class SetOrderTracking extends BaseService
+  final class InsertUpdateOrderProduct extends BaseService
   {
       /**
        * @var OrderAction
@@ -62,9 +62,10 @@
           $this->CheckAccess($request, $response);
 
           $orderId = (int)$args['id'];
+          $orderProductId = (int)$args['pid'];
           $data = (array)$request->getParsedBody();
-          
-          $result = $this->orderAction->setOrderTracking($orderId, $data);
+                    
+          $result = $this->orderAction->InsertUpdateOrderProduct($orderId, $orderProductId, $data);
 
           return $this->responder->withJson($response, $result);
       }

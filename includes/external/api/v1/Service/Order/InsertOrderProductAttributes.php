@@ -21,7 +21,7 @@
   /**
    * Action
    */
-  final class SetOrderStatus extends BaseService
+  final class InsertOrderProductAttributes extends BaseService
   {
       /**
        * @var OrderAction
@@ -63,8 +63,8 @@
 
           $orderId = (int)$args['id'];
           $data = (array)$request->getParsedBody();
-          
-          $result = $this->orderAction->setOrderStatus($orderId, $data);
+                    
+          $result = $this->orderAction->InsertOrderProductAttributes($orderId, $data);
 
           return $this->responder->withJson($response, $result);
       }

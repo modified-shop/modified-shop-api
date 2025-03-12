@@ -17,15 +17,6 @@
   use Psr\Log\LoggerInterface;
   use Exception;
 
-  // include needed classes
-  require_once(DIR_WS_CLASSES.'order.php');
-  require_once(DIR_WS_CLASSES.'xtcPrice.php');
-
-  // include needed functions
-  require_once(DIR_FS_INC.'xtc_remove_order.inc.php');
-  //require_once(DIR_FS_INC.'xtc_catalog_href_link.inc.php');
-  require_once(DIR_FS_INC.'get_tracking_link.inc.php');
-
   /**
    * Service.
    */
@@ -35,210 +26,568 @@
       use OrderDeleteAction;
 
       /**
-       * Set order status by the given order id.
+       * Insert an order by the given options.
+       *
+       * @param mixed[] $options
+       *
+       * @return array The order data
+       */
+      public function InsertOrder(array $options): array
+      {
+          $order = $this->InsertUpdateOrder(0, $options);
+          
+          return $order;
+      }
+
+      /**
+       * Insert or Update an order by the given order id.
        *
        * @param int $orderId The order id
        * @param mixed[] $options
        *
        * @throws Exception
        *
-       * @return void
+       * @return array The order data
        */
-      public function UpdateOrderStatus(int $orderId, array $options): void
+      public function InsertUpdateOrder(int $orderId, array $options): array
       {
-          global $xtPrice;
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          if ($orderId > 0) {
+              $action = 'update';
+              $order_query = xtc_db_query("SELECT *
+                                             FROM ".TABLE_ORDERS."
+                                            WHERE orders_id = '".(int)$orderId."'");
+              if (xtc_db_num_rows($order_query) < 1) {
+                  throw new Exception(sprintf('Order not found: %s', $orderId));
+              } else {
+                  $order = xtc_db_fetch_array($order_query);
+                  $order['last_modified'] = 'now()';
+              }
+          } else {
+              $action = 'insert';
+              $order = $this->getDefaultTableValues(TABLE_ORDERS);
+              $order['date_purchased'] = 'now()';
+          }
+
+          foreach ($order as $key => $value) {
+              if (isset($this->options[$key])) {
+                  $order[$key] = $this->options[$key];
+              }
+          }
+
+          // Input validation
+          $this->checkTableData(TABLE_ORDERS, $order);
+          unset($order['orders_id']);
+
+          xtc_db_perform(TABLE_ORDERS, $order, $action, "orders_id = '".(int)$orderId."'");
+          if ($action == 'insert') {
+              $orderId = xtc_db_insert_id();
+          }
+
+          return $this->GetOrder($orderId);
+      }
+
+      /**
+       * Insert an order product by given order id.
+       *
+       * @param int $orderId The order id
+       * @param mixed[] $options
+       *
+       * @return array The order product data
+       */
+      public function InsertOrderProduct(int $orderId, array $options): array
+      {
+          $order_product = $this->InsertUpdateOrderProduct($orderId, 0, $options);
           
+          return $order_product;
+      }
+
+      /**
+       * Insert or Update a order product by the given order id and order products id.
+       *
+       * @param int $orderId The order id
+       * @param int $orderProductsId The order products id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The order product data
+       */
+      public function InsertUpdateOrderProduct(int $orderId, int $orderProductId, array $options): array
+      {
+          // Input validation
           if (empty($orderId)) {
               throw new Exception('Order ID required');
           }
 
-          $order = new \order($orderId);
-
-          if (!isset($order->info['orders_id'])) {
-              throw new Exception(sprintf('Order not found: %s', $orderId));
+          if (empty($orderProductId)) {
+              throw new Exception('Order Product ID required');
           }
 
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
 
-          if (empty($this->options['orders_status_id'])) {
-              throw new Exception('Orders Status ID required');
-          }
-          
-          error_log(print_r($this->options, true), 3, DIR_FS_CATALOG.'log/api.log');
-          
-          $lang_query = xtc_db_query("SELECT *
-                                        FROM ".TABLE_LANGUAGES."
-                                       WHERE directory = '".xtc_db_input($order->info['language'])."'");
-          $lang_array = xtc_db_fetch_array($lang_query);
-          $lang = $lang_array['languages_id'];
-          $lang_code = $lang_array['code'];
-          $lang_charset = $lang_array['language_charset'];
+          $order_query = xtc_db_query("SELECT *
+                                         FROM ".TABLE_ORDERS."
+                                        WHERE orders_id = '".(int)$orderId."'");
+          if (xtc_db_num_rows($order_query) < 1) {
+              throw new Exception(sprintf('Order not found: %s', $orderId));
+          } else {          
+              $order_product_query = xtc_db_query("SELECT *
+                                                     FROM ".TABLE_ORDERS_PRODUCTS."
+                                                    WHERE orders_id = '".(int)$orderId."'
+                                                      AND orders_products_id = '".(int)$orderProductId."'");
+              if (xtc_db_num_rows($order_product_query) > 0) {
+                  $action = 'update';
+                  $order_product = xtc_db_fetch_array($order_product_query);
+              } else {
+                  if (!isset($this->options['products_id'])) {
+                      throw new Exception('Product ID required');
+                  }
+                  $action = 'insert';
+                  $order_product = $this->getDefaultTableValues(TABLE_ORDERS_PRODUCTS);
+                  $order_product['orders_id'] = (int)$orderId;
+              }
 
-          $orders_status_lang_array = [];
-          $orders_status_query = xtc_db_query("SELECT orders_status_id,
-                                                      orders_status_name,
-                                                      language_id
-                                                 FROM ".TABLE_ORDERS_STATUS."
-                                             ORDER BY sort_order");
-          while ($orders_status = xtc_db_fetch_array($orders_status_query)) {
-              $orders_status_lang_array[$orders_status['language_id']][$orders_status['orders_status_id']] = $orders_status['orders_status_name'];
-          }
+              if (isset($this->options['products_id'])) {
+                  $products_query = xtc_db_query("SELECT *
+                                                    FROM ".TABLE_PRODUCTS."
+                                                   WHERE products_id = '".(int)$this->options['products_id']."'");
+                  if (xtc_db_num_rows($products_query) < 1) {
+                      throw new Exception(sprintf('Product ID invalid'));
+                  }
+              }
+          
+              foreach ($order_product as $key => $value) {
+                  if (isset($this->options[$key])) {
+                      $order_product[$key] = $this->options[$key];
+                  }
+              }
 
-          if (!isset($orders_status_lang_array[$lang][$this->options['orders_status_id']])) {
-              throw new Exception('Orders Status ID not valid');
-          }
-
-          if (isset($this->options['documents'])
-              && is_array($this->options['documents'])
-              )
-          {
-            foreach ($this->options['documents'] as $documents) {
-              file_put_contents(DIR_FS_CATALOG.DIR_ADMIN.'archives/invoice/'.$documents['title'], base64_encode($documents['data']));
-            }
-          }
-          
-          $tracking_array = [];
-          if (isset($this->options['tracking'])) {
-              $tracking_array = $this->InsertOrderTracking($orderId, $options);              
-          }
-          
-          $smarty = new \Smarty();    
-          $xtPrice = new \xtcPrice($order->info['currency'], $order->info['status']);
-          
-          $oID = $orderId;
-          $status = (int)$this->options['orders_status_id'];
-          $comments = '';
-          if (!empty($this->options['comments'])) {
-              $comments = $this->options['comments'];
+              // Input validation
+              $this->checkTableData(TABLE_ORDERS_PRODUCTS, $order_product);
+              xtc_db_perform(TABLE_ORDERS_PRODUCTS, $order_product, $action, "orders_id = '".(int)$orderId."' AND orders_products_id = '".(int)$orderProductId."'");
           }
 
-          $_POST['notify'] = 'off';
-          if (!empty($this->options['customer_notified'])) {
-              $_POST['notify'] = (int)$this->options['customer_notified'] == 1 ? 'on' : 'off';
-          }
-          $_POST['notify_comments'] = 'off';
-          if (!empty($this->options['comments_sent'])) {
-              $_POST['notify_comments'] = (int)$this->options['comments_sent'] == 1 ? 'on' : 'off';
-          }
-
-          $_POST['tracking_id'] = array_column($tracking_array, 'tracking_id');
-          define('_VALID_XTC', true);
-          $order_updated = false;
-          $email_preview = false;
-          
-          require_once(DIR_FS_CATALOG.DIR_ADMIN.'includes/filenames.php');
-          require_once(DIR_WS_LANGUAGES.$order->info['language'].'/admin/'.$order->info['language'].'.php');
-          include(DIR_FS_CATALOG.DIR_ADMIN.'includes/modules/orders_update.php');
-      
-          if ($order_updated) {
-              $this->logger->info(sprintf('Order updated successfully: %s', $orderId));
-          }
+          return $this->GetOrderProducts($orderId);
       }
 
       /**
-       * Set order status by the given order id.
+       * Insert an order product attributes by given order id.
        *
        * @param int $orderId The order id
        * @param mixed[] $options
        *
+       * @return array The order product data
+       */
+      public function InsertOrderProductAttributes(int $orderId, array $options): array
+      {
+          $order_product = $this->InsertUpdateOrderProductAttributes($orderId, 0, $options);
+          
+          return $order_product;
+      }
+
+      /**
+       * Insert or Update a order product attributes by the given order id and order products attributes id.
+       *
+       * @param int $orderId The order id
+       * @param int $orderProductsAttributesId The order products attributes id
+       * @param mixed[] $options
+       *
        * @throws Exception
        *
-       * @return array The tracking data
+       * @return array The order product data
+       */
+      public function InsertUpdateOrderProductAttributes(int $orderId, int $orderProductsAttributesId, array $options): array
+      {
+          // Input validation
+          if (empty($orderId)) {
+              throw new Exception('Order ID required');
+          }
+
+          if (empty($orderProductsAttributesId)) {
+              throw new Exception('Order Product Attributes ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $order_query = xtc_db_query("SELECT *
+                                         FROM ".TABLE_ORDERS."
+                                        WHERE orders_id = '".(int)$orderId."'");
+          if (xtc_db_num_rows($order_query) < 1) {
+              throw new Exception(sprintf('Order not found: %s', $orderId));
+          } else {          
+              $order_product_attributes_query = xtc_db_query("SELECT *
+                                                                FROM ".TABLE_ORDERS_PRODUCTS_ATTRIBUTES."
+                                                               WHERE orders_id = '".(int)$orderId."'
+                                                                 AND orders_products_attributes_id = '".(int)$orderProductsAttributesId."'");
+              if (xtc_db_num_rows($order_product_attributes_query) > 0) {
+                  $action = 'update';
+                  $order_product_attributes = xtc_db_fetch_array($order_product_attributes_query);
+              } else {
+                  if (!isset($this->options['orders_products_id'])) {
+                      throw new Exception('Order Product ID required');
+                  }
+                  $action = 'insert';
+                  $order_product_attributes = $this->getDefaultTableValues(TABLE_ORDERS_PRODUCTS_ATTRIBUTES);
+                  $order_product_attributes['orders_id'] = (int)$orderId;
+              }
+
+              if (isset($this->options['orders_products_id'])) {
+                  $order_product_query = xtc_db_query("SELECT *
+                                                         FROM ".TABLE_ORDERS_PRODUCTS."
+                                                        WHERE orders_id = '".(int)$orderId."'
+                                                          AND orders_products_id = '".(int)$this->options['orders_products_id']."'");
+                  if (xtc_db_num_rows($order_product_query) < 1) {
+                      throw new Exception('Order Product ID invalid');
+                  }
+              }
+          
+              foreach ($order_product_attributes as $key => $value) {
+                  if (isset($this->options[$key])) {
+                      $order_product_attributes[$key] = $this->options[$key];
+                  }
+              }
+
+              // Input validation
+              $this->checkTableData(TABLE_ORDERS_PRODUCTS_ATTRIBUTES, $order_product_attributes);
+              xtc_db_perform(TABLE_ORDERS_PRODUCTS_ATTRIBUTES, $order_product_attributes, $action, "orders_id = '".(int)$orderId."' AND orders_products_attributes_id = '".(int)$orderProductsAttributesId."'");
+          }
+
+          return $this->GetOrderProducts($orderId);
+      }
+
+      /**
+       * Insert an order product download by given order id.
+       *
+       * @param int $orderId The order id
+       * @param mixed[] $options
+       *
+       * @return array The order product data
+       */
+      public function InsertOrderProductDownload(int $orderId, array $options): array
+      {
+          $order_product = $this->InsertUpdateOrderProductDownload($orderId, 0, $options);
+          
+          return $order_product;
+      }
+
+      /**
+       * Insert or Update a order product attributes by the given order id and order products download id.
+       *
+       * @param int $orderId The order id
+       * @param int $orderProductsDownloadId The order products download id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The order product data
+       */
+      public function InsertUpdateOrderProductDownload(int $orderId, int $orderProductsDownloadId, array $options): array
+      {
+          // Input validation
+          if (empty($orderId)) {
+              throw new Exception('Order ID required');
+          }
+
+          if (empty($orderProductsDownloadId)) {
+              throw new Exception('Order Product Download ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $order_query = xtc_db_query("SELECT *
+                                         FROM ".TABLE_ORDERS."
+                                        WHERE orders_id = '".(int)$orderId."'");
+          if (xtc_db_num_rows($order_query) < 1) {
+              throw new Exception(sprintf('Order not found: %s', $orderId));
+          } else {          
+              $order_product_download_query = xtc_db_query("SELECT *
+                                                              FROM ".TABLE_ORDERS_PRODUCTS_DOWNLOAD."
+                                                             WHERE orders_id = '".(int)$orderId."'
+                                                               AND orders_products_download_id = '".(int)$orderProductsDownloadId."'");
+              if (xtc_db_num_rows($order_product_download_query) > 0) {
+                  $action = 'update';
+                  $order_product_download = xtc_db_fetch_array($order_product_download_query);
+              } else {
+                  if (!isset($this->options['orders_products_id'])) {
+                      throw new Exception('Order Product ID required');
+                  }
+                  $action = 'insert';
+                  $order_product_download = $this->getDefaultTableValues(TABLE_ORDERS_PRODUCTS_DOWNLOAD);
+                  $order_product_download['orders_id'] = (int)$orderId;
+              }
+
+              if (isset($this->options['orders_products_id'])) {
+                  $order_product_query = xtc_db_query("SELECT *
+                                                         FROM ".TABLE_ORDERS_PRODUCTS."
+                                                        WHERE orders_id = '".(int)$orderId."'
+                                                          AND orders_products_id = '".(int)$this->options['orders_products_id']."'");
+                  if (xtc_db_num_rows($order_product_query) < 1) {
+                      throw new Exception('Order Product ID invalid');
+                  }
+              }
+          
+              foreach ($order_product_download as $key => $value) {
+                  if (isset($this->options[$key])) {
+                      $order_product_download[$key] = $this->options[$key];
+                  }
+              }
+
+              // Input validation
+              $this->checkTableData(TABLE_ORDERS_PRODUCTS_DOWNLOAD, $order_product_download);
+              xtc_db_perform(TABLE_ORDERS_PRODUCTS_DOWNLOAD, $order_product_download, $action, "orders_id = '".(int)$orderId."' AND orders_products_download_id = '".(int)$orderProductsDownloadId."'");
+          }
+
+          return $this->GetOrderProducts($orderId);
+      }
+
+      /**
+       * Insert an order status history by given order id.
+       *
+       * @param int $orderId The order id
+       * @param mixed[] $options
+       *
+       * @return array The order status history data
+       */
+      public function InsertOrderStatusHistory(int $orderId, array $options): array
+      {
+          $order_status_history = $this->InsertUpdateOrderStatusHistory($orderId, 0, $options);
+          
+          return $order_status_history;
+      }
+
+      /**
+       * Insert or Update a order status history by the given order id and order status history id.
+       *
+       * @param int $orderId The order id
+       * @param int $orderStatusHistoryId The order status history id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The order status history data
+       */
+      public function InsertUpdateOrderStatusHistory(int $orderId, int $orderStatusHistoryId, array $options): array
+      {
+          // Input validation
+          if (empty($orderId)) {
+              throw new Exception('Order ID required');
+          }
+
+          if (empty($orderStatusHistoryId)) {
+              throw new Exception('Order Status History ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $order_query = xtc_db_query("SELECT *
+                                         FROM ".TABLE_ORDERS."
+                                        WHERE orders_id = '".(int)$orderId."'");
+          if (xtc_db_num_rows($order_query) < 1) {
+              throw new Exception(sprintf('Order not found: %s', $orderId));
+          } else {          
+              $order_status_history_query = xtc_db_query("SELECT *
+                                                            FROM ".TABLE_ORDERS_STATUS_HISTORY."
+                                                           WHERE orders_id = '".(int)$orderId."'
+                                                             AND orders_status_history_id = '".(int)$orderStatusHistoryId."'");
+              if (xtc_db_num_rows($order_status_history_query) > 0) {
+                  $action = 'update';
+                  $order_status_history = xtc_db_fetch_array($order_status_history_query);
+              } else {
+                  if (!isset($this->options['orders_status_id'])) {
+                      throw new Exception('Order Status ID required');
+                  }
+                  $action = 'insert';
+                  $order_status_history = $this->getDefaultTableValues(TABLE_ORDERS_STATUS_HISTORY);
+                  $order_status_history['orders_id'] = (int)$orderId;
+              }
+
+              if (isset($this->options['orders_status_id'])) {
+                  $order_status_query = xtc_db_query("SELECT *
+                                                        FROM ".TABLE_ORDERS_STATUS."
+                                                       WHERE orders_status_id = '".(int)$this->options['orders_status_id']."'");
+                  if (xtc_db_num_rows($order_status_query) < 1) {
+                      throw new Exception('Order Status ID invalid');
+                  }
+              }
+          
+              foreach ($order_status_history as $key => $value) {
+                  if (isset($this->options[$key])) {
+                      $order_status_history[$key] = $this->options[$key];
+                  }
+              }
+
+              // Input validation
+              $this->checkTableData(TABLE_ORDERS_STATUS_HISTORY, $order_status_history);
+              xtc_db_perform(TABLE_ORDERS_STATUS_HISTORY, $order_status_history, $action, "orders_id = '".(int)$orderId."' AND orders_status_history_id = '".(int)$orderStatusHistoryId."'");
+          }
+
+          return $this->GetOrderStatusHistory($orderId);
+      }
+
+      /**
+       * Insert an order stotal by given order id.
+       *
+       * @param int $orderId The order id
+       * @param mixed[] $options
+       *
+       * @return array The order total data
+       */
+      public function InsertOrderTotal(int $orderId, array $options): array
+      {
+          $order_total = $this->InsertUpdateOrderTotal($orderId, 0, $options);
+          
+          return $order_total;
+      }
+
+      /**
+       * Insert or Update a order status history by the given order id and order status history id.
+       *
+       * @param int $orderId The order id
+       * @param int $orderTotalId The order total id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The order total data
+       */
+      public function InsertUpdateOrderTotal(int $orderId, int $orderTotalId, array $options): array
+      {
+          // Input validation
+          if (empty($orderId)) {
+              throw new Exception('Order ID required');
+          }
+
+          if (empty($orderTotalId)) {
+              throw new Exception('Order Total ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $order_query = xtc_db_query("SELECT *
+                                         FROM ".TABLE_ORDERS."
+                                        WHERE orders_id = '".(int)$orderId."'");
+          if (xtc_db_num_rows($order_query) < 1) {
+              throw new Exception(sprintf('Order not found: %s', $orderId));
+          } else {          
+              $order_total_query = xtc_db_query("SELECT *
+                                                   FROM ".TABLE_ORDERS_TOTAL."
+                                                  WHERE orders_id = '".(int)$orderId."'
+                                                    AND orders_total_id = '".(int)$orderTotalId."'");
+              if (xtc_db_num_rows($order_total_query) > 0) {
+                  $action = 'update';
+                  $order_total = xtc_db_fetch_array($order_total_query);
+              } else {
+                  $action = 'insert';
+                  $order_total = $this->getDefaultTableValues(TABLE_ORDERS_TOTAL);
+                  $order_total['orders_id'] = (int)$orderId;
+              }
+          
+              foreach ($order_total as $key => $value) {
+                  if (isset($this->options[$key])) {
+                      $order_total[$key] = $this->options[$key];
+                  }
+              }
+
+              // Input validation
+              $this->checkTableData(TABLE_ORDERS_TOTAL, $order_total);
+              xtc_db_perform(TABLE_ORDERS_TOTAL, $order_total, $action, "orders_id = '".(int)$orderId."' AND orders_total_id = '".(int)$orderTotalId."'");
+          }
+
+          return $this->GetOrderTotal($orderId);
+      }
+
+      /**
+       * Insert an order tracking by given order id.
+       *
+       * @param int $orderId The order id
+       * @param mixed[] $options
+       *
+       * @return array The order tracking data
        */
       public function InsertOrderTracking(int $orderId, array $options): array
       {
+          $order_tracking = $this->InsertUpdateOrderTracking($orderId, 0, $options);
+          
+          return $order_tracking;
+      }
+
+      /**
+       * Insert or Update a order status history by the given order id and order tracking id.
+       *
+       * @param int $orderId The order id
+       * @param int $orderTrackingId The order tracking id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The order tracking data
+       */
+      public function InsertUpdateOrderTracking(int $orderId, int $orderTrackingId, array $options): array
+      {
+          // Input validation
           if (empty($orderId)) {
               throw new Exception('Order ID required');
           }
 
-          $order = new \order($orderId);
-
-          if (!isset($order->info['orders_id'])) {
-              throw new Exception(sprintf('Order not found: %s', $orderId));
+          if (empty($orderTrackingId)) {
+              throw new Exception('Order Tracking ID required');
           }
 
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
-          
-          if (isset($this->options['tracking'])) {
-              foreach ($this->options['tracking'] as $index => $tracking) {
-                  if (isset($tracking['carrier']) 
-                      && !empty($tracking['carrier'])
-                      && !isset($tracking['carrier_id'])
-                      )
-                  {
-                    $carrier_query = xtc_db_query("SELECT *
-                                                     FROM ".TABLE_CARRIERS."
-                                                    WHERE carrier_name = '".xtc_db_input($tracking['carrier'])."'");
-                    $carrier = xtc_db_fetch_array($carrier_query);
-                    $this->options['tracking'][$index]['carrier'] = $tracking['carrier_id'] = $carrier['carrier_id'];
-                  }
 
-                  if (empty($tracking['carrier_id'])) {
+          $order_query = xtc_db_query("SELECT *
+                                         FROM ".TABLE_ORDERS."
+                                        WHERE orders_id = '".(int)$orderId."'");
+          if (xtc_db_num_rows($order_query) < 1) {
+              throw new Exception(sprintf('Order not found: %s', $orderId));
+          } else {          
+              $order_tracking_query = xtc_db_query("SELECT *
+                                                      FROM ".TABLE_ORDERS_TRACKING."
+                                                     WHERE orders_id = '".(int)$orderId."'
+                                                       AND tracking_id = '".(int)$orderTrackingId."'");
+              if (xtc_db_num_rows($order_tracking_query) > 0) {
+                  $action = 'update';
+                  $order_tracking = xtc_db_fetch_array($order_tracking_query);
+              } else {
+                  if (!isset($this->options['carrier_id'])) {
                       throw new Exception('Carrier ID required');
                   }
+                  $action = 'insert';
+                  $order_tracking = $this->getDefaultTableValues(TABLE_ORDERS_TRACKING);
+                  $order_tracking['orders_id'] = (int)$orderId;
+                  $order_tracking['date_added'] = 'now()';
+              }
 
-                  if (empty($tracking['carrier_id'])) {
-                      throw new Exception('Parcel ID required');
-                  }
-
-                  $check_query = xtc_db_query("SELECT *
-                                                  FROM ".TABLE_ORDERS_TRACKING."
-                                                 WHERE parcel_id = '".xtc_db_input($tracking['parcel_id'])."'
-                                                   AND orders_id = '".(int)$orderId."'");
-                  if (xtc_db_num_rows($check_query) < 1) {
-                      $sql_data_array = array(
-                          'orders_id' => $orderId,
-                          'carrier_id' => $tracking['carrier_id'],
-                          'parcel_id' => $tracking['parcel_id'],
-                          'date_added' => 'now()'
-                      );
-                      xtc_db_perform(TABLE_ORDERS_TRACKING, $sql_data_array);
-                      $this->options['tracking'][$index]['tracking_id'] = xtc_db_insert_id();
-                  } else {
-                    $check = xtc_db_fetch_array($check_query);
-                    $this->options['tracking'][$index]['tracking_id'] = $check['tracking_id'];
+              if (isset($this->options['carrier_id'])) {
+                  $carrier_query = xtc_db_query("SELECT *
+                                                   FROM ".TABLE_CARRIERS."
+                                                  WHERE carrier_id = '".(int)$this->options['carrier_id']."'");
+                  if (xtc_db_num_rows($order_status_query) < 1) {
+                      throw new Exception('Carrier ID invalid');
                   }
               }
-          } else {
-            throw new Exception('Tracking required');
-          }
 
-          return $this->options['tracking'];
-      }
-            
-      /**
-       * Delete an order by the given order id.
-       *
-       * @param int $orderId The order id
-       * @param string $payment_method 
-       *
-       * @return string
-       */
-      private function getTransactionID(int $orderId, string $payment_method): string
-      {
-          $transaction_id = '';
-
-          switch ($payment_method) {
-            case 'paypal':
-            case 'paypalacdc':
-            case 'paypalpui':
-            case 'paypalexpress':
-            case 'paypalsepa':
-            case 'paypalsofort':
-            case 'paypalgiropay':
-              $check_query = xtc_db_query("SELECT *
-                                             FROM `paypal_payment`
-                                            WHERE orders_id = '".(int)$orderId."'");
-              if (xtc_db_num_rows($check_query) > 0) {
-                $check = xtc_db_fetch_array($check_query);
-                $transaction_id = (string)$check['transaction_id'];
+              foreach ($order_tracking as $key => $value) {
+                  if (isset($this->options[$key])) {
+                      $order_tracking[$key] = $this->options[$key];
+                  }
               }
-              break;
+
+              // Input validation
+              $this->checkTableData(TABLE_ORDERS_TRACKING, $order_tracking);
+              xtc_db_perform(TABLE_ORDERS_TRACKING, $order_tracking, $action, "orders_id = '".(int)$orderId."' AND tracking_id = '".(int)$orderTrackingId."'");
           }
-          
-          return $transaction_id;
+
+          return $this->GetOrderTracking($orderId);
       }
 
   }
