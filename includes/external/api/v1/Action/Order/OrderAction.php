@@ -571,7 +571,7 @@
                   $carrier_query = xtc_db_query("SELECT *
                                                    FROM ".TABLE_CARRIERS."
                                                   WHERE carrier_id = '".(int)$this->options['carrier_id']."'");
-                  if (xtc_db_num_rows($order_status_query) < 1) {
+                  if (xtc_db_num_rows($carrier_query) < 1) {
                       throw new Exception('Carrier ID invalid');
                   }
               }
