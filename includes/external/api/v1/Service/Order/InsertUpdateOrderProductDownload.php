@@ -62,7 +62,7 @@
           $this->CheckAccess($request, $response);
 
           $orderId = (int)$args['id'];
-          $orderProductsDownloadId = (int)$args['aid'];
+          $orderProductsDownloadId = (int)$args['did'];
           $data = (array)$request->getParsedBody();
                     
           $result = $this->orderAction->InsertUpdateOrderProductDownload($orderId, $orderProductsDownloadId, $data);
