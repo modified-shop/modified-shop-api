@@ -53,11 +53,6 @@
        */
       public function InsertUpdateOption(int $optionId, array $options): array
       {
-          // Input validation
-          if (empty($optionId)) {
-              throw new Exception('Option ID required');
-          }
-
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
 
@@ -137,11 +132,6 @@
        */
       public function InsertUpdateValue(int $valueId, array $options): array
       {
-          // Input validation
-          if (empty($valueId)) {
-              throw new Exception('Value ID required');
-          }
-
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
 
@@ -205,11 +195,6 @@
        */
       public function InsertAttributes(int $optionId, array $options): array
       {
-          // Input validation
-          if (empty($optionId)) {
-              throw new Exception('Option ID required');
-          }
-
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
           
