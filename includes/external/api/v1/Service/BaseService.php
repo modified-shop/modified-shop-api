@@ -44,7 +44,7 @@
                                           FROM ".TABLE_CUSTOMERS." c
                                           JOIN `api_access` aa
                                                ON aa.customers_id = c.customers_id
-                                         WHERE c.customers_email_address = '".xtc_db_input($token['usr'])."'");
+                                         WHERE c.customers_email_address = '".xtc_db_input($token['sub'])."'");
           $access = xtc_db_fetch_array($access_query);
           
           if (!isset($access[$className])
