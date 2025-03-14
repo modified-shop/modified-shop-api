@@ -315,8 +315,7 @@
               throw new Exception(sprintf('Tax Rate not found: %s', $taxRateId));
           } else {
               $tax_rates = xtc_db_fetch_array($tax_rates_query);
-              $tax_rates['tax_rates_title'] = $this->parse_multi_language_value($tax_rates['tax_rates_title']);
-              $tax_rates['tax_rates_description'] = $this->parse_multi_language_value($tax_rates['tax_rates_description']);
+              $tax_rates['tax_description'] = $this->parse_multi_language_value($tax_rates['tax_description']);
           }
           
           $result = $this->encode_request($tax_rates);
