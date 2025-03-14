@@ -87,7 +87,7 @@
                   }
 
                   $option['options_id'] = $optionId;
-                  $option['language_id'] = (int)$languages['languages_id'];
+                  $option['languages_id'] = (int)$languages['languages_id'];
               }
     
               foreach ($option as $key => $value) {
@@ -98,7 +98,7 @@
     
               // Input validation
               $this->checkTableData(TABLE_PRODUCTS_TAGS_OPTIONS, $option);
-              xtc_db_perform(TABLE_PRODUCTS_TAGS_OPTIONS, $option, $action, "language_id = '".(int)$languages['languages_id']."' ".$where);
+              xtc_db_perform(TABLE_PRODUCTS_TAGS_OPTIONS, $option, $action, "languages_id = '".(int)$languages['languages_id']."' ".$where);
           }
 
           return $this->GetSingleOption($optionId);
@@ -155,7 +155,7 @@
                   $where = "AND values_id = '".(int)$valueId."'";
                   $values_query = xtc_db_query("SELECT *
                                                   FROM ".TABLE_PRODUCTS_TAGS_VALUES."
-                                                 WHERE language_id = '".(int)$languages['languages_id']."'
+                                                 WHERE languages_id = '".(int)$languages['languages_id']."'
                                                        ".$where);
                   if (xtc_db_num_rows($values_query) < 1) {
                       $action = 'insert';
@@ -191,7 +191,7 @@
     
               // Input validation
               $this->checkTableData(TABLE_PRODUCTS_TAGS_VALUES, $values);
-              xtc_db_perform(TABLE_PRODUCTS_TAGS_VALUES, $values, $action, "language_id = '".(int)$languages['languages_id']."' ".$where);
+              xtc_db_perform(TABLE_PRODUCTS_TAGS_VALUES, $values, $action, "languages_id = '".(int)$languages['languages_id']."' ".$where);
           }
 
           return $this->GetSingleValue($valueId);
