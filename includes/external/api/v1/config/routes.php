@@ -38,6 +38,9 @@
 
               // attributes
               include __DIR__ . '/attributes.php';
+
+              // tags
+              include __DIR__ . '/tags.php';
               
               // orders
               include __DIR__ . '/orders.php';
