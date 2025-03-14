@@ -305,7 +305,7 @@
       {
           // Input validation
           if (empty($taxRateId)) {
-              throw new Exception('Tax Class ID required');
+              throw new Exception('Tax Rate ID required');
           }
           
           $tax_rates_query = xtc_db_query("SELECT *
@@ -369,7 +369,7 @@
                                          ORDER BY tax_rates_id ASC
                                             LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($tax_rates = xtc_db_fetch_array($tax_rates_query)) {
-              $data[] = $this->GetSingleTaxClass($tax_rates['tax_rates_id']);
+              $data[] = $this->GetSingleTaxRate($tax_rates['tax_rates_id']);
           }
           
           $result = [
