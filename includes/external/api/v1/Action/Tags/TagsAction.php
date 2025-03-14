@@ -121,7 +121,7 @@
               throw new Exception('Option ID required');
           }
 
-          $values = $this->InsertUpdateValue(0, $options);
+          $values = $this->InsertUpdateValue($optionId, 0, $options);
           
           return $values;
       }
