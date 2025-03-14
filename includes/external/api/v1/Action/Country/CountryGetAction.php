@@ -72,16 +72,18 @@
           if (isset($this->options['status']) && preg_replace('/[^\d\,]/', '', $this->options['status']) != '') {
               $conditions[] = " status IN (".preg_replace('/[^\d\,]/', '', $this->options['status']).") ";
           }
-          if (isset($this->options['iso2']) && preg_replace('/[^\d\,]/', '', $this->options['iso2']) != '') {
-              $conditions[] = " countries_iso_code_2 IN (".preg_replace('/[^\d\,]/', '', $this->options['iso2']).") ";
+          if (isset($this->options['iso2']) && preg_replace('/[^\w\,]/', '', $this->options['iso2']) != '') {
+              $data = preg_replace('/[^\w\,]/', '', $this->options['iso2']);
+              $conditions[] = " countries_iso_code_2 IN ('".str_replace(',', "','", $data)."') ";
           }
-          if (isset($this->options['iso3']) && preg_replace('/[^\d\,]/', '', $this->options['iso3']) != '') {
-              $conditions[] = " countries_iso_code_3 IN (".preg_replace('/[^\d\,]/', '', $this->options['iso3']).") ";
+          if (isset($this->options['iso3']) && preg_replace('/[^\w\,]/', '', $this->options['iso3']) != '') {
+              $data = preg_replace('/[^\w\,]/', '', $this->options['iso3']);
+              $conditions[] = " countries_iso_code_3 IN ('".str_replace(',', "','", $data)."') ";
           }
           
           $where = '';
           if (count($conditions) > 0) {
-            $where = " WHERE ".implode(' AND ', $conditions);
+              $where = " WHERE ".implode(' AND ', $conditions);
           }
                                               
           $count_query = xtc_db_query("SELECT count(*) as total
@@ -348,7 +350,7 @@
 
           $where = '';
           if (count($conditions) > 0) {
-            $where = " WHERE ".implode(' AND ', $conditions);
+              $where = " WHERE ".implode(' AND ', $conditions);
           }
 
           $count_query = xtc_db_query("SELECT count(*) as total
