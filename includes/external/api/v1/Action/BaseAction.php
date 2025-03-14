@@ -222,4 +222,24 @@
           }
       }
 
+      /**
+       * get language data
+       *
+       * @param string $text
+       *
+       * @return array
+       */
+      protected function parse_multi_language_value($text): array
+      {
+          $lang_array = [];
+          $text_array = explode("||", $text);
+          foreach ($text_array as $val) {
+              $val_array = explode ("::", $val);
+              if (count($val_array) == 2) {
+                $lang_array[strtoupper($val_array[0])] = $val_array[1];
+              }
+          }
+          
+          return $lang_array;
+      }
   }

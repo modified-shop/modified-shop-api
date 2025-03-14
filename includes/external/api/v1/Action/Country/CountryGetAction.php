@@ -145,6 +145,8 @@
               throw new Exception(sprintf('Geo Zone not found: %s', $geoZoneId));
           } else {
               $geo_zone = xtc_db_fetch_array($geo_zone_query);
+              $geo_zone['geo_zone_name'] = $this->parse_multi_language_value($geo_zone['geo_zone_name']);
+              $geo_zone['geo_zone_description'] = $this->parse_multi_language_value($geo_zone['geo_zone_description']);
           }
           
           $result = $this->encode_request($geo_zone);
