@@ -25,7 +25,7 @@
       /**
        * Read a country by the given country id.
        *
-       * @param int $countryId The category id
+       * @param int $countryId The country id
        *
        * @throws Exception
        *
@@ -127,7 +127,7 @@
       /**
        * Read a geo zone by the given geo zone id.
        *
-       * @param int $geoZoneId The category id
+       * @param int $geoZoneId The geo zone id
        *
        * @throws Exception
        *
@@ -211,7 +211,7 @@
       /**
        * Read a tax class by the given tax class id.
        *
-       * @param int $taxClassId The category id
+       * @param int $taxClassId The class id
        *
        * @throws Exception
        *
@@ -295,24 +295,24 @@
       /**
        * Read a tax rates by the given tax rates id.
        *
-       * @param int $taxClassId The category id
+       * @param int $taxRateId The tax rate id
        *
        * @throws Exception
        *
        * @return array The tax rates data
        */
-      public function GetSingleTaxRate(int $taxClassId): array
+      public function GetSingleTaxRate(int $taxRateId): array
       {
           // Input validation
-          if (empty($taxClassId)) {
+          if (empty($taxRateId)) {
               throw new Exception('Tax Class ID required');
           }
           
           $tax_rates_query = xtc_db_query("SELECT *
                                              FROM ".TABLE_TAX_RATES."
-                                            WHERE tax_rates_id = '".(int)$taxClassId."'");
+                                            WHERE tax_rates_id = '".(int)$taxRateId."'");
           if (xtc_db_num_rows($tax_rates_query) < 1) {
-              throw new Exception(sprintf('Tax Rate not found: %s', $taxClassId));
+              throw new Exception(sprintf('Tax Rate not found: %s', $taxRateId));
           } else {
               $tax_rates = xtc_db_fetch_array($tax_rates_query);
               $tax_rates['tax_rates_title'] = $this->parse_multi_language_value($tax_rates['tax_rates_title']);
