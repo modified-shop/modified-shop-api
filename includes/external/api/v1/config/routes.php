@@ -44,6 +44,9 @@
               
               // orders
               include __DIR__ . '/orders.php';
+
+              // countries
+              include __DIR__ . '/countries.php';
               
               // dhl
               include __DIR__ . '/dhl.php';
