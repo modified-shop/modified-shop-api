@@ -317,7 +317,7 @@
           $data = [];
           $zone_query = xtc_db_query("SELECT zone_country_id
                                         FROM ".TABLE_ZONES_TO_GEO_ZONES."
-                                       WHERE zone_country_id = '".(int)$geoZoneId."'");
+                                       WHERE geo_zone_id = '".(int)$geoZoneId."'");
           if (xtc_db_num_rows($zone_query) > 0) {
               while ($zone = xtc_db_fetch_array($zone_query)) {
                   $data[] = $this->getCountryDetails($zone['zone_country_id']);
