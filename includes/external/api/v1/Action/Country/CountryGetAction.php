@@ -324,7 +324,7 @@
               }
           }
 
-          $result = $this->getCountryDetails($data);
+          $result = $this->encode_request($data);
           return $result;
       }
 
