@@ -31,7 +31,7 @@
        *
        * @return array The country data
        */
-      public function GetCountry(int $countryId): array
+      public function GetSingleCountry(int $countryId): array
       {
           // Input validation
           if (empty($countryId)) {
@@ -100,7 +100,7 @@
                                          ORDER BY countries_id ASC
                                             LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($countries = xtc_db_fetch_array($countries_query)) {
-              $data[] = $this->GetCountry($countries['countries_id']);
+              $data[] = $this->GetSingleCountry($countries['countries_id']);
           }
           
           $result = [
@@ -121,32 +121,5 @@
           
           return $result;
       }
-
-      /**
-       * Read a country by the given country id.
-       *
-       * @param int $countryId The country id
-       *
-       * @throws Exception
-       *
-       * @return array The country data
-       */
-      public function GetSingleCountry(int $countryId, array $options): array
-      {
-          /* Store passed in options overwriting any defaults */
-          $this->hydrate($options);
-
-          // Input validation
-          if (empty($countryId)) {
-              throw new Exception('Country ID required');
-          }
-
-          $result = $this->GetCountry($countryId);
-          return $result;
-      }
-
-
-
-
     
   }
