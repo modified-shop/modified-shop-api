@@ -110,6 +110,17 @@
           xtc_db_query("UPDATE `api_access` SET ".$column." = 32 WHERE customers_id = 'groups'");
         }
       }
+
+      // Tags
+      $column_array = $this->get_dir_content(DIR_FS_EXTERNAL.'api/v1/Service/Tags/');
+      foreach ($column_array as $column) {
+        $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '".xtc_db_input($column)."'");
+        if (xtc_db_num_rows($check_query) < 1) {
+          xtc_db_query("ALTER TABLE `api_access` ADD ".$column." int(1) NOT NULL DEFAULT '0'");
+          xtc_db_query("UPDATE `api_access` SET ".$column." = 1  WHERE customers_id = '1'");
+          xtc_db_query("UPDATE `api_access` SET ".$column." = 33 WHERE customers_id = 'groups'");
+        }
+      }
   
       // Order
       $column_array = $this->get_dir_content(DIR_FS_EXTERNAL.'api/v1/Service/Order/');
@@ -119,6 +130,17 @@
           xtc_db_query("ALTER TABLE `api_access` ADD ".$column." int(1) NOT NULL DEFAULT '0'");
           xtc_db_query("UPDATE `api_access` SET ".$column." = 1  WHERE customers_id = '1'");
           xtc_db_query("UPDATE `api_access` SET ".$column." = 40 WHERE customers_id = 'groups'");
+        }
+      }
+
+      // Country
+      $column_array = $this->get_dir_content(DIR_FS_EXTERNAL.'api/v1/Service/Country/');
+      foreach ($column_array as $column) {
+        $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '".xtc_db_input($column)."'");
+        if (xtc_db_num_rows($check_query) < 1) {
+          xtc_db_query("ALTER TABLE `api_access` ADD ".$column." int(1) NOT NULL DEFAULT '0'");
+          xtc_db_query("UPDATE `api_access` SET ".$column." = 1  WHERE customers_id = '1'");
+          xtc_db_query("UPDATE `api_access` SET ".$column." = 50 WHERE customers_id = 'groups'");
         }
       }
   
