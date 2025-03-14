@@ -236,7 +236,7 @@
           foreach ($text_array as $val) {
               $val_array = explode ("::", $val);
               if (count($val_array) == 2) {
-                $lang_array[strtoupper($val_array[0])] = $val_array[1];
+                $lang_array[strtolower($val_array[0])] = $val_array[1];
               }
           }
           
