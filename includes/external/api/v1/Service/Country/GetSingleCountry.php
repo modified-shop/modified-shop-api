@@ -62,8 +62,10 @@
           $this->CheckAccess($request, $response);
 
           $countryId = (int)$args['id'];
+          $params = $request->getQueryParams();
+          $params['path'] = $request->getUri()->getPath();
 
-          $result = $this->countryAction->GetSingleCountry($countryId);
+          $result = $this->countryAction->GetSingleCountry($countryId, $params);
 
           return $this->responder->withJson($response, $result);
       }

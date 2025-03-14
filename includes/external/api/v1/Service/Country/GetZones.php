@@ -21,7 +21,7 @@
   /**
    * Action
    */
-  final class GetSingleGeoZone extends BaseService
+  final class GetZones extends BaseService
   {
       /**
        * @var CountryAction
@@ -61,11 +61,9 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $geoZoneId = (int)$args['id'];
-          $params = $request->getQueryParams();
-          $params['path'] = $request->getUri()->getPath();
-
-          $result = $this->countryAction->GetSingleGeoZone($geoZoneId, $params);
+          $countryId = (int)$args['id'];
+          
+          $result = $this->countryAction->GetZones($countryId);
 
           return $this->responder->withJson($response, $result);
       }

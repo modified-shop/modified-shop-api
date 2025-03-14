@@ -31,7 +31,7 @@
        *
        * @return array The country data
        */
-      public function GetSingleCountry(int $countryId): array
+      public function getCountryDetails(int $countryId): array
       {
           // Input validation
           if (empty($countryId)) {
@@ -45,9 +45,39 @@
               throw new Exception(sprintf('Country not found: %s', $countryId));
           } else {
               $country = xtc_db_fetch_array($country_query);
+
+              if (isset($this->options['with'])) {
+                  $with = explode(',', $this->options['with']);
+                  if (in_array('zones', $with) !== false) {
+                      $country['zones'] = $this->GetZones($countryId);
+                  }
+              }
           }
           
           $result = $this->encode_request($country);
+          return $result;
+      }
+
+      /**
+       * Read a country by the given country id.
+       *
+       * @param int $countryId The country id
+       *
+       * @throws Exception
+       *
+       * @return array The country data
+       */
+      public function GetSingleCountry(int $countryId, array $options): array
+      {
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          // Input validation
+          if (empty($countryId)) {
+              throw new Exception('Country ID required');
+          }
+
+          $result = $this->getCountryDetails($countryId);
           return $result;
       }
 
@@ -102,7 +132,7 @@
                                          ORDER BY countries_id ASC
                                             LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($countries = xtc_db_fetch_array($countries_query)) {
-              $data[] = $this->GetSingleCountry($countries['countries_id']);
+              $data[] = $this->getCountryDetails($countries['countries_id']);
           }
           
           $result = [
@@ -125,6 +155,36 @@
       }
 
       /**
+       * Read a zone by the given country id.
+       *
+       * @param int $countryId The country id
+       *
+       * @throws Exception
+       *
+       * @return array The geo zone data
+       */
+      public function GetZones($countryId) {
+
+          // Input validation
+          if (empty($countryId)) {
+              throw new Exception('Country ID required');
+          }
+          
+          $data = [];
+          $zone_query = xtc_db_query("SELECT *
+                                        FROM ".TABLE_ZONES."
+                                       WHERE zone_country_id = '".(int)$countryId."'");
+          if (xtc_db_num_rows($zone_query) > 0) {
+              while ($zone = xtc_db_fetch_array($zone_query)) {
+                  $data[] = $zone;
+              }
+          }
+
+          $result = $this->getCountryDetails($data);
+          return $result;
+      }
+      
+      /**
        * Read a geo zone by the given geo zone id.
        *
        * @param int $geoZoneId The geo zone id
@@ -133,7 +193,7 @@
        *
        * @return array The geo zone data
        */
-      public function GetSingleGeoZone(int $geoZoneId): array
+      public function getGeoZoneDetails(int $geoZoneId): array
       {
           // Input validation
           if (empty($geoZoneId)) {
@@ -149,9 +209,39 @@
               $geo_zone = xtc_db_fetch_array($geo_zone_query);
               $geo_zone['geo_zone_name'] = $this->parse_multi_language_value($geo_zone['geo_zone_name']);
               $geo_zone['geo_zone_description'] = $this->parse_multi_language_value($geo_zone['geo_zone_description']);
+
+              if (isset($this->options['with'])) {
+                  $with = explode(',', $this->options['with']);
+                  if (in_array('countries', $with) !== false) {
+                      $geo_zone['countries'] = $this->GetZonesCountries($geoZoneId);
+                  }
+              }
           }
           
           $result = $this->encode_request($geo_zone);
+          return $result;
+      }
+
+      /**
+       * Read a geo zone by the given geo zone id.
+       *
+       * @param int $geoZoneId The geo zone id
+       *
+       * @throws Exception
+       *
+       * @return array The geo zone data
+       */
+      public function GetSingleGeoZone(int $geoZoneId, array $options): array
+      {
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          // Input validation
+          if (empty($geoZoneId)) {
+              throw new Exception('Geo Zone ID required');
+          }
+          
+          $result = $this->getGeoZoneDetails($geoZoneId);
           return $result;
       }
 
@@ -186,7 +276,7 @@
                                         ORDER BY geo_zone_id ASC
                                            LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($geo_zone = xtc_db_fetch_array($geo_zone_query)) {
-              $data[] = $this->GetSingleGeoZone($geo_zone['geo_zone_id']);
+              $data[] = $this->getGeoZoneDetails($geo_zone['geo_zone_id']);
           }
           
           $result = [
@@ -205,6 +295,36 @@
               }
           }
           
+          return $result;
+      }
+
+      /**
+       * Read a zone countries by the given geo zone id.
+       *
+       * @param int $countryId The country id
+       *
+       * @throws Exception
+       *
+       * @return array The geo zone countries data
+       */
+      public function GetZonesCountries($geoZoneId) {
+
+          // Input validation
+          if (empty($geoZoneId)) {
+              throw new Exception('Geo Zone ID required');
+          }
+          
+          $data = [];
+          $zone_query = xtc_db_query("SELECT zone_country_id
+                                        FROM ".TABLE_ZONES_TO_GEO_ZONES."
+                                       WHERE zone_country_id = '".(int)$geoZoneId."'");
+          if (xtc_db_num_rows($zone_query) > 0) {
+              while ($zone = xtc_db_fetch_array($zone_query)) {
+                  $data[] = $this->getCountryDetails($zone['zone_country_id']);
+              }
+          }
+
+          $result = $this->getCountryDetails($data);
           return $result;
       }
 
