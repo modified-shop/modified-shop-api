@@ -224,9 +224,9 @@
           
           $tax_class_query = xtc_db_query("SELECT *
                                              FROM ".TABLE_TAX_CLASS."
-                                            WHERE tax_class_id = '".(int)$geoZoneId."'");
+                                            WHERE tax_class_id = '".(int)$taxClassId."'");
           if (xtc_db_num_rows($tax_class_query) < 1) {
-              throw new Exception(sprintf('Geo Zone not found: %s', $geoZoneId));
+              throw new Exception(sprintf('Geo Zone not found: %s', $taxClassId));
           } else {
               $tax_class = xtc_db_fetch_array($tax_class_query);
               $tax_class['tax_class_title'] = $this->parse_multi_language_value($tax_class['tax_class_title']);
