@@ -209,9 +209,10 @@
               {
                   $error[$key][] = sprintf('Not expected format: %s', $info['type']);
               } elseif (strpos($info['type'], 'int') === false
-                  && $info['length'] > 0
-                  && strlen($data[$key]) > $info['length']
-                  )
+                        && $info['length'] > 0
+                        && $data[$key] != ''
+                        && strlen($data[$key]) > $info['length']
+                        )
               {
                   $error[$key][] = sprintf('Value length greater then allowed: %s', $info['length']);
               }
