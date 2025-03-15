@@ -381,7 +381,7 @@
                                                 FROM ".TABLE_ORDERS_STATUS." os
                                                 JOIN ".TABLE_LANGUAGES." l
                                                      ON l.languages_id = os.language_id
-                                               WHERE os.shipping_status_id = '".(int)$orderStatusId."'");
+                                               WHERE os.orders_status_id = '".(int)$orderStatusId."'");
           if (xtc_db_num_rows($order_status_query) < 1) {
               throw new Exception(sprintf('Order Status not found: %s', $orderStatusId));
           } else {
