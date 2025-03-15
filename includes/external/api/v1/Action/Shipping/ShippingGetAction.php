@@ -120,16 +120,25 @@
               throw new Exception('Shipping Status ID required');
           }
           
-          $shipping_status_query = xtc_db_query("SELECT *
-                                                   FROM ".TABLE_SHIPPING_STATUS."
-                                                  WHERE shipping_status_id = '".(int)$shippingStatusId."'");
+          $shipping_status_query = xtc_db_query("SELECT ss.*,
+                                                        l.code
+                                                   FROM ".TABLE_SHIPPING_STATUS." ss
+                                                   JOIN ".TABLE_LANGUAGES." l
+                                                        ON l.languages_id = ss.language_id
+                                                  WHERE ss.shipping_status_id = '".(int)$shippingStatusId."'");
           if (xtc_db_num_rows($shipping_status_query) < 1) {
-              throw new Exception(sprintf('Shipping Status not found: %s', $carrierID));
+              throw new Exception(sprintf('Shipping Status not found: %s', $shippingStatusId));
           } else {
-              $shipping_status = xtc_db_fetch_array($shipping_status_query);
+              $shipping = [];
+              while ($shipping_status = xtc_db_fetch_array($shipping_status_query)) {
+                  $code = $shipping_status['code'];
+                  unset($shipping_status['code']);
+              
+                  $shipping[$code] = $shipping_status;
+              }
           }
           
-          $result = $this->encode_request($shipping_status);
+          $result = $this->encode_request($shipping);
           return $result;
       }
 
