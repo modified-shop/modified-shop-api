@@ -122,7 +122,7 @@
           
           $data = [];
           $campaigns_query = xtc_db_query("SELECT *
-                                             FROM ".TABLE_CAMPAIGNS."
+                                             FROM ".TABLE_CAMPAIGNS_IP."
                                             WHERE campaign = '".xtc_db_input($refId)."'
                                                   ".$where."
                                          ORDER BY time ASC
