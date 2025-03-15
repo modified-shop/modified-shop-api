@@ -10,10 +10,10 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------------------------*/
 
-  namespace api\v1\Service\Currency;
+  namespace api\v1\Service\Campaign;
 
   use api\v1\Service\BaseService;
-  use api\v1\Action\Currency\CurrencyAction;
+  use api\v1\Action\Campaign\CampaignAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
@@ -21,12 +21,12 @@
   /**
    * Action
    */
-  final class DeleteCurrency extends BaseService
+  final class InsertCampaign extends BaseService
   {
       /**
-       * @var CurrencyAction
+       * @var CampaignAction
        */
-      private $currencyAction;
+      private $campaignAction;
 
       /**
        * @var Responder
@@ -36,12 +36,12 @@
       /**
        * The constructor.
        *
-       * @param CurrencyAction $currencyAction The currency reader
+       * @param CampaignAction $campaignAction The campaign reader
        * @param Responder $responder The responder
        */
-      public function __construct(CurrencyAction $currencyAction, Responder $responder)
+      public function __construct(CampaignAction $campaignAction, Responder $responder)
       {
-          $this->currencyAction = $currencyAction;
+          $this->campaignAction = $campaignAction;
           $this->responder = $responder;
       }
 
@@ -61,10 +61,10 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $currencyID = (int)$args['id'];
-          
-          $this->currencyAction->DeleteCurrency($currencyID);
+          $data = (array)$request->getParsedBody();
+                    
+          $result = $this->campaignAction->InsertCampaign($data);
 
-          return $this->responder->withJson($response)->withStatus(204);
+          return $this->responder->withJson($response, $result)->withStatus(201);
       }
   }
