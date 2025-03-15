@@ -52,15 +52,15 @@
       }
 
       /**
-       * Read campaigns by given conditions
+       * Read currencies by given conditions
        *
        * @param mixed[] $options
        *
        * @throws Exception
        *
-       * @return array The campaigns data
+       * @return array The currency data
        */
-      public function GetCurrencys(array $options): array
+      public function GetCurrencies(array $options): array
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
