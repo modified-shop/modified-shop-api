@@ -21,7 +21,7 @@
   /**
    * Action
    */
-  final class GetOrderStatus extends BaseService
+  final class GetSingleOrderStatus extends BaseService
   {
       /**
        * @var OrderAction
@@ -64,7 +64,9 @@
           $params = $request->getQueryParams();
           $params['path'] = $request->getUri()->getPath();
 
-          $result = $this->orderAction->GetOrderStatus($params);
+          $orderStatusId = (int)$args['id'];
+
+          $result = $this->orderAction->GetSingleOrderStatus($orderStatusId);
 
           return $this->responder->withJson($response, $result);
       }

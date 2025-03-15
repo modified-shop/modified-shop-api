@@ -13,6 +13,7 @@
   // orders
   $app->get('/orders',                              \api\v1\Service\Order\GetOrders::class);
   $app->get('/orders/status',                       \api\v1\Service\Order\GetOrderStatus::class);
+  $app->get('/orders/status/{id}',                  \api\v1\Service\Order\GetSingleOrderStatus::class);
   $app->get('/orders/{id}',                         \api\v1\Service\Order\GetSingleOrder::class);
   $app->get('/orders/{id}/products',                \api\v1\Service\Order\GetOrderProducts::class);
   $app->get('/orders/{id}/status_history',          \api\v1\Service\Order\GetOrderStatusHistory::class);

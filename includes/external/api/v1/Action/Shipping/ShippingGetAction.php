@@ -107,7 +107,7 @@
       /**
        * Read a shipping status by the given shipping status id.
        *
-       * @param int $carrierID The carrier id
+       * @param int $shippingStatusId The shipping status id
        *
        * @throws Exception
        *

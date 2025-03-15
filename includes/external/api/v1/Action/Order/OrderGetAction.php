@@ -361,29 +361,93 @@
       }
 
       /**
-       * Read an order status.
+       * Read a order status by the given order status id.
+       *
+       * @param int $orderStatusId The order status id
        *
        * @throws Exception
        *
        * @return array The order status data
        */
-      public function GetOrderStatus(): array
+      public function GetSingleOrderStatus(int $orderStatusId): array
       {
-          $data = [];
-          $order_status_query = xtc_db_query("SELECT *
-                                                FROM ".TABLE_ORDERS_STATUS);
+         // Input validation
+          if (empty($orderStatusId)) {
+              throw new Exception('Order Status ID required');
+          }
+
+          $order_status_query = xtc_db_query("SELECT os.*,
+                                                     l.code
+                                                FROM ".TABLE_ORDERS_STATUS." os
+                                                JOIN ".TABLE_LANGUAGES." l
+                                                     ON l.languages_id = os.language_id
+                                               WHERE os.shipping_status_id = '".(int)$orderStatusId."'");
           if (xtc_db_num_rows($order_status_query) < 1) {
-              throw new Exception('no Order Status found');
+              throw new Exception(sprintf('Order Status not found: %s', $orderStatusId));
           } else {
-              $order_status_query = xtc_db_query("SELECT *
-                                                    FROM ".TABLE_ORDERS_STATUS."
-                                                ORDER BY sort_order ASC");
+              $data = [];
               while ($order_status = xtc_db_fetch_array($order_status_query)) {
-                  $data[] = $order_status;
+                  $code = $order_status['code'];
+                  unset($order_status['code']);
+              
+                  $data[$code] = $order_status;
               }
           }
 
           $result = $this->encode_request($data);
+          return $result;
+      }
+
+      /**
+       * Read order status by given conditions
+       *
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The order status data
+       */
+      public function GetOrderStatus(array $options): array
+      {          
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+          
+          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
+          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
+                                                        
+          $count_query = xtc_db_query("SELECT count(*) as total
+                                         FROM ".TABLE_ORDERS_STATUS);
+          $count = xtc_db_fetch_array($count_query);
+          
+          if ($count['total'] < 1) {
+              throw new Exception('no Order Status found');
+          }
+          
+          $data = [];
+          $order_status_query = xtc_db_query("SELECT orders_status_id
+                                                FROM ".TABLE_ORDERS_STATUS."
+                                            ORDER BY orders_status_id ASC
+                                               LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
+          while ($shipping_status = xtc_db_fetch_array($shipping_status_query)) {
+              $data[] = $this->GetSingleOrderStatus($shipping_status['orders_status_id']);
+          }
+          
+          $result = [
+              'paging' => [
+                  'total' => $count['total']
+              ],
+              'data' => $data
+          ];
+          
+          if ($count['total'] > count($data)) {
+              if ($this->options['page'] > 1) {
+                  $result['paging']['prev'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] - 1);
+              }
+              if (((($this->options['page'] - 1) * $this->options['limit']) + $this->options['limit']) < $count['total']) {
+                  $result['paging']['next'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] + 1);
+              }
+          }
+          
           return $result;
       }
 
