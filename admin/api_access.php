@@ -91,6 +91,10 @@
       'name' =>  TEXT_HEADING_SHIPPING,
       'color' => '#cb7272',
     ),
+    '70' => array(
+      'name' =>  TEXT_HEADING_CAMPAIGN,
+      'color' => '#8cd1ba',
+    ),
   );
 
 require (DIR_WS_INCLUDES.'head.php');

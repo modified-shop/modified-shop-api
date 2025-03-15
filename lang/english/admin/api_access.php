@@ -18,3 +18,4 @@
   define('TEXT_HEADING_ORDERS', 'Orders');
   define('TEXT_HEADING_COUNTRIES', 'Countries');
   define('TEXT_HEADING_SHIPPING', 'Shipping');
+  define('TEXT_HEADING_CAMPAIGN', 'Campaigns');
