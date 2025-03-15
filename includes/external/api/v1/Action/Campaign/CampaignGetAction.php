@@ -23,6 +23,35 @@
   trait CampaignGetAction
   {
       /**
+       * Read a campaign by the given campaign id.
+       *
+       * @param int $campaignId The campaign id
+       *
+       * @throws Exception
+       *
+       * @return array The campaign data
+       */
+      public function getSingleCampaign(int $campaignId): array
+      {
+          // Input validation
+          if (empty($campaignId)) {
+              throw new Exception('Campaign ID required');
+          }
+          
+          $campaign_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_CAMPAIGNS."
+                                           WHERE campaigns_id = '".(int)$campaignId."'");
+          if (xtc_db_num_rows($campaign_query) < 1) {
+              throw new Exception(sprintf('Campaign not found: %s', $campaignId));
+          } else {
+              $campaign = xtc_db_fetch_array($campaign_query);
+          }
+          
+          $result = $this->encode_request($campaign);
+          return $result;
+      }
+
+      /**
        * Read campaigns by given conditions
        *
        * @param mixed[] $options
@@ -48,12 +77,12 @@
           }
           
           $data = [];
-          $campaigns_query = xtc_db_query("SELECT *
+          $campaigns_query = xtc_db_query("SELECT campaigns_id
                                              FROM ".TABLE_CAMPAIGNS."
                                          ORDER BY campaigns_id ASC
                                             LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($campaigns = xtc_db_fetch_array($campaigns_query)) {
-              $data[] = $this->encode_request($campaigns);
+              $data[] = $this->getSingleCampaign($campaigns['campaigns_id']);
           }
           
           $result = [
