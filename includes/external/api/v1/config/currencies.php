@@ -11,5 +11,5 @@
    ---------------------------------------------------------------------------------------*/
 
   // campaigns
-  $app->get('/currencies',                       \api\v1\Service\Campaign\GetCurrencies::class);
-  $app->get('/currencies/{id}',                  \api\v1\Service\Campaign\GetSingleCurrency::class);
+  $app->get('/currencies',                       \api\v1\Service\Currency\GetCurrencies::class);
+  $app->get('/currencies/{id}',                  \api\v1\Service\Currency\GetSingleCurrency::class);
