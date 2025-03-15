@@ -10,11 +10,19 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------------------------*/
 
-  define('TEXT_HEADING_CUSTOMERS', 'Customers');
-  define('TEXT_HEADING_CATEGORIES', 'Categories');
-  define('TEXT_HEADING_PRODUCTS', 'Products');
-  define('TEXT_HEADING_MANUFACTURERS', 'Manufacturers');
-  define('TEXT_HEADING_ATTRIBUTES', 'Attributes');
-  define('TEXT_HEADING_ORDERS', 'Orders');
-  define('TEXT_HEADING_COUNTRIES', 'Countries');
-  define('TEXT_HEADING_SHIPPING', 'Shipping');
+  namespace api\v1\Action\Shipping;
+
+  use api\v1\Action\BaseAction;
+  use api\v1\Utility\LoggerHandler;
+  use Psr\Log\LoggerInterface;
+  use Exception;
+  
+  /**
+   * Service.
+   */
+  final class ShippingAction extends BaseAction
+  {
+      use ShippingGetAction;
+      use ShippingDeleteAction;
+      
+  }

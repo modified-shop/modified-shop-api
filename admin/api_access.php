@@ -83,6 +83,14 @@
       'name' =>  TEXT_HEADING_ORDERS,
       'color' => '#617d8d',
     ),
+    '50' => array(
+      'name' =>  TEXT_HEADING_COUNTRIES,
+      'color' => '#666666',
+    ),
+    '60' => array(
+      'name' =>  TEXT_HEADING_SHIPPING,
+      'color' => '#cb7272',
+    ),
   );
 
 require (DIR_WS_INCLUDES.'head.php');

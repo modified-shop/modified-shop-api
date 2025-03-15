@@ -16,3 +16,5 @@
   define('TEXT_HEADING_MANUFACTURERS', 'Hersteller');
   define('TEXT_HEADING_ATTRIBUTES', 'Attribute');
   define('TEXT_HEADING_ORDERS', 'Bestellungen');
+  define('TEXT_HEADING_COUNTRIES', 'L&auml;nder');
+  define('TEXT_HEADING_SHIPPING', 'Versand');

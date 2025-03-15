@@ -10,11 +10,9 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------------------------*/
 
-  define('TEXT_HEADING_CUSTOMERS', 'Customers');
-  define('TEXT_HEADING_CATEGORIES', 'Categories');
-  define('TEXT_HEADING_PRODUCTS', 'Products');
-  define('TEXT_HEADING_MANUFACTURERS', 'Manufacturers');
-  define('TEXT_HEADING_ATTRIBUTES', 'Attributes');
-  define('TEXT_HEADING_ORDERS', 'Orders');
-  define('TEXT_HEADING_COUNTRIES', 'Countries');
-  define('TEXT_HEADING_SHIPPING', 'Shipping');
+  // customers
+  $app->get('/shipping/carrier',                   \api\v1\Service\Shipping\GetCarrier::class);
+  $app->get('/shipping/status',                    \api\v1\Service\Shipping\GetShippingStatus::class);
+
+  $app->get('/shipping/carrier/{id}',              \api\v1\Service\Shipping\GetSingleCarrier::class);
+  $app->get('/shipping/status/{id}',               \api\v1\Service\Shipping\GetSingleShippingStatus::class);

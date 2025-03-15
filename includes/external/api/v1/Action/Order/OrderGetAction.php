@@ -388,33 +388,6 @@
       }
 
       /**
-       * Read an order carrier.
-       *
-       * @throws Exception
-       *
-       * @return array The carrier data
-       */
-      public function GetOrderCarrier(): array
-      {
-          $data = [];
-          $carrier_query = xtc_db_query("SELECT *
-                                           FROM ".TABLE_CARRIERS);
-          if (xtc_db_num_rows($carrier_query) < 1) {
-              throw new Exception('no Carrier found');
-          } else {
-              $carrier_query = xtc_db_query("SELECT *
-                                               FROM ".TABLE_CARRIERS."
-                                           ORDER BY carrier_sort_order ASC");
-              while ($carrier = xtc_db_fetch_array($carrier_query)) {
-                  $data[] = $carrier;
-              }
-          }
-
-          $result = $this->encode_request($data);
-          return $result;
-      }
-
-      /**
        * Read a order transaction by the given order id.
        *
        * @param int $orderId The order id
