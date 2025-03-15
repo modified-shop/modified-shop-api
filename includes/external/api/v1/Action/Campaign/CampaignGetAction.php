@@ -50,7 +50,6 @@
           $data = [];
           $campaigns_query = xtc_db_query("SELECT *
                                              FROM ".TABLE_CAMPAIGNS."
-                                                  ".$where."
                                          ORDER BY campaigns_id ASC
                                             LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($campaigns = xtc_db_fetch_array($campaigns_query)) {
@@ -98,6 +97,7 @@
           if ($this->options['limit'] > 50) $this->options['limit'] = 50;
           $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                                                         
+          $conditions = [];
           if ((int)$this->options['from'] > 0) {
               $conditions[] = " time >= '".date('Y-m-d H:i:s', (int)$this->options['from'])."' ";
           }
