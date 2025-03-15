@@ -86,7 +86,7 @@
               $orderId = xtc_db_insert_id();
           }
 
-          return $this->GetOrder($orderId);
+          return $this->GetSingleOrder($orderId);
       }
 
       /**
