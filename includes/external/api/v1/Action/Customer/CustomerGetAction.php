@@ -523,4 +523,72 @@
           return $result;          
       }
       
+      /**
+       * Read whos online by given conditions
+       *
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The whos online data
+       */
+      public function GetWhosOnline(array $options): array
+      {          
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+          
+          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
+          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
+          
+          $conditions = [];
+          if ((int)$this->options['from'] > 0) {
+              $conditions[] = " time_entry >= '".(int)$this->options['from']."' ";
+          }
+          if ((int)$this->options['to'] > 0) {
+              $conditions[] = " time_last_click <= '".(int)$this->options['to']."' ";
+          }
+          
+          $where = '';
+          if (count($conditions) > 0) {
+            $where = " WHERE ".implode(' AND ', $conditions);
+          }
+          
+          $count_query = xtc_db_query("SELECT count(*) as total
+                                         FROM ".TABLE_WHOS_ONLINE."
+                                              ".$where);
+          $count = xtc_db_fetch_array($count_query);
+          
+          if ($count['total'] < 1) {
+              throw new Exception('no Customer found');
+          }
+          
+          $data = [];
+          $customers_query = xtc_db_query("SELECT *
+                                             FROM ".TABLE_WHOS_ONLINE."
+                                                  ".$where."
+                                         ORDER BY time_last_click DESC
+                                            LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
+          while ($customers = xtc_db_fetch_array($customers_query)) {
+              $data[] = $this->encode_request($customers);
+          }
+          
+          $result = [
+              'paging' => [
+                  'total' => $count['total']
+              ],
+              'data' => $data
+          ];
+          
+          if ($count['total'] > count($data)) {
+              if ($this->options['page'] > 1) {
+                  $result['paging']['prev'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] - 1);
+              }
+              if (((($this->options['page'] - 1) * $this->options['limit']) + $this->options['limit']) < $count['total']) {
+                  $result['paging']['next'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] + 1);
+              }
+          }
+          
+          return $result;
+      }
+
   }

@@ -12,6 +12,7 @@
 
   // customers
   $app->get('/customers',                           \api\v1\Service\Customer\GetCustomers::class);
+  $app->get('/customers/whos_online',               \api\v1\Service\Customer\GetWhosOnline::class);
   $app->get('/customers/{id}',                      \api\v1\Service\Customer\GetSingleCustomer::class);
   $app->get('/customers/{id}/info',                 \api\v1\Service\Customer\GetCustomerInfo::class);
   $app->get('/customers/{id}/ip',                   \api\v1\Service\Customer\GetCustomerIp::class);
