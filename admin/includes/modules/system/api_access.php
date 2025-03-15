@@ -156,7 +156,7 @@
       }
 
       // Campaign
-      $column_array = $this->get_dir_content(DIR_FS_EXTERNAL.'api/v1/Service/Shipping/');
+      $column_array = $this->get_dir_content(DIR_FS_EXTERNAL.'api/v1/Service/Campaign/');
       foreach ($column_array as $column) {
         $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '".xtc_db_input($column)."'");
         if (xtc_db_num_rows($check_query) < 1) {
