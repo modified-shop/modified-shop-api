@@ -50,6 +50,9 @@
 
               // shipping
               include __DIR__ . '/shipping.php';
+
+              // campaigns
+              include __DIR__ . '/campaigns.php';
               
               // dhl
               include __DIR__ . '/dhl.php';

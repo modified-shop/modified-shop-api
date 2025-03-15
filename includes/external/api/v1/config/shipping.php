@@ -10,7 +10,7 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------------------------*/
 
-  // customers
+  // shipping
   $app->get('/shipping/carrier',                   \api\v1\Service\Shipping\GetCarrier::class);
   $app->get('/shipping/status',                    \api\v1\Service\Shipping\GetShippingStatus::class);
 

@@ -10,7 +10,7 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------------------------*/
 
-  // customers
+  // countries
   $app->get('/countries',                           \api\v1\Service\Country\GetCountries::class);
   $app->get('/countries/geo_zones',                 \api\v1\Service\Country\GetGeoZones::class);
   $app->get('/countries/tax_class',                 \api\v1\Service\Country\GetTaxClass::class);
