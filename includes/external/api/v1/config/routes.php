@@ -53,6 +53,9 @@
 
               // campaigns
               include __DIR__ . '/campaigns.php';
+
+              // currencies
+              include __DIR__ . '/currencies.php';
               
               // dhl
               include __DIR__ . '/dhl.php';

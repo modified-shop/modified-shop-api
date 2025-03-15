@@ -18,4 +18,5 @@
   define('TEXT_HEADING_ORDERS', 'Bestellungen');
   define('TEXT_HEADING_COUNTRIES', 'L&auml;nder');
   define('TEXT_HEADING_SHIPPING', 'Versand');
-  define('TEXT_HEADING_CAMPAIGN', 'Kampagnen');
+  define('TEXT_HEADING_CAMPAIGNS', 'Kampagnen');
+  define('TEXT_HEADING_CURRENCIES', 'W&auml;hrungen');

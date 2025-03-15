@@ -92,8 +92,12 @@
       'color' => '#cb7272',
     ),
     '70' => array(
-      'name' =>  TEXT_HEADING_CAMPAIGN,
+      'name' =>  TEXT_HEADING_CAMPAIGNS,
       'color' => '#8cd1ba',
+    ),
+    '80' => array(
+      'name' =>  TEXT_HEADING_CURRENCIES,
+      'color' => '#c689ab',
     ),
   );
 
