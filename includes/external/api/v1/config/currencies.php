@@ -13,3 +13,6 @@
   // campaigns
   $app->get('/currencies',                       \api\v1\Service\Currency\GetCurrencies::class);
   $app->get('/currencies/{id}',                  \api\v1\Service\Currency\GetSingleCurrency::class);
+
+  // delete campaigns
+  $app->delete('/currencies/{id}',               \api\v1\Service\Currency\DeleteCurrency::class);
