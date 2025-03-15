@@ -80,7 +80,7 @@
           $this->checkTableData(TABLE_CURRENCIES, $currency);
           unset($order['currencies_id']);
 
-          xtc_db_perform(TABLE_CURRENCIES, $order, $action, "currencies_id = '".(int)$currencyId."'");
+          xtc_db_perform(TABLE_CURRENCIES, $currency, $action, "currencies_id = '".(int)$currencyId."'");
           if ($action == 'insert') {
               $currencyId = xtc_db_insert_id();
           }
