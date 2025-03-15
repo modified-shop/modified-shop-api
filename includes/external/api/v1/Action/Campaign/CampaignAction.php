@@ -34,9 +34,9 @@
        */
       public function InsertCampaign(array $options): array
       {
-          $order = $this->InsertUpdateCampaign(0, $options);
+          $campaign = $this->InsertUpdateCampaign(0, $options);
           
-          return $order;
+          return $campaign;
       }
 
       /**
@@ -60,7 +60,7 @@
                                                 FROM ".TABLE_CAMPAIGNS."
                                                WHERE campaigns_id = '".(int)$campaignId."'");
               if (xtc_db_num_rows($campaign_query) < 1) {
-                  throw new Exception(sprintf('Campaign not found: %s', $orderId));
+                  throw new Exception(sprintf('Campaign not found: %s', $campaignId));
               } else {
                   $campaign = xtc_db_fetch_array($campaign_query);
                   $campaign['last_modified'] = 'now()';
@@ -77,9 +77,18 @@
               }
           }
 
+          if ($action == 'insert') {
+              $check_query = xtc_db_query("SELECT *
+                                             FROM ".TABLE_CAMPAIGNS."
+                                            WHERE campaigns_refID = '".xtc_db_input($campaign['campaigns_refID'])."'");
+              if (xtc_db_num_rows($check_query) > 0) {
+                  throw new Exception('Campaign refId already exists');
+              }
+          }
+          
           // Input validation
           $this->checkTableData(TABLE_CAMPAIGNS, $campaign);
-          unset($campaign['currencies_id']);
+          unset($campaign['campaigns_id']);
 
           xtc_db_perform(TABLE_CAMPAIGNS, $campaign, $action, "campaigns_id = '".(int)$campaignId."'");
           if ($action == 'insert') {

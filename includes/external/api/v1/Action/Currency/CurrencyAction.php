@@ -34,9 +34,9 @@
        */
       public function InsertCurrency(array $options): array
       {
-          $order = $this->InsertUpdateCurrency(0, $options);
+          $currency = $this->InsertUpdateCurrency(0, $options);
           
-          return $order;
+          return $currency;
       }
 
       /**
@@ -60,7 +60,7 @@
                                                 FROM ".TABLE_CURRENCIES."
                                                WHERE currencies_id = '".(int)$currencyId."'");
               if (xtc_db_num_rows($currency_query) < 1) {
-                  throw new Exception(sprintf('Currency not found: %s', $orderId));
+                  throw new Exception(sprintf('Currency not found: %s', $currencyId));
               } else {
                   $currency = xtc_db_fetch_array($currency_query);
                   $currency['last_updated'] = 'now()';
@@ -73,6 +73,15 @@
           foreach ($currency as $key => $value) {
               if (isset($this->options[$key])) {
                   $currency[$key] = $this->options[$key];
+              }
+          }
+
+          if ($action == 'insert') {
+              $check_query = xtc_db_query("SELECT *
+                                             FROM ".TABLE_CURRENCIES."
+                                            WHERE code = '".xtc_db_input($currency['code'])."'");
+              if (xtc_db_num_rows($check_query) > 0) {
+                  throw new Exception('Campaign refId already exists');
               }
           }
 
