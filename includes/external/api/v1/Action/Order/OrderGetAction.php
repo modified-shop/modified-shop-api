@@ -428,8 +428,8 @@
                                                 FROM ".TABLE_ORDERS_STATUS."
                                             ORDER BY orders_status_id ASC
                                                LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
-          while ($shipping_status = xtc_db_fetch_array($shipping_status_query)) {
-              $data[] = $this->GetSingleOrderStatus($shipping_status['orders_status_id']);
+          while ($order_status = xtc_db_fetch_array($order_status_query)) {
+              $data[] = $this->GetSingleOrderStatus($order_status['orders_status_id']);
           }
           
           $result = [
