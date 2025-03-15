@@ -25,4 +25,68 @@
       use CampaignGetAction;
       use CampaignDeleteAction;
       
+      /**
+       * Insert an campaign by the given options.
+       *
+       * @param mixed[] $options
+       *
+       * @return array The campaign data
+       */
+      public function InsertCampaign(array $options): array
+      {
+          $order = $this->InsertUpdateCampaign(0, $options);
+          
+          return $order;
+      }
+
+      /**
+       * Insert or Update an campaign by the given campaign id.
+       *
+       * @param int $campaignId The campaign id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The campaign data
+       */
+      public function InsertUpdateCampaign(int $campaignId, array $options): array
+      {
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          if ($campaignId > 0) {
+              $action = 'update';
+              $campaign_query = xtc_db_query("SELECT *
+                                                FROM ".TABLE_CAMPAIGNS."
+                                               WHERE campaigns_id = '".(int)$campaignId."'");
+              if (xtc_db_num_rows($campaign_query) < 1) {
+                  throw new Exception(sprintf('Campaign not found: %s', $orderId));
+              } else {
+                  $campaign = xtc_db_fetch_array($campaign_query);
+                  $campaign['last_modified'] = 'now()';
+              }
+          } else {
+              $action = 'insert';
+              $campaign = $this->getDefaultTableValues(TABLE_CAMPAIGNS);
+              $campaign['date_added'] = 'now()';
+          }
+
+          foreach ($campaign as $key => $value) {
+              if (isset($this->options[$key])) {
+                  $campaign[$key] = $this->options[$key];
+              }
+          }
+
+          // Input validation
+          $this->checkTableData(TABLE_CAMPAIGNS, $campaign);
+          unset($campaign['currencies_id']);
+
+          xtc_db_perform(TABLE_CAMPAIGNS, $campaign, $action, "campaigns_id = '".(int)$campaignId."'");
+          if ($action == 'insert') {
+              $campaignId = xtc_db_insert_id();
+          }
+
+          return $this->getSingleCampaign($campaignId);
+      }
+
   }

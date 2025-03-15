@@ -11,5 +11,15 @@
    ---------------------------------------------------------------------------------------*/
 
   // campaigns
-  $app->get('/campaign',                           \api\v1\Service\Campaign\GetCampaigns::class);
-  $app->get('/campaign/{id}/ip',                   \api\v1\Service\Campaign\GetCampaignsIp::class);
+  $app->get('/campaigns',                       \api\v1\Service\Campaign\GetCampaigns::class);
+  $app->get('/campaigns/{id}/ip',               \api\v1\Service\Campaign\GetCampaignsIp::class);
+
+  // insert campaigns
+  $app->post('/campaigns',                      \api\v1\Service\Campaign\InsertCurrency::class);
+  $app->post('/campaigns/{id}',                 \api\v1\Service\Campaign\InsertUpdateCurrency::class);
+
+  // update campaigns
+  $app->put('/campaigns/{id}',                  \api\v1\Service\Campaign\InsertUpdateCurrency::class);
+
+  // delete campaigns
+  $app->delete('/campaigns/{id}',               \api\v1\Service\Campaign\DeleteCurrency::class);

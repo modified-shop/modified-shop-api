@@ -22,5 +22,31 @@
    */
   trait CampaignDeleteAction
   {
+      /**
+       * Delete a campaign by the given campaign id.
+       *
+       * @param int $campaignId The currency id
+       *
+       * @return void
+       */
+      public function DeleteCampaign(int $campaignId): void
+      {
+          // Input validation
+          if (empty($campaignId)) {
+              throw new Exception('Campaign ID required');
+          }
+
+          $campaign_query = xtc_db_query("SELECT *
+                                            FROM ".TABLE_CAMPAIGNS."
+                                           WHERE campaigns_id = '".(int)$campaignId."'");
+          if (xtc_db_num_rows($campaign_query) < 1) {
+            throw new Exception(sprintf('Campaign not found: %s', $campaignId));
+          } else {
+              //delete
+              xtc_db_query("DELETE FROM ".TABLE_CAMPAIGNS." WHERE campaigns_id = '".(int)$campaignId."'");
+          }
+          
+          $this->logger->info(sprintf('Campaign deleted successfully: %s', $campaignId));
+      }
 
   }
