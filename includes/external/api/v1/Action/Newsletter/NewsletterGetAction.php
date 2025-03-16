@@ -50,7 +50,7 @@
                   $with = explode(',', $this->options['with']);
                   if (in_array('history', $with) !== false) {
                       $this->throw_exception = false;
-                      $country['history'] = $this->GetSingleNewsletterRecipientsHistory($newsletter['customers_email_address']);
+                      $newsletter['history'] = $this->GetSingleNewsletterRecipientsHistory($newsletter['customers_email_address']);
                   }
               }
           }
