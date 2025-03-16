@@ -22,3 +22,4 @@
   define('TEXT_HEADING_CURRENCIES', 'W&auml;hrungen');
   define('TEXT_HEADING_LANGUAGES', 'Sprachen');
   define('TEXT_HEADING_NEWSLETTER', 'Newsletter');
+  define('TEXT_HEADING_CONFIGURATIONS', 'Einstellungen');

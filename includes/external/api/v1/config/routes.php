@@ -62,6 +62,9 @@
 
               // newsletters
               include __DIR__ . '/newsletters.php';
+
+              // configurations
+              include __DIR__ . '/configurations.php';
               
               // dhl
               include __DIR__ . '/dhl.php';

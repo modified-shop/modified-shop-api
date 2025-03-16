@@ -103,9 +103,13 @@
       'name' =>  TEXT_HEADING_LANGUAGES,
       'color' => '#ffaaa5',
     ),
-    '90' => array(
+    '100' => array(
       'name' =>  TEXT_HEADING_NEWSLETTER,
       'color' => '#dcedc1',
+    ),
+    '110' => array(
+      'name' =>  TEXT_HEADING_CONFIGURATIONS,
+      'color' => '#66545e',
     ),
   );
 
