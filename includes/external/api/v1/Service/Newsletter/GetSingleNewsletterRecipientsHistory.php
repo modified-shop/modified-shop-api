@@ -21,7 +21,7 @@
   /**
    * Action
    */
-  final class GetNewsletterRecipientsHistory extends BaseService
+  final class GetSingleNewsletterRecipientsHistory extends BaseService
   {
       /**
        * @var NewsletterAction
@@ -61,10 +61,9 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $params = $request->getQueryParams();
-          $params['path'] = $request->getUri()->getPath();
+          $newsletterEmailAddress = (string)$args['id'];
 
-          $result = $this->newsletterAction->GetNewsletterRecipientsHistory($params);
+          $result = $this->newsletterAction->GetSingleNewsletterRecipientsHistory($newsletterEmailAddress);
 
           return $this->responder->withJson($response, $result);
       }

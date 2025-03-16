@@ -12,7 +12,9 @@
 
   // newsletters
   $app->get('/newsletters/recipients',                       \api\v1\Service\Newsletter\GetNewsletterRecipients::class);
-  $app->get('/newsletters/recipients/{id}/history',          \api\v1\Service\Newsletter\GetNewsletterRecipientsHistory::class);
+  $app->get('/newsletters/recipients/history',               \api\v1\Service\Newsletter\GetNewsletterRecipientsHistory::class);
+  $app->get('/newsletters/recipients/{id}',                  \api\v1\Service\Newsletter\GetSingleNewsletterRecipients::class);
+  $app->get('/newsletters/recipients/history/{id}',          \api\v1\Service\Newsletter\GetSingleNewsletterRecipientsHistory::class);
 
   // insert newsletters
   $app->post('/newsletters/recipients',                      \api\v1\Service\Newsletter\InsertNewsletterRecipients::class);

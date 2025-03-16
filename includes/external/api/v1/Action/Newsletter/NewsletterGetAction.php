@@ -31,7 +31,7 @@
        *
        * @return array The newsletter data
        */
-      public function getSingleNewsletterRecipients(int $newsletterId): array
+      public function GetSingleNewsletterRecipients(int $newsletterId): array
       {
           // Input validation
           if (empty($newsletterId)) {
@@ -80,6 +80,12 @@
           if (isset($this->options['status']) && !empty(preg_replace('/[^\d\,]/', '', $this->options['status']))) {
               $conditions[] = " mail_status IN (".preg_replace('/[^\d\,]/', '', $this->options['status']).") ";
           }
+          if (isset($this->options['mail'])) {
+              require_once(DIR_FS_INC.'xtc_validate_email.inc.php');
+              if (xtc_validate_email($this->options['mail']) !== false) {
+                  $conditions[] = " customers_email_address LIKE ('%".xtc_db_input($this->options['mail'])."%') ";
+              }
+          }
           if ((int)$this->options['from'] > 0) {
               $conditions[] = " date_added >= '".date('Y-m-d H:i:s', (int)$this->options['from'])."' ";
           }
@@ -108,7 +114,7 @@
                                            ORDER BY mail_id ASC
                                               LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($newsletters = xtc_db_fetch_array($newsletters_query)) {
-              $data[] = $this->getSingleNewsletterRecipients($newsletters['mail_id']);
+              $data[] = $this->GetSingleNewsletterRecipients($newsletters['mail_id']);
           }
           
           $result = [
