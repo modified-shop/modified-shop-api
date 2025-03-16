@@ -21,3 +21,4 @@
   define('TEXT_HEADING_CAMPAIGNS', 'Campaigns');
   define('TEXT_HEADING_CURRENCIES', 'Currencies');
   define('TEXT_HEADING_LANGUAGES', 'Languages');
+  define('TEXT_HEADING_NEWSLETTER', 'Newsletter');

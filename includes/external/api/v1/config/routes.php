@@ -59,6 +59,9 @@
 
               // languages
               include __DIR__ . '/languages.php';
+
+              // newsletters
+              include __DIR__ . '/newsletters.php';
               
               // dhl
               include __DIR__ . '/dhl.php';

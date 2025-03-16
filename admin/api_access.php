@@ -101,7 +101,11 @@
     ),
     '90' => array(
       'name' =>  TEXT_HEADING_LANGUAGES,
-      'color' => '#c689ab',
+      'color' => '#ffaaa5',
+    ),
+    '90' => array(
+      'name' =>  TEXT_HEADING_NEWSLETTER,
+      'color' => '#dcedc1',
     ),
   );
 
