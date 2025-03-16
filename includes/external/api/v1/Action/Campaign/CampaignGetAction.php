@@ -107,6 +107,7 @@
       /**
        * Read campaigns by given conditions
        *
+       * @param string $refId The ref id
        * @param mixed[] $options
        *
        * @throws Exception
