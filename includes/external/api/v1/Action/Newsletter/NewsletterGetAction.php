@@ -160,7 +160,7 @@
           } else {
               $data = [];
               while ($newsletter = xtc_db_fetch_array($newsletter_query)) {
-                $data[] $newsletter;
+                $data[] = $newsletter;
               }
           }
           
