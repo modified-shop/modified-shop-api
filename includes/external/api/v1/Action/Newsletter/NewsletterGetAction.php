@@ -68,7 +68,7 @@
        *
        * @return array The newsletters data
        */
-      public function GetNewslettersRecipients(array $options): array
+      public function GetNewsletterRecipients(array $options): array
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
