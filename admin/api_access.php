@@ -99,6 +99,10 @@
       'name' =>  TEXT_HEADING_CURRENCIES,
       'color' => '#c689ab',
     ),
+    '90' => array(
+      'name' =>  TEXT_HEADING_LANGUAGES,
+      'color' => '#c689ab',
+    ),
   );
 
 require (DIR_WS_INCLUDES.'head.php');

@@ -20,3 +20,4 @@
   define('TEXT_HEADING_SHIPPING', 'Versand');
   define('TEXT_HEADING_CAMPAIGNS', 'Kampagnen');
   define('TEXT_HEADING_CURRENCIES', 'W&auml;hrungen');
+  define('TEXT_HEADING_LANGUAGES', 'Sprachen');

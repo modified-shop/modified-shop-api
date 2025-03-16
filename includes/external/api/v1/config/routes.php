@@ -56,6 +56,9 @@
 
               // currencies
               include __DIR__ . '/currencies.php';
+
+              // languages
+              include __DIR__ . '/languages.php';
               
               // dhl
               include __DIR__ . '/dhl.php';
