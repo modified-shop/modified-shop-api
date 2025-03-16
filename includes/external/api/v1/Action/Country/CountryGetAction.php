@@ -31,7 +31,7 @@
        *
        * @return array The country data
        */
-      public function getCountryDetails(int $countryId): array
+      public function GetCountryDetails(int $countryId): array
       {
           // Input validation
           if (empty($countryId)) {
@@ -62,6 +62,7 @@
        * Read a country by the given country id.
        *
        * @param int $countryId The country id
+       * @param mixed[] $options
        *
        * @throws Exception
        *
@@ -77,7 +78,7 @@
               throw new Exception('Country ID required');
           }
 
-          $result = $this->getCountryDetails($countryId);
+          $result = $this->GetCountryDetails($countryId);
           return $result;
       }
 
@@ -132,7 +133,7 @@
                                          ORDER BY countries_id ASC
                                             LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($countries = xtc_db_fetch_array($countries_query)) {
-              $data[] = $this->getCountryDetails($countries['countries_id']);
+              $data[] = $this->GetCountryDetails($countries['countries_id']);
           }
           
           $result = [
@@ -193,7 +194,7 @@
        *
        * @return array The geo zone data
        */
-      public function getGeoZoneDetails(int $geoZoneId): array
+      public function GetGeoZoneDetails(int $geoZoneId): array
       {
           // Input validation
           if (empty($geoZoneId)) {
@@ -226,6 +227,7 @@
        * Read a geo zone by the given geo zone id.
        *
        * @param int $geoZoneId The geo zone id
+       * @param mixed[] $options
        *
        * @throws Exception
        *
@@ -241,7 +243,7 @@
               throw new Exception('Geo Zone ID required');
           }
           
-          $result = $this->getGeoZoneDetails($geoZoneId);
+          $result = $this->GetGeoZoneDetails($geoZoneId);
           return $result;
       }
 
@@ -276,7 +278,7 @@
                                         ORDER BY geo_zone_id ASC
                                            LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($geo_zone = xtc_db_fetch_array($geo_zone_query)) {
-              $data[] = $this->getGeoZoneDetails($geo_zone['geo_zone_id']);
+              $data[] = $this->GetGeoZoneDetails($geo_zone['geo_zone_id']);
           }
           
           $result = [
@@ -320,7 +322,7 @@
                                        WHERE geo_zone_id = '".(int)$geoZoneId."'");
           if (xtc_db_num_rows($zone_query) > 0) {
               while ($zone = xtc_db_fetch_array($zone_query)) {
-                  $data[] = $this->getCountryDetails($zone['zone_country_id']);
+                  $data[] = $this->GetCountryDetails($zone['zone_country_id']);
               }
           }
 
