@@ -46,6 +46,9 @@
           } else {
               $data = [];
               while ($configuration = xtc_db_fetch_array($configuration_query)) {
+                unset($configuration['use_function']);
+                unset($configuration['set_function']);
+
                 $data[] = $configuration;
               }
           }
