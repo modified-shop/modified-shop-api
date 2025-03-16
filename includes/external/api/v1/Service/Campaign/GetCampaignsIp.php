@@ -26,7 +26,7 @@
       /**
        * @var CampaignAction
        */
-      private $shippingAction;
+      private $campaignAction;
 
       /**
        * @var Responder
@@ -36,12 +36,12 @@
       /**
        * The constructor.
        *
-       * @param CampaignAction $shippingAction The customer reader
+       * @param CampaignAction $campaignAction The customer reader
        * @param Responder $responder The responder
        */
-      public function __construct(CampaignAction $shippingAction, Responder $responder)
+      public function __construct(CampaignAction $campaignAction, Responder $responder)
       {
-          $this->shippingAction = $shippingAction;
+          $this->campaignAction = $campaignAction;
           $this->responder = $responder;
       }
 
@@ -65,7 +65,7 @@
           $params = $request->getQueryParams();
           $params['path'] = $request->getUri()->getPath();
 
-          $result = $this->shippingAction->GetCampaignsIp($refId, $params);
+          $result = $this->campaignAction->GetCampaignsIp($refId, $params);
 
           return $this->responder->withJson($response, $result);
       }
