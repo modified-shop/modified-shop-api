@@ -11,7 +11,7 @@
    ---------------------------------------------------------------------------------------*/
 
   // configurations
-  $app->get('/configurations/{id}',                   \api\v1\Service\Configuration\GetConfiguration::class);
   $app->get('/configurations/groups',                 \api\v1\Service\Configuration\GetConfigurationGroups::class);
+  $app->get('/configurations/{id}',                   \api\v1\Service\Configuration\GetConfiguration::class);
   $app->get('/configurations/groups/{id}',            \api\v1\Service\Configuration\GetSingleConfigurationGroup::class);
  
