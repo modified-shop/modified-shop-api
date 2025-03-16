@@ -43,7 +43,7 @@
             throw new Exception(sprintf('Newsletter not found: %s', $newsletterId));
           } else {
               //delete
-              xtc_db_query("DELETE FROM ".TABLE_NEWSLETTER_RECIPIENTS." WHERE newsletters_id = '".(int)$newsletterId."'");
+              xtc_db_query("DELETE FROM ".TABLE_NEWSLETTER_RECIPIENTS." WHERE mail_id = '".(int)$newsletterId."'");
           }
           
           $this->logger->info(sprintf('Newsletter deleted successfully: %s', $newsletterId));
