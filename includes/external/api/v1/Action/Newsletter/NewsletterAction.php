@@ -94,7 +94,7 @@
               $newsletterId = xtc_db_insert_id();
           }
 
-          return $this->getSingleNewsletter($newsletterId);
+          return $this->GetSingleNewsletterRecipients($newsletterId);
       }
 
   }
