@@ -728,7 +728,7 @@
                       rename(DIR_FS_CATALOG.'media/content/'.$content_file->filename, DIR_FS_CATALOG.'media/content/'.$content_file_name);
                       copy(DIR_FS_CATALOG.'media/content/'.$content_file_name, DIR_FS_CATALOG.'media/content/backup/'.$content_file_name);
     
-                      //image chmod
+                      //content chmod
                       chmod(DIR_FS_CATALOG.'media/content/'.$content_file_name, 0644);
 
                       xtc_db_query("UPDATE ".TABLE_PRODUCTS_CONTENT."
