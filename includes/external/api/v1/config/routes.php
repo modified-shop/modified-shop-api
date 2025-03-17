@@ -69,6 +69,9 @@
               // configurations
               include __DIR__ . '/configurations.php';
 
+              // coupons
+              include __DIR__ . '/coupons.php';
+
               // dhl
               include __DIR__ . '/dhl.php';
 
