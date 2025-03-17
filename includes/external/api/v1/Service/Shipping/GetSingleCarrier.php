@@ -61,11 +61,11 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $carrierID = (int)$args['id'];
+          $carrierId = (int)$args['id'];
           $params = $request->getQueryParams();
           $params['path'] = $request->getUri()->getPath();
 
-          $result = $this->shippingAction->GetSingleCarrier($carrierID, $params);
+          $result = $this->shippingAction->GetSingleCarrier($carrierId, $params);
 
           return $this->responder->withJson($response, $result);
       }

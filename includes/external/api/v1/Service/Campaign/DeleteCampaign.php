@@ -61,9 +61,9 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $campaignID = (int)$args['id'];
+          $campaignId = (int)$args['id'];
           
-          $this->campaignAction->DeleteCampaign($campaignID);
+          $this->campaignAction->DeleteCampaign($campaignId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }

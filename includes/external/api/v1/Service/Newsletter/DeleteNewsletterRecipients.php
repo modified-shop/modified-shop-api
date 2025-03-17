@@ -61,9 +61,9 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $newsletterID = (int)$args['id'];
+          $newsletterId = (int)$args['id'];
           
-          $this->newsletterAction->DeleteNewsletterRecipients($newsletterID);
+          $this->newsletterAction->DeleteNewsletterRecipients($newsletterId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }

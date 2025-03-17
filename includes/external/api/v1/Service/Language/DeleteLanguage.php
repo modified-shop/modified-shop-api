@@ -61,9 +61,9 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $languageID = (int)$args['id'];
+          $languageId = (int)$args['id'];
           
-          $this->languageAction->DeleteLanguage($languageID);
+          $this->languageAction->DeleteLanguage($languageId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }

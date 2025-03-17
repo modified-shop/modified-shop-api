@@ -61,11 +61,11 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $currencyID = (int)$args['id'];
+          $currencyId = (int)$args['id'];
           $params = $request->getQueryParams();
           $params['path'] = $request->getUri()->getPath();
 
-          $result = $this->currencyAction->GetSingleCurrency($currencyID, $params);
+          $result = $this->currencyAction->GetSingleCurrency($currencyId, $params);
 
           return $this->responder->withJson($response, $result);
       }

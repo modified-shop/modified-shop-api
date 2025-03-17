@@ -61,9 +61,9 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $currencyID = (int)$args['id'];
+          $currencyId = (int)$args['id'];
           
-          $this->currencyAction->DeleteCurrency($currencyID);
+          $this->currencyAction->DeleteCurrency($currencyId);
 
           return $this->responder->withJson($response)->withStatus(204);
       }
