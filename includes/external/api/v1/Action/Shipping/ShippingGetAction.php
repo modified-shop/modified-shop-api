@@ -143,7 +143,7 @@
       }
 
       /**
-       * Read carrier by given conditions
+       * Read shipping status by given conditions
        *
        * @param mixed[] $options
        *
