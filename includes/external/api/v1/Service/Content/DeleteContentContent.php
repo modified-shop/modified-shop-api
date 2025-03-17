@@ -17,11 +17,12 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
 
   /**
    * Action
    */
-  final class GetContents extends BaseService
+  final class DeleteContentContent extends BaseService
   {
       /**
        * @var ContentAction
@@ -61,11 +62,16 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $params = $request->getQueryParams();
-          $params['path'] = $request->getUri()->getPath();
+          $contentGroupId = (int)$args['id'];
+          $contentId = (int)$args['cid'];
           
-          $result = $this->contentAction->GetContents($params);
+          // Input validation
+          if (empty($contentId)) {
+              throw new Exception('Content ID required');
+          }
 
-          return $this->responder->withJson($response, $result);
+          $this->contentAction->DeleteContentContent($contentGroupId, $contentId);
+
+          return $this->responder->withJson($response)->withStatus(204);
       }
   }

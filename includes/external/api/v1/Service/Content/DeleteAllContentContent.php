@@ -21,7 +21,7 @@
   /**
    * Action
    */
-  final class GetContents extends BaseService
+  final class DeleteAllContentContent extends BaseService
   {
       /**
        * @var ContentAction
@@ -61,11 +61,10 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $params = $request->getQueryParams();
-          $params['path'] = $request->getUri()->getPath();
+          $contentId = (int)$args['id'];
           
-          $result = $this->contentAction->GetContents($params);
+          $this->contentAction->DeleteAllContentContent($contentId);
 
-          return $this->responder->withJson($response, $result);
+          return $this->responder->withJson($response)->withStatus(204);
       }
   }

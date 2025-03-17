@@ -21,7 +21,7 @@
   /**
    * Action
    */
-  final class GetContents extends BaseService
+  final class GetContentContent extends BaseService
   {
       /**
        * @var ContentAction
@@ -45,6 +45,7 @@
           $this->responder = $responder;
       }
 
+	  
       /**
        * Invoke.
        *
@@ -61,10 +62,9 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $params = $request->getQueryParams();
-          $params['path'] = $request->getUri()->getPath();
-          
-          $result = $this->contentAction->GetContents($params);
+          $contentGroupId = (int)$args['id'];
+
+          $result = $this->contentAction->GetContentContent($contentGroupId);
 
           return $this->responder->withJson($response, $result);
       }

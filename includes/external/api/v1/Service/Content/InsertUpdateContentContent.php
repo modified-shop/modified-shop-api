@@ -21,7 +21,7 @@
   /**
    * Action
    */
-  final class GetContents extends BaseService
+  final class InsertUpdateContentContent extends BaseService
   {
       /**
        * @var ContentAction
@@ -61,10 +61,10 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $params = $request->getQueryParams();
-          $params['path'] = $request->getUri()->getPath();
+          $contentGroupId = (int)$args['id'];
+          $data = (array)$request->getParsedBody();
           
-          $result = $this->contentAction->GetContents($params);
+          $result = $this->contentAction->InsertUpdateContentContent($contentGroupId, $data);
 
           return $this->responder->withJson($response, $result);
       }
