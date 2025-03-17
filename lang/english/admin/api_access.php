@@ -23,3 +23,4 @@
   define('TEXT_HEADING_LANGUAGES', 'Languages');
   define('TEXT_HEADING_NEWSLETTER', 'Newsletter');
   define('TEXT_HEADING_CONFIGURATIONS', 'Configurations');
+  define('TEXT_HEADING_CONTENTS', 'Contents');

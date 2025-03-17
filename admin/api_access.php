@@ -111,6 +111,10 @@
       'name' =>  TEXT_HEADING_CONFIGURATIONS,
       'color' => '#66545e',
     ),
+    '120' => array(
+      'name' =>  TEXT_HEADING_CONTENTS,
+      'color' => '#a39193',
+    ),
   );
 
 require (DIR_WS_INCLUDES.'head.php');
