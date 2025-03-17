@@ -51,6 +51,9 @@
               // shipping
               include __DIR__ . '/shipping.php';
 
+              // contents
+              include __DIR__ . '/contents.php';
+              
               // campaigns
               include __DIR__ . '/campaigns.php';
 
@@ -65,7 +68,7 @@
 
               // configurations
               include __DIR__ . '/configurations.php';
-              
+
               // dhl
               include __DIR__ . '/dhl.php';
 
