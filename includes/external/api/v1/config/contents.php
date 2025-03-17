@@ -12,6 +12,7 @@
 
   // contents
   $app->get('/contents',                          \api\v1\Service\Content\GetContents::class);
+  $app->get('/contents/fileflag',                 \api\v1\Service\Content\GetContentFileFlag::class);
   $app->get('/contents/{id}',                     \api\v1\Service\Content\GetSingleContent::class);
   $app->get('/contents/{id}/content',             \api\v1\Service\Content\GetContentContent::class);
 

@@ -243,4 +243,56 @@
           return $result;
       }
 
+      /**
+       * Read file flag by given conditions
+       *
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The file flag data
+       */
+      public function GetContentFileFlag(array $options): array
+      {          
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+          
+          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
+          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
+                                                        
+          $count_query = xtc_db_query("SELECT count(*) as total
+                                         FROM ".TABLE_CM_FILE_FLAGS);
+          $count = xtc_db_fetch_array($count_query);
+          
+          if ($count['total'] < 1) {
+              throw new Exception('no File Flag found');
+          }
+          
+          $data = [];
+          $file_flag_query = xtc_db_query("SELECT *
+                                             FROM ".TABLE_CM_FILE_FLAGS."
+                                            LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
+          while ($file_flag = xtc_db_fetch_array($file_flag_query)) {
+              $data[] = $this->encode_request($file_flag);
+          }
+          
+          $result = [
+              'paging' => [
+                  'total' => $count['total']
+              ],
+              'data' => $data
+          ];
+          
+          if ($count['total'] > count($data)) {
+              if ($this->options['page'] > 1) {
+                  $result['paging']['prev'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] - 1);
+              }
+              if (((($this->options['page'] - 1) * $this->options['limit']) + $this->options['limit']) < $count['total']) {
+                  $result['paging']['next'] = HTTPS_SERVER.DIR_WS_CATALOG.ltrim($this->options['path'], '/').'?'.xtc_get_all_get_params(array('page')).'page='.($this->options['page'] + 1);
+              }
+          }
+          
+          return $result;
+      }
+
   }
