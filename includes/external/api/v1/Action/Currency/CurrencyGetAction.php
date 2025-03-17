@@ -31,7 +31,7 @@
        *
        * @return array The currency data
        */
-      public function (int $currencyId): array
+      public function GetSingleCurrency(int $currencyId): array
       {
           // Input validation
           if (empty($currencyId)) {
