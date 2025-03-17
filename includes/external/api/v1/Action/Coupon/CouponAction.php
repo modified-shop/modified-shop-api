@@ -116,12 +116,12 @@
                   throw new Exception(sprintf('Coupon not found: %s', $couponId));
               } else {
                   $coupon = xtc_db_fetch_array($coupon_query);
-                  $coupon['last_modified'] = 'now()';
+                  $coupon['date_modified'] = 'now()';
               }
           } else {
               $action = 'insert';
               $coupon = $this->getDefaultTableValues(TABLE_COUPONS);
-              $coupon['date_added'] = 'now()';
+              $coupon['date_created'] = 'now()';
           }
           
           foreach ($coupon as $key => $value) {
