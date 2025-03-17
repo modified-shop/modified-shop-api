@@ -115,6 +115,10 @@
       'name' =>  TEXT_HEADING_CONTENTS,
       'color' => '#a39193',
     ),
+    '130' => array(
+      'name' =>  TEXT_HEADING_COUPONS,
+      'color' => '#aa6f73',
+    ),
   );
 
 require (DIR_WS_INCLUDES.'head.php');

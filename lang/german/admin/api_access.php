@@ -24,3 +24,4 @@
   define('TEXT_HEADING_NEWSLETTER', 'Newsletter');
   define('TEXT_HEADING_CONFIGURATIONS', 'Einstellungen');
   define('TEXT_HEADING_CONTENTS', 'Contents');
+  define('TEXT_HEADING_COUPONS', 'Gutscheine / Coupons');
