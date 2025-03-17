@@ -215,23 +215,31 @@
               throw new Exception('Content Group ID required');
           }
 
-          $data = [];
+          $content_data = [];
           $content_query = xtc_db_query("SELECT *
                                            FROM ".TABLE_CONTENT_MANAGER_CONTENT."
                                           WHERE content_manager_id = '".(int)$contentGroupId."'");
           if (xtc_db_num_rows($content_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Content Group not found: %s', $contentGroupId));
           } else {
-              $content_query = xtc_db_query("SELECT *
-                                               FROM ".TABLE_CONTENT_MANAGER_CONTENT."
-                                              WHERE content_manager_id = '".(int)$contentGroupId."'
-                                           ORDER BY sort_order, content_id");
+              $data = [];
+              $content_query = xtc_db_query("SELECT cmc.*,
+                                                    l.code
+                                               FROM ".TABLE_CONTENT_MANAGER_CONTENT." cmc
+                                               JOIN ".TABLE_LANGUAGES." l
+                                                    ON l.languages_id = cmc.languages_id
+                                              WHERE cmc.content_manager_id = '".(int)$contentGroupId."'
+                                           ORDER BY cmc.sort_order, cmc.content_id");
               while ($content = xtc_db_fetch_array($content_query)) {
-                  $data[] = $content;
+                  $code = $content['code'];
+                  unset($content['code']);
+
+                  $data[$code] = $content;
               }
+              $content_data[] = $data;
           }
 
-          $result = $this->encode_request($data);
+          $result = $this->encode_request($content_data);
           return $result;
       }
 
