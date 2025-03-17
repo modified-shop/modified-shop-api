@@ -97,7 +97,7 @@
               }         
           }
 
-          return $this->getSingleContent($contentGroupId);
+          return $this->GetContent($contentGroupId);
       }
 
       /**
