@@ -200,8 +200,7 @@
 
           $count_query = xtc_db_query("SELECT count(DISTINCT customers_email_address) as total
                                          FROM ".TABLE_NEWSLETTER_RECIPIENTS_HISTORY."
-                                              ".$where."
-                                     GROUP BY customers_email_address");
+                                              ".$where);
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {

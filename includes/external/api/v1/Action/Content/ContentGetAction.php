@@ -124,8 +124,7 @@
                                                         
           $count_query = xtc_db_query("SELECT count(DISTINCT content_group) as total
                                          FROM ".TABLE_CONTENT_MANAGER."
-                                              ".$where."
-                                     GROUP BY content_group");
+                                              ".$where);
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
