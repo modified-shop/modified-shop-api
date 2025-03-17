@@ -122,9 +122,10 @@
             $where = " WHERE ".implode(' AND ', $conditions);
           }
                                                         
-          $count_query = xtc_db_query("SELECT count(*) as total
+          $count_query = xtc_db_query("SELECT count(DISTINCT content_group) as total
                                          FROM ".TABLE_CONTENT_MANAGER."
-                                              ".$where);
+                                              ".$where."
+                                     GROUP BY content_group");
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
@@ -135,6 +136,7 @@
           $content_query = xtc_db_query("SELECT content_group
                                            FROM ".TABLE_CONTENT_MANAGER."
                                                 ".$where."
+                                       GROUP BY content_group
                                        ORDER BY content_group ASC
                                           LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($content = xtc_db_fetch_array($content_query)) {
@@ -180,7 +182,7 @@
                                                 l.code
                                            FROM ".TABLE_CONTENT_MANAGER." cm
                                            JOIN ".TABLE_LANGUAGES." l
-                                                ON l.languages_id = cm.language_id
+                                                ON l.languages_id = cm.languages_id
                                           WHERE cm.content_group = '".(int)$contentGroupId."'");
           if (xtc_db_num_rows($content_query) < 1 && $this->throw_exception === true) {
               throw new Exception(sprintf('Content Group not found: %s', $contentGroupId));
