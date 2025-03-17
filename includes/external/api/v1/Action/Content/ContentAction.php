@@ -79,7 +79,7 @@
 
                   // Input validation
                   $this->checkTableData(TABLE_CONTENT_MANAGER, $content);
-                  xtc_db_perform(TABLE_CONTENT_MANAGER, $content, 'update', "content_group = '".(int)$contentGroupId."' AND language_id = '".(int)$languages['languages_id']."'");
+                  xtc_db_perform(TABLE_CONTENT_MANAGER, $content, 'update', "content_group = '".(int)$contentGroupId."' AND languages_id = '".(int)$languages['languages_id']."'");
               } elseif (isset($this->options[$languages['code']])) {
                   $content = $this->getDefaultTableValues(TABLE_CONTENT_MANAGER);
                   $content['content_group'] = (int)$contentGroupId;
