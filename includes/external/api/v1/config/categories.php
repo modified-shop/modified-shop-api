@@ -19,7 +19,7 @@
 
   // insert categories
   $app->post('/categories',                         \api\v1\Service\Category\InsertCategory::class);
-  $app->post('/categories/categories',              \api\v1\Service\Category\InsertUpdateCategory::class);
+  $app->post('/categories/{id}/categories',         \api\v1\Service\Category\InsertUpdateCategory::class);
   $app->post('/categories/{id}/description',        \api\v1\Service\Category\InsertUpdateDescription::class);
   $app->post('/categories/{id}/products',           \api\v1\Service\Category\InsertUpdateProducts::class);
   $app->post('/categories/{id}/images',             \api\v1\Service\Category\InsertUpdateImages::class);
