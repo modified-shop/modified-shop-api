@@ -61,7 +61,7 @@
               }
           }
           
-          return $this->GetSingleCategory($categoryId);
+          return $this->GetCategoryDetails($categoryId);
       }
 
       /**
@@ -100,7 +100,7 @@
               }
           }
           
-          return $this->GetSingleCategory($categoryId);
+          return $this->GetCategoryDetails($categoryId);
       }
 
       /**
