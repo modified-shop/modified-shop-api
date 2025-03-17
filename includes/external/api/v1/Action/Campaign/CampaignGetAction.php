@@ -31,7 +31,7 @@
        *
        * @return array The campaign data
        */
-      public function getSingleCampaign(int $campaignId): array
+      public function GetSingleCampaign(int $campaignId): array
       {
           // Input validation
           if (empty($campaignId)) {
@@ -82,7 +82,7 @@
                                          ORDER BY campaigns_id ASC
                                             LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($campaigns = xtc_db_fetch_array($campaigns_query)) {
-              $data[] = $this->getSingleCampaign($campaigns['campaigns_id']);
+              $data[] = $this->GetSingleCampaign($campaigns['campaigns_id']);
           }
           
           $result = [

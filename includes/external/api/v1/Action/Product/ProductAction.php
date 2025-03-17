@@ -71,7 +71,7 @@
               }
           }
 
-          return $this->getProductDetails($productId);
+          return $this->GetProductDetails($productId);
       }
 
       /**

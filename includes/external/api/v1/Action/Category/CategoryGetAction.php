@@ -31,7 +31,7 @@
        *
        * @return array The category data
        */
-      public function getCategoryDetails(int $categoryId): array
+      public function GetCategoryDetails(int $categoryId): array
       {
           // Input validation
           if (empty($categoryId)) {
@@ -115,7 +115,7 @@
                                           ORDER BY categories_id ASC
                                              LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($categories = xtc_db_fetch_array($categories_query)) {
-              $data[] = $this->getCategoryDetails($categories['categories_id']);
+              $data[] = $this->GetCategoryDetails($categories['categories_id']);
           }
           
           $result = [
@@ -156,7 +156,7 @@
               throw new Exception('Category ID required');
           }
 
-          $result = $this->getCategoryDetails($categoryId);
+          $result = $this->GetCategoryDetails($categoryId);
           return $result;
       }
 

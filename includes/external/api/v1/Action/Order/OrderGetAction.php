@@ -31,7 +31,7 @@
        *
        * @return array The order data
        */
-      public function getOrderDetails(int $orderId): array
+      public function GetOrderDetails(int $orderId): array
       {
           // Input validation
           if (empty($orderId)) {
@@ -91,7 +91,7 @@
               throw new Exception('Order ID required');
           }
 
-          $result = $this->getOrderDetails($orderId);
+          $result = $this->GetOrderDetails($orderId);
           return $result;
       }
 
@@ -144,7 +144,7 @@
                                       ORDER BY date_purchased DESC
                                          LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($orders = xtc_db_fetch_array($orders_query)) {
-              $data[] = $this->getOrderDetails($orders['orders_id']);
+              $data[] = $this->GetOrderDetails($orders['orders_id']);
           }
           
           $result = [
@@ -459,7 +459,7 @@
        *
        * @return string
        */
-      private function getTransactionID(int $orderId, string $payment_method): string
+      private function GetTransactionID(int $orderId, string $payment_method): string
       {
           $transaction_id = '';
 

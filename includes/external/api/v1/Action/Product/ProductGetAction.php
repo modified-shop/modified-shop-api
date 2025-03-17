@@ -31,7 +31,7 @@
        *
        * @return array The product data
        */
-      public function getProductDetails(int $productId): array
+      public function GetProductDetails(int $productId): array
       {
           // Input validation
           if (empty($productId)) {
@@ -107,7 +107,7 @@
               throw new Exception('Product ID required');
           }
 
-          $result = $this->getProductDetails($productId);
+          $result = $this->GetProductDetails($productId);
           return $result;
       }
 
@@ -160,7 +160,7 @@
                                         ORDER BY products_date_added DESC
                                            LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($products = xtc_db_fetch_array($products_query)) {
-              $data[] = $this->getProductDetails($products['products_id']);
+              $data[] = $this->GetProductDetails($products['products_id']);
           }
           
           $result = [

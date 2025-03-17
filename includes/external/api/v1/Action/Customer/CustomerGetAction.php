@@ -31,7 +31,7 @@
        *
        * @return array The customer data
        */
-      public function getCustomerDetails(int $customerId): array
+      public function GetCustomerDetails(int $customerId): array
       {
           // Input validation
           if (empty($customerId)) {
@@ -100,7 +100,7 @@
               throw new Exception('Customer ID required');
           }
 
-          $result = $this->getCustomerDetails($customerId);
+          $result = $this->GetCustomerDetails($customerId);
           return $result;
       }
 
@@ -153,7 +153,7 @@
                                          ORDER BY customers_date_added DESC
                                             LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($customers = xtc_db_fetch_array($customers_query)) {
-              $data[] = $this->getCustomerDetails($customers['customers_id']);
+              $data[] = $this->GetCustomerDetails($customers['customers_id']);
           }
           
           $result = [

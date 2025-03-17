@@ -52,7 +52,7 @@
               }
           }
 
-          return $this->getManufacturerDetails($manufacturerId);
+          return $this->GetManufacturerDetails($manufacturerId);
       }
 
       /**

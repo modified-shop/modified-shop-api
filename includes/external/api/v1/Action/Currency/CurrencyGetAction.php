@@ -31,7 +31,7 @@
        *
        * @return array The currency data
        */
-      public function getSingleCurrency(int $currencyId): array
+      public function (int $currencyId): array
       {
           // Input validation
           if (empty($currencyId)) {
@@ -82,7 +82,7 @@
                                           ORDER BY currencies_id ASC
                                              LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($currencies = xtc_db_fetch_array($currencies_query)) {
-              $data[] = $this->getSingleCurrency($currencies['currencies_id']);
+              $data[] = $this->GetSingleCurrency($currencies['currencies_id']);
           }
           
           $result = [

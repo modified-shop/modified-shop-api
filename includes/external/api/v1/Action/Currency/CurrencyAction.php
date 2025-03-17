@@ -94,7 +94,7 @@
               $currencyId = xtc_db_insert_id();
           }
 
-          return $this->getSingleCurrency($currencyId);
+          return $this->GetSingleCurrency($currencyId);
       }
 
   }

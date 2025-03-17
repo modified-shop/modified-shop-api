@@ -31,7 +31,7 @@
        *
        * @return array The manufacturer data
        */
-      public function getManufacturerDetails(int $manufacturerId): array
+      public function GetManufacturerDetails(int $manufacturerId): array
       {
           // Input validation
           if (empty($manufacturerId)) {
@@ -83,7 +83,7 @@
               throw new Exception('Manufacturer ID required');
           }
 
-          $result = $this->getManufacturerDetails($manufacturerId);
+          $result = $this->GetManufacturerDetails($manufacturerId);
           return $result;
       }
 
@@ -136,7 +136,7 @@
                                              ORDER BY date_added DESC
                                                 LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($manufacturers = xtc_db_fetch_array($manufacturers_query)) {
-              $data[] = $this->getManufacturerDetails($manufacturers['manufacturers_id']);
+              $data[] = $this->GetManufacturerDetails($manufacturers['manufacturers_id']);
           }
           
           $result = [

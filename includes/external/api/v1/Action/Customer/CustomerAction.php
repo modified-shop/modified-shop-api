@@ -55,7 +55,7 @@
               }
           }
 
-          return $this->getCustomerDetails($customerId);
+          return $this->GetCustomerDetails($customerId);
       }
 
       /**

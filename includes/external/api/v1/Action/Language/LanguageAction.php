@@ -93,7 +93,7 @@
               $languageId = xtc_db_insert_id();
           }
 
-          return $this->getSingleLanguage($languageId);
+          return $this->GetSingleLanguage($languageId);
       }
 
   }

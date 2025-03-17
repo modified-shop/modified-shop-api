@@ -31,7 +31,7 @@
        *
        * @return array The language data
        */
-      public function getSingleLanguage(int $languageId): array
+      public function GetSingleLanguage(int $languageId): array
       {
           // Input validation
           if (empty($languageId)) {
@@ -82,7 +82,7 @@
                                          ORDER BY languages_id ASC
                                             LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($languages = xtc_db_fetch_array($languages_query)) {
-              $data[] = $this->getSingleLanguage($languages['languages_id']);
+              $data[] = $this->GetSingleLanguage($languages['languages_id']);
           }
           
           $result = [

@@ -95,7 +95,7 @@
               $campaignId = xtc_db_insert_id();
           }
 
-          return $this->getSingleCampaign($campaignId);
+          return $this->GetSingleCampaign($campaignId);
       }
 
   }
