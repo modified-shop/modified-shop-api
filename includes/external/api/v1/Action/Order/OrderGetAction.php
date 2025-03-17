@@ -415,7 +415,7 @@
           if ($this->options['limit'] > 50) $this->options['limit'] = 50;
           $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                                                         
-          $count_query = xtc_db_query("SELECT count(*) as total
+          $count_query = xtc_db_query("SELECT count(DISTINCT orders_status_id) as total
                                          FROM ".TABLE_ORDERS_STATUS);
           $count = xtc_db_fetch_array($count_query);
           
