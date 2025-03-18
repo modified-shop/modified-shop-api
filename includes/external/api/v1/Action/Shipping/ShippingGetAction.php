@@ -170,6 +170,7 @@
           $data = [];
           $shipping_status_query = xtc_db_query("SELECT shipping_status_id
                                                    FROM ".TABLE_SHIPPING_STATUS."
+                                               GROUP BY shipping_status_id
                                                ORDER BY shipping_status_id ASC
                                                   LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($shipping_status = xtc_db_fetch_array($shipping_status_query)) {
