@@ -36,7 +36,7 @@
       /**
        * The constructor.
        *
-       * @param ShippingAction $shippingAction The customer reader
+       * @param ShippingAction $shippingAction The shipping reader
        * @param Responder $responder The responder
        */
       public function __construct(ShippingAction $shippingAction, Responder $responder)

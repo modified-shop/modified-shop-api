@@ -16,3 +16,7 @@
 
   $app->get('/shipping/carrier/{id}',              \api\v1\Service\Shipping\GetSingleCarrier::class);
   $app->get('/shipping/status/{id}',               \api\v1\Service\Shipping\GetSingleShippingStatus::class);
+
+  // delete languages
+  $app->delete('/shipping/carrier/{id}',           \api\v1\Service\Shipping\DeleteCarrier::class);
+  $app->delete('/shipping/status/{id}',            \api\v1\Service\Shipping\DeleteShippingStatus::class);

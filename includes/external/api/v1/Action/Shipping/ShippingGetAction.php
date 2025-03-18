@@ -25,24 +25,24 @@
       /**
        * Read a carrier by the given carrier id.
        *
-       * @param int $carrierID The carrier id
+       * @param int $carrierId The carrier id
        *
        * @throws Exception
        *
        * @return array The carrier data
        */
-      public function GetSingleCarrier(int $carrierID): array
+      public function GetSingleCarrier(int $carrierId): array
       {
           // Input validation
-          if (empty($carrierID)) {
+          if (empty($carrierId)) {
               throw new Exception('Carrier ID required');
           }
           
           $carrier_query = xtc_db_query("SELECT *
                                            FROM ".TABLE_CARRIERS."
-                                          WHERE carrier_id = '".(int)$carrierID."'");
+                                          WHERE carrier_id = '".(int)$carrierId."'");
           if (xtc_db_num_rows($carrier_query) < 1) {
-              throw new Exception(sprintf('Carrier not found: %s', $carrierID));
+              throw new Exception(sprintf('Carrier not found: %s', $carrierId));
           } else {
               $carrier = xtc_db_fetch_array($carrier_query);
           }

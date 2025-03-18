@@ -21,7 +21,7 @@
   /**
    * Action
    */
-  final class GetSingleShippingStatus extends BaseService
+  final class DeleteCarrier extends BaseService
   {
       /**
        * @var ShippingAction
@@ -61,12 +61,10 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $shippingStatusId = (int)$args['id'];
-          $params = $request->getQueryParams();
-          $params['path'] = $request->getUri()->getPath();
+          $carrierId = (int)$args['id'];
+          
+          $this->shippingAction->DeleteCarrier($carrierId);
 
-          $result = $this->shippingAction->GetSingleShippingStatus($shippingStatusId, $params);
-
-          return $this->responder->withJson($response, $result);
+          return $this->responder->withJson($response)->withStatus(204);
       }
   }

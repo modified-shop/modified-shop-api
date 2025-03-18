@@ -21,7 +21,7 @@
   /**
    * Action
    */
-  final class GetSingleShippingStatus extends BaseService
+  final class DeleteShippingStatus extends BaseService
   {
       /**
        * @var ShippingAction
@@ -62,11 +62,9 @@
           $this->CheckAccess($request, $response);
 
           $shippingStatusId = (int)$args['id'];
-          $params = $request->getQueryParams();
-          $params['path'] = $request->getUri()->getPath();
+          
+          $this->shippingAction->DeleteShippingStatus($shippingStatusId);
 
-          $result = $this->shippingAction->GetSingleShippingStatus($shippingStatusId, $params);
-
-          return $this->responder->withJson($response, $result);
+          return $this->responder->withJson($response)->withStatus(204);
       }
   }
