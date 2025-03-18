@@ -426,6 +426,7 @@
           $data = [];
           $order_status_query = xtc_db_query("SELECT orders_status_id
                                                 FROM ".TABLE_ORDERS_STATUS."
+                                            GROUP BY orders_status_id
                                             ORDER BY orders_status_id ASC
                                                LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($order_status = xtc_db_fetch_array($order_status_query)) {
