@@ -11,12 +11,12 @@
    ---------------------------------------------------------------------------------------*/
 
   // shipping
-  $app->get('/shipping/carrier',                   \api\v1\Service\Shipping\GetCarrier::class);
+  $app->get('/shipping/carriers',                  \api\v1\Service\Shipping\GetCarrier::class);
   $app->get('/shipping/status',                    \api\v1\Service\Shipping\GetShippingStatus::class);
 
-  $app->get('/shipping/carrier/{id}',              \api\v1\Service\Shipping\GetSingleCarrier::class);
+  $app->get('/shipping/carriers/{id}',             \api\v1\Service\Shipping\GetSingleCarrier::class);
   $app->get('/shipping/status/{id}',               \api\v1\Service\Shipping\GetSingleShippingStatus::class);
 
   // delete languages
-  $app->delete('/shipping/carrier/{id}',           \api\v1\Service\Shipping\DeleteCarrier::class);
+  $app->delete('/shipping/carriers/{id}',          \api\v1\Service\Shipping\DeleteCarrier::class);
   $app->delete('/shipping/status/{id}',            \api\v1\Service\Shipping\DeleteShippingStatus::class);
