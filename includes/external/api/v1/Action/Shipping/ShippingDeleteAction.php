@@ -40,7 +40,7 @@
                                            FROM ".TABLE_CARRIERS."
                                           WHERE carrier_id = '".(int)$carrierId."'");
           if (xtc_db_num_rows($carrier_query) < 1) {
-            throw new Exception(sprintf('Carrier not found: %s', $carrierId));
+              throw new Exception(sprintf('Carrier not found: %s', $carrierId));
           } else {
               //delete
               xtc_db_query("DELETE FROM ".TABLE_CARRIERS." WHERE carrier_id = '".(int)$carrierId."'");
@@ -67,7 +67,7 @@
                                                    FROM ".TABLE_SHIPPING_STATUS."
                                                   WHERE shipping_status_id = '".(int)$shippingStatusId."'");
           if (xtc_db_num_rows($shipping_status_query) < 1) {
-            throw new Exception(sprintf('Shipping Status not found: %s', $shippingStatusId));
+              throw new Exception(sprintf('Shipping Status not found: %s', $shippingStatusId));
           } else {
               //delete
               xtc_db_query("DELETE FROM ".TABLE_SHIPPING_STATUS." WHERE shipping_status_id = '".(int)$shippingStatusId."'");
