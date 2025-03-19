@@ -245,7 +245,7 @@ require (DIR_WS_INCLUDES.'head.php');
                 
                 echo '<div class="accounting_container">';
                 echo '<div class="accounting_col">';
-                for ($i=1; $i<=$total; $i++) {
+                for ($i=0; $i<$total; $i++) {
                   ?>
                   <table class="tableBoxCenter collapse">
                     <tr class="dataTableHeadingRow">
