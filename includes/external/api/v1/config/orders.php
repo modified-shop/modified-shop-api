@@ -22,6 +22,8 @@
   
   // insert orders
   $app->post('/orders',                                      \api\v1\Service\Order\InsertOrder::class);
+  $app->post('/orders/status',                               \api\v1\Service\Order\InsertOrderStatus::class);
+  $app->post('/orders/status/{id}',                          \api\v1\Service\Order\InsertUpdateOrderStatus::class);
   $app->post('/orders/{id}/products',                        \api\v1\Service\Order\InsertOrderProduct::class);
   $app->post('/orders/{id}/products/{pid}',                  \api\v1\Service\Order\InsertUpdateOrderProduct::class);
   $app->post('/orders/{id}/products_attributes',             \api\v1\Service\Order\InsertOrderProductAttributes::class);
@@ -36,6 +38,7 @@
   $app->post('/orders/{id}/tracking/{tid}',                  \api\v1\Service\Order\InsertUpdateOrderTracking::class);
 
   // update orders
+  $app->put('/orders/status/{id}',                           \api\v1\Service\Order\InsertUpdateOrderStatus::class);
   $app->put('/orders/{id}',                                  \api\v1\Service\Order\InsertUpdateOrder::class);
   $app->put('/orders/{id}/products/{pid}',                   \api\v1\Service\Order\InsertUpdateOrderProduct::class);
   $app->put('/orders/{id}/products_attributes/{aid}',        \api\v1\Service\Order\InsertUpdateOrderProductAttributes::class);
@@ -45,6 +48,7 @@
   $app->put('/orders/{id}/tracking/{tid}',                   \api\v1\Service\Order\InsertUpdateOrderTracking::class);
 
   // delete orders
+  $app->delete('/orders/status/{id}',                        \api\v1\Service\Order\DeleteOrderStatus::class);
   $app->delete('/orders/{id}',                               \api\v1\Service\Order\DeleteOrder::class);
   $app->delete('/orders/{id}/products',                      \api\v1\Service\Order\DeleteAllProduct::class);
   $app->delete('/orders/{id}/products/{pid}',                \api\v1\Service\Order\DeleteProduct::class);

@@ -590,4 +590,83 @@
           return $this->GetOrderTracking($orderId);
       }
 
+      /**
+       * Insert a order status by the given options.
+       *
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The order status data
+       */
+      public function InsertOrderStatus(array $options): array
+      {
+          $order_status = $this->InsertUpdateOrderStatus(0, $options);
+          
+          return $order_status;
+      }
+      
+      /**
+       * Insert or Update a order status by given order status id.
+       *
+       * @param int $orderStatusId The order status id
+       * @param mixed[] $options
+       *
+       * @throws Exception
+       *
+       * @return array The order status data
+       */
+      public function InsertUpdateOrderStatus(int $orderStatusId, array $options): array
+      {
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+
+          $languages_query = xtc_db_query("SELECT *
+                                             FROM ".TABLE_LANGUAGES);
+          while ($languages = xtc_db_fetch_array($languages_query)) {
+              $where = '';
+              if ($orderStatusId > 0) {
+                  $where = "AND orders_status_id = '".(int)$orderStatusId."'";
+                  $order_status_query = xtc_db_query("SELECT *
+                                                        FROM ".TABLE_ORDERS_STATUS."
+                                                       WHERE language_id = '".(int)$languages['languages_id']."'
+                                                            ".$where);
+                  if (xtc_db_num_rows($order_status_query) < 1) {
+                      $action = 'insert';
+                      $order_status = $this->getDefaultTableValues(TABLE_ORDERS_STATUS);
+                      $order_status['orders_status_id'] = $orderStatusId;
+                      $order_status['language_id'] = (int)$languages['languages_id'];
+                  } else {
+                      $action = 'update';
+                      $order_status = xtc_db_fetch_array($order_status_query);
+                  }
+              } else {
+                  $action = 'insert';
+                  $order_status = $this->getDefaultTableValues(TABLE_ORDERS_STATUS);
+                  
+                  if ($orderStatusId < 1) {
+                      $next_id_query = xtc_db_query("SELECT max(orders_status_id) as orders_status_id 
+                                                       FROM ".TABLE_ORDERS_STATUS."");
+                      $next_id = xtc_db_fetch_array($next_id_query);
+                      $orderStatusId = $next_id['orders_status_id'] + 1;
+                  }
+
+                  $order_status['orders_status_id'] = $orderStatusId;
+                  $order_status['language_id'] = (int)$languages['languages_id'];
+              }
+    
+              foreach ($order_status as $key => $value) {
+                  if (isset($this->options[$languages['code']][$key])) {
+                      $order_status[$key] = $this->options[$languages['code']][$key];
+                  }
+              }
+    
+              // Input validation
+              $this->checkTableData(TABLE_ORDERS_STATUS, $order_status);
+              xtc_db_perform(TABLE_ORDERS_STATUS, $order_status, $action, "language_id = '".(int)$languages['languages_id']."' ".$where);
+          }
+
+          return $this->GetSingleOrderStatus($orderStatusId);
+      }
+
   }

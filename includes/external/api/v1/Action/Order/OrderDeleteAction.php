@@ -363,4 +363,31 @@
           $this->DeleteTracking($orderId, 0);
       }
 
+      /**
+       * Delete a order status by the given order status id.
+       *
+       * @param int $orderStatusId The order status id
+       *
+       * @return void
+       */
+      public function DeleteOrderStatus(int $orderStatusId): void
+      {
+          // Input validation
+          if (empty($orderStatusId)) {
+              throw new Exception('Order Status ID required');
+          }
+
+          $order_status_query = xtc_db_query("SELECT *
+                                                FROM ".TABLE_ORDERS_STATUS."
+                                               WHERE orders_status_id = '".(int)$orderStatusId."'");
+          if (xtc_db_num_rows($order_status_query) < 1) {
+              throw new Exception(sprintf('Order Status not found: %s', $orderStatusId));
+          } else {
+              //delete
+              xtc_db_query("DELETE FROM ".TABLE_ORDERS_STATUS." WHERE orders_status_id = '".(int)$orderStatusId."'");
+          }
+          
+          $this->logger->info(sprintf('Order Status deleted successfully: %s', $orderStatusId));
+      }
+
   }
