@@ -172,7 +172,7 @@
               xtc_db_perform(TABLE_SHIPPING_STATUS, $shipping_status, $action, "language_id = '".(int)$languages['languages_id']."' ".$where);
           }
 
-          return $this->GetSingleValue($shippingStatusId);
+          return $this->GetSingleShippingStatus($shippingStatusId);
       }
 
   }
