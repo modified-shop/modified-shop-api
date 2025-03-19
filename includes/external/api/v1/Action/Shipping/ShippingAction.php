@@ -107,7 +107,7 @@
        */
       public function InsertShippingStatus(array $options): array
       {
-          $shipping_status = $this->InsertUpdateValue(0, $options);
+          $shipping_status = $this->InsertUpdateShippingStatus(0, $options);
           
           return $shipping_status;
       }
