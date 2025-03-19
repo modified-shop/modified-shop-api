@@ -133,6 +133,24 @@ require (DIR_WS_INCLUDES.'head.php');
     $(".access"+val).attr('checked', checked);
   }
 </script>
+<style>
+.accounting_container {
+  display: flex;
+  margin: 0px -10px;
+}
+.accounting_col {
+  width: 50%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+ 
+.accounting_col .tableBoxCenter.collapse .dataTableHeadingRow {
+  cursor:pointer;
+}
+.accounting_col .tableBoxCenter.collapse .dataTableHeadingRow:hover .dataTableHeadingContent {
+  background-color:#ddd; 
+}
+</style>
 </head>
 <body>
 <!-- header //-->
@@ -218,6 +236,9 @@ require (DIR_WS_INCLUDES.'head.php');
                   unset($accounting_array[0]);
                   $accounting_array[0] = $accounting_tmp;
                 }
+
+                $accounting_array = array_values($accounting_array);
+                $naming_array = array_values($naming_array);
                 
                 $total = count($accounting_array);
                 $divide = ceil($total/2);
@@ -245,9 +266,9 @@ require (DIR_WS_INCLUDES.'head.php');
                     <tr><td>&nbsp;</td></tr>
                   </table>
                   <?php
-                  if ($i % $divide == 0 || $i == $total) {
+                  if (($i + 1) % $divide == 0 || ($i + 1) == $total) {
                     echo '</div>';
-                    if ($i < $total) {
+                    if (($i + 1) < $total) {
                       echo '<div class="accounting_col">';
                     }
                   }
