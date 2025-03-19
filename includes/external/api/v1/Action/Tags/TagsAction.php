@@ -81,7 +81,7 @@
                   
                   if ($optionId < 1) {
                       $next_id_query = xtc_db_query("SELECT max(options_id) as options_id 
-                                                       FROM " . TABLE_PRODUCTS_TAGS_OPTIONS . "");
+                                                       FROM ".TABLE_PRODUCTS_TAGS_OPTIONS."");
                       $next_id = xtc_db_fetch_array($next_id_query);
                       $optionId = $next_id['options_id'] + 1;
                   }
@@ -173,7 +173,7 @@
                   
                   if ($valueId < 1) {
                       $next_id_query = xtc_db_query("SELECT max(values_id) as values_id 
-                                                       FROM " . TABLE_PRODUCTS_TAGS_VALUES . "");
+                                                       FROM ".TABLE_PRODUCTS_TAGS_VALUES."");
                       $next_id = xtc_db_fetch_array($next_id_query);
                       $valueId = $next_id['values_id'] + 1;
                   }
