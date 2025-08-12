@@ -32,7 +32,7 @@
         schema: new OA\Schema(
           type: 'integer',
         ),
-        description: 'configuration Id'
+        description: 'configuration group Id'
       ),
     ],
     responses: [
@@ -43,6 +43,10 @@
       new OA\Response(
           response: 403,
           description: 'configuration group not found'
+      ),
+      new OA\Response(
+          response: 500,
+          description: 'configuration group Id required'
       )
     ],
     security: [

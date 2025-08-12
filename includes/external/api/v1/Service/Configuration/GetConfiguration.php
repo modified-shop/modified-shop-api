@@ -43,6 +43,10 @@
       new OA\Response(
           response: 403,
           description: 'configuration not found'
+      ),
+      new OA\Response(
+          response: 500,
+          description: 'configuration Id required'
       )
     ],
     security: [
