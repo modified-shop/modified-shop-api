@@ -17,10 +17,39 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/configurations/{id}',
+    tags: ['Configuration'],
+    description: 'Get configuration data by given Id',
+    operationId: 'GetConfiguration',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'configuration Id'
+      ),
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'The configuration data',
+      ),
+      new OA\Response(
+          response: 400,
+          description: 'no configuration found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetConfiguration']]
+    ]
+  )]
+  
   final class GetConfiguration extends BaseService
   {
       /**
