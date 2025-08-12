@@ -48,7 +48,7 @@
         description: 'The currencies data',
       ),
       new OA\Response(
-          response: 500,
+          response: 403,
           description: 'no currencies found'
       )
     ],

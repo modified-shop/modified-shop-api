@@ -41,7 +41,7 @@
         description: 'The currencies data',
       ),
       new OA\Response(
-          response: 500,
+          response: 400,
           description: 'Invalid ID supplied'
       )
     ],

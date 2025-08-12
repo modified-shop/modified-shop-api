@@ -32,7 +32,7 @@
         schema: new OA\Schema(
           type: 'integer',
         ),
-        description: 'Currencies Id'
+        description: 'currencies Id'
       ),
     ],
     responses:[
@@ -41,7 +41,7 @@
         description: 'no data',
       ),
       new OA\Response(
-          response: 500,
+          response: 400,
           description: 'Invalid ID supplied'
       )
     ],

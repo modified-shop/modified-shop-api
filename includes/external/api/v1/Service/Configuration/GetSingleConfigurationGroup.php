@@ -20,36 +20,29 @@
   use OpenApi\Attributes as OA;
 
   #[OA\Get(
-    path: '/configurations/groups/{id}',
+    path: '/configurations/groups/{Id}',
     tags: ['Configuration'],
     description: 'Get configuration group data by given Id',
     operationId: 'GetSingleConfigurationGroup',
     parameters: [
       new OA\Parameter(
-        name: 'page', 
-        in: 'query',
+        name: 'Id', 
+        in: 'path',
+        required: true,
         schema: new OA\Schema(
-          type: 'integer'
+          type: 'integer',
         ),
-        description: 'Number of page'
+        description: 'configuration Id'
       ),
-      new OA\Parameter(
-        name: 'limit', 
-        in: 'query',
-        schema: new OA\Schema(
-          type: 'integer'
-        ),
-        description: 'Number of results per page'
-      )
     ],
     responses: [
       new OA\Response(
         response: 200, 
-        description: 'The configuration data',
+        description: 'configuration data',
       ),
       new OA\Response(
-          response: 400,
-          description: 'no configuration found'
+          response: 403,
+          description: 'configuration group not found'
       )
     ],
     security: [

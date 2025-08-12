@@ -40,16 +40,24 @@
           type: 'integer'
         ),
         description: 'Number of results per page'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: configuration'
       )
     ],
     responses: [
       new OA\Response(
         response: 200, 
-        description: 'The configuration data',
+        description: 'configuration data',
       ),
       new OA\Response(
-          response: 400,
-          description: 'no configuration found'
+          response: 403,
+          description: 'no configuration group found'
       )
     ],
     security: [
