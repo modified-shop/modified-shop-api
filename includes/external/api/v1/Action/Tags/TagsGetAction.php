@@ -74,9 +74,6 @@
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
-          
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                     
           $count_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_PRODUCTS_TAGS_OPTIONS."
@@ -170,9 +167,6 @@
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
-          
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                     
           $conditions = [];
           if (isset($this->options['option']) && preg_replace('/[^\d\,]/', '', $this->options['option']) != '') {

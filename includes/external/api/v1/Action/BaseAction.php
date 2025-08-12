@@ -155,7 +155,10 @@
                   $this->options[$key] = $value;
               }
           }
-      }
+ 
+          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
+          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
+     }
 
       /**
        * get default table data

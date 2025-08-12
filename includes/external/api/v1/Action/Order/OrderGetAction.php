@@ -107,9 +107,6 @@
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
           
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
-          
           $conditions = [];
           if (isset($this->options['status']) && !empty(preg_replace('/[^\d\,]/', '', $this->options['status']))) {
               $conditions[] = " orders_status IN (".preg_replace('/[^\d\,]/', '', $this->options['status']).") ";
@@ -407,9 +404,6 @@
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
-          
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                                                         
           $count_query = xtc_db_query("SELECT count(DISTINCT orders_status_id) as total
                                          FROM ".TABLE_ORDERS_STATUS);

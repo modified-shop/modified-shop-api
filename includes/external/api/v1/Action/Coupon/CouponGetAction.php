@@ -68,9 +68,6 @@
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
           
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
-          
           $conditions = [];
           if (isset($this->options['status']) && preg_replace('/[^\w\,]/', '', $this->options['status']) != '') {
               $data = preg_replace('/[^\w\,]/', '', $this->options['status']);

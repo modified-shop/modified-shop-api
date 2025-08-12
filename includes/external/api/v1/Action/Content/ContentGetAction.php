@@ -99,9 +99,6 @@
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
-          
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
 
           $conditions = [];
           if (isset($this->options['status']) && preg_replace('/[^\d\,]/', '', $this->options['status']) != '') {
@@ -254,9 +251,6 @@
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
-          
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                                                         
           $count_query = xtc_db_query("SELECT count(*) as total
                                          FROM ".TABLE_CM_FILE_FLAGS);

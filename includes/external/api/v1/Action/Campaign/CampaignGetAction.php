@@ -62,9 +62,6 @@
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
-          
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                                                         
           $count_query = xtc_db_query("SELECT count(*) as total
                                          FROM ".TABLE_CAMPAIGNS);
@@ -121,9 +118,6 @@
           if (empty($refId)) {
               throw new Exception('Ref ID required');
           }
-
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                                                         
           $conditions = [];
           if ((int)$this->options['from'] > 0) {

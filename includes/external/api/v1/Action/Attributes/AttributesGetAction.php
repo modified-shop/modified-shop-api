@@ -74,9 +74,6 @@
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
-          
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                     
           $count_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_PRODUCTS_OPTIONS."
@@ -170,9 +167,6 @@
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
-          
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                     
           $count_query = xtc_db_query("SELECT *
                                          FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
@@ -226,9 +220,6 @@
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
-          
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                     
           $count_query = xtc_db_query("SELECT count(*) as total
                                          FROM ".TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS."

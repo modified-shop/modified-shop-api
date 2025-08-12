@@ -94,9 +94,6 @@
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
           
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
-          
           $conditions = [];
           if (isset($this->options['status']) && preg_replace('/[^\d\,]/', '', $this->options['status']) != '') {
               $conditions[] = " status IN (".preg_replace('/[^\d\,]/', '', $this->options['status']).") ";
@@ -256,9 +253,6 @@
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
-          
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                                                         
           $count_query = xtc_db_query("SELECT count(*) as total
                                          FROM ".TABLE_GEO_ZONES);
@@ -368,9 +362,6 @@
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
-          
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                                                         
           $count_query = xtc_db_query("SELECT count(*) as total
                                          FROM ".TABLE_TAX_CLASS);
@@ -449,9 +440,6 @@
       {          
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
-          
-          if ($this->options['limit'] > 50) $this->options['limit'] = 50;
-          $this->options['page'] = (abs((int)$this->options['page']) > 0) ? abs((int)$this->options['page']) : 1;
                                                         
           $conditions = [];
           if (isset($this->options['zone']) && preg_replace('/[^\d\,]/', '', $this->options['zone']) != '') {
