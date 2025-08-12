@@ -17,13 +17,13 @@
   use api\v1\Auth\Authentication;
   use OpenApi\Generator as OpenApiGenerator;
   use Symfony\Component\Finder\Finder;
-  
+
   return function (App $app) {
       // oauth
       $app->post('/v1/oauth', \api\v1\Auth\JwtAuth::class)->add(Authentication::class);
       
       // docs
-      $app->get('/v1/docs', function ($request, $response, $args) {
+      $app->get('/v1/swagger.json', function ($request, $response, $args) {
           $swagger = OpenApiGenerator::scan([DIR_FS_EXTERNAL.'api/v1/']);
           $response->getBody()->write(json_encode($swagger));
           return $response->withHeader('Content-Type', 'application/json');
