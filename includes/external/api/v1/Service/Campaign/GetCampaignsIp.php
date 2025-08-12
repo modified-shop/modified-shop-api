@@ -20,11 +20,20 @@
   use OpenApi\Attributes as OA;
 
   #[OA\Get(
-    path: '/api/v1/campaigns',
+    path: '/api/v1/campaigns/{Id}/ip',
     tags: ['Campaign'],
     description: 'Get campaigns ip data',
     operationId: 'GetCampaignsIp',
     parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'campaigns Id'
+      ),
       new OA\Parameter(
         name: 'page', 
         in: 'query',
