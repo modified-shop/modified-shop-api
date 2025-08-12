@@ -21,7 +21,7 @@
 
   #[OA\Put(
     path: '/api/v1/campaigns/{Id}',
-    tags: ['Currency'],
+    tags: ['Campaign'],
     description: 'Update single campaigns data by given Id',
     operationId: 'InsertUpdateCampaign',
     parameters: [
