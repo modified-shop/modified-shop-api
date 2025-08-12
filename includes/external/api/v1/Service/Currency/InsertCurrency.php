@@ -31,7 +31,7 @@
       ),
       new OA\Response(
           response: 400,
-          description: 'Invalid code supplied'
+          description: 'invalid code supplied'
       )
     ],
     security: [

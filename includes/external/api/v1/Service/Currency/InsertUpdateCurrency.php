@@ -38,11 +38,11 @@
     responses:[
       new OA\Response(
         response: 201, 
-        description: 'The currencies data',
+        description: 'currencies data',
       ),
       new OA\Response(
           response: 400,
-          description: 'Invalid code supplied'
+          description: 'invalid code supplied'
       ),
       new OA\Response(
           response: 500,
