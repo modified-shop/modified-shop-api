@@ -27,6 +27,8 @@
        *
        * @param int $currencyId The currency id
        *
+       * @throws Exception
+       *
        * @return void
        */
       public function DeleteCurrency(int $currencyId): void

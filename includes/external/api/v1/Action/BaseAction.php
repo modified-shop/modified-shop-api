@@ -30,8 +30,7 @@
     version: '1.0.0', 
     title: 'modified eCommerce Shopsoftware API',
     description: ''
-  )]
-  
+  )]  
   class BaseAction
   {
       /**
@@ -115,6 +114,26 @@
           }
     
           return $string;  
+      }
+
+      /**
+       * error handling
+       *
+       * @param string $message
+       * @param int $code
+       *
+       * @return mixed
+       */
+      protected function errormessage($message, code = 404)
+      {    
+          return [
+            'errormessage' => [
+              'error' => [
+                'message' => $message,
+              ],
+            ],
+            'code' => (int)$code,
+          ];
       }
 
       /**

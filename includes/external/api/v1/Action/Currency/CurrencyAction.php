@@ -60,7 +60,7 @@
                                                 FROM ".TABLE_CURRENCIES."
                                                WHERE currencies_id = '".(int)$currencyId."'");
               if (xtc_db_num_rows($currency_query) < 1) {
-                  throw new Exception(sprintf('Currency not found: %s', $currencyId));
+                  return $this->errormessage(sprintf('Currency not found: %s', $currencyId));
               } else {
                   $currency = xtc_db_fetch_array($currency_query);
                   $currency['last_updated'] = 'now()';
@@ -81,7 +81,7 @@
                                              FROM ".TABLE_CURRENCIES."
                                             WHERE code = '".xtc_db_input($currency['code'])."'");
               if (xtc_db_num_rows($check_query) > 0) {
-                  throw new Exception('Campaign refId already exists');
+                  return $this->errormessage('Currency code already exists', 400);
               }
           }
 

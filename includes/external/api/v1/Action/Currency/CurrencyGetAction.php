@@ -42,7 +42,7 @@
                                             FROM ".TABLE_CURRENCIES."
                                            WHERE currencies_id = '".(int)$currencyId."'");
           if (xtc_db_num_rows($currency_query) < 1) {
-              throw new Exception(sprintf('Currency not found: %s', $currencyId));
+              return $this->errormessage(sprintf('Currency not found: %s', $currencyId));
           } else {
               $currency = xtc_db_fetch_array($currency_query);
           }
@@ -55,8 +55,6 @@
        * Read currencies by given conditions
        *
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The currency data
        */
@@ -73,7 +71,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Currency found');
+              return $this->errormessage('no Currency found');
           }
           
           $data = [];

@@ -17,10 +17,46 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/currencies',
+    tags: ['Currency'],
+    description: 'Get currencies data',
+    operationId: 'GetCurrencies',
+    parameters: [
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'The currencies data',
+      ),
+      new OA\Response(
+          response: 500,
+          description: 'no currencies found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetCurrencies']]
+    ]
+  )]
+  
   final class GetCurrencies extends BaseService
   {
       /**
@@ -66,6 +102,9 @@
           
           $result = $this->currencyAction->GetCurrencies($params);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response, $result);
       }
   }

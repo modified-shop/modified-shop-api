@@ -17,10 +17,39 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/currencies/{Id}',
+    tags: ['Currency'],
+    description: 'Get single currency data by given Id',
+    operationId: 'GetSingleCurrency',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'Currencies Id'
+      ),
+    ],
+    responses:[
+      new OA\Response(
+        response: 200, 
+        description: 'The currencies data',
+      ),
+      new OA\Response(
+          response: 500,
+          description: 'Invalid ID supplied'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleCurrency']]
+    ]
+  )]
+
   final class GetSingleCurrency extends BaseService
   {
       /**
@@ -66,7 +95,10 @@
           $params['path'] = $request->getUri()->getPath();
 
           $result = $this->currencyAction->GetSingleCurrency($currencyId, $params);
-
+          
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response, $result);
       }
   }
