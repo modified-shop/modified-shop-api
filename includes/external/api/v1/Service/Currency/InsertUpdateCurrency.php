@@ -32,7 +32,7 @@
         schema: new OA\Schema(
           type: 'integer',
         ),
-        description: 'Currencies Id'
+        description: 'currencies Id'
       ),
     ],
     responses:[

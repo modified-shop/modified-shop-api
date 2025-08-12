@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Put(
+    path: '/api/v1/campaigns/{Id}',
+    tags: ['Currency'],
+    description: 'Update single campaigns data by given Id',
+    operationId: 'InsertUpdateCampaign',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'campaigns Id'
+      ),
+    ],
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'campaigns data',
+      ),
+      new OA\Response(
+          response: 400,
+          description: 'invalid refId supplied'
+      ),
+      new OA\Response(
+          response: 500,
+          description: 'campaigns Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateCampaign']]
+    ]
+  )]
+
   final class InsertUpdateCampaign extends BaseService
   {
       /**

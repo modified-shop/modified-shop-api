@@ -17,10 +17,28 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/campaigns',
+    tags: ['Campaign'],
+    description: 'Insert single campaigns data by given Id',
+    operationId: 'InsertCampaign',
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'campaigns data',
+      ),
+      new OA\Response(
+          response: 400,
+          description: 'invalid refId supplied'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertCampaign']]
+    ]
+  )]
+
   final class InsertCampaign extends BaseService
   {
       /**
