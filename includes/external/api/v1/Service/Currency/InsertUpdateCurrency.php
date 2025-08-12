@@ -42,7 +42,11 @@
       ),
       new OA\Response(
           response: 400,
-          description: 'Invalid ID supplied'
+          description: 'Invalid code supplied'
+      ),
+      new OA\Response(
+          response: 500,
+          description: 'currency Id required'
       )
     ],
     security: [

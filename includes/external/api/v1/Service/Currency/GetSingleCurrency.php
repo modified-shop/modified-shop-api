@@ -38,11 +38,19 @@
     responses:[
       new OA\Response(
         response: 200, 
-        description: 'The currencies data',
+        description: 'currencies data',
       ),
       new OA\Response(
           response: 400,
-          description: 'Invalid ID supplied'
+          description: 'invalid ID supplied'
+      ),
+      new OA\Response(
+          response: 403,
+          description: 'currency not found'
+      ),
+      new OA\Response(
+          response: 500,
+          description: 'currency Id required'
       )
     ],
     security: [

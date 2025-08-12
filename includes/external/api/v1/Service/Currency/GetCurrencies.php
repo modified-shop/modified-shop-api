@@ -45,7 +45,7 @@
     responses: [
       new OA\Response(
         response: 200, 
-        description: 'The currencies data',
+        description: 'currencies data',
       ),
       new OA\Response(
           response: 403,

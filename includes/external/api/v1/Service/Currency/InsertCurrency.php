@@ -27,11 +27,15 @@
     responses:[
       new OA\Response(
         response: 201, 
-        description: 'The currencies data',
+        description: 'currencies data',
+      ),
+      new OA\Response(
+          response: 400,
+          description: 'Invalid code supplied'
       )
     ],
     security: [
-      ['InsertCurrency' => ['GetCurrencies']]
+      ['modified_auth' => ['InsertCurrency']]
     ]
   )]
 
