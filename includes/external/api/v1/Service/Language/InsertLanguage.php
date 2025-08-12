@@ -17,10 +17,28 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/languages',
+    tags: ['Language'],
+    description: 'Insert single language data by given Id',
+    operationId: 'Insertlanguage',
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'languages data',
+      ),
+      new OA\Response(
+          response: 400,
+          description: 'invalid code supplied'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['Insertlanguage']]
+    ]
+  )]
+
   final class InsertLanguage extends BaseService
   {
       /**

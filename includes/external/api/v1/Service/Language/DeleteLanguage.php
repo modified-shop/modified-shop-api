@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/languages/{Id}',
+    tags: ['Language'],
+    description: 'Delete single language data by given Id',
+    operationId: 'DeleteLanguage',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'languages Id'
+      ),
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+          response: 403,
+          description: 'language not found'
+      ),
+      new OA\Response(
+          response: 500,
+          description: 'language Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteLanguage']]
+    ]
+  )]
+
   final class DeleteLanguage extends BaseService
   {
       /**

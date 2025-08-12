@@ -17,10 +17,46 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/languages',
+    tags: ['Language'],
+    description: 'Get languages data',
+    operationId: 'Getlanguages',
+    parameters: [
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'languages data',
+      ),
+      new OA\Response(
+          response: 403,
+          description: 'no languages found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['Getlanguages']]
+    ]
+  )]
+  
   final class GetLanguages extends BaseService
   {
       /**

@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Put(
+    path: '/api/v1/languages/{Id}',
+    tags: ['Language'],
+    description: 'Update single language data by given Id',
+    operationId: 'InsertUpdatelanguage',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'languages Id'
+      ),
+    ],
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'languages data',
+      ),
+      new OA\Response(
+          response: 400,
+          description: 'invalid code supplied'
+      ),
+      new OA\Response(
+          response: 500,
+          description: 'language Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdatelanguage']]
+    ]
+  )]
+
   final class InsertUpdateLanguage extends BaseService
   {
       /**
