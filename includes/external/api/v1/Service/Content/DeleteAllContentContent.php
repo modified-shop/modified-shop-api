@@ -63,8 +63,11 @@
 
           $contentId = (int)$args['id'];
           
-          $this->contentAction->DeleteAllContentContent($contentId);
+          $result = $this->contentAction->DeleteAllContentContent($contentId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

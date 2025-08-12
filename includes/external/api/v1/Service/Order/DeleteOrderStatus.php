@@ -63,8 +63,11 @@
 
           $orderStatusId = (int)$args['id'];
           
-          $this->orderAction->DeleteOrderStatus($orderStatusId);
+          $result = $this->orderAction->DeleteOrderStatus($orderStatusId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

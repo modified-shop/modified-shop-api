@@ -66,6 +66,9 @@
                     
           $result = $this->productAction->InsertUpdateDescription($productId, $data);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           if ($productId > 0) {
               return $this->responder->withJson($response, $result);
           }

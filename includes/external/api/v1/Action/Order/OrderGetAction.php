@@ -42,7 +42,7 @@
                                          FROM ".TABLE_ORDERS."
                                         WHERE orders_id = '".(int)$orderId."'");
           if (xtc_db_num_rows($order_query) < 1) {
-              throw new Exception(sprintf('Order not found: %s', $orderId));
+              $this->errormessage(sprintf('Order not found: %s', $orderId));
           } else {            
               // disable Exception
               $this->throw_exception = false;
@@ -100,8 +100,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The order data
        */
       public function GetOrders(array $options): array
@@ -134,7 +132,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Order found');
+              $this->errormessage('no Order found');
           }
           
           $data = [];
@@ -187,7 +185,7 @@
                                          FROM ".TABLE_ORDERS."
                                         WHERE orders_id = '".(int)$orderId ."'");
           if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Order not found: %s', $orderId));
+              $this->errormessage(sprintf('Order not found: %s', $orderId));
           } else {
               $order = xtc_db_fetch_array($order_query);
           }
@@ -217,7 +215,7 @@
                                          FROM ".TABLE_ORDERS_PRODUCTS."
                                         WHERE orders_id = '".(int)$orderId."'");
           if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Order products not found: %s', $orderId));
+              $this->errormessage(sprintf('Order products not found: %s', $orderId));
           } else {
               $orders_products_query = xtc_db_query("SELECT *
                                                        FROM ".TABLE_ORDERS_PRODUCTS."
@@ -273,7 +271,7 @@
                                          FROM ".TABLE_ORDERS_STATUS_HISTORY."
                                         WHERE orders_id = '".(int)$orderId."'");
           if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Order status history not found: %s', $orderId));
+              $this->errormessage(sprintf('Order status history not found: %s', $orderId));
           } else {
               $orders_status_history_query = xtc_db_query("SELECT *
                                                              FROM ".TABLE_ORDERS_STATUS_HISTORY."
@@ -309,7 +307,7 @@
                                          FROM ".TABLE_ORDERS_TOTAL."
                                         WHERE orders_id = '".(int)$orderId."'");
           if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Order total not found: %s', $orderId));
+              $this->errormessage(sprintf('Order total not found: %s', $orderId));
           } else {
               $orders_total_query = xtc_db_query("SELECT *
                                                     FROM ".TABLE_ORDERS_TOTAL."
@@ -345,7 +343,7 @@
                                          FROM ".TABLE_ORDERS_TRACKING."
                                         WHERE orders_id = '".(int)$orderId."'");
           if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Order tracking not found: %s', $orderId));
+              $this->errormessage(sprintf('Order tracking not found: %s', $orderId));
           } else {
               $orders_total_query = xtc_db_query("SELECT *
                                                     FROM ".TABLE_ORDERS_TRACKING."
@@ -383,7 +381,7 @@
                                                      ON l.languages_id = os.language_id
                                                WHERE os.orders_status_id = '".(int)$orderStatusId."'");
           if (xtc_db_num_rows($order_status_query) < 1) {
-              throw new Exception(sprintf('Order Status not found: %s', $orderStatusId));
+              $this->errormessage(sprintf('Order Status not found: %s', $orderStatusId));
           } else {
               $data = [];
               while ($order_status = xtc_db_fetch_array($order_status_query)) {
@@ -403,8 +401,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The order status data
        */
       public function GetOrderStatus(array $options): array
@@ -420,7 +416,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Order Status found');
+              $this->errormessage('no Order Status found');
           }
           
           $data = [];

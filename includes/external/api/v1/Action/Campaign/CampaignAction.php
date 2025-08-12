@@ -45,8 +45,6 @@
        * @param int $campaignId The campaign id
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The campaign data
        */
       public function InsertUpdateCampaign(int $campaignId, array $options): array
@@ -60,7 +58,7 @@
                                                 FROM ".TABLE_CAMPAIGNS."
                                                WHERE campaigns_id = '".(int)$campaignId."'");
               if (xtc_db_num_rows($campaign_query) < 1) {
-                  throw new Exception(sprintf('Campaign not found: %s', $campaignId));
+                  $this->errormessage(sprintf('Campaign not found: %s', $campaignId));
               } else {
                   $campaign = xtc_db_fetch_array($campaign_query);
                   $campaign['last_modified'] = 'now()';
@@ -82,7 +80,7 @@
                                              FROM ".TABLE_CAMPAIGNS."
                                             WHERE campaigns_refID = '".xtc_db_input($campaign['campaigns_refID'])."'");
               if (xtc_db_num_rows($check_query) > 0) {
-                  throw new Exception('Campaign refId already exists');
+                  $this->errormessage('Campaign refId already exists', 400);
               }
           }
           

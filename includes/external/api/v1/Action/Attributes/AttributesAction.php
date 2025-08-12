@@ -47,8 +47,6 @@
        * @param int $optionId The option id
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The option data
        */
       public function InsertUpdateOption(int $optionId, array $options): array
@@ -109,8 +107,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The value data
        */
       public function InsertValue(array $options): array
@@ -125,8 +121,6 @@
        *
        * @param int $valueId The value id
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The value data
        */
@@ -207,7 +201,7 @@
                                                    WHERE products_options_id = '".(int)$optionId."'
                                                      AND products_options_values_id = '".(int)$this->options['products_options_values_id']."'");
               if (xtc_db_num_rows($option_value_query) > 0) {
-                  throw new Exception(sprintf('Value ID already exists'));
+                  $this->errormessage('Value ID already exists', 400);
               } else {
                   $option = $this->getDefaultTableValues(TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS);
                   $option['products_options_id'] = $optionId;

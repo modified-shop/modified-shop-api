@@ -42,7 +42,7 @@
                                             FROM ".TABLE_CAMPAIGNS."
                                            WHERE campaigns_id = '".(int)$campaignId."'");
           if (xtc_db_num_rows($campaign_query) < 1) {
-              throw new Exception(sprintf('Campaign not found: %s', $campaignId));
+              $this->errormessage(sprintf('Campaign not found: %s', $campaignId));
           } else {
               $campaign = xtc_db_fetch_array($campaign_query);
           }
@@ -55,8 +55,6 @@
        * Read campaigns by given conditions
        *
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The campaigns data
        */
@@ -73,7 +71,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Campaign found');
+              $this->errormessage('no Campaign found');
           }
           
           $data = [];
@@ -147,7 +145,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Campaign Ip found');
+              $this->errormessage('no Campaign Ip found');
           }
           
           $data = [];

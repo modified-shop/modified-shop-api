@@ -45,8 +45,6 @@
        * @param int $newsletterId The newsletter id
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The newsletter data
        */
       public function InsertUpdateNewsletterRecipients(int $newsletterId, array $options): array
@@ -60,7 +58,7 @@
                                                   FROM ".TABLE_NEWSLETTER_RECIPIENTS."
                                                  WHERE mail_id = '".(int)$newsletterId."'");
               if (xtc_db_num_rows($newsletter_query) < 1) {
-                  throw new Exception(sprintf('Newsletter not found: %s', $newsletterId));
+                  $this->errormessage(sprintf('Newsletter not found: %s', $newsletterId));
               } else {
                   $newsletter = xtc_db_fetch_array($newsletter_query);
               }
@@ -81,7 +79,7 @@
                                              FROM ".TABLE_NEWSLETTER_RECIPIENTS."
                                             WHERE customers_email_address = '".xtc_db_input($newsletter['customers_email_address'])."'");
               if (xtc_db_num_rows($check_query) > 0) {
-                  throw new Exception('Newsletter Email Address already exists');
+                  $this->errormessage('Newsletter Email Address already exists', 400);
               }
           }
           

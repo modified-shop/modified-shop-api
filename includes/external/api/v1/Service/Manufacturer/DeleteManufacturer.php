@@ -63,8 +63,11 @@
 
           $manufacturerId = (int)$args['id'];
           
-          $this->manufacturerAction->DeleteManufacturer($manufacturerId);
+          $result = $this->manufacturerAction->DeleteManufacturer($manufacturerId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

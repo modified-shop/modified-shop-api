@@ -70,8 +70,11 @@
               throw new Exception('Tracking ID required');
           }
           
-          $this->orderAction->DeleteTracking($orderId, $trackingId);
+          $result = $this->orderAction->DeleteTracking($orderId, $trackingId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

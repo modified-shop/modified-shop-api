@@ -66,6 +66,9 @@
                     
           $result = $this->categoryAction->InsertUpdateCategory($categoryId, $data);
           
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           if ($categoryId > 0) {
               return $this->responder->withJson($response, $result);
           }

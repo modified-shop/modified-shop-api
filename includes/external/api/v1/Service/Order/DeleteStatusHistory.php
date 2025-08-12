@@ -70,8 +70,11 @@
               throw new Exception('Order status history ID required');
           }
           
-          $this->orderAction->DeleteStatusHistory($orderId, $orderStatusHistoryId);
+          $result = $this->orderAction->DeleteStatusHistory($orderId, $orderStatusHistoryId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

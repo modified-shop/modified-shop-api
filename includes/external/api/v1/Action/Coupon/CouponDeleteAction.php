@@ -27,6 +27,8 @@
        *
        * @param int $couponId The coupon id
        *
+       * @throws Exception
+       *
        * @return void
        */
       public function DeleteCoupon(int $couponId): void
@@ -40,7 +42,7 @@
                                           FROM ".TABLE_COUPONS."
                                          WHERE coupon_id = '".(int)$couponId."'");
           if (xtc_db_num_rows($coupon_query) < 1) {
-              throw new Exception(sprintf('Coupon not found: %s', $couponId));
+              $this->errormessage(sprintf('Coupon not found: %s', $couponId));
           } else {
               xtc_db_query("DELETE FROM ".TABLE_COUPONS." WHERE coupon_id = '".(int)$couponId."'");
               xtc_db_query("DELETE FROM ".TABLE_COUPONS_DESCRIPTION." WHERE coupon_id = '".(int)$couponId."'");

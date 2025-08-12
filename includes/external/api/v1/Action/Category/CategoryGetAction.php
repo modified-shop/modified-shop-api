@@ -42,7 +42,7 @@
                                             FROM ".TABLE_CATEGORIES."
                                            WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($category_query) < 1) {
-              throw new Exception(sprintf('Category not found: %s', $categoryId));
+              $this->errormessage(sprintf('Category not found: %s', $categoryId));
           } else {
               // disable Exception
               $this->throw_exception = false;
@@ -67,8 +67,6 @@
        * Read categorys by given conditions
        *
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The category data
        */
@@ -105,7 +103,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Category found');
+              $this->errormessage('no Category found');
           }
           
           $data = [];
@@ -180,7 +178,7 @@
                                             FROM ".TABLE_CATEGORIES."
                                            WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($category_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Category not found: %s', $categoryId));
+              $this->errormessage(sprintf('Category not found: %s', $categoryId));
           } else {
               $category = xtc_db_fetch_array($category_query);
           }
@@ -209,7 +207,7 @@
                                             FROM ".TABLE_CATEGORIES_DESCRIPTION."
                                            WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($category_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Category description not found: %s', $categoryId));
+              $this->errormessage(sprintf('Category description not found: %s', $categoryId));
           } else {
               $description = [];
               $categories_description_query = xtc_db_query("SELECT cd.*,
@@ -251,7 +249,7 @@
                                             FROM ".TABLE_CATEGORIES."
                                            WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($category_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Category products not found: %s', $categoryId));
+              $this->errormessage(sprintf('Category products not found: %s', $categoryId));
           } else {
               $categories_products_query = xtc_db_query("SELECT *
                                                            FROM ".TABLE_PRODUCTS_TO_CATEGORIES."

@@ -27,6 +27,8 @@
        *
        * @param int $productId The product id
        *
+       * @throws Exception
+       *
        * @return void
        */
       public function DeleteProduct(int $productId): void
@@ -40,7 +42,7 @@
                                            FROM ".TABLE_PRODUCTS."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1) {
-            throw new Exception(sprintf('Product not found: %s', $productId));
+            $this->errormessage(sprintf('Product not found: %s', $productId));
           } else {
               // disable Exception
               $this->throw_exception = false;
@@ -102,7 +104,7 @@
                                           WHERE products_id = '".(int)$productId."'
                                                 ".$where);
           if (xtc_db_num_rows($product_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product categories not found: %s', $productId));
+              $this->errormessage(sprintf('Product categories not found: %s', $productId));
           } else {
               while ($product = xtc_db_fetch_array($product_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_TO_CATEGORIES." 
@@ -152,7 +154,7 @@
                                          WHERE products_id = '".(int)$productId."'
                                            AND products_image != ''");
           if (xtc_db_num_rows($images_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product image not found: %s', $productId));
+              $this->errormessage(sprintf('Product image not found: %s', $productId));
           } else {
               $images = xtc_db_fetch_array($images_query);
               
@@ -191,7 +193,7 @@
                                          WHERE products_id = '".(int)$productId."'
                                              ".$where);
           if (xtc_db_num_rows($images_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product more images not found: %s', $productId));
+              $this->errormessage(sprintf('Product more images not found: %s', $productId));
           } else {
               while ($images = xtc_db_fetch_array($images_query)) {
                   // disable Exception
@@ -253,7 +255,7 @@
                                          WHERE products_id = '".(int)$productId."'
                                              ".$where);
           if (xtc_db_num_rows($images_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product more images not found: %s', $productId));
+              $this->errormessage(sprintf('Product more images not found: %s', $productId));
           } else {
               while ($images = xtc_db_fetch_array($images_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_IMAGES_DESCRIPTION." 
@@ -290,7 +292,7 @@
                                         WHERE products_id = '".(int)$productId."'
                                               ".$where);
           if (xtc_db_num_rows($xsell_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product xsell not found: %s', $productId));
+              $this->errormessage(sprintf('Product xsell not found: %s', $productId));
           } else {
               while ($xsell = xtc_db_fetch_array($xsell_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_XSELL." 
@@ -346,7 +348,7 @@
                                            WHERE products_id = '".(int)$productId."'
                                                  ".$where);
           if (xtc_db_num_rows($specials_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product specials not found: %s', $productId));
+              $this->errormessage(sprintf('Product specials not found: %s', $productId));
           } else {
               while ($specials = xtc_db_fetch_array($specials_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_SPECIALS." 
@@ -402,7 +404,7 @@
                                              WHERE products_id = '".(int)$productId."'
                                                    ".$where);
           if (xtc_db_num_rows($attributes_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product attributes not found: %s', $productId));
+              $this->errormessage(sprintf('Product attributes not found: %s', $productId));
           } else {
               while ($attributes = xtc_db_fetch_array($attributes_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_ATTRIBUTES." 
@@ -461,7 +463,7 @@
                                        WHERE products_id = '".(int)$productId."'
                                              ".$where);
           if (xtc_db_num_rows($tags_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product tags not found: %s', $productId));
+              $this->errormessage(sprintf('Product tags not found: %s', $productId));
           } else {
               while ($tags = xtc_db_fetch_array($tags_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_TAGS." 
@@ -517,7 +519,7 @@
                                           WHERE products_id = '".(int)$productId."'
                                                 ".$where);
           if (xtc_db_num_rows($content_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product content not found: %s', $productId));
+              $this->errormessage(sprintf('Product content not found: %s', $productId));
           } else {
               while ($content = xtc_db_fetch_array($content_query)) {
                   $duplicate_content_query = xtc_db_query("SELECT COUNT(*) AS total 
@@ -589,7 +591,7 @@
                                                  WHERE products_id = '".(int)$productId."'
                                                        ".$where);
           if (xtc_db_num_rows($personal_offer_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product personal offer not found: %s', $productId));
+              $this->errormessage(sprintf('Product personal offer not found: %s', $productId));
           } else {
               while ($personal_offer = xtc_db_fetch_array($personal_offer_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_PERSONAL_OFFERS_BY.$statusId."
@@ -626,7 +628,9 @@
        * Delete all personal offer by the given product id.
        *
        * @param int $productId The product id
-       *       *
+       *
+       * @throws Exception
+       *
        * @return void
        */
       public function DeleteAllPersonalOffers(int $productId): void
@@ -672,7 +676,7 @@
                                           WHERE products_id = '".(int)$productId."'
                                                 ".$where);
           if (xtc_db_num_rows($reviews_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product personal offer not found: %s', $productId));
+              $this->errormessage(sprintf('Product personal offer not found: %s', $productId));
           } else {
               while ($reviews = xtc_db_fetch_array($reviews_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_REVIEWS."
@@ -708,8 +712,6 @@
        * Deletes an image by given name.
        *
        * @param string $image_name
-       *
-       * @throws Exception
        *
        * @return void
        */

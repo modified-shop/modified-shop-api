@@ -45,8 +45,6 @@
        * @param int $orderId The order id
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The order data
        */
       public function InsertUpdateOrder(int $orderId, array $options): array
@@ -60,7 +58,7 @@
                                              FROM ".TABLE_ORDERS."
                                             WHERE orders_id = '".(int)$orderId."'");
               if (xtc_db_num_rows($order_query) < 1) {
-                  throw new Exception(sprintf('Order not found: %s', $orderId));
+                  $this->errormessage(sprintf('Order not found: %s', $orderId));
               } else {
                   $order = xtc_db_fetch_array($order_query);
                   $order['last_modified'] = 'now()';
@@ -129,7 +127,7 @@
                                          FROM ".TABLE_ORDERS."
                                         WHERE orders_id = '".(int)$orderId."'");
           if (xtc_db_num_rows($order_query) < 1) {
-              throw new Exception(sprintf('Order not found: %s', $orderId));
+              $this->errormessage(sprintf('Order not found: %s', $orderId));
           } else {
               if ($orderProductId > 0) {     
                   $action = 'update';
@@ -138,7 +136,7 @@
                                                         WHERE orders_id = '".(int)$orderId."'
                                                           AND orders_products_id = '".(int)$orderProductId."'");
                   if (xtc_db_num_rows($order_product_query) < 1) {
-                      throw new Exception(sprintf('Order Product Id not found: %s', $orderProductId));
+                      $this->errormessage(sprintf('Order Product Id not found: %s', $orderProductId));
                   } else {
                       $order_product = xtc_db_fetch_array($order_product_query);
                   }
@@ -156,7 +154,7 @@
                                                     FROM ".TABLE_PRODUCTS."
                                                    WHERE products_id = '".(int)$this->options['products_id']."'");
                   if (xtc_db_num_rows($products_query) < 1) {
-                      throw new Exception(sprintf('Product ID invalid'));
+                      $this->errormessage(sprintf('Product ID invalid'), 400);
                   }
               }
           
@@ -214,7 +212,7 @@
                                          FROM ".TABLE_ORDERS."
                                         WHERE orders_id = '".(int)$orderId."'");
           if (xtc_db_num_rows($order_query) < 1) {
-              throw new Exception(sprintf('Order not found: %s', $orderId));
+              $this->errormessage(sprintf('Order not found: %s', $orderId));
           } else {          
               if ($orderProductsAttributesId > 0) {     
                   $action = 'update';
@@ -223,7 +221,7 @@
                                                                    WHERE orders_id = '".(int)$orderId."'
                                                                      AND orders_products_attributes_id = '".(int)$orderProductsAttributesId."'");
                   if (xtc_db_num_rows($order_product_attributes_query) < 1) {
-                      throw new Exception(sprintf('Order Product Attributes Id not found: %s', $orderProductsAttributesId));
+                      $this->errormessage(sprintf('Order Product Attributes Id not found: %s', $orderProductsAttributesId));
                   } else {
                       $order_product_attributes = xtc_db_fetch_array($order_product_attributes_query);
                   }
@@ -242,7 +240,7 @@
                                                         WHERE orders_id = '".(int)$orderId."'
                                                           AND orders_products_id = '".(int)$this->options['orders_products_id']."'");
                   if (xtc_db_num_rows($order_product_query) < 1) {
-                      throw new Exception('Order Product ID invalid');
+                      $this->errormessage('Order Product ID invalid', 400);
                   }
               }
           
@@ -300,7 +298,7 @@
                                          FROM ".TABLE_ORDERS."
                                         WHERE orders_id = '".(int)$orderId."'");
           if (xtc_db_num_rows($order_query) < 1) {
-              throw new Exception(sprintf('Order not found: %s', $orderId));
+              $this->errormessage(sprintf('Order not found: %s', $orderId));
           } else {          
                if ($orderProductsDownloadId > 0) {     
                   $action = 'update';
@@ -309,7 +307,7 @@
                                                                  WHERE orders_id = '".(int)$orderId."'
                                                                    AND orders_products_download_id = '".(int)$orderProductsDownloadId."'");
                   if (xtc_db_num_rows($order_product_download_query) < 1) {
-                      throw new Exception(sprintf('Order Product Download Id not found: %s', $orderProductsDownloadId));
+                      $this->errormessage(sprintf('Order Product Download Id not found: %s', $orderProductsDownloadId));
                   } else {
                       $order_product_download = xtc_db_fetch_array($order_product_download_query);
                   }
@@ -328,7 +326,7 @@
                                                         WHERE orders_id = '".(int)$orderId."'
                                                           AND orders_products_id = '".(int)$this->options['orders_products_id']."'");
                   if (xtc_db_num_rows($order_product_query) < 1) {
-                      throw new Exception('Order Product ID invalid');
+                      $this->errormessage('Order Product ID invalid', 400);
                   }
               }
           
@@ -386,7 +384,7 @@
                                          FROM ".TABLE_ORDERS."
                                         WHERE orders_id = '".(int)$orderId."'");
           if (xtc_db_num_rows($order_query) < 1) {
-              throw new Exception(sprintf('Order not found: %s', $orderId));
+              $this->errormessage(sprintf('Order not found: %s', $orderId));
           } else {          
                if ($orderStatusHistoryId > 0) {     
                   $action = 'update';
@@ -395,7 +393,7 @@
                                                                WHERE orders_id = '".(int)$orderId."'
                                                                  AND orders_status_history_id = '".(int)$orderStatusHistoryId."'");
                   if (xtc_db_num_rows($order_status_history_query) < 1) {
-                      throw new Exception(sprintf('Order Status History Id not found: %s', $orderStatusHistoryId));
+                      $this->errormessage(sprintf('Order Status History Id not found: %s', $orderStatusHistoryId));
                   } else {
                       $order_status_history = xtc_db_fetch_array($order_status_history_query);
                   }
@@ -413,7 +411,7 @@
                                                         FROM ".TABLE_ORDERS_STATUS."
                                                        WHERE orders_status_id = '".(int)$this->options['orders_status_id']."'");
                   if (xtc_db_num_rows($order_status_query) < 1) {
-                      throw new Exception('Order Status ID invalid');
+                      $this->errormessage('Order Status ID invalid', 400);
                   }
               }
           
@@ -471,7 +469,7 @@
                                          FROM ".TABLE_ORDERS."
                                         WHERE orders_id = '".(int)$orderId."'");
           if (xtc_db_num_rows($order_query) < 1) {
-              throw new Exception(sprintf('Order not found: %s', $orderId));
+              $this->errormessage(sprintf('Order not found: %s', $orderId));
           } else {          
                if ($orderTotalId > 0) {     
                   $action = 'update';
@@ -480,7 +478,7 @@
                                                       WHERE orders_id = '".(int)$orderId."'
                                                         AND orders_total_id = '".(int)$orderTotalId."'");
                   if (xtc_db_num_rows($order_total_query) < 1) {
-                      throw new Exception(sprintf('Order Total Id not found: %s', $orderTotalId));
+                      $this->errormessage(sprintf('Order Total Id not found: %s', $orderTotalId));
                   } else {
                       $order_total = xtc_db_fetch_array($order_total_query);
                   }
@@ -544,7 +542,7 @@
                                          FROM ".TABLE_ORDERS."
                                         WHERE orders_id = '".(int)$orderId."'");
           if (xtc_db_num_rows($order_query) < 1) {
-              throw new Exception(sprintf('Order not found: %s', $orderId));
+              $this->errormessage(sprintf('Order not found: %s', $orderId));
           } else {          
                if ($orderTrackingId > 0) {     
                   $action = 'update';
@@ -553,7 +551,7 @@
                                                          WHERE orders_id = '".(int)$orderId."'
                                                            AND tracking_id = '".(int)$orderTrackingId."'");
                   if (xtc_db_num_rows($order_tracking_query) < 1) {
-                      throw new Exception(sprintf('Order Tracking Id not found: %s', $orderTrackingId));
+                      $this->errormessage(sprintf('Order Tracking Id not found: %s', $orderTrackingId));
                   } else {
                       $order_tracking = xtc_db_fetch_array($order_tracking_query);
                   }
@@ -572,7 +570,7 @@
                                                    FROM ".TABLE_CARRIERS."
                                                   WHERE carrier_id = '".(int)$this->options['carrier_id']."'");
                   if (xtc_db_num_rows($carrier_query) < 1) {
-                      throw new Exception('Carrier ID invalid');
+                      $this->errormessage('Carrier ID invalid', 400);
                   }
               }
 
@@ -595,8 +593,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The order status data
        */
       public function InsertOrderStatus(array $options): array
@@ -611,8 +607,6 @@
        *
        * @param int $orderStatusId The order status id
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The order status data
        */

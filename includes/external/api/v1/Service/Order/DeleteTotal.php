@@ -70,8 +70,11 @@
               throw new Exception('Order total ID required');
           }
          
-          $this->orderAction->DeleteTotal($orderId, $orderTotalId);
+          $result = $this->orderAction->DeleteTotal($orderId, $orderTotalId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

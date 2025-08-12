@@ -42,7 +42,7 @@
                                           FROM ".TABLE_COUPONS."
                                          WHERE coupon_id = '".(int)$couponId."'");
           if (xtc_db_num_rows($coupon_query) < 1) {
-              throw new Exception(sprintf('Coupon not found: %s', $couponId));
+              $this->errormessage(sprintf('Coupon not found: %s', $couponId));
           } else {
               // disable Exception
               $this->throw_exception = false;
@@ -60,8 +60,6 @@
        * Read coupons by given conditions
        *
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The coupon data
        */
@@ -106,7 +104,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Coupon found');
+              $this->errormessage('no Coupon found');
           }
           
           $data = [];
@@ -181,7 +179,7 @@
                                           FROM ".TABLE_COUPONS."
                                          WHERE coupon_id = '".(int)$couponId."'");
           if (xtc_db_num_rows($coupon_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Coupon not found: %s', $couponId));
+              $this->errormessage(sprintf('Coupon not found: %s', $couponId));
           } else {
               $coupon = xtc_db_fetch_array($coupon_query);
           }
@@ -210,7 +208,7 @@
                                             FROM ".TABLE_COUPONS_DESCRIPTION."
                                            WHERE coupon_id = '".(int)$couponId."'");
           if (xtc_db_num_rows($coupon_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Coupon description not found: %s', $couponId));
+              $this->errormessage(sprintf('Coupon description not found: %s', $couponId));
           } else {
               $description = [];
               $coupon_description_query = xtc_db_query("SELECT cd.*,

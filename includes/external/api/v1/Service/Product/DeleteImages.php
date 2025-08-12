@@ -70,8 +70,11 @@
               throw new Exception('Image ID required');
           }
 
-          $this->productAction->DeleteImages($productId, $imageId);
+          $result = $this->productAction->DeleteImages($productId, $imageId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

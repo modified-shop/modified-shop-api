@@ -124,7 +124,7 @@
        *
        * @return mixed
        */
-      protected function errormessage($message, code = 404)
+      protected function errormessage($message, $code = 404)
       {    
           return [
             'errormessage' => [

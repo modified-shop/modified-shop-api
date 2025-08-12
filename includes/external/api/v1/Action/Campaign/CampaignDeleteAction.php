@@ -27,6 +27,8 @@
        *
        * @param int $campaignId The currency id
        *
+       * @throws Exception
+       *
        * @return void
        */
       public function DeleteCampaign(int $campaignId): void
@@ -40,7 +42,7 @@
                                             FROM ".TABLE_CAMPAIGNS."
                                            WHERE campaigns_id = '".(int)$campaignId."'");
           if (xtc_db_num_rows($campaign_query) < 1) {
-            throw new Exception(sprintf('Campaign not found: %s', $campaignId));
+            $this->errormessage(sprintf('Campaign not found: %s', $campaignId));
           } else {
               //delete
               xtc_db_query("DELETE FROM ".TABLE_CAMPAIGNS." WHERE campaigns_id = '".(int)$campaignId."'");

@@ -42,7 +42,7 @@
                                            FROM ".TABLE_COUNTRIES."
                                           WHERE countries_id = '".(int)$countryId."'");
           if (xtc_db_num_rows($country_query) < 1) {
-              throw new Exception(sprintf('Country not found: %s', $countryId));
+              $this->errormessage(sprintf('Country not found: %s', $countryId));
           } else {
               $country = xtc_db_fetch_array($country_query);
 
@@ -87,8 +87,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The country data
        */
       public function GetCountries(array $options): array
@@ -123,7 +121,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Country found');
+              $this->errormessage('no Country found');
           }
           
           $data = [];
@@ -205,7 +203,7 @@
                                             FROM ".TABLE_GEO_ZONES."
                                            WHERE geo_zone_id = '".(int)$geoZoneId."'");
           if (xtc_db_num_rows($geo_zone_query) < 1) {
-              throw new Exception(sprintf('Geo Zone not found: %s', $geoZoneId));
+              $this->errormessage(sprintf('Geo Zone not found: %s', $geoZoneId));
           } else {
               $geo_zone = xtc_db_fetch_array($geo_zone_query);
               $geo_zone['geo_zone_name'] = $this->parse_multi_language_value($geo_zone['geo_zone_name']);
@@ -252,8 +250,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The geo zone data
        */
       public function GetGeoZones(array $options): array
@@ -269,7 +265,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Geo Zone found');
+              $this->errormessage('no Geo Zone found');
           }
           
           $data = [];
@@ -350,7 +346,7 @@
                                              FROM ".TABLE_TAX_CLASS."
                                             WHERE tax_class_id = '".(int)$taxClassId."'");
           if (xtc_db_num_rows($tax_class_query) < 1) {
-              throw new Exception(sprintf('Tax Class not found: %s', $taxClassId));
+              $this->errormessage(sprintf('Tax Class not found: %s', $taxClassId));
           } else {
               $tax_class = xtc_db_fetch_array($tax_class_query);
               $tax_class['tax_class_title'] = $this->parse_multi_language_value($tax_class['tax_class_title']);
@@ -365,8 +361,6 @@
        * Read geo zone by given conditions
        *
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The tax class data
        */
@@ -383,7 +377,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Tax Class found');
+              $this->errormessage('no Tax Class found');
           }
           
           $data = [];
@@ -434,7 +428,7 @@
                                              FROM ".TABLE_TAX_RATES."
                                             WHERE tax_rates_id = '".(int)$taxRateId."'");
           if (xtc_db_num_rows($tax_rates_query) < 1) {
-              throw new Exception(sprintf('Tax Rate not found: %s', $taxRateId));
+              $this->errormessage(sprintf('Tax Rate not found: %s', $taxRateId));
           } else {
               $tax_rates = xtc_db_fetch_array($tax_rates_query);
               $tax_rates['tax_description'] = $this->parse_multi_language_value($tax_rates['tax_description']);
@@ -448,8 +442,6 @@
        * Read geo zone by given conditions
        *
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The tax rates data
        */
@@ -480,7 +472,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Tax Rate found');
+              $this->errormessage('no Tax Rate found');
           }
           
           $data = [];

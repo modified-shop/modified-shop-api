@@ -27,6 +27,8 @@
        *
        * @param int $carrierId The carrier id
        *
+       * @throws Exception
+       *
        * @return void
        */
       public function DeleteCarrier(int $carrierId): void
@@ -40,7 +42,7 @@
                                            FROM ".TABLE_CARRIERS."
                                           WHERE carrier_id = '".(int)$carrierId."'");
           if (xtc_db_num_rows($carrier_query) < 1) {
-              throw new Exception(sprintf('Carrier not found: %s', $carrierId));
+              $this->errormessage(sprintf('Carrier not found: %s', $carrierId));
           } else {
               //delete
               xtc_db_query("DELETE FROM ".TABLE_CARRIERS." WHERE carrier_id = '".(int)$carrierId."'");
@@ -53,6 +55,8 @@
        * Delete a shipping status by the given shipping status id.
        *
        * @param int $shippingStatusId The shipping status id
+       *
+       * @throws Exception
        *
        * @return void
        */
@@ -67,7 +71,7 @@
                                                    FROM ".TABLE_SHIPPING_STATUS."
                                                   WHERE shipping_status_id = '".(int)$shippingStatusId."'");
           if (xtc_db_num_rows($shipping_status_query) < 1) {
-              throw new Exception(sprintf('Shipping Status not found: %s', $shippingStatusId));
+              $this->errormessage(sprintf('Shipping Status not found: %s', $shippingStatusId));
           } else {
               //delete
               xtc_db_query("DELETE FROM ".TABLE_SHIPPING_STATUS." WHERE shipping_status_id = '".(int)$shippingStatusId."'");

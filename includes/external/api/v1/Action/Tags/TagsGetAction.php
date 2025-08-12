@@ -43,7 +43,7 @@
                                           FROM ".TABLE_PRODUCTS_TAGS_OPTIONS."
                                          WHERE options_id = '".(int)$optionId."'");
           if (xtc_db_num_rows($option_query) < 1) {
-              throw new Exception(sprintf('Option not found: %s', $optionId));
+              $this->errormessage(sprintf('Option not found: %s', $optionId));
           } else {
               $options_query = xtc_db_query("SELECT pto.*,
                                                     l.code
@@ -68,8 +68,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The options data
        */
       public function GetOptions(array $options): array
@@ -88,7 +86,7 @@
           ];
           
           if ($count['total'] < 1) {
-              throw new Exception('no Options found');
+              $this->errormessage('no Options found');
           }
           
           $data = [];
@@ -141,7 +139,7 @@
                                          FROM ".TABLE_PRODUCTS_TAGS_VALUES."
                                         WHERE values_id = '".(int)$valueId."'");
           if (xtc_db_num_rows($value_query) < 1) {
-              throw new Exception(sprintf('Value not found: %s', $valueId));
+              $this->errormessage(sprintf('Value not found: %s', $valueId));
           } else {
               $values_query = xtc_db_query("SELECT ptv.*,
                                                    l.code
@@ -165,8 +163,6 @@
        * Read value by given conditions
        *
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The value data
        */
@@ -197,7 +193,7 @@
           ];
           
           if ($count['total'] < 1) {
-              throw new Exception('no Values found');
+              $this->errormessage('no Values found');
           }
           
           $data = [];

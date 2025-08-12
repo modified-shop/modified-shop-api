@@ -70,8 +70,11 @@
               throw new Exception('Special ID required');
           }
 
-          $this->productAction->DeleteSpecials($productId, $specialsId);
+          $result = $this->productAction->DeleteSpecials($productId, $specialsId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

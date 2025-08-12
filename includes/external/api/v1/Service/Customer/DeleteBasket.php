@@ -70,8 +70,11 @@
               throw new Exception('Customer basket ID required');
           }
           
-          $this->customerAction->DeleteBasket($customerId, $customersBasketId);
+          $result = $this->customerAction->DeleteBasket($customerId, $customersBasketId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

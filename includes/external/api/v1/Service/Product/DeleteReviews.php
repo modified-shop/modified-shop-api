@@ -70,8 +70,11 @@
               throw new Exception('Review ID required');
           }
 
-          $this->productAction->DeleteReviews($productId, $reviewsId);
+          $result = $this->productAction->DeleteReviews($productId, $reviewsId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

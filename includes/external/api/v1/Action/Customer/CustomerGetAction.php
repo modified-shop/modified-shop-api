@@ -42,7 +42,7 @@
                                             FROM ".TABLE_CUSTOMERS."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1) {
-              throw new Exception(sprintf('Customer not found: %s', $customerId));
+              $this->errormessage(sprintf('Customer not found: %s', $customerId));
           } else {            
               // disable Exception
               $this->throw_exception = false;
@@ -109,8 +109,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The customer data
        */
       public function GetCustomers(array $options): array
@@ -143,7 +141,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Customer found');
+              $this->errormessage('no Customer found');
           }
           
           $data = [];
@@ -196,7 +194,7 @@
                                             FROM ".TABLE_CUSTOMERS."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Customer not found: %s', $customerId));
+              $this->errormessage(sprintf('Customer not found: %s', $customerId));
           } else {
               $customer = xtc_db_fetch_array($customer_query);
               
@@ -230,7 +228,7 @@
                                             FROM ".TABLE_CUSTOMERS_INFO."
                                            WHERE customers_info_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Customer info not found: %s', $customerId));
+              $this->errormessage(sprintf('Customer info not found: %s', $customerId));
           } else {
               $info = xtc_db_fetch_array($customer_query);
           }
@@ -260,7 +258,7 @@
                                             FROM ".TABLE_CUSTOMERS_IP."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Customer ip not found: %s', $customerId));
+              $this->errormessage(sprintf('Customer ip not found: %s', $customerId));
           } else {
               $customers_ip_query = xtc_db_query("SELECT *
                                                     FROM ".TABLE_CUSTOMERS_IP."
@@ -296,7 +294,7 @@
                                             FROM ".TABLE_CUSTOMERS_MEMO."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-            throw new Exception(sprintf('Customer memo not found: %s', $customerId));
+            $this->errormessage(sprintf('Customer memo not found: %s', $customerId));
           } else {
             $customers_memo_query = xtc_db_query("SELECT *
                                                     FROM ".TABLE_CUSTOMERS_MEMO."
@@ -332,7 +330,7 @@
                                             FROM ".TABLE_CUSTOMERS_STATUS_HISTORY."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Customer status history not found: %s', $customerId));
+              $this->errormessage(sprintf('Customer status history not found: %s', $customerId));
           } else {
               $customers_status_history_query = xtc_db_query("SELECT *
                                                                 FROM ".TABLE_CUSTOMERS_STATUS_HISTORY."
@@ -368,7 +366,7 @@
                                             FROM ".TABLE_ADDRESS_BOOK."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1) {
-              throw new Exception(sprintf('Customer addresses not found: %s', $customerId));
+              $this->errormessage(sprintf('Customer addresses not found: %s', $customerId));
           } else {
               $address_book_query = xtc_db_query("SELECT address_book_id
                                                     FROM ".TABLE_ADDRESS_BOOK." ab
@@ -408,7 +406,7 @@
                                             FROM ".TABLE_ADDRESS_BOOK."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1) {
-              throw new Exception(sprintf('Customer address not found: %s', $customerId));
+              $this->errormessage(sprintf('Customer address not found: %s', $customerId));
           } else {
               $address_book_query = xtc_db_query("SELECT ab.*,
                                                          c.countries_name,
@@ -452,7 +450,7 @@
                                             FROM ".TABLE_CUSTOMERS_BASKET."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Customer basket not found: %s', $customerId));
+              $this->errormessage(sprintf('Customer basket not found: %s', $customerId));
           } else {
               $customers_basket_query = xtc_db_query("SELECT *
                                                         FROM ".TABLE_CUSTOMERS_BASKET."
@@ -498,7 +496,7 @@
                                             FROM ".TABLE_CUSTOMERS_WISHLIST."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Customer wishlist not found: %s', $customerId));
+              $this->errormessage(sprintf('Customer wishlist not found: %s', $customerId));
           } else {
               $customers_wishlist_query = xtc_db_query("SELECT *
                                                         FROM ".TABLE_CUSTOMERS_WISHLIST."
@@ -527,8 +525,6 @@
        * Read whos online by given conditions
        *
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The whos online data
        */
@@ -559,7 +555,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Customer found');
+              $this->errormessage('no Customer found');
           }
           
           $data = [];

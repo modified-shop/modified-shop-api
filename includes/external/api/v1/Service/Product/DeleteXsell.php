@@ -70,8 +70,11 @@
               throw new Exception('Xsell ID required');
           }
 
-          $this->productAction->DeleteXsell($productId, $xsellId);
+          $result = $this->productAction->DeleteXsell($productId, $xsellId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

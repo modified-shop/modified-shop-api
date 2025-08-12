@@ -42,7 +42,7 @@
                                            FROM ".TABLE_CARRIERS."
                                           WHERE carrier_id = '".(int)$carrierId."'");
           if (xtc_db_num_rows($carrier_query) < 1) {
-              throw new Exception(sprintf('Carrier not found: %s', $carrierId));
+              $this->errormessage(sprintf('Carrier not found: %s', $carrierId));
           } else {
               $carrier = xtc_db_fetch_array($carrier_query);
           }
@@ -55,8 +55,6 @@
        * Read carrier by given conditions
        *
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The carrier data
        */
@@ -73,7 +71,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Carrier found');
+              $this->errormessage('no Carrier found');
           }
           
           $data = [];
@@ -127,7 +125,7 @@
                                                         ON l.languages_id = ss.language_id
                                                   WHERE ss.shipping_status_id = '".(int)$shippingStatusId."'");
           if (xtc_db_num_rows($shipping_status_query) < 1) {
-              throw new Exception(sprintf('Shipping Status not found: %s', $shippingStatusId));
+              $this->errormessage(sprintf('Shipping Status not found: %s', $shippingStatusId));
           } else {
               $shipping = [];
               while ($shipping_status = xtc_db_fetch_array($shipping_status_query)) {
@@ -147,8 +145,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The shipping status data
        */
       public function GetShippingStatus(array $options): array
@@ -164,7 +160,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Shipping Status found');
+              $this->errormessage('no Shipping Status found');
           }
           
           $data = [];

@@ -27,6 +27,8 @@
        *
        * @param int $languageId The currency id
        *
+       * @throws Exception
+       *
        * @return void
        */
       public function DeleteLanguage(int $languageId): void
@@ -40,7 +42,7 @@
                                             FROM ".TABLE_LANGUAGES."
                                            WHERE languages_id = '".(int)$languageId."'");
           if (xtc_db_num_rows($language_query) < 1) {
-              throw new Exception(sprintf('Language not found: %s', $languageId));
+              $this->errormessage(sprintf('Language not found: %s', $languageId));
           } else {
               //delete
               xtc_db_query("DELETE FROM ".TABLE_LANGUAGES." WHERE languages_id = '".(int)$languageId."'");

@@ -27,6 +27,8 @@
        *
        * @param int $newsletterId The currency id
        *
+       * @throws Exception
+       *
        * @return void
        */
       public function DeleteNewsletterRecipients(int $newsletterId): void
@@ -40,7 +42,7 @@
                                               FROM ".TABLE_NEWSLETTER_RECIPIENTS."
                                              WHERE mail_id = '".(int)$newsletterId."'");
           if (xtc_db_num_rows($newsletter_query) < 1) {
-            throw new Exception(sprintf('Newsletter not found: %s', $newsletterId));
+            $this->errormessage(sprintf('Newsletter not found: %s', $newsletterId));
           } else {
               //delete
               xtc_db_query("DELETE FROM ".TABLE_NEWSLETTER_RECIPIENTS." WHERE mail_id = '".(int)$newsletterId."'");

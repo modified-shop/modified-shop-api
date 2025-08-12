@@ -71,8 +71,11 @@
               throw new Exception('Price ID required');
           }
 
-          $this->productAction->DeletePersonalOffer($productId, $statusId, $priceId);
+          $result = $this->productAction->DeletePersonalOffer($productId, $statusId, $priceId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

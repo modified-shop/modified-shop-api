@@ -70,8 +70,11 @@
               throw new Exception('Tag ID required');
           }
 
-          $this->productAction->DeleteTags($productId, $tagsId);
+          $result = $this->productAction->DeleteTags($productId, $tagsId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

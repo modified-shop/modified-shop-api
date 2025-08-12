@@ -42,7 +42,7 @@
                                            FROM ".TABLE_PRODUCTS."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1) {
-              throw new Exception(sprintf('Product not found: %s', $productId));
+              $this->errormessage(sprintf('Product not found: %s', $productId));
           } else {
               // disable Exception
               $this->throw_exception = false;
@@ -116,8 +116,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The product data
        */
       public function GetProducts(array $options): array
@@ -150,7 +148,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Product found');
+              $this->errormessage('no Product found');
           }
           
           $data = [];
@@ -203,7 +201,7 @@
                                            FROM ".TABLE_PRODUCTS."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product not found: %s', $productId));
+              $this->errormessage(sprintf('Product not found: %s', $productId));
           } else {
               $product = xtc_db_fetch_array($product_query);
           }
@@ -233,7 +231,7 @@
                                            FROM ".TABLE_PRODUCTS_DESCRIPTION."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product description not found: %s', $productId));
+              $this->errormessage(sprintf('Product description not found: %s', $productId));
           } else {
               $products_description_query = xtc_db_query("SELECT pd.*,
                                                                  l.code
@@ -274,7 +272,7 @@
                                            FROM ".TABLE_PRODUCTS_TO_CATEGORIES."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product categories not found: %s', $productId));
+              $this->errormessage(sprintf('Product categories not found: %s', $productId));
           } else {
               $products_categories_query = xtc_db_query("SELECT *
                                                            FROM ".TABLE_PRODUCTS_TO_CATEGORIES."
@@ -310,7 +308,7 @@
                                            FROM ".TABLE_PRODUCTS_IMAGES."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product images not found: %s', $productId));
+              $this->errormessage(sprintf('Product images not found: %s', $productId));
           } else {
               $product_images_query = xtc_db_query("SELECT *
                                                       FROM ".TABLE_PRODUCTS_IMAGES."
@@ -355,7 +353,7 @@
                                           WHERE products_id = '".(int)$productId."'
                                                 ".str_replace('pid.', '', $where));
           if (xtc_db_num_rows($product_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product images not found: %s', $productId));
+              $this->errormessage(sprintf('Product images not found: %s', $productId));
           } else {
               $image_description_query = xtc_db_query("SELECT pid.*,
                                                               l.code
@@ -397,7 +395,7 @@
                                            FROM ".TABLE_PRODUCTS_XSELL."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product xsell not found: %s', $productId));
+              $this->errormessage(sprintf('Product xsell not found: %s', $productId));
           } else {
               $products_xsell_query = xtc_db_query("SELECT *
                                                       FROM ".TABLE_PRODUCTS_XSELL."
@@ -433,7 +431,7 @@
                                            FROM ".TABLE_PRODUCTS_ATTRIBUTES."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product attributes not found: %s', $productId));
+              $this->errormessage(sprintf('Product attributes not found: %s', $productId));
           } else {
               $products_attributes_query = xtc_db_query("SELECT *
                                                            FROM ".TABLE_PRODUCTS_ATTRIBUTES."
@@ -475,7 +473,7 @@
                                            FROM ".TABLE_PRODUCTS_TAGS."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product tags not found: %s', $productId));
+              $this->errormessage(sprintf('Product tags not found: %s', $productId));
           } else {
               $products_tags_query = xtc_db_query("SELECT *
                                                      FROM ".TABLE_PRODUCTS_TAGS."
@@ -511,7 +509,7 @@
                                            FROM ".TABLE_PRODUCTS_CONTENT."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product tags not found: %s', $productId));
+              $this->errormessage(sprintf('Product tags not found: %s', $productId));
           } else {
               $products_content_query = xtc_db_query("SELECT *
                                                      FROM ".TABLE_PRODUCTS_CONTENT."
@@ -547,7 +545,7 @@
                                            FROM ".TABLE_SPECIALS."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product specials not found: %s', $productId));
+              $this->errormessage(sprintf('Product specials not found: %s', $productId));
           } else {
               $products_specials_query = xtc_db_query("SELECT *
                                                          FROM ".TABLE_SPECIALS."
@@ -583,7 +581,7 @@
                                            FROM ".TABLE_REVIEWS."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product reviews not found: %s', $productId));
+              $this->errormessage(sprintf('Product reviews not found: %s', $productId));
           } else {
               $products_reviews_query = xtc_db_query("SELECT *
                                                         FROM ".TABLE_REVIEWS." r
@@ -663,7 +661,7 @@
                                            FROM ".TABLE_PERSONAL_OFFERS_BY.$statusId."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Product personal offer not found: %s', $productId));
+              $this->errormessage(sprintf('Product personal offer not found: %s', $productId));
           } else {
               $products_personal_offer_query = xtc_db_query("SELECT *
                                                                FROM ".TABLE_PERSONAL_OFFERS_BY.$statusId."

@@ -69,8 +69,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The category data
        */
       public function UpdateCategory(int $categoryId, array $options): array
@@ -82,7 +80,7 @@
                                             FROM ".TABLE_CATEGORIES."
                                            WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($category_query) < 1) {
-              throw new Exception(sprintf('Category not found: %s', $categoryId));
+              $this->errormessage(sprintf('Category not found: %s', $categoryId));
           } else {
               if (isset($this->options[TABLE_CATEGORIES])) {
                   $categories = $this->InsertUpdateCategory($categoryId, $this->options[TABLE_CATEGORIES]);
@@ -93,7 +91,7 @@
                                             FROM ".TABLE_CATEGORIES_DESCRIPTION."
                                            WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($category_query) < 1) {
-              throw new Exception(sprintf('Category description not found: %s', $categoryId));
+              $this->errormessage(sprintf('Category description not found: %s', $categoryId));
           } else {
               if (isset($this->options[TABLE_CATEGORIES_DESCRIPTION])) {
                   $categories_description = $this->InsertUpdateDescription($categoryId, $this->options[TABLE_CATEGORIES_DESCRIPTION]);
@@ -122,7 +120,7 @@
                                                   FROM ".TABLE_CATEGORIES."
                                                  WHERE categories_id = '".(int)$categoryId."'");
               if (xtc_db_num_rows($categories_query) < 1) {
-                  throw new Exception(sprintf('Category not found: %s', $categoryId));
+                  $this->errormessage(sprintf('Category not found: %s', $categoryId));
               } else {
                   $categories = xtc_db_fetch_array($categories_query);
                   $categories['last_modified'] = 'now()';
@@ -175,7 +173,7 @@
                                               FROM ".TABLE_CATEGORIES."
                                              WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($categories_query) < 1) {
-              throw new Exception(sprintf('Category not found: %s', $categoryId));
+              $this->errormessage(sprintf('Category not found: %s', $categoryId));
           } else {
               $languages_query = xtc_db_query("SELECT *
                                                  FROM ".TABLE_LANGUAGES);
@@ -223,6 +221,8 @@
        * @param int $categoryId The category id
        * @param mixed[] $options
        *
+       * @throws Exception
+       *
        * @return array The category data
        */
       public function InsertUpdateProducts(int $categoryId, array $options): array
@@ -239,7 +239,7 @@
                                               FROM ".TABLE_CATEGORIES."
                                              WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($categories_query) < 1) {
-              throw new Exception(sprintf('Category not found: %s', $categoryId));
+              $this->errormessage(sprintf('Category not found: %s', $categoryId));
           } else {
               if (!isset($this->options['products_id'])) {
                   throw new Exception(sprintf('Product ID required'));
@@ -292,7 +292,7 @@
                                             FROM ".TABLE_CATEGORIES."
                                            WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($category_query) < 1) {
-              throw new Exception(sprintf('Category not found: %s', $categoryId));
+              $this->errormessage(sprintf('Category not found: %s', $categoryId));
           } else {
               define('_VALID_XTC', true);
           

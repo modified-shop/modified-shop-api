@@ -70,8 +70,11 @@
               throw new Exception('Product ID required');
           }
           
-          $this->categoryAction->DeleteProduct($categoryId, $productId);
+          $result = $this->categoryAction->DeleteProduct($categoryId, $productId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

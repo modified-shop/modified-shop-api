@@ -70,8 +70,11 @@
               throw new Exception('Attribute ID required');
           }
 
-          $this->productAction->DeleteAttributes($productId, $attributesId);
+          $result = $this->productAction->DeleteAttributes($productId, $attributesId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

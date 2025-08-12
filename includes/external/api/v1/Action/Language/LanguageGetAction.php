@@ -42,7 +42,7 @@
                                             FROM ".TABLE_LANGUAGES."
                                            WHERE languages_id = '".(int)$languageId."'");
           if (xtc_db_num_rows($language_query) < 1) {
-              throw new Exception(sprintf('Language not found: %s', $languageId));
+              $this->errormessage(sprintf('Language not found: %s', $languageId));
           } else {
               $language = xtc_db_fetch_array($language_query);
           }
@@ -55,8 +55,6 @@
        * Read languages by given conditions
        *
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The languages data
        */
@@ -73,7 +71,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Language found');
+              $this->errormessage('no Language found');
           }
           
           $data = [];

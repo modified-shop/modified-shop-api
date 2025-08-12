@@ -70,8 +70,11 @@
               throw new Exception('Customer status history ID required');
           }
           
-          $this->customerAction->DeleteStatusHistory($customerId, $customerStatusHistoryId);
+          $result = $this->customerAction->DeleteStatusHistory($customerId, $customerStatusHistoryId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

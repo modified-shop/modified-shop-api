@@ -30,8 +30,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The option data
        */
       public function InsertOption(array $options): array
@@ -46,8 +44,6 @@
        *
        * @param int $optionId The option id
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The option data
        */

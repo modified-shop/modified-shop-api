@@ -63,8 +63,11 @@
 
           $productId = (int)$args['id'];
           
-          $this->productAction->DeleteAllAttributes($productId);
+          $result = $this->productAction->DeleteAllAttributes($productId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

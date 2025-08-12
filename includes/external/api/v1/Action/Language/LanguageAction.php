@@ -45,8 +45,6 @@
        * @param int $languageId The language id
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The language data
        */
       public function InsertUpdateLanguage(int $languageId, array $options): array
@@ -60,7 +58,7 @@
                                                 FROM ".TABLE_LANGUAGES."
                                                WHERE languages_id = '".(int)$languageId."'");
               if (xtc_db_num_rows($language_query) < 1) {
-                  throw new Exception(sprintf('Language not found: %s', $languageId));
+                  $this->errormessage(sprintf('Language not found: %s', $languageId));
               } else {
                   $language = xtc_db_fetch_array($language_query);
               }
@@ -80,7 +78,7 @@
                                              FROM ".TABLE_LANGUAGES."
                                             WHERE code = '".xtc_db_input($language['code'])."'");
               if (xtc_db_num_rows($check_query) > 0) {
-                  throw new Exception('Language Code already exists');
+                  $this->errormessage('Language Code already exists', 400);
               }
           }
           

@@ -63,8 +63,11 @@
 
           $customerId = (int)$args['id'];
           
-          $this->customerAction->DeleteAllMemo($customerId);
+          $result = $this->customerAction->DeleteAllMemo($customerId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

@@ -63,8 +63,11 @@
 
           $valueId = (int)$args['id'];
           
-          $this->attributesAction->DeleteValue($valueId);
+          $result = $this->attributesAction->DeleteValue($valueId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

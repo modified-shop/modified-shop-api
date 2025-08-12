@@ -63,8 +63,11 @@
 
           $customerId = (int)$args['id'];
           
-          $this->customerAction->DeleteInfo($customerId);
+          $result = $this->customerAction->DeleteInfo($customerId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

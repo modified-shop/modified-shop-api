@@ -92,8 +92,11 @@
 
           $currencyId = (int)$args['id'];
           
-          $this->currencyAction->DeleteCurrency($currencyId);
+          $result = $this->currencyAction->DeleteCurrency($currencyId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

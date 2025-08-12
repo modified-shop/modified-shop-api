@@ -70,8 +70,11 @@
               throw new Exception('Order products attributes ID required');
           }
           
-          $this->orderAction->DeleteProductAttributes($orderId, $orderProductsAttributesId);
+          $result = $this->orderAction->DeleteProductAttributes($orderId, $orderProductsAttributesId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

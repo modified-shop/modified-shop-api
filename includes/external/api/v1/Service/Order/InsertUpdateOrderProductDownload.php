@@ -67,6 +67,9 @@
                     
           $result = $this->orderAction->InsertUpdateOrderProductDownload($orderId, $orderProductsDownloadId, $data);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response, $result);
       }
   }

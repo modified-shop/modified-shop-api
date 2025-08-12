@@ -66,6 +66,9 @@
                     
           $result = $this->manufacturerAction->InsertUpdateManufacturer($manufacturerId, $data);
           
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           if ($manufacturerId > 0) {
               return $this->responder->withJson($response, $result);
           }

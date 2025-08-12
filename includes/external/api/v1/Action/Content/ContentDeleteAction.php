@@ -27,6 +27,8 @@
        *
        * @param int $contentGroupId The content group id
        *
+       * @throws Exception
+       *
        * @return void
        */
       public function DeleteContent(int $contentGroupId): void
@@ -40,7 +42,7 @@
                                             FROM ".TABLE_CONTENT_MANAGER."
                                            WHERE content_group = '".(int)$contentGroupId."'");
           if (xtc_db_num_rows($content_query) < 1) {
-            throw new Exception(sprintf('Content Group not found: %s', $contentGroupId));
+            $this->errormessage(sprintf('Content Group not found: %s', $contentGroupId));
           } else {
               // disable Exception
               $this->throw_exception = false;
@@ -82,7 +84,7 @@
                                           WHERE content_manager_id = '".(int)$contentGroupId."'
                                                 ".$where);
           if (xtc_db_num_rows($content_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Content Group not found: %s', $contentGroupId));
+              $this->errormessage(sprintf('Content Group not found: %s', $contentGroupId));
           } else {
               while ($content = xtc_db_fetch_array($content_query)) {
                   $duplicate_content_query = xtc_db_query("SELECT COUNT(*) AS total 

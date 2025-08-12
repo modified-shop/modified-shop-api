@@ -63,8 +63,11 @@
 
           $couponId = (int)$args['id'];
           
-          $this->couponAction->DeleteCoupon($couponId);
+          $result = $this->couponAction->DeleteCoupon($couponId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

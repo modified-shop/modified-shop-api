@@ -63,8 +63,11 @@
 
           $campaignId = (int)$args['id'];
           
-          $this->campaignAction->DeleteCampaign($campaignId);
+          $result = $this->campaignAction->DeleteCampaign($campaignId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

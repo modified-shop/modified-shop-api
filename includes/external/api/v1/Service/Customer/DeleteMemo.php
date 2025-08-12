@@ -70,8 +70,11 @@
               throw new Exception('Memo ID required');
           }
           
-          $this->customerAction->DeleteMemo($customerId, $memoId);
+          $result = $this->customerAction->DeleteMemo($customerId, $memoId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

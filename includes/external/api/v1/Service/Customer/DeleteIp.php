@@ -70,8 +70,11 @@
               throw new Exception('Customer ip ID required');
           }
           
-          $this->customerAction->DeleteIp($customerId, $customerIpId);
+          $result = $this->customerAction->DeleteIp($customerId, $customerIpId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

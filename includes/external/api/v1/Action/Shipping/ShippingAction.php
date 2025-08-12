@@ -60,7 +60,7 @@
                                                FROM ".TABLE_CARRIERS."
                                               WHERE carrier_id = '".(int)$carrierId."'");
               if (xtc_db_num_rows($carrier_query) < 1) {
-                  throw new Exception(sprintf('Carrier not found: %s', $carrierId));
+                  $this->errormessage(sprintf('Carrier not found: %s', $carrierId));
               } else {
                   $carrier = xtc_db_fetch_array($carrier_query);
               }
@@ -80,7 +80,7 @@
                                              FROM ".TABLE_CARRIERS."
                                             WHERE carrier_name = '".xtc_db_input($carrier['carrier_name'])."'");
               if (xtc_db_num_rows($check_query) > 0) {
-                  throw new Exception('Carrier Name already exists');
+                  $this->errormessage('Carrier Name already exists', 400);
               }
           }
           
@@ -101,8 +101,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The shipping status data
        */
       public function InsertShippingStatus(array $options): array
@@ -117,8 +115,6 @@
        *
        * @param int $shippingStatusId The shipping status id
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The shipping status data
        */

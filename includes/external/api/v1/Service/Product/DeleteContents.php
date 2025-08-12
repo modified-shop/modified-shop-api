@@ -70,8 +70,11 @@
               throw new Exception('Content ID required');
           }
 
-          $this->productAction->DeleteContents($productId, $contentId);
+          $result = $this->productAction->DeleteContents($productId, $contentId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

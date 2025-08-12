@@ -63,8 +63,11 @@
 
           $shippingStatusId = (int)$args['id'];
           
-          $this->shippingAction->DeleteShippingStatus($shippingStatusId);
+          $result = $this->shippingAction->DeleteShippingStatus($shippingStatusId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

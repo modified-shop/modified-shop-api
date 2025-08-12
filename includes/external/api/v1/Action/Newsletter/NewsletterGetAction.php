@@ -42,7 +42,7 @@
                                               FROM ".TABLE_NEWSLETTER_RECIPIENTS."
                                              WHERE mail_id = '".(int)$newsletterId."'");
           if (xtc_db_num_rows($newsletter_query) < 1) {
-              throw new Exception(sprintf('Newsletter not found: %s', $newsletterId));
+              $this->errormessage(sprintf('Newsletter not found: %s', $newsletterId));
           } else {
               $newsletter = xtc_db_fetch_array($newsletter_query);
 
@@ -63,8 +63,6 @@
        * Read newsletters by given conditions
        *
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The newsletters data
        */
@@ -104,7 +102,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Newsletter found');
+              $this->errormessage('no Newsletter found');
           }
           
           $data = [];
@@ -156,7 +154,7 @@
                                               FROM ".TABLE_NEWSLETTER_RECIPIENTS_HISTORY."
                                              WHERE customers_email_address = '".xtc_db_input($newsletterEmailAddress)."'");
           if (xtc_db_num_rows($newsletter_query) < 1 && $this->throw_exception === true) {
-              throw new Exception(sprintf('Newsletter Email Address not found: %s', $newsletterEmailAddress));
+              $this->errormessage(sprintf('Newsletter Email Address not found: %s', $newsletterEmailAddress));
           } else {
               $data = [];
               while ($newsletter = xtc_db_fetch_array($newsletter_query)) {
@@ -172,8 +170,6 @@
        * Read newsletters by given conditions
        *
        * @param mixed[] $options
-       *
-       * @throws Exception
        *
        * @return array The newsletters data
        */
@@ -204,7 +200,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Newsletter History found');
+              $this->errormessage('no Newsletter History found');
           }
           
           $data = [];

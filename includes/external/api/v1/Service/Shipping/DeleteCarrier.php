@@ -63,8 +63,11 @@
 
           $carrierId = (int)$args['id'];
           
-          $this->shippingAction->DeleteCarrier($carrierId);
+          $result = $this->shippingAction->DeleteCarrier($carrierId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

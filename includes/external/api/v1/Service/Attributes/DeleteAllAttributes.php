@@ -63,8 +63,11 @@
 
           $optionId = (int)$args['id'];
           
-          $this->attributesAction->DeleteAllAttributes($optionId);
+          $result = $this->attributesAction->DeleteAllAttributes($optionId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

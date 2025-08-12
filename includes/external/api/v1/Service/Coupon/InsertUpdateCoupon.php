@@ -66,6 +66,9 @@
                     
           $result = $this->couponAction->InsertUpdateCoupon($couponId, $data);
           
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           if ($couponId > 0) {
               return $this->responder->withJson($response, $result);
           }

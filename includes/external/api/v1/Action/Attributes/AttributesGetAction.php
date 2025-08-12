@@ -43,7 +43,7 @@
                                           FROM ".TABLE_PRODUCTS_OPTIONS."
                                          WHERE products_options_id = '".(int)$optionId."'");
           if (xtc_db_num_rows($option_query) < 1) {
-              throw new Exception(sprintf('Option not found: %s', $optionId));
+              $this->errormessage(sprintf('Option not found: %s', $optionId));
           } else {
               $options_query = xtc_db_query("SELECT po.*,
                                                     l.code
@@ -68,8 +68,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The options data
        */
       public function GetOptions(array $options): array
@@ -88,7 +86,7 @@
           ];
           
           if ($count['total'] < 1) {
-              throw new Exception('no Options found');
+              $this->errormessage('no Options found');
           }
           
           $data = [];
@@ -141,7 +139,7 @@
                                          FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
                                         WHERE products_options_values_id = '".(int)$valueId."'");
           if (xtc_db_num_rows($value_query) < 1) {
-              throw new Exception(sprintf('Value not found: %s', $valueId));
+              $this->errormessage(sprintf('Value not found: %s', $valueId));
           } else {
               $values_query = xtc_db_query("SELECT pov.*,
                                                    l.code
@@ -166,8 +164,6 @@
        *
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The value data
        */
       public function GetValues(array $options): array
@@ -186,7 +182,7 @@
           ];
           
           if ($count['total'] < 1) {
-              throw new Exception('no Values found');
+              $this->errormessage('no Values found');
           }
           
           $data = [];
@@ -224,8 +220,6 @@
        * @param int $optionId The option id
        * @param mixed[] $options
        *
-       * @throws Exception
-       *
        * @return array The attributes data
        */
       public function GetAttributes(int $optionId, array $options): array
@@ -242,7 +236,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              throw new Exception('no Attributes found');
+              $this->errormessage('no Attributes found');
           }
           
           $data = [];

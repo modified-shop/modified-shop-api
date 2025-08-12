@@ -63,8 +63,11 @@
 
           $productId = (int)$args['id'];
           
-          $this->productAction->DeleteAllReviews($productId);
+          $result = $this->productAction->DeleteAllReviews($productId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }

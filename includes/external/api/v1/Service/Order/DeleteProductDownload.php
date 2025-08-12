@@ -70,8 +70,11 @@
               throw new Exception('Order products download ID required');
           }
           
-          $this->orderAction->DeleteProductDownload($orderId, $orderProductsDownloadId);
+          $result = $this->orderAction->DeleteProductDownload($orderId, $orderProductsDownloadId);
 
+          if (isset($result['errormessage'])) {
+              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+          }
           return $this->responder->withJson($response)->withStatus(204);
       }
   }
