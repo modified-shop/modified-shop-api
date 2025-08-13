@@ -24,6 +24,9 @@
     tags: ['Manufacturer'],
     description: 'Update manufacturers data by given Id',
     operationId: 'InsertUpdateManufacturer',
+    requestBody: new OA\RequestBody(
+      required: true
+    ),
     responses:[
       new OA\Parameter(
         name: 'Id', 

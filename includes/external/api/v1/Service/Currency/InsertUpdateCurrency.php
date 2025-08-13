@@ -24,6 +24,9 @@
     tags: ['Currency'],
     description: 'Update single currency data by given Id',
     operationId: 'InsertUpdateCurrency',
+    requestBody: new OA\RequestBody(
+      required: true
+    ),
     parameters: [
       new OA\Parameter(
         name: 'Id', 
