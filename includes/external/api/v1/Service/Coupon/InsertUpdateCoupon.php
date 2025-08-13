@@ -23,7 +23,7 @@
     path: '/api/v1/coupons/{Id}/coupons',
     tags: ['Coupon'],
     description: 'Insert coupons by given Id',
-    operationId: 'InsertCoupon',
+    operationId: 'InsertCoupons',
     responses:[
       new OA\Parameter(
         name: 'Id', 
@@ -56,7 +56,7 @@
     path: '/api/v1/coupons/{Id}/coupons',
     tags: ['Coupon'],
     description: 'Update coupons by given Id',
-    operationId: 'UpdateCoupon',
+    operationId: 'UpdateCoupons',
     responses:[
       new OA\Parameter(
         name: 'Id', 
