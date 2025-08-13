@@ -23,7 +23,7 @@
     path: '/api/v1/manufacturers/{id}/image',
     tags: ['Manufacturer'],
     description: 'Insert manufacturers image by given Id',
-    operationId: 'InsertUpdateImage',
+    operationId: 'InsertManufacturersImage',
     responses:[
       new OA\Parameter(
         name: 'Id', 
@@ -56,7 +56,7 @@
     path: '/api/v1/manufacturers/{id}/image',
     tags: ['Manufacturer'],
     description: 'Update manufacturers image by given Id',
-    operationId: 'InsertUpdateImage',
+    operationId: 'UpdateManufacturersImage',
     responses:[
       new OA\Parameter(
         name: 'Id', 

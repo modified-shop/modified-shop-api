@@ -23,7 +23,7 @@
     path: '/api/v1/manufacturers/{id}/description',
     tags: ['Manufacturer'],
     description: 'Insert manufacturers description by given Id',
-    operationId: 'InsertUpdateDescription',
+    operationId: 'InsertManufacturersDescription',
     responses:[
       new OA\Parameter(
         name: 'Id', 
@@ -56,7 +56,7 @@
     path: '/api/v1/manufacturers/{id}/description',
     tags: ['Manufacturer'],
     description: 'Update manufacturers description by given Id',
-    operationId: 'InsertUpdateDescription',
+    operationId: 'UpdateManufacturersDescription',
     responses:[
       new OA\Parameter(
         name: 'Id', 
