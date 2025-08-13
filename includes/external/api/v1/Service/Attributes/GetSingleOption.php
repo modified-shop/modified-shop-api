@@ -21,7 +21,7 @@
 
   #[OA\Get(
     path: '/api/v1/attributes/options/{id}',
-    tags: ['Attribute'],
+    tags: ['Attributes'],
     description: 'Get single attributes options by given Id',
     operationId: 'GetSingleOption',
     parameters: [

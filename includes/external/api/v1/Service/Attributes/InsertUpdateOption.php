@@ -21,7 +21,7 @@
 
   #[OA\Post(
     path: '/api/v1/attributes/options/{Id}',
-    tags: ['Attribute'],
+    tags: ['Attributes'],
     description: 'Update single attribute options',
     operationId: 'InsertUpdateOption',
     parameters: [

@@ -21,7 +21,7 @@
 
   #[OA\Get(
     path: '/api/v1/attributes/{Id}',
-    tags: ['Attribute'],
+    tags: ['Attributes'],
     description: 'Get attributes data by given Id',
     operationId: 'GetAttributes',
     parameters: [

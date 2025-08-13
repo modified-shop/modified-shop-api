@@ -21,7 +21,7 @@
 
   #[OA\Post(
     path: '/api/v1/attributes/{Id}',
-    tags: ['Attribute'],
+    tags: ['Attributes'],
     description: 'Insert single attribute',
     operationId: 'InsertAttributes',
     parameters: [
