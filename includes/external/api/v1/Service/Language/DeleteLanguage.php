@@ -33,7 +33,7 @@
           type: 'integer',
         ),
         description: 'languages Id'
-      ),
+      )
     ],
     responses:[
       new OA\Response(

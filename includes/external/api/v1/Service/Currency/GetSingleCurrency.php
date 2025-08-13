@@ -33,7 +33,7 @@
           type: 'integer',
         ),
         description: 'currencies Id'
-      ),
+      )
     ],
     responses:[
       new OA\Response(
