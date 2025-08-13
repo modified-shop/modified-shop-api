@@ -60,7 +60,7 @@
       }
 
       /**
-       * Delete a manufacturer by the given manufacturer id and manufacturer id.
+       * Delete a manufacturer by the given manufacturer id and product id.
        *
        * @param int $manufacturerId The manufacturer id
        * @param int $productId The product id

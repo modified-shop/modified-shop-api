@@ -17,10 +17,74 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/manufacturers/{id}/image',
+    tags: ['Manufacturer'],
+    description: 'Insert manufacturers image by given Id',
+    operationId: 'InsertUpdateImage',
+    responses:[
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'manufacturers Id'
+      ),
+      new OA\Response(
+        response: 201, 
+        description: 'manufacturers data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'manufacturer not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'manufacturer Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateImage']]
+    ]
+  )]
+
+  #[OA\Put(
+    path: '/api/v1/manufacturers/{id}/image',
+    tags: ['Manufacturer'],
+    description: 'Update manufacturers image by given Id',
+    operationId: 'InsertUpdateImage',
+    responses:[
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'manufacturers Id'
+      ),
+      new OA\Response(
+        response: 201, 
+        description: 'manufacturers data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'manufacturer not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'manufacturer Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateImage']]
+    ]
+  )]
+
   final class InsertUpdateManufacturer extends BaseService
   {
       /**

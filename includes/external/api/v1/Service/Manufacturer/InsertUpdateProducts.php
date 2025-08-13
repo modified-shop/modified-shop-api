@@ -17,10 +17,74 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/manufacturers/{id}/products',
+    tags: ['Manufacturer'],
+    description: 'Insert manufacturers products by given Id',
+    operationId: 'InsertUpdateProducts',
+    responses:[
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'manufacturers Id'
+      ),
+      new OA\Response(
+        response: 201, 
+        description: 'manufacturers data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'manufacturer not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'manufacturer Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateProducts']]
+    ]
+  )]
+
+  #[OA\Put(
+    path: '/api/v1/manufacturers/{id}/products',
+    tags: ['Manufacturer'],
+    description: 'Update manufacturers products by given Id',
+    operationId: 'InsertUpdateProducts',
+    responses:[
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'manufacturers Id'
+      ),
+      new OA\Response(
+        response: 201, 
+        description: 'manufacturers data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'manufacturer not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'manufacturer Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateProducts']]
+    ]
+  )]
+
   final class InsertUpdateProducts extends BaseService
   {
       /**

@@ -17,10 +17,24 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/manufacturers',
+    tags: ['Manufacturer'],
+    description: 'Insert single manufacturer',
+    operationId: 'Insertmanufacturer',
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'manufacturers data',
+      )
+    ],
+    security: [
+      ['modified_auth' => ['Insertmanufacturer']]
+    ]
+  )]
+
   final class InsertManufacturer extends BaseService
   {
       /**

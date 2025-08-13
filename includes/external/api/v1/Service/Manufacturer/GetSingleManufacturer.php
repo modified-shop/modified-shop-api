@@ -17,10 +17,47 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/manufacturers/{Id}',
+    tags: ['Manufacturer'],
+    description: 'Get single manufacturers data by given Id',
+    operationId: 'GetSingleManufacturer',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'manufacturers Id'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: products'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'manufacturers data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no manufacturers found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleManufacturer']]
+    ]
+  )]
+  
   final class GetSingleManufacturer extends BaseService
   {
       /**

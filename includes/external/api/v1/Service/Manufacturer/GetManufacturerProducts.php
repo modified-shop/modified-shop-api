@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/manufacturers/{Id}/products',
+    tags: ['Manufacturer'],
+    description: 'Get manufacturers products by given Id',
+    operationId: 'GetManufacturerProducts',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'manufacturers Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'manufacturers data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no manufacturers products found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'manufacturer Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetManufacturerProducts']]
+    ]
+  )]
+  
   final class GetManufacturerProducts extends BaseService
   {
       /**

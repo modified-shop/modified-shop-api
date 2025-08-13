@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/manufacturers/{Id}',
+    tags: ['Manufacturer'],
+    description: 'Delete single manufacturer by given Id',
+    operationId: 'DeleteManufacturer',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'manufacturers Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'manufacturer not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'manufacturer Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteManufacturer']]
+    ]
+  )]
+
   final class DeleteManufacturer extends BaseService
   {
       /**
