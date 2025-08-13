@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/countries/{Id}/zones',
+    tags: ['Country'],
+    description: 'Get zones data by given Id',
+    operationId: 'GetZones',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'countries Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'zones data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'zones not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'countries Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetZones']]
+    ]
+  )]
+  
   final class GetZones extends BaseService
   {
       /**

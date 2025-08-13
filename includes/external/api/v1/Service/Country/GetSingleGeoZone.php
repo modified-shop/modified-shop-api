@@ -17,10 +17,67 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/countries/geo_zones/{Id}',
+    tags: ['Country'],
+    description: 'Get geo zones data by given Id',
+    operationId: 'GetSingleGeoZone',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'geo zones Id'
+      ),
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: countries'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'geo zones data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'geo zones not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'countries Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleGeoZone']]
+    ]
+  )]
+  
   final class GetSingleGeoZone extends BaseService
   {
       /**

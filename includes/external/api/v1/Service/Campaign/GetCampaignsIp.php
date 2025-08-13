@@ -75,6 +75,10 @@
       new OA\Response(
         response: 403,
         description: 'no campaigns ip found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'campaigns Id required'
       )
     ],
     security: [

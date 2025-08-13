@@ -17,10 +17,51 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/countries/{Id}',
+    tags: ['Country'],
+    description: 'Get countries data by given Id',
+    operationId: 'GetSingleCountry',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'countries Id'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: zones'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'countries data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'countries not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'countries Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleCountry']]
+    ]
+  )]
+  
   final class GetSingleCountry extends BaseService
   {
       /**

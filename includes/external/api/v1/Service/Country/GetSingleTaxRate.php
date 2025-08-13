@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/countries/tax_rates/{Id}',
+    tags: ['Country'],
+    description: 'Get tax rates data by given Id',
+    operationId: 'GetSingleTaxRate',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'tax rates Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'tax rates data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'tax rates not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'tax rates Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleTaxRate']]
+    ]
+  )]
+  
   final class GetSingleTaxRate extends BaseService
   {
       /**

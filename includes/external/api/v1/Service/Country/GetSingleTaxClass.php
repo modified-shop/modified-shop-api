@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/countries/tax_class/{Id}',
+    tags: ['Country'],
+    description: 'Get tax class data by given Id',
+    operationId: 'GetSingleTaxClass',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'tax class Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'tax class data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'tax class not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'tax class Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleTaxClass']]
+    ]
+  )]
+  
   final class GetSingleTaxClass extends BaseService
   {
       /**

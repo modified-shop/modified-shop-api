@@ -17,10 +17,78 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/countries',
+    tags: ['Country'],
+    description: 'Get countries data',
+    operationId: 'GetCountries',
+    parameters: [
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      ),
+      new OA\Parameter(
+        name: 'status', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'status'
+      ),
+      new OA\Parameter(
+        name: 'iso2', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'countries iso2 code'
+      ),
+      new OA\Parameter(
+        name: 'iso2', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'countries iso3 code'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: zones'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'countries data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'countries not found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetCountries']]
+    ]
+  )]
+  
   final class GetCountries extends BaseService
   {
       /**
