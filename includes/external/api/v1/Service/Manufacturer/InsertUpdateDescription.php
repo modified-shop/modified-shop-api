@@ -20,7 +20,7 @@
   use OpenApi\Attributes as OA;
 
   #[OA\Post(
-    path: '/api/v1/manufacturers/{id}/description',
+    path: '/api/v1/manufacturers/{Id}/description',
     tags: ['Manufacturer'],
     description: 'Insert manufacturers description by given Id',
     operationId: 'InsertManufacturersDescription',

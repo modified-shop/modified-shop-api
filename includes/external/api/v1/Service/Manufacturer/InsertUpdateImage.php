@@ -20,7 +20,7 @@
   use OpenApi\Attributes as OA;
 
   #[OA\Post(
-    path: '/api/v1/manufacturers/{id}/image',
+    path: '/api/v1/manufacturers/{Id}/image',
     tags: ['Manufacturer'],
     description: 'Insert manufacturers image by given Id',
     operationId: 'InsertManufacturersImage',

@@ -20,7 +20,7 @@
   use OpenApi\Attributes as OA;
 
   #[OA\Put(
-    path: '/api/v1/manufacturers/{id}/manufacturers',
+    path: '/api/v1/manufacturers/{Id}/manufacturers',
     tags: ['Manufacturer'],
     description: 'Update manufacturers data by given Id',
     operationId: 'InsertUpdateManufacturer',
