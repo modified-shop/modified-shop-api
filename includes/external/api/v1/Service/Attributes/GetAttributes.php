@@ -17,10 +17,59 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/attributes/{Id}',
+    tags: ['Attribute'],
+    description: 'Get attributes data by given Id',
+    operationId: 'GetAttributes',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'options Id'
+      ),
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'attributes data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no attributes found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'options Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetAttributes']]
+    ]
+  )]
+  
   final class GetAttributes extends BaseService
   {
       /**

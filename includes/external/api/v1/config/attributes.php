@@ -21,7 +21,7 @@
   // update options
   $app->put('/attributes/options/{id}',               \api\v1\Service\Attributes\InsertUpdateOption::class);
 
-  // delete Attributes
+  // delete options
   $app->delete('/attributes/options/{id}',            \api\v1\Service\Attributes\DeleteOption::class);
 
 

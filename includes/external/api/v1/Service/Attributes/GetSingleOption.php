@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/attributes/options/{id}',
+    tags: ['Attribute'],
+    description: 'Get single attributes options by given Id',
+    operationId: 'GetSingleOption',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'options Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'attributes options data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no options found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'options Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleOption']]
+    ]
+  )]
+  
   final class GetSingleOption extends BaseService
   {
       /**

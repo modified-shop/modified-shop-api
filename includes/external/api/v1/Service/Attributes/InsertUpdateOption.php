@@ -17,10 +17,39 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/attributes/options/{Id}',
+    tags: ['Attribute'],
+    description: 'Update single attribute options',
+    operationId: 'InsertUpdateOption',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'options Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 200,
+        description: 'attributes options data',
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'options Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateOption']]
+    ]
+  )]
+
   final class InsertUpdateOption extends BaseService
   {
       /**

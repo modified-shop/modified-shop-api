@@ -17,10 +17,46 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/attributes/values',
+    tags: ['Attribute'],
+    description: 'Get attributes values',
+    operationId: 'GetValues',
+    parameters: [
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'attributes values data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no values found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetValues']]
+    ]
+  )]
+  
   final class GetValues extends BaseService
   {
       /**

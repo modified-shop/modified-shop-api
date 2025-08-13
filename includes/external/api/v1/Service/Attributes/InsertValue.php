@@ -17,10 +17,24 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/attributes/values',
+    tags: ['Attribute'],
+    description: 'Insert single attribute values',
+    operationId: 'InsertValue',
+    responses:[
+      new OA\Response(
+        response: 201,
+        description: 'attributes values data',
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertValue']]
+    ]
+  )]
+
   final class InsertValue extends BaseService
   {
       /**

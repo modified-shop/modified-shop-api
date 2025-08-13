@@ -18,10 +18,56 @@
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
   use Exception;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/attributes/{Id}/values/{vId}',
+    tags: ['Attributes'],
+    description: 'Delete a values from a attributes by given Ids',
+    operationId: 'DeleteAttributes',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'options Id'
+      ),
+      new OA\Parameter(
+        name: 'vId', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'values Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'options not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'options Id required'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'values Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteAttributes']]
+    ]
+  )]
+
   final class DeleteAttributes extends BaseService
   {
       /**

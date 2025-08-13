@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/attributes/values/{id}',
+    tags: ['Attribute'],
+    description: 'Get single attributes values by given Id',
+    operationId: 'GetSingleValue',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'values Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'attributes values data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no values found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'values Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleValue']]
+    ]
+  )]
+  
   final class GetSingleValue extends BaseService
   {
       /**
