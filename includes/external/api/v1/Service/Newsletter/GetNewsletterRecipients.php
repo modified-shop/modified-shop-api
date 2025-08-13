@@ -17,10 +17,86 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/newsletters/recipients',
+    tags: ['Newsletter'],
+    description: 'Get newsletters recipients data',
+    operationId: 'GetNewsletterRecipients',
+    parameters: [
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      ),
+      new OA\Parameter(
+        name: 'status', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Status of newsletters'
+      ),
+      new OA\Parameter(
+        name: 'mail', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'customers email address'
+      ),
+      new OA\Parameter(
+        name: 'from', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Timestamp date_added'
+      ),
+      new OA\Parameter(
+        name: 'to', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Timestamp date_added'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: history'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'newsletters recipients data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no newsletters recipients found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetNewsletterRecipients']]
+    ]
+  )]
+  
   final class GetNewsletterRecipients extends BaseService
   {
       /**

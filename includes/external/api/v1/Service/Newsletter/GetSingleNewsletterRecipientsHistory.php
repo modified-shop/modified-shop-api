@@ -17,10 +17,39 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/newsletters/recipients/history/{Id}',
+    tags: ['Newsletter'],
+    description: 'Get single newsletters recipients history data by given Id',
+    operationId: 'GetSingleNewsletterRecipientsHistory',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'string',
+        ),
+        description: 'newsletters email address'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'newsletters recipients history data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no newsletters recipient history found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleNewsletterRecipientsHistory']]
+    ]
+  )]
+  
   final class GetSingleNewsletterRecipientsHistory extends BaseService
   {
       /**

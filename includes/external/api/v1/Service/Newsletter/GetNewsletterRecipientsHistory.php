@@ -17,10 +17,62 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/newsletters/recipients/history',
+    tags: ['Newsletter'],
+    description: 'Get newsletters recipients history data',
+    operationId: 'GetNewsletterRecipientsHistory',
+    parameters: [
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      ),
+      new OA\Parameter(
+        name: 'from', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Timestamp date_added'
+      ),
+      new OA\Parameter(
+        name: 'to', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Timestamp date_added'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'newsletters recipients history data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no newsletters recipients history found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetNewsletterRecipientsHistory']]
+    ]
+  )]
+  
   final class GetNewsletterRecipientsHistory extends BaseService
   {
       /**

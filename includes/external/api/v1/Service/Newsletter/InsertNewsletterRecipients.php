@@ -17,10 +17,28 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/newsletters/recipients',
+    tags: ['Newsletter'],
+    description: 'Insert single newsletter recipients',
+    operationId: 'InsertNewsletterRecipients',
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'newsletters recipients data',
+      ),
+      new OA\Response(
+        response: 400,
+        description: 'invalid email address supplied'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertNewsletterRecipients']]
+    ]
+  )]
+
   final class InsertNewsletterRecipients extends BaseService
   {
       /**

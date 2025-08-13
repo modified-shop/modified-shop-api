@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/newsletters/recipients/{Id}',
+    tags: ['Newsletter'],
+    description: 'Delete single newsletter data by given Id',
+    operationId: 'DeleteNewsletterRecipients',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'newsletters Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'newsletter recipient not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'newsletter Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteNewsletterRecipients']]
+    ]
+  )]
+
   final class DeleteNewsletterRecipients extends BaseService
   {
       /**

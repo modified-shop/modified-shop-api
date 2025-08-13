@@ -17,10 +17,41 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Put(
+    path: '/api/v1/newsletters/recipients/{Id}',
+    tags: ['Newsletter'],
+    description: 'Update newsletters recipients data by given Id',
+    operationId: 'InsertUpdateNewsletter',
+    responses:[
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'newsletters Id'
+      ),
+      new OA\Response(
+        response: 201, 
+        description: 'newsletters recipients data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'newsletter recipients not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'newsletter Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateImage']]
+    ]
+  )]
+
   final class InsertUpdateNewsletterRecipients extends BaseService
   {
       /**

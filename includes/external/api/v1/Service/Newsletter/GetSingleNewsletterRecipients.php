@@ -17,10 +17,47 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/newsletters/recipients/{Id}',
+    tags: ['Newsletter'],
+    description: 'Get single newsletters recipients data by given Id',
+    operationId: 'GetSingleNewsletterRecipients',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'newsletters Id'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: history'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'newsletters recipients data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no newsletters recipient found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleNewsletterRecipients']]
+    ]
+  )]
+  
   final class GetSingleNewsletterRecipients extends BaseService
   {
       /**
