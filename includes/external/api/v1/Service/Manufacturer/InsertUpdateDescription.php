@@ -53,7 +53,7 @@
   )]
 
   #[OA\Put(
-    path: '/api/v1/manufacturers/{id}/description',
+    path: '/api/v1/manufacturers/{Id}/description',
     tags: ['Manufacturer'],
     description: 'Update manufacturers description by given Id',
     operationId: 'UpdateManufacturersDescription',
