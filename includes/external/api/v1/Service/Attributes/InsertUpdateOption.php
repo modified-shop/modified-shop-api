@@ -19,7 +19,7 @@
   use Psr\Http\Message\ServerRequestInterface;
   use OpenApi\Attributes as OA;
 
-  #[OA\Post(
+  #[OA\Put(
     path: '/api/v1/attributes/options/{Id}',
     tags: ['Attributes'],
     description: 'Update single attribute options',
