@@ -58,7 +58,7 @@
         description: 'countries iso2 code'
       ),
       new OA\Parameter(
-        name: 'iso2', 
+        name: 'iso3', 
         in: 'query',
         schema: new OA\Schema(
           type: 'string'
