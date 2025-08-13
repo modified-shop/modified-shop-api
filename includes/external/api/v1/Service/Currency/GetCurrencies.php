@@ -48,8 +48,8 @@
         description: 'currencies data',
       ),
       new OA\Response(
-          response: 403,
-          description: 'no currencies found'
+        response: 403,
+        description: 'no currencies found'
       )
     ],
     security: [

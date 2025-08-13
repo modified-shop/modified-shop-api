@@ -41,12 +41,12 @@
         description: 'campaigns data',
       ),
       new OA\Response(
-          response: 400,
-          description: 'invalid refId supplied'
+        response: 400,
+        description: 'invalid refId supplied'
       ),
       new OA\Response(
-          response: 500,
-          description: 'campaigns Id required'
+        response: 500,
+        description: 'campaigns Id required'
       )
     ],
     security: [

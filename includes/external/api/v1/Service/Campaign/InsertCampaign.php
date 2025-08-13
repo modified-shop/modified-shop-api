@@ -22,7 +22,7 @@
   #[OA\Post(
     path: '/api/v1/campaigns',
     tags: ['Campaign'],
-    description: 'Insert single campaigns data by given Id',
+    description: 'Insert single campaign',
     operationId: 'InsertCampaign',
     responses:[
       new OA\Response(
@@ -30,8 +30,8 @@
         description: 'campaigns data',
       ),
       new OA\Response(
-          response: 400,
-          description: 'invalid refId supplied'
+        response: 400,
+        description: 'invalid refId supplied'
       )
     ],
     security: [

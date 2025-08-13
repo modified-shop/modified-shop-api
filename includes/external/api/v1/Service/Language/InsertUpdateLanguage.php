@@ -41,12 +41,12 @@
         description: 'languages data',
       ),
       new OA\Response(
-          response: 400,
-          description: 'invalid code supplied'
+        response: 400,
+        description: 'invalid code supplied'
       ),
       new OA\Response(
-          response: 500,
-          description: 'language Id required'
+        response: 500,
+        description: 'language Id required'
       )
     ],
     security: [

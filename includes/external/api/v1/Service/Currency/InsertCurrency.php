@@ -22,7 +22,7 @@
   #[OA\Post(
     path: '/api/v1/currencies',
     tags: ['Currency'],
-    description: 'Insert single currency data by given Id',
+    description: 'Insert single currency',
     operationId: 'InsertCurrency',
     responses:[
       new OA\Response(
@@ -30,8 +30,8 @@
         description: 'currencies data',
       ),
       new OA\Response(
-          response: 400,
-          description: 'invalid code supplied'
+        response: 400,
+        description: 'invalid code supplied'
       )
     ],
     security: [

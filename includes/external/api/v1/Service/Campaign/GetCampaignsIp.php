@@ -73,8 +73,8 @@
         description: 'campaigns ip data',
       ),
       new OA\Response(
-          response: 403,
-          description: 'no campaigns ip found'
+        response: 403,
+        description: 'no campaigns ip found'
       )
     ],
     security: [

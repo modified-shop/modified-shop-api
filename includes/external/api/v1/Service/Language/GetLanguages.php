@@ -48,8 +48,8 @@
         description: 'languages data',
       ),
       new OA\Response(
-          response: 403,
-          description: 'no languages found'
+        response: 403,
+        description: 'no languages found'
       )
     ],
     security: [

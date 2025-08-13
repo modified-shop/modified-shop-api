@@ -41,12 +41,12 @@
         description: 'no data',
       ),
       new OA\Response(
-          response: 403,
-          description: 'language not found'
+        response: 403,
+        description: 'language not found'
       ),
       new OA\Response(
-          response: 500,
-          description: 'language Id required'
+        response: 500,
+        description: 'language Id required'
       )
     ],
     security: [

@@ -20,7 +20,7 @@
   use OpenApi\Attributes as OA;
 
   #[OA\Get(
-    path: '/configurations/groups',
+    path: '/api/v1/configurations/groups',
     tags: ['Configuration'],
     description: 'Get configuration group data',
     operationId: 'GetConfigurationGroups',
@@ -56,8 +56,8 @@
         description: 'configuration data',
       ),
       new OA\Response(
-          response: 403,
-          description: 'no configuration group found'
+        response: 403,
+        description: 'no configuration group found'
       )
     ],
     security: [

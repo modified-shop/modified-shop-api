@@ -41,12 +41,12 @@
         description: 'currencies data',
       ),
       new OA\Response(
-          response: 400,
-          description: 'invalid code supplied'
+        response: 400,
+        description: 'invalid code supplied'
       ),
       new OA\Response(
-          response: 500,
-          description: 'currency Id required'
+        response: 500,
+        description: 'currency Id required'
       )
     ],
     security: [

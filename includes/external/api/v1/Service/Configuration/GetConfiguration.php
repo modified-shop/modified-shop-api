@@ -20,7 +20,7 @@
   use OpenApi\Attributes as OA;
 
   #[OA\Get(
-    path: '/configurations/{Id}',
+    path: '/api/v1/configurations/{Id}',
     tags: ['Configuration'],
     description: 'Get configuration data by given Id',
     operationId: 'GetConfiguration',
@@ -41,12 +41,12 @@
         description: 'configuration data',
       ),
       new OA\Response(
-          response: 403,
-          description: 'configuration not found'
+        response: 403,
+        description: 'configuration not found'
       ),
       new OA\Response(
-          response: 500,
-          description: 'configuration Id required'
+        response: 500,
+        description: 'configuration Id required'
       )
     ],
     security: [

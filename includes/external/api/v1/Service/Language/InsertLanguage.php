@@ -22,7 +22,7 @@
   #[OA\Post(
     path: '/api/v1/languages',
     tags: ['Language'],
-    description: 'Insert single language data by given Id',
+    description: 'Insert single language',
     operationId: 'Insertlanguage',
     responses:[
       new OA\Response(
@@ -30,8 +30,8 @@
         description: 'languages data',
       ),
       new OA\Response(
-          response: 400,
-          description: 'invalid code supplied'
+        response: 400,
+        description: 'invalid code supplied'
       )
     ],
     security: [

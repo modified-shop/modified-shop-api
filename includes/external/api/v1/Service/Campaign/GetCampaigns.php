@@ -48,8 +48,8 @@
         description: 'campaigns data',
       ),
       new OA\Response(
-          response: 403,
-          description: 'no campaigns found'
+        response: 403,
+        description: 'no campaigns found'
       )
     ],
     security: [

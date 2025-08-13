@@ -41,12 +41,12 @@
         description: 'no data',
       ),
       new OA\Response(
-          response: 403,
-          description: 'campaign not found'
+        response: 403,
+        description: 'campaign not found'
       ),
       new OA\Response(
-          response: 500,
-          description: 'campaign Id required'
+        response: 500,
+        description: 'campaign Id required'
       )
     ],
     security: [
