@@ -20,7 +20,7 @@
   use OpenApi\Attributes as OA;
 
   #[OA\Delete(
-    path: '/api/v1/attributes/options/{id}',
+    path: '/api/v1/attributes/options/{Id}',
     tags: ['Attributes'],
     description: 'Delete attributes options by given Id',
     operationId: 'DeleteOption',
