@@ -37,7 +37,7 @@
     ],
     responses:[
       new OA\Response(
-        response: 200,
+        response: 201,
         description: 'attributes values data',
       ),
       new OA\Response(
@@ -98,6 +98,6 @@
           if (isset($result['errormessage'])) {
               return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
           }
-          return $this->responder->withJson($response, $result);
+          return $this->responder->withJson($response, $result)->withStatus(201);
       }
   }
