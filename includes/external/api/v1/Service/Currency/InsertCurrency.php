@@ -24,9 +24,6 @@
     tags: ['Currency'],
     description: 'Insert single currency',
     operationId: 'InsertCurrency',
-    requestBody: new OA\RequestBody(
-      required: true
-    ),
     responses:[
       new OA\Response(
         response: 201, 

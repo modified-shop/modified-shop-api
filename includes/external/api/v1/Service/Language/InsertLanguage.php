@@ -24,9 +24,6 @@
     tags: ['Language'],
     description: 'Insert single language',
     operationId: 'Insertlanguage',
-    requestBody: new OA\RequestBody(
-      required: true
-    ),
     responses:[
       new OA\Response(
         response: 201, 

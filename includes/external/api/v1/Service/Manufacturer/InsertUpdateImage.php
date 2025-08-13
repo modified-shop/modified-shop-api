@@ -24,9 +24,6 @@
     tags: ['Manufacturer'],
     description: 'Insert manufacturers image by given Id',
     operationId: 'InsertManufacturersImage',
-    requestBody: new OA\RequestBody(
-      required: true
-    ),
     responses:[
       new OA\Parameter(
         name: 'Id', 

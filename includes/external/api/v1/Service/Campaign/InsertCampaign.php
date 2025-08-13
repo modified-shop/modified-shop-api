@@ -24,9 +24,6 @@
     tags: ['Campaign'],
     description: 'Insert single campaign',
     operationId: 'InsertCampaign',
-    requestBody: new OA\RequestBody(
-      required: true
-    ),
     responses:[
       new OA\Response(
         response: 201, 

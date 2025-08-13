@@ -24,9 +24,6 @@
     tags: ['Manufacturer'],
     description: 'Insert manufacturers description by given Id',
     operationId: 'InsertManufacturersDescription',
-    requestBody: new OA\RequestBody(
-      required: true
-    ),
     responses:[
       new OA\Parameter(
         name: 'Id', 

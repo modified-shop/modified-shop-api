@@ -24,9 +24,6 @@
     tags: ['Campaign'],
     description: 'Update single campaigns data by given Id',
     operationId: 'InsertUpdateCampaign',
-    requestBody: new OA\RequestBody(
-      required: true
-    ),
     parameters: [
       new OA\Parameter(
         name: 'Id', 

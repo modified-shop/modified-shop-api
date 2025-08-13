@@ -24,9 +24,6 @@
     tags: ['Manufacturer'],
     description: 'Insert single manufacturer',
     operationId: 'Insertmanufacturer',
-    requestBody: new OA\RequestBody(
-      required: true
-    ),
     responses:[
       new OA\Response(
         response: 201, 

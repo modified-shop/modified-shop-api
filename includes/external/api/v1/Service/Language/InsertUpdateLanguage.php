@@ -24,9 +24,6 @@
     tags: ['Language'],
     description: 'Update single language data by given Id',
     operationId: 'InsertUpdatelanguage',
-    requestBody: new OA\RequestBody(
-      required: true
-    ),
     parameters: [
       new OA\Parameter(
         name: 'Id', 
