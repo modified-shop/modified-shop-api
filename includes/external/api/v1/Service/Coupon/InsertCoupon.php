@@ -17,10 +17,28 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/coupons',
+    tags: ['Coupon'],
+    description: 'Insert single coupon data',
+    operationId: 'InsertCoupon',
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'coupons data',
+      ),
+      new OA\Response(
+        response: 400,
+        description: 'invalid code supplied'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertCoupon']]
+    ]
+  )]
+
   final class InsertCoupon extends BaseService
   {
       /**

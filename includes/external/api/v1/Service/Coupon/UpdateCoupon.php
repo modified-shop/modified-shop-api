@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Put(
+    path: '/api/v1/coupons/{Id}',
+    tags: ['Coupon'],
+    description: 'Update single coupon data by given Id',
+    operationId: 'UpdateCoupon',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'coupons Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'coupons data',
+      ),
+      new OA\Response(
+        response: 400,
+        description: 'invalid code supplied'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'coupons Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['UpdateCoupon']]
+    ]
+  )]
+
   final class UpdateCoupon extends BaseService
   {
       /**

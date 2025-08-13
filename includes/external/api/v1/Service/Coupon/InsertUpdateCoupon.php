@@ -17,10 +17,74 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/coupons/{Id}/coupons',
+    tags: ['Coupon'],
+    description: 'Insert coupons by given Id',
+    operationId: 'InsertCoupon',
+    responses:[
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'coupons Id'
+      ),
+      new OA\Response(
+        response: 201, 
+        description: 'coupons data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'coupons not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'coupons Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateDescription']]
+    ]
+  )]
+
+  #[OA\Put(
+    path: '/api/v1/coupons/{Id}/coupons',
+    tags: ['Coupon'],
+    description: 'Update coupons by given Id',
+    operationId: 'UpdateCoupon',
+    responses:[
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'coupons Id'
+      ),
+      new OA\Response(
+        response: 201, 
+        description: 'coupons data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'coupons not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'coupons Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateCoupon']]
+    ]
+  )]
+
   final class InsertUpdateCoupon extends BaseService
   {
       /**

@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/coupons/{Id}/coupons',
+    tags: ['Coupon'],
+    description: 'Get coupons data',
+    operationId: 'GetCoupon',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'coupons Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'coupons data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no coupons found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'coupons Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetCoupon']]
+    ]
+  )]
+  
   final class GetCoupon extends BaseService
   {
       /**
