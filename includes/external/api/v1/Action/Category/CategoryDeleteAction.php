@@ -87,7 +87,7 @@
       {
           // Input validation
           if (empty($categoryId)) {
-              throw new Exception('Product ID required');
+              throw new Exception('Category ID required');
           }
 
           $where = '';
@@ -123,7 +123,7 @@
       {
           // Input validation
           if (empty($categoryId)) {
-              throw new Exception('Product ID required');
+              throw new Exception('Category ID required');
           }
 
           $this->DeleteProduct($categoryId, 0);
