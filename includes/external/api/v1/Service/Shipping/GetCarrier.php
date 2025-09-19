@@ -49,7 +49,7 @@
       ),
       new OA\Response(
         response: 403,
-        description: 'no carriers found'
+        description: 'no carrier found'
       )
     ],
     security: [

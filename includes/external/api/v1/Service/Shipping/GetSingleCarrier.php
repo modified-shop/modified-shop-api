@@ -20,9 +20,9 @@
   use OpenApi\Attributes as OA;
 
   #[OA\Get(
-    path: '/api/v1/shipping/status/{Id}',
+    path: '/api/v1/shipping/carrier/{Id}',
     tags: ['Shipping'],
-    description: 'Get single carrier data by given Id',
+    description: 'Get single carriers data by given Id',
     operationId: 'GetSingleCarrier',
     parameters: [
       new OA\Parameter(
@@ -38,7 +38,7 @@
     responses: [
       new OA\Response(
         response: 200, 
-        description: 'carrier data',
+        description: 'carriers data',
       ),
       new OA\Response(
         response: 403,
