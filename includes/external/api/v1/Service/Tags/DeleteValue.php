@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/tags/values/{Id}',
+    tags: ['Tags'],
+    description: 'Delete single value by given Id',
+    operationId: 'DeleteValue',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'value Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'value not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'value Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteValue']]
+    ]
+  )]
+
   final class DeleteValue extends BaseService
   {
       /**

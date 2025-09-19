@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/tags/values/{Id}',
+    tags: ['Tags'],
+    description: 'Insert single valueto an option by given Id',
+    operationId: 'InsertValue',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'option Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'values data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no option found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'option Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertValue']]
+    ]
+  )]
+
   final class InsertValue extends BaseService
   {
       /**
