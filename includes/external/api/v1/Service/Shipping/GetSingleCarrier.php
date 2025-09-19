@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/shipping/status/{Id}',
+    tags: ['Shipping'],
+    description: 'Get single carrier data by given Id',
+    operationId: 'GetSingleCarrier',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'carrier Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'carrier data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no carrier found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'carrier Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleCarrier']]
+    ]
+  )]
+  
   final class GetSingleCarrier extends BaseService
   {
       /**

@@ -17,10 +17,24 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/shipping/status',
+    tags: ['Shipping'],
+    description: 'Insert single shipping status',
+    operationId: 'InsertShippingStatus',
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'shipping status data',
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertShippingStatus']]
+    ]
+  )]
+
   final class InsertShippingStatus extends BaseService
   {
       /**

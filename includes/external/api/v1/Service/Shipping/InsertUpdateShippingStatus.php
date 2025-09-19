@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Put(
+    path: '/api/v1/shipping/status/{Id}',
+    tags: ['Shipping'],
+    description: 'Update shipping status data by given Id',
+    operationId: 'InsertUpdateShippingStatus',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'shipping status Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'shipping status data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'shipping status not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'shipping status Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateShippingStatus']]
+    ]
+  )]
+
   final class InsertUpdateShippingStatus extends BaseService
   {
       /**

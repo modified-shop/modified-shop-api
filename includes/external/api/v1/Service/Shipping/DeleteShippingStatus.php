@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/shipping/status/{Id}',
+    tags: ['Shipping'],
+    description: 'Delete single shipping status by given Id',
+    operationId: 'DeleteShippingStatus',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'shipping status Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'shipping status not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'shipping status Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteShippingStatus']]
+    ]
+  )]
+
   final class DeleteShippingStatus extends BaseService
   {
       /**

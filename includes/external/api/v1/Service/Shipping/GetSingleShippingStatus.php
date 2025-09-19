@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/shipping/status/{Id}',
+    tags: ['Shipping'],
+    description: 'Get single shipping status data by given Id',
+    operationId: 'GetSingleShippingStatus',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'shipping status Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'shipping status data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no shipping status found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'shipping status Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleShippingStatus']]
+    ]
+  )]
+  
   final class GetSingleShippingStatus extends BaseService
   {
       /**

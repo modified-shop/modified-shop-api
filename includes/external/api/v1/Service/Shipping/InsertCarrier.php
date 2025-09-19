@@ -17,10 +17,24 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/shipping/carrier',
+    tags: ['Shipping'],
+    description: 'Insert single carrier',
+    operationId: 'InsertCarrier',
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'carriers data',
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertCarrier']]
+    ]
+  )]
+
   final class InsertCarrier extends BaseService
   {
       /**

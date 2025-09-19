@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/shipping/carriers/{Id}',
+    tags: ['Shipping'],
+    description: 'Delete single carrier by given Id',
+    operationId: 'DeleteCarrier',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'carrier Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'carrier not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'carrier Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteCarrier']]
+    ]
+  )]
+
   final class DeleteCarrier extends BaseService
   {
       /**

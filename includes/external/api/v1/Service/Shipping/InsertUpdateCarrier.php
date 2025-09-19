@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Put(
+    path: '/api/v1/shipping/carriers/{Id}',
+    tags: ['Shipping'],
+    description: 'Update carriers data by given Id',
+    operationId: 'InsertUpdateCarrier',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'carrier Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'carriers data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'carrier not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'carrier Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateCarrier']]
+    ]
+  )]
+
   final class InsertUpdateCarrier extends BaseService
   {
       /**
