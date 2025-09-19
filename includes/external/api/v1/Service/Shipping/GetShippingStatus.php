@@ -23,7 +23,7 @@
     path: '/api/v1/shipping/status',
     tags: ['Shipping'],
     description: 'Get shipping status data',
-    operationId: 'GetCarrier',
+    operationId: 'GetShippingStatus',
     parameters: [
       new OA\Parameter(
         name: 'page', 
@@ -53,7 +53,7 @@
       )
     ],
     security: [
-      ['modified_auth' => ['GetCarrier']]
+      ['modified_auth' => ['GetShippingStatus']]
     ]
   )]
   
