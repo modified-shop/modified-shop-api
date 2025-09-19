@@ -51,6 +51,10 @@
       new OA\Response(
         response: 403,
         description: 'no category found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'category Id required'
       )
     ],
     security: [

@@ -32,7 +32,7 @@
         schema: new OA\Schema(
           type: 'integer',
         ),
-        description: 'manufacturers Id'
+        description: 'manufacturer Id'
       )
     ],
     responses:[

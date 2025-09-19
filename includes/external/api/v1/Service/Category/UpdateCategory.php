@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Put(
+    path: '/api/v1/categories/{Id}',
+    tags: ['Category'],
+    description: 'Update single category by given category Id',
+    operationId: 'UpdateCategory',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'category Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'categories data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'category not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'category Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['UpdateCategory']]
+    ]
+  )]
+
   final class UpdateCategory extends BaseService
   {
       /**

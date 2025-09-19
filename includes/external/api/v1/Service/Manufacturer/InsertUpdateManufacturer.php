@@ -24,7 +24,7 @@
     tags: ['Manufacturer'],
     description: 'Update manufacturers data by given Id',
     operationId: 'InsertUpdateManufacturer',
-    responses:[
+    parameters: [
       new OA\Parameter(
         name: 'Id', 
         in: 'path',
@@ -32,8 +32,10 @@
         schema: new OA\Schema(
           type: 'integer',
         ),
-        description: 'manufacturers Id'
-      ),
+        description: 'manufacturer Id'
+      )
+    ],
+    responses: [
       new OA\Response(
         response: 201, 
         description: 'manufacturers data',
@@ -48,7 +50,7 @@
       )
     ],
     security: [
-      ['modified_auth' => ['InsertUpdateImage']]
+      ['modified_auth' => ['InsertUpdateManufacturer']]
     ]
   )]
 

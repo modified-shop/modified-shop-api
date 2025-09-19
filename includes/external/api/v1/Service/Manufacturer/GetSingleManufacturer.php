@@ -32,7 +32,7 @@
         schema: new OA\Schema(
           type: 'integer',
         ),
-        description: 'manufacturers Id'
+        description: 'manufacturer Id'
       ),
       new OA\Parameter(
         name: 'with', 
@@ -51,6 +51,10 @@
       new OA\Response(
         response: 403,
         description: 'no manufacturers found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'manufacturer Id required'
       )
     ],
     security: [

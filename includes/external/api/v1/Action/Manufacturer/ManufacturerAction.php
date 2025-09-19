@@ -56,6 +56,49 @@
       }
 
       /**
+       * Update a manufacturer by the given manufacturer id.
+       *
+       * @param int $manufacturerId The manufacturer id
+       * @param mixed[] $options
+       *
+       * @return array The manufacturer data
+       */
+      public function UpdateManufacturer(int $manufacturerId, array $options): array
+      {
+          // Input validation
+          if (empty($manufacturerId)) {
+              throw new Exception('Manufacturer ID required');
+          }
+
+          /* Store passed in options overwriting any defaults */
+          $this->hydrate($options);
+          
+          $manufacturers_query = xtc_db_query("SELECT *
+                                                 FROM ".TABLE_MANUFACTURERS."
+                                                WHERE manufacturers_id = '".(int)$manufacturerId."'");
+          if (xtc_db_num_rows($manufacturers_query) < 1) {
+              $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
+          } else {
+              if (isset($this->options[TABLE_MANUFACTURERS])) {
+                  $manufacturers = $this->InsertUpdateManufacturer($manufacturerId, $this->options[TABLE_MANUFACTURERS]);
+              }
+          }
+          
+          $manufacturers_query = xtc_db_query("SELECT *
+                                                 FROM ".TABLE_MANUFACTURERS_INFO."
+                                                WHERE manufacturers_id = '".(int)$manufacturerId."'");
+          if (xtc_db_num_rows($manufacturers_query) < 1) {
+              $this->errormessage(sprintf('Manufacturer description not found: %s', $manufacturerId));
+          } else {
+              if (isset($this->options[TABLE_MANUFACTURERS_INFO])) {
+                  $manufacturers_description = $this->InsertUpdateDescription($manufacturerId, $this->options[TABLE_MANUFACTURERS_INFO]);
+              }
+          }
+          
+          return $this->GetManufacturerDetails($manufacturerId);
+      }
+
+      /**
        * Insert or Update a manufacturer by the given manufacturer id.
        *
        * @param int $manufacturerId The manufacturer id

@@ -24,7 +24,7 @@
     tags: ['Newsletter'],
     description: 'Update newsletters recipients data by given Id',
     operationId: 'InsertUpdateNewsletter',
-    responses:[
+    parameters:[
       new OA\Parameter(
         name: 'Id', 
         in: 'path',
@@ -33,7 +33,9 @@
           type: 'integer',
         ),
         description: 'newsletters Id'
-      ),
+      )
+    ],
+    responses:[
       new OA\Response(
         response: 201, 
         description: 'newsletters recipients data',

@@ -24,7 +24,7 @@
     tags: ['Manufacturer'],
     description: 'Insert manufacturers image by given Id',
     operationId: 'InsertManufacturersImage',
-    responses:[
+    parameters: [
       new OA\Parameter(
         name: 'Id', 
         in: 'path',
@@ -32,8 +32,10 @@
         schema: new OA\Schema(
           type: 'integer',
         ),
-        description: 'manufacturers Id'
-      ),
+        description: 'manufacturer Id'
+      )
+    ],
+    responses: [
       new OA\Response(
         response: 201, 
         description: 'manufacturers data',
@@ -57,7 +59,7 @@
     tags: ['Manufacturer'],
     description: 'Update manufacturers image by given Id',
     operationId: 'UpdateManufacturersImage',
-    responses:[
+    parameters: [
       new OA\Parameter(
         name: 'Id', 
         in: 'path',
@@ -65,8 +67,10 @@
         schema: new OA\Schema(
           type: 'integer',
         ),
-        description: 'manufacturers Id'
-      ),
+        description: 'manufacturer Id'
+      )
+    ],
+    responses: [
       new OA\Response(
         response: 201, 
         description: 'manufacturers data',

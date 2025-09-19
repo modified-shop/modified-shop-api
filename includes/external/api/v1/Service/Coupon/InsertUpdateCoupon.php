@@ -24,7 +24,7 @@
     tags: ['Coupon'],
     description: 'Insert coupons by given Id',
     operationId: 'InsertCoupons',
-    responses:[
+    parameters: [
       new OA\Parameter(
         name: 'Id', 
         in: 'path',
@@ -33,7 +33,9 @@
           type: 'integer',
         ),
         description: 'coupons Id'
-      ),
+      )
+    ],
+    responses: [
       new OA\Response(
         response: 201, 
         description: 'coupons data',
@@ -57,7 +59,7 @@
     tags: ['Coupon'],
     description: 'Update coupons by given Id',
     operationId: 'UpdateCoupons',
-    responses:[
+    parameters: [
       new OA\Parameter(
         name: 'Id', 
         in: 'path',
@@ -66,7 +68,9 @@
           type: 'integer',
         ),
         description: 'coupons Id'
-      ),
+      )
+    ],
+    responses: [
       new OA\Response(
         response: 201, 
         description: 'coupons data',

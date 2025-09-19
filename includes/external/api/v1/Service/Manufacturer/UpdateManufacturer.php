@@ -10,55 +10,20 @@
    Released under the GNU General Public License
    ---------------------------------------------------------------------------------------*/
 
-  namespace api\v1\Service\Coupon;
+  namespace api\v1\Service\Manufacturer;
 
   use api\v1\Service\BaseService;
-  use api\v1\Action\Coupon\CouponAction;
+  use api\v1\Action\Manufacturer\ManufacturerAction;
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
   use OpenApi\Attributes as OA;
 
-  #[OA\Post(
-    path: '/api/v1/coupons/{Id}/description',
-    tags: ['Coupon'],
-    description: 'Insert coupons description by given Id',
-    operationId: 'InsertCouponsDescription',
-    parameters: [
-      new OA\Parameter(
-        name: 'Id', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
-        ),
-        description: 'coupons Id'
-      )
-    ],
-    responses: [
-      new OA\Response(
-        response: 201, 
-        description: 'coupons description data',
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'coupons description not found'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'coupons Id required'
-      )
-    ],
-    security: [
-      ['modified_auth' => ['InsertUpdateDescription']]
-    ]
-  )]
-
   #[OA\Put(
-    path: '/api/v1/coupons/{Id}/description',
-    tags: ['Coupon'],
-    description: 'Update coupons description by given Id',
-    operationId: 'UpdateCouponsDescription',
+    path: '/api/v1/manufacturers/{Id}',
+    tags: ['Manufacturer'],
+    description: 'Update single manufacturer by given manufacturer Id',
+    operationId: 'UpdateManufacturer',
     parameters: [
       new OA\Parameter(
         name: 'Id', 
@@ -67,34 +32,34 @@
         schema: new OA\Schema(
           type: 'integer',
         ),
-        description: 'coupons Id'
+        description: 'manufacturer Id'
       )
     ],
-    responses: [
+    responses:[
       new OA\Response(
         response: 201, 
-        description: 'coupons description data',
+        description: 'manufacturers data',
       ),
       new OA\Response(
         response: 403,
-        description: 'coupons description not found'
+        description: 'manufacturer not found'
       ),
       new OA\Response(
         response: 500,
-        description: 'coupons Id required'
+        description: 'manufacturer Id required'
       )
     ],
     security: [
-      ['modified_auth' => ['InsertUpdateDescription']]
+      ['modified_auth' => ['UpdateManufacturer']]
     ]
   )]
 
-  final class InsertUpdateDescription extends BaseService
+  final class UpdateManufacturer extends BaseService
   {
       /**
-       * @var CouponAction
+       * @var ManufacturerAction
        */
-      private $couponAction;
+      private $manufacturerAction;
 
       /**
        * @var Responder
@@ -104,12 +69,12 @@
       /**
        * The constructor.
        *
-       * @param CouponAction $couponAction The customer reader
+       * @param ManufacturerAction $manufacturerAction The customer reader
        * @param Responder $responder The responder
        */
-      public function __construct(CouponAction $couponAction, Responder $responder)
+      public function __construct(ManufacturerAction $manufacturerAction, Responder $responder)
       {
-          $this->couponAction = $couponAction;
+          $this->manufacturerAction = $manufacturerAction;
           $this->responder = $responder;
       }
 
@@ -129,11 +94,11 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $couponId = ((isset($args['id'])) ? (int)$args['id'] : 0);
+          $manufacturerId = $args['id'];
           $data = (array)$request->getParsedBody();
                     
-          $result = $this->couponAction->InsertUpdateDescription($couponId, $data);
-
+          $result = $this->manufacturerAction->UpdateManufacturer($manufacturerId, $data);
+          
           if (isset($result['errormessage'])) {
               return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
           }

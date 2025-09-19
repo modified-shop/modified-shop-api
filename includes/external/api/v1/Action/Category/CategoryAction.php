@@ -67,12 +67,18 @@
       /**
        * Insert a category by the given category id and options.
        *
+       * @param int $categoryId The category id
        * @param mixed[] $options
        *
        * @return array The category data
        */
       public function UpdateCategory(int $categoryId, array $options): array
       {
+          // Input validation
+          if (empty($categoryId)) {
+              throw new Exception('Category ID required');
+          }
+
           /* Store passed in options overwriting any defaults */
           $this->hydrate($options);
           

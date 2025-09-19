@@ -33,7 +33,7 @@
         schema: new OA\Schema(
           type: 'integer',
         ),
-        description: 'manufacturers Id'
+        description: 'manufacturer Id'
       ),
       new OA\Parameter(
         name: 'pId', 

@@ -17,10 +17,24 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/categories',
+    tags: ['Category'],
+    description: 'Insert single category',
+    operationId: 'InsertCategory',
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'categories data',
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertCategory']]
+    ]
+  )]
+
   final class InsertCategory extends BaseService
   {
       /**
