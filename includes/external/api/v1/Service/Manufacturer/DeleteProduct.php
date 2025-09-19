@@ -24,7 +24,7 @@
     path: '/api/v1/manufacturers/{Id}/products/{pId}',
     tags: ['Manufacturer'],
     description: 'Delete single product from a manufacturer data by given Ids',
-    operationId: 'DeleteProduct',
+    operationId: 'DeleteProductManufacturers',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

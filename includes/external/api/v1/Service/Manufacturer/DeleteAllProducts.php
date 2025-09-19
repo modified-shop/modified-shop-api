@@ -23,7 +23,7 @@
     path: '/api/v1/manufacturers/{Id}/products',
     tags: ['Manufacturer'],
     description: 'Delete all products from a manufacturer by given Id',
-    operationId: 'DeleteAllProducts',
+    operationId: 'DeleteAllProductsManufacturers',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

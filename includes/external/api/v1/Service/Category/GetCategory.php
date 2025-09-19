@@ -17,10 +17,59 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/categories/{Id}',
+    tags: ['Category'],
+    description: 'Get categories data by given Id',
+    operationId: 'GetCategory',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'category Id'
+      ),
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'categories data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no categories found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'category Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetCategory']]
+    ]
+  )]
+  
   final class GetCategory extends BaseService
   {
       /**

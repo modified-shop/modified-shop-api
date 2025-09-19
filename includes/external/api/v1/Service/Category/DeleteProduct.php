@@ -24,7 +24,7 @@
     path: '/api/v1/categories/{Id}/products/{pId}',
     tags: ['Category'],
     description: 'Delete a product from a category by given Id',
-    operationId: 'DeleteProduct',
+    operationId: 'DeleteProductCategories',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

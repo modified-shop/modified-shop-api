@@ -17,10 +17,47 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/categories/{Id}',
+    tags: ['Category'],
+    description: 'Get single category data by given Id',
+    operationId: 'GetSingleCategory',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'category Id'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: products'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'category data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no category found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleCategory']]
+    ]
+  )]
+  
   final class GetSingleCategory extends BaseService
   {
       /**

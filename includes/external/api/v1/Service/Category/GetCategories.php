@@ -17,10 +17,86 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/categories',
+    tags: ['Category'],
+    description: 'Get categories data',
+    operationId: 'GetCategories',
+    parameters: [
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      ),
+      new OA\Parameter(
+        name: 'status', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'categories status'
+      ),
+      new OA\Parameter(
+        name: 'parent', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'parent Id'
+      ),
+      new OA\Parameter(
+        name: 'from', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'date added'
+      ),
+      new OA\Parameter(
+        name: 'to', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'date added'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: products'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'categories data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no categories found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetCategories']]
+    ]
+  )]
+  
   final class GetCategories extends BaseService
   {
       /**
