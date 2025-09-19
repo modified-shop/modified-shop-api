@@ -18,10 +18,56 @@
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
   use Exception;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/orders/{Id}/products_download/{dId}',
+    tags: ['Orders'],
+    description: 'Delete single order product download by given Id',
+    operationId: 'DeleteProductDownload',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order Id'
+      ),
+      new OA\Parameter(
+        name: 'dId', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order product download Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'order product download not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order Id required'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order product download Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteProductDownload']]
+    ]
+  )]
+
   final class DeleteProductDownload extends BaseService
   {
       /**

@@ -18,10 +18,56 @@
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
   use Exception;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/orders/{Id}/products/{pId}',
+    tags: ['Orders'],
+    description: 'Delete single order product by given Id',
+    operationId: 'DeleteProduct',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order Id'
+      ),
+      new OA\Parameter(
+        name: 'pId', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order product Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'order product not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order Id required'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order product Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteProduct']]
+    ]
+  )]
+
   final class DeleteProduct extends BaseService
   {
       /**

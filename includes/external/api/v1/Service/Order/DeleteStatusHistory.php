@@ -18,10 +18,56 @@
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
   use Exception;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/orders/{Id}/status_history/{hId}',
+    tags: ['Orders'],
+    description: 'Delete single order histroy by given Id',
+    operationId: 'DeleteStatusHistory',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order Id'
+      ),
+      new OA\Parameter(
+        name: 'hId', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order histroy Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'order histroy not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order Id required'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order histroy Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteStatusHistory']]
+    ]
+  )]
+
   final class DeleteStatusHistory extends BaseService
   {
       /**
