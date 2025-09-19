@@ -23,7 +23,7 @@
     path: '/api/v1/tags/options/{Id}',
     tags: ['Tags'],
     description: 'Update options data by given Id',
-    operationId: 'InsertUpdateOption',
+    operationId: 'InsertUpdateTagsOption',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

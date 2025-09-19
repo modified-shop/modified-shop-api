@@ -23,7 +23,7 @@
     path: '/api/v1/attributes/values',
     tags: ['Attributes'],
     description: 'Get attributes values',
-    operationId: 'GetValues',
+    operationId: 'GetAttributesValues',
     parameters: [
       new OA\Parameter(
         name: 'page', 

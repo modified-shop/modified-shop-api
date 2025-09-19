@@ -23,7 +23,7 @@
     path: '/api/v1/tags/values',
     tags: ['Tags'],
     description: 'Get values data',
-    operationId: 'GetValues',
+    operationId: 'GetTagsValues',
     parameters: [
       new OA\Parameter(
         name: 'page', 

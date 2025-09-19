@@ -23,7 +23,7 @@
     path: '/api/v1/tags/values/{Id}',
     tags: ['Tags'],
     description: 'Insert single valueto an option by given Id',
-    operationId: 'InsertValue',
+    operationId: 'InsertTagsValue',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

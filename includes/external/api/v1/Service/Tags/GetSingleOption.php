@@ -23,7 +23,7 @@
     path: '/api/v1/tags/options/{Id}',
     tags: ['Tags'],
     description: 'Get single options data by given Id',
-    operationId: 'GetSingleOption',
+    operationId: 'GetSingleTagsOption',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

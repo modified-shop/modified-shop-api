@@ -23,7 +23,7 @@
     path: '/api/v1/tags/options',
     tags: ['Tags'],
     description: 'Insert single option',
-    operationId: 'InsertOption',
+    operationId: 'InsertTagsOption',
     responses:[
       new OA\Response(
         response: 201, 

@@ -23,7 +23,7 @@
     path: '/api/v1/attributes/options/{Id}',
     tags: ['Attributes'],
     description: 'Update single attribute options',
-    operationId: 'InsertUpdateOption',
+    operationId: 'InsertUpdateAttributesOption',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

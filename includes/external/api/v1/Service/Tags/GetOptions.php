@@ -23,7 +23,7 @@
     path: '/api/v1/tags/options',
     tags: ['Tags'],
     description: 'Get options data',
-    operationId: 'GetOptions',
+    operationId: 'GetTagsOptions',
     parameters: [
       new OA\Parameter(
         name: 'page', 

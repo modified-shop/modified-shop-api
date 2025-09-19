@@ -23,7 +23,7 @@
     path: '/api/v1/attributes/values/{Id}',
     tags: ['Attributes'],
     description: 'Delete attributes values by given Id',
-    operationId: 'DeleteValue',
+    operationId: 'DeleteAttributesValue',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

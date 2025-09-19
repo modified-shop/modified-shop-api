@@ -23,7 +23,7 @@
     path: '/api/v1/attributes/options',
     tags: ['Attributes'],
     description: 'Insert single attribute options',
-    operationId: 'InsertOption',
+    operationId: 'InsertAttributesOption',
     responses:[
       new OA\Response(
         response: 201,

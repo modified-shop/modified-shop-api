@@ -23,7 +23,7 @@
     path: '/api/v1/attributes/options/{Id}',
     tags: ['Attributes'],
     description: 'Get single attributes options by given Id',
-    operationId: 'GetSingleOption',
+    operationId: 'GetSingleAttributesOption',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

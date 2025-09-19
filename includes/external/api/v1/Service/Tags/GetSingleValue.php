@@ -23,7 +23,7 @@
     path: '/api/v1/tags/values/{Id}',
     tags: ['Tags'],
     description: 'Get single values data by given Id',
-    operationId: 'GetSingleValue',
+    operationId: 'GetSingleTagsValue',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

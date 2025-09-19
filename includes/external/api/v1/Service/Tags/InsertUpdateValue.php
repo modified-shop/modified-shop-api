@@ -23,7 +23,7 @@
     path: '/tags/values/{Id}/{vId}',
     tags: ['Tags'],
     description: 'Update values data by given Id',
-    operationId: 'InsertUpdateValue',
+    operationId: 'InsertUpdateTagsValue',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

@@ -23,7 +23,7 @@
     path: '/api/v1/tags/values/{Id}',
     tags: ['Tags'],
     description: 'Delete single value by given Id',
-    operationId: 'DeleteValue',
+    operationId: 'DeleteTagsValue',
     parameters: [
       new OA\Parameter(
         name: 'Id', 
