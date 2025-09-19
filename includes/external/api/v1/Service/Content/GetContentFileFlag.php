@@ -17,10 +17,46 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/contents/fileflag',
+    tags: ['Content'],
+    description: 'Get contents file flag data',
+    operationId: 'GetContentFileFlag',
+    parameters: [
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'contents file flag data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no contents file flag found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetContentFileFlag']]
+    ]
+  )]
+  
   final class GetContentFileFlag extends BaseService
   {
       /**

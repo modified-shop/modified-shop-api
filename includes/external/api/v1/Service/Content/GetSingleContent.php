@@ -17,10 +17,51 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/contents/{Id}',
+    tags: ['Content'],
+    description: 'Get single contents data by given Id',
+    operationId: 'GetSingleContent',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'content group Id'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: content'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'contents data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no contents found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'content group Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleContent']]
+    ]
+  )]
+  
   final class GetSingleContent extends BaseService
   {
       /**
