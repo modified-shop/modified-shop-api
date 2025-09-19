@@ -17,10 +17,46 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/orders/status',
+    tags: ['Orders'],
+    description: 'Get orders status data',
+    operationId: 'GetOrderStatus',
+    parameters: [
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'orders status data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no orders status found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetOrderStatus']]
+    ]
+  )]
+  
   final class GetOrderStatus extends BaseService
   {
       /**
