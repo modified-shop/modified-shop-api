@@ -17,11 +17,57 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
   use Exception;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/contents/{Id}/content/{cId}',
+    tags: ['Content'],
+    description: 'Delete single contents by given Id',
+    operationId: 'DeleteContentContent',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'content group Id'
+      ),
+      new OA\Parameter(
+        name: 'cId', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'content Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'content not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'content group Id required'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'content Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteContentContent']]
+    ]
+  )]
+
   final class DeleteContentContent extends BaseService
   {
       /**

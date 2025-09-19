@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/contents/{Id}/content',
+    tags: ['Content'],
+    description: 'Delete all content from a content by given Id',
+    operationId: 'DeleteAllContentContent',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'content group Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'content not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'content group Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteAllContentContent']]
+    ]
+  )]
+
   final class DeleteAllContentContent extends BaseService
   {
       /**
@@ -61,9 +94,9 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $contentId = (int)$args['id'];
+          $contentGroupId = (int)$args['id'];
           
-          $result = $this->contentAction->DeleteAllContentContent($contentId);
+          $result = $this->contentAction->DeleteAllContentContent($contentGroupId);
 
           if (isset($result['errormessage'])) {
               return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
