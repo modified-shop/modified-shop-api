@@ -22,7 +22,7 @@
   #[OA\Get(
     path: '/api/v1/contents/{Id}',
     tags: ['Content'],
-    description: 'Get single contents data by given Id',
+    description: 'Get single content data by given Id',
     operationId: 'GetSingleContent',
     parameters: [
       new OA\Parameter(

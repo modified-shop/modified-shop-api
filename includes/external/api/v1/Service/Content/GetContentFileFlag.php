@@ -22,7 +22,7 @@
   #[OA\Get(
     path: '/api/v1/contents/fileflag',
     tags: ['Content'],
-    description: 'Get contents file flag data',
+    description: 'Get content file flag data',
     operationId: 'GetContentFileFlag',
     parameters: [
       new OA\Parameter(
@@ -45,11 +45,11 @@
     responses: [
       new OA\Response(
         response: 200, 
-        description: 'contents file flag data',
+        description: 'content file flag data',
       ),
       new OA\Response(
         response: 403,
-        description: 'no contents file flag found'
+        description: 'no content file flag found'
       )
     ],
     security: [

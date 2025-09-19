@@ -22,7 +22,7 @@
   #[OA\Get(
     path: '/api/v1/contents/{Id}/content',
     tags: ['Content'],
-    description: 'Get content contents by given Id',
+    description: 'Get content from a content by given Id',
     operationId: 'GetContentContent',
     parameters: [
       new OA\Parameter(
@@ -42,7 +42,7 @@
       ),
       new OA\Response(
         response: 403,
-        description: 'no content contents found'
+        description: 'no content content found'
       ),
       new OA\Response(
         response: 500,

@@ -23,6 +23,7 @@
 
   // update contents
   $app->put('/contents/{id}',                     \api\v1\Service\Content\InsertUpdateContent::class);
+  $app->put('/contents/{id}/content',             \api\v1\Service\Content\InsertUpdateContentContent::class);
 
   // delete contents
   $app->delete('/contents/{id}',                  \api\v1\Service\Content\DeleteContent::class);

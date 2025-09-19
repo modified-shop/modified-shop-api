@@ -22,7 +22,7 @@
   #[OA\Delete(
     path: '/api/v1/contents/{Id}',
     tags: ['Content'],
-    description: 'Delete single contents by given Id',
+    description: 'Delete single content by given Id',
     operationId: 'DeleteContent',
     parameters: [
       new OA\Parameter(

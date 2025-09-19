@@ -17,10 +17,78 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/contents/{Id}/content',
+    tags: ['Content'],
+    description: 'insert content for a content data by given Id',
+    operationId: 'InsertContentContent',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'content group Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'contents data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'contents not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'content group Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateContentContent']]
+    ]
+  )]
+
+  #[OA\Put(
+    path: '/api/v1/contents/{Id}/content',
+    tags: ['Content'],
+    description: 'Update content for a content data by given Id',
+    operationId: 'UpdateContentContent',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'content group Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'contents data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'contents not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'content group Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateContentContent']]
+    ]
+  )]
+  
   final class InsertUpdateContentContent extends BaseService
   {
       /**

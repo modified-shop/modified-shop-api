@@ -17,10 +17,24 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/contents',
+    tags: ['Content'],
+    description: 'Insert single content',
+    operationId: 'InsertContent',
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'content data',
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertContent']]
+    ]
+  )]
+
   final class InsertContent extends BaseService
   {
       /**

@@ -22,7 +22,7 @@
   #[OA\Get(
     path: '/api/v1/contents',
     tags: ['Content'],
-    description: 'Get contents file flag data',
+    description: 'Get contents data',
     operationId: 'GetContents',
     parameters: [
       new OA\Parameter(
@@ -47,7 +47,7 @@
         schema: new OA\Schema(
           type: 'integer'
         ),
-        description: 'Status of contents'
+        description: 'Status of content'
       ),
       new OA\Parameter(
         name: 'flag', 
@@ -55,7 +55,7 @@
         schema: new OA\Schema(
           type: 'string'
         ),
-        description: 'File flag of contents'
+        description: 'File flag of content'
       ),
       new OA\Parameter(
         name: 'from', 
@@ -85,11 +85,11 @@
     responses: [
       new OA\Response(
         response: 200, 
-        description: 'contents file flag data',
+        description: 'content data',
       ),
       new OA\Response(
         response: 403,
-        description: 'no contents file flag found'
+        description: 'no content found'
       )
     ],
     security: [
