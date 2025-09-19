@@ -21,7 +21,7 @@
   use Exception;
 
   #[OA\Delete(
-    path: '/categories/{Id}/products/{pId}',
+    path: '/api/v1/categories/{Id}/products/{pId}',
     tags: ['Category'],
     description: 'Delete a product from a category by given Id',
     operationId: 'DeleteProduct',
