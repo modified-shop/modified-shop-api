@@ -159,16 +159,32 @@
       }
 
       /**
+       * Insert an customer memo by given customer id.
+       *
+       * @param int $customerId The customer id
+       * @param mixed[] $options
+       *
+       * @return array The order tracking data
+       */
+      public function InsertMemo(int $customerId, array $options): array
+      {
+          $customers_memo = $this->InsertUpdateMemo($customerId, 0, $options);
+          
+          return $customers_memo;
+      }
+
+      /**
        * Insert or Update a customer memo by the given customer id.
        *
        * @param int $customerId The customer id
+       * @param int $memoId The memo id
        * @param mixed[] $options
        *
        * @throws Exception
        *
        * @return array The customer data
        */
-      public function InsertUpdateMemo(int $customerId, array $options): array
+      public function InsertUpdateMemo(int $customerId, int $memoId, array $options): array
       {
           // Input validation
           if (empty($customerId)) {
@@ -184,17 +200,15 @@
           if (xtc_db_num_rows($customer_query) < 1) {
               $this->errormessage(sprintf('Customer not found: %s', $customerId));
           } else {
-              $where = '';
-              if (isset($this->options['memo_id'])) {
-                  $where = "AND memo_id = '".(int)$this->options['memo_id']."'";
+              if ($memoId > 0) {     
+                  $action = 'update';
                   $customers_memo_query = xtc_db_query("SELECT *
                                                           FROM ".TABLE_CUSTOMERS_MEMO."
                                                          WHERE customers_id = '".(int)$customerId."'
-                                                               ".$where);
+                                                           AND memo_id = '".(int)$memoId."'");
                   if (xtc_db_num_rows($customers_memo_query) < 1) {
-                      $this->errormessage(sprintf('Memo ID invalid'));
+                      $this->errormessage(sprintf('Customer Memo Id not found: %s', $memoId));
                   } else {
-                      $action = 'update';
                       $customers_memo = xtc_db_fetch_array($customers_memo_query);
                   }
               } else {
@@ -219,16 +233,32 @@
       }
 
       /**
+       * Insert an customer address book by given customer id.
+       *
+       * @param int $customerId The customer id
+       * @param mixed[] $options
+       *
+       * @return array The order tracking data
+       */
+      public function InsertAddressBook(int $customerId, array $options): array
+      {
+          $address_book = $this->InsertUpdateAddressBook($customerId, 0, $options);
+          
+          return $address_book;
+      }
+
+      /**
        * Insert or Update a customer address book by the given customer id.
        *
        * @param int $customerId The customer id
+       * @param int $addressBookId The customer id
        * @param mixed[] $options
        *
        * @throws Exception
        *
        * @return array The address book data
        */
-      public function InsertUpdateAddressBook(int $customerId, array $options): array
+      public function InsertUpdateAddressBook(int $customerId, int $addressBookId, array $options): array
       {
           // Input validation
           if (empty($customerId)) {
@@ -245,14 +275,13 @@
               $this->errormessage(sprintf('Customer not found: %s', $customerId));
           } else {
               $where = '';
-              if (isset($this->options['address_book_id'])) {
-                  $where = "AND address_book_id = '".(int)$this->options['address_book_id']."'";
+              if ($addressBookId > 0) {     
                   $address_book_query = xtc_db_query("SELECT *
                                                         FROM ".TABLE_ADDRESS_BOOK."
                                                        WHERE customers_id = '".(int)$customerId."'
-                                                             ".$where);
+                                                         AND address_book_id = '".(int)$addressBookId."'");
                   if (xtc_db_num_rows($address_book_query) < 1) {
-                      $this->errormessage(sprintf('Address book ID invalid'), 400);
+                      $this->errormessage(sprintf('Address book Id not found: %s', $addressBookId));
                   } else {
                       $action = 'update';
                       $address_book = xtc_db_fetch_array($address_book_query);

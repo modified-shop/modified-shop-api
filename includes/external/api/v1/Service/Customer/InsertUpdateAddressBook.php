@@ -17,10 +17,60 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Put(
+    path: '/api/v1/customers/{Id}/address_book/{aId}',
+    tags: ['Customer'],
+    description: 'Update customer address book data by given Id',
+    operationId: 'InsertUpdateAddressBook',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'customer Id'
+      ),
+      new OA\Parameter(
+        name: 'aId', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'address book Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'address book data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'customer not found'
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'address book not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'customer Id required'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'address book Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateAddressBook']]
+    ]
+  )]
+
   final class InsertUpdateAddressBook extends BaseService
   {
       /**

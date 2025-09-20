@@ -19,11 +19,11 @@
   use Psr\Http\Message\ServerRequestInterface;
   use OpenApi\Attributes as OA;
 
-  #[OA\Put(
-    path: '/api/v1/customers/{Id}',
+  #[OA\Post(
+    path: '/api/v1/customers/{Id}/memo',
     tags: ['Customer'],
-    description: 'Update customer data by given Id',
-    operationId: 'InsertUpdateCustomer',
+    description: 'Insert customer memo by given Id',
+    operationId: 'InsertMemo',
     parameters: [
       new OA\Parameter(
         name: 'Id', 
@@ -32,17 +32,17 @@
         schema: new OA\Schema(
           type: 'integer',
         ),
-        description: 'customer Id'
+        description: 'memo Id'
       )
     ],
-    responses: [
+    responses:[
       new OA\Response(
         response: 201, 
-        description: 'customer data',
+        description: 'memo data',
       ),
       new OA\Response(
         response: 403,
-        description: 'customer not found'
+        description: 'no customer found'
       ),
       new OA\Response(
         response: 500,
@@ -50,11 +50,11 @@
       )
     ],
     security: [
-      ['modified_auth' => ['InsertUpdateCustomer']]
+      ['modified_auth' => ['InsertMemo']]
     ]
   )]
 
-  final class InsertUpdateCustomer extends BaseService
+  final class InsertMemo extends BaseService
   {
       /**
        * @var CustomerAction
@@ -94,10 +94,9 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $customerId = ((isset($args['id'])) ? (int)$args['id'] : 0);
           $data = (array)$request->getParsedBody();
                     
-          $result = $this->customerAction->InsertUpdateCustomer($customerId, $data);
+          $result = $this->customerAction->InsertMemo($customerId, $data);
 
           if (isset($result['errormessage'])) {
               return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);

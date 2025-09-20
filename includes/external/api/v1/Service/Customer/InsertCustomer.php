@@ -17,10 +17,24 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/customers',
+    tags: ['Customer'],
+    description: 'Insert single customer',
+    operationId: 'InsertCustomer',
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'customer data',
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertCustomer']]
+    ]
+  )]
+
   final class InsertCustomer extends BaseService
   {
       /**
