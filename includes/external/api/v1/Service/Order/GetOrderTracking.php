@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/orders/{Id}/tracking',
+    tags: ['Orders'],
+    description: 'Get order tracking data by given Id',
+    operationId: 'GetSingleOrder',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'order tracking data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no order tracking found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleOrder']]
+    ]
+  )]
+  
   final class GetOrderTracking extends BaseService
   {
       /**

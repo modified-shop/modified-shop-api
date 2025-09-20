@@ -17,10 +17,51 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/orders/{Id}',
+    tags: ['Orders'],
+    description: 'Get single order data by given Id',
+    operationId: 'GetSingleOrder',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order Id'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: products, history, total, tracking'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'order data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no order found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleOrder']]
+    ]
+  )]
+  
   final class GetSingleOrder extends BaseService
   {
       /**

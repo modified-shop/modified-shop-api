@@ -17,10 +17,78 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/orders',
+    tags: ['Orders'],
+    description: 'Get orders data',
+    operationId: 'GetManufacturers',
+    parameters: [
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      ),
+      new OA\Parameter(
+        name: 'status', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Status of order'
+      ),
+      new OA\Parameter(
+        name: 'from', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Timestamp date_purchased'
+      ),
+      new OA\Parameter(
+        name: 'to', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Timestamp date_purchased'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: products, history, total, tracking'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'order data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no order found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetManufacturers']]
+    ]
+  )]
+  
   final class GetOrders extends BaseService
   {
       /**
