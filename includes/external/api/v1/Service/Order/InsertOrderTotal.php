@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/orders/{Id}/total',
+    tags: ['Orders'],
+    description: 'Insert total to order by given Id',
+    operationId: 'InsertOrderTotal',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'order total data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no order found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertOrderTotal']]
+    ]
+  )]
+
   final class InsertOrderTotal extends BaseService
   {
       /**

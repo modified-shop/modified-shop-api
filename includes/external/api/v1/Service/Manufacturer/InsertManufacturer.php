@@ -23,7 +23,7 @@
     path: '/api/v1/manufacturers',
     tags: ['Manufacturer'],
     description: 'Insert single manufacturer',
-    operationId: 'Insertmanufacturer',
+    operationId: 'InsertManufacturer',
     responses:[
       new OA\Response(
         response: 201, 
@@ -31,7 +31,7 @@
       )
     ],
     security: [
-      ['modified_auth' => ['Insertmanufacturer']]
+      ['modified_auth' => ['InsertManufacturer']]
     ]
   )]
 

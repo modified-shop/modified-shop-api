@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/orders/{Id}/products_attributes',
+    tags: ['Orders'],
+    description: 'Insert product attributes to order by given Id',
+    operationId: 'InsertOrderProductAttributes',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 201, 
+        description: 'order products data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no order found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertOrderProductAttributes']]
+    ]
+  )]
+
   final class InsertOrderProductAttributes extends BaseService
   {
       /**
