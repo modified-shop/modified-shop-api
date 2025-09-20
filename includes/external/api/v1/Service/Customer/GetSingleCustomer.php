@@ -21,7 +21,7 @@
 
   #[OA\Get(
     path: '/api/v1/customers/{Id}',
-    tags: ['Order'],
+    tags: ['Customer'],
     description: 'Get single customer data by given Id',
     operationId: 'GetSingleCustomer',
     parameters: [
