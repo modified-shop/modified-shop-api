@@ -18,10 +18,60 @@
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
   use Exception;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/customers/{Id}/ip/{iId}',
+    tags: ['Customers'],
+    description: 'Delete single customer ip by given Id',
+    operationId: 'DeleteIp',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'customer Id'
+      ),
+      new OA\Parameter(
+        name: 'iId', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'customer ip Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'customer not found'
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'customer ip not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'customer Id required'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'customer ip Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteIp']]
+    ]
+  )]
+
   final class DeleteIp extends BaseService
   {
       /**

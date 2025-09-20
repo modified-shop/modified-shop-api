@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/customers/{Id}',
+    tags: ['Customers'],
+    description: 'Delete single customer by given Id',
+    operationId: 'DeleteCustomer',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'customer Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'customer not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'customer Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteCustomer']]
+    ]
+  )]
+
   final class DeleteCustomer extends BaseService
   {
       /**
