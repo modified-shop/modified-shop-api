@@ -23,7 +23,7 @@
     path: '/api/v1/orders',
     tags: ['Orders'],
     description: 'Get orders data',
-    operationId: 'GetManufacturers',
+    operationId: 'GetOrders',
     parameters: [
       new OA\Parameter(
         name: 'page', 
@@ -85,7 +85,7 @@
       )
     ],
     security: [
-      ['modified_auth' => ['GetManufacturers']]
+      ['modified_auth' => ['GetOrders']]
     ]
   )]
   

@@ -23,7 +23,7 @@
     path: '/api/v1/orders/{Id}/tracking',
     tags: ['Orders'],
     description: 'Get order tracking data by given Id',
-    operationId: 'GetSingleOrder',
+    operationId: 'GetOrderTracking',
     parameters: [
       new OA\Parameter(
         name: 'Id', 
@@ -50,7 +50,7 @@
       )
     ],
     security: [
-      ['modified_auth' => ['GetSingleOrder']]
+      ['modified_auth' => ['GetOrderTracking']]
     ]
   )]
   
