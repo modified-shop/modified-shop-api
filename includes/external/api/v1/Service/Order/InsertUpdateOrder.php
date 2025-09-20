@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Put(
+    path: '/api/v1/orders/{Id}',
+    tags: ['Orders'],
+    description: 'Update order data by given Id',
+    operationId: 'InsertUpdateOrder',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'order data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'order not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateOrder']]
+    ]
+  )]
+
   final class InsertUpdateOrder extends BaseService
   {
       /**

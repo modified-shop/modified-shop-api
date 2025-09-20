@@ -22,12 +22,12 @@
   #[OA\Post(
     path: '/api/v1/orders/status',
     tags: ['Orders'],
-    description: 'Insert single orders status',
+    description: 'Insert single order status',
     operationId: 'InsertOrderStatus',
     responses:[
       new OA\Response(
         response: 201, 
-        description: 'orders status data',
+        description: 'order status data',
       )
     ],
     security: [

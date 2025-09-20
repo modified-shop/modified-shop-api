@@ -17,10 +17,60 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Put(
+    path: '/api/v1/orders/{Id}/status_history/{hId}',
+    tags: ['Orders'],
+    description: 'Update order status history data by given Id',
+    operationId: 'InsertUpdateOrderStatusHistory',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order Id'
+      )
+      new OA\Parameter(
+        name: 'hId', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order status history Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'order status history data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'order not found'
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'order status history not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order Id required'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order status history Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateOrderStatusHistory']]
+    ]
+  )]
+
   final class InsertUpdateOrderStatusHistory extends BaseService
   {
       /**

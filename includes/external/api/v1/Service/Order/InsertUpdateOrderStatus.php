@@ -22,7 +22,7 @@
   #[OA\Put(
     path: '/api/v1/orders/status/{Id}',
     tags: ['Orders'],
-    description: 'Update orders status data by given Id',
+    description: 'Update order status data by given Id',
     operationId: 'InsertUpdateOrderStatus',
     parameters: [
       new OA\Parameter(
@@ -32,7 +32,7 @@
         schema: new OA\Schema(
           type: 'integer',
         ),
-        description: 'orders status Id'
+        description: 'order status Id'
       )
     ],
     responses: [
@@ -42,11 +42,11 @@
       ),
       new OA\Response(
         response: 403,
-        description: 'orders status not found'
+        description: 'order status not found'
       ),
       new OA\Response(
         response: 500,
-        description: 'orders status Id required'
+        description: 'order status Id required'
       )
     ],
     security: [

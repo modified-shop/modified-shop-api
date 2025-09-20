@@ -22,7 +22,7 @@
   #[OA\Get(
     path: '/api/v1/orders/status',
     tags: ['Orders'],
-    description: 'Get orders status data',
+    description: 'Get order status data',
     operationId: 'GetOrderStatus',
     parameters: [
       new OA\Parameter(
@@ -45,11 +45,11 @@
     responses: [
       new OA\Response(
         response: 200, 
-        description: 'orders status data',
+        description: 'order status data',
       ),
       new OA\Response(
         response: 403,
-        description: 'no orders status found'
+        description: 'no order status found'
       )
     ],
     security: [

@@ -17,10 +17,60 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Put(
+    path: '/api/v1/orders/{Id}/tracking/{tId}',
+    tags: ['Orders'],
+    description: 'Update order tracking data by given Id',
+    operationId: 'InsertUpdateOrderTracking',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order Id'
+      )
+      new OA\Parameter(
+        name: 'tId', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order tracking Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'order tracking data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'order not found'
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'order tracking not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order Id required'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order tracking Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateOrderTracking']]
+    ]
+  )]
+
   final class InsertUpdateOrderTracking extends BaseService
   {
       /**

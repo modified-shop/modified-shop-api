@@ -17,10 +17,60 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Put(
+    path: '/api/v1/orders/{Id}/products_download/{dId}',
+    tags: ['Orders'],
+    description: 'Update order products download data by given Id',
+    operationId: 'InsertUpdateOrderProductDownload',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order Id'
+      )
+      new OA\Parameter(
+        name: 'dId', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'order products download Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'order products data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'order not found'
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'order products download not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order Id required'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'order products download Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateOrderProductDownload']]
+    ]
+  )]
+
   final class InsertUpdateOrderProductDownload extends BaseService
   {
       /**
