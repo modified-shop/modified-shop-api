@@ -23,7 +23,7 @@
     path: '/api/v1/orders/{Id}/status_history',
     tags: ['Order'],
     description: 'Delete all stytus history from an order by given Id',
-    operationId: 'DeleteAllStatusHistory',
+    operationId: 'DeleteAllOrderStatusHistory',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

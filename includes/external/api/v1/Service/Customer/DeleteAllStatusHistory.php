@@ -23,7 +23,7 @@
     path: '/api/v1/customers/{Id}/status_history',
     tags: ['Customer'],
     description: 'Delete all status history from a customer by given Id',
-    operationId: 'DeleteAllStatusHistory',
+    operationId: 'DeleteAllCustomerStatusHistory',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

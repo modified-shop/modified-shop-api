@@ -24,7 +24,7 @@
     path: '/api/v1/orders/{Id}/status_history/{hId}',
     tags: ['Order'],
     description: 'Delete single order histroy by given Id',
-    operationId: 'DeleteStatusHistory',
+    operationId: 'DeleteOrderStatusHistory',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

@@ -23,7 +23,7 @@
     path: '/api/v1/customers/{Id}/address_book/{aId}',
     tags: ['Customer'],
     description: 'Get single customer address book data by given Id',
-    operationId: 'GetSingleCustomer',
+    operationId: 'GetCustomerAddressBook',
     parameters: [
       new OA\Parameter(
         name: 'Id', 
@@ -63,7 +63,7 @@
       )
     ],
     security: [
-      ['modified_auth' => ['GetSingleCustomer']]
+      ['modified_auth' => ['GetCustomerAddressBook']]
     ]
   )]
   
