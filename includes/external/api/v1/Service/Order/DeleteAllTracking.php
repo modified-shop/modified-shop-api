@@ -21,7 +21,7 @@
 
   #[OA\Delete(
     path: '/api/v1/orders/{Id}/tracking',
-    tags: ['Manufacturer'],
+    tags: ['Order'],
     description: 'Delete all tracking from an order by given Id',
     operationId: 'DeleteAllTracking',
     parameters: [

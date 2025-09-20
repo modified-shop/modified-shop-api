@@ -22,7 +22,7 @@
 
   #[OA\Delete(
     path: '/api/v1/customers/{Id}/address_book/{aId}',
-    tags: ['Customers'],
+    tags: ['Customer'],
     description: 'Delete single customer by given Id',
     operationId: 'DeleteAddressBook',
     parameters: [

@@ -21,7 +21,7 @@
 
   #[OA\Delete(
     path: '/api/v1/customers/{Id}/memo',
-    tags: ['Customers'],
+    tags: ['Customer'],
     description: 'Delete all memo from a customer by given Id',
     operationId: 'DeleteAllMemo',
     parameters: [

@@ -21,7 +21,7 @@
 
   #[OA\Get(
     path: '/api/v1/orders/{Id}/total',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Get order total data by given Id',
     operationId: 'GetOrderTotal',
     parameters: [

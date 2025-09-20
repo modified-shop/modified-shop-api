@@ -21,7 +21,7 @@
 
   #[OA\Put(
     path: '/api/v1/orders/{Id}/tracking/{tId}',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Update order tracking data by given Id',
     operationId: 'InsertUpdateOrderTracking',
     parameters: [

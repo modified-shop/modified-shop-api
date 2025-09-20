@@ -21,7 +21,7 @@
 
   #[OA\Put(
     path: '/api/v1/orders/{Id}/products_download/{dId}',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Update order products download data by given Id',
     operationId: 'InsertUpdateOrderProductDownload',
     parameters: [

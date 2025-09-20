@@ -21,7 +21,7 @@
 
   #[OA\Post(
     path: '/api/v1/orders/{Id}/total',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Insert total to order by given Id',
     operationId: 'InsertOrderTotal',
     parameters: [

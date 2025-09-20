@@ -21,7 +21,7 @@
 
   #[OA\Delete(
     path: '/api/v1/customers/{Id}/ip',
-    tags: ['Customers'],
+    tags: ['Customer'],
     description: 'Delete all ip from a customer by given Id',
     operationId: 'DeleteAllIp',
     parameters: [

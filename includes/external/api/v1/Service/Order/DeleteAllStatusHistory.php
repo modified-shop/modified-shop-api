@@ -21,7 +21,7 @@
 
   #[OA\Delete(
     path: '/api/v1/orders/{Id}/status_history',
-    tags: ['Manufacturer'],
+    tags: ['Order'],
     description: 'Delete all stytus history from an order by given Id',
     operationId: 'DeleteAllStatusHistory',
     parameters: [

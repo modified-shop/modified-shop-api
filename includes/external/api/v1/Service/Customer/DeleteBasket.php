@@ -22,7 +22,7 @@
 
   #[OA\Delete(
     path: '/api/v1/customers/{Id}/basket/{bId}',
-    tags: ['Customers'],
+    tags: ['Customer'],
     description: 'Delete single customer basket by given Id',
     operationId: 'DeleteBasket',
     parameters: [

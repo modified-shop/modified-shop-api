@@ -21,7 +21,7 @@
 
   #[OA\Put(
     path: '/api/v1/orders/{Id}/status_history/{hId}',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Update order status history data by given Id',
     operationId: 'InsertUpdateOrderStatusHistory',
     parameters: [

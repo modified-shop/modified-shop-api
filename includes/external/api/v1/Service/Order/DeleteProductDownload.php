@@ -22,7 +22,7 @@
 
   #[OA\Delete(
     path: '/api/v1/orders/{Id}/products_download/{dId}',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Delete single order product download by given Id',
     operationId: 'DeleteProductDownload',
     parameters: [

@@ -21,7 +21,7 @@
 
   #[OA\Get(
     path: '/api/v1/orders',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Get orders data',
     operationId: 'GetOrders',
     parameters: [

@@ -21,7 +21,7 @@
 
   #[OA\Delete(
     path: '/api/v1/customers/{Id}/wishlist',
-    tags: ['Customers'],
+    tags: ['Customer'],
     description: 'Delete wishlist from a customer by given Id',
     operationId: 'DeleteAllWishlist',
     parameters: [

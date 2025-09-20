@@ -21,7 +21,7 @@
 
   #[OA\Post(
     path: '/api/v1/orders/{Id}/tracking',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Insert tracking to order by given Id',
     operationId: 'InsertOrderTracking',
     parameters: [

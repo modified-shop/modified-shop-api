@@ -21,7 +21,7 @@
 
   #[OA\Delete(
     path: '/api/v1/orders/{Id}/products',
-    tags: ['Manufacturer'],
+    tags: ['Order'],
     description: 'Delete all products from an order by given Id',
     operationId: 'DeleteAllProductOrders',
     parameters: [

@@ -21,7 +21,7 @@
 
   #[OA\Post(
     path: '/api/v1/orders/{Id}/status_history',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Insert status history to order by given Id',
     operationId: 'InsertOrderStatusHistory',
     parameters: [

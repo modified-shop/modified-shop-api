@@ -21,7 +21,7 @@
 
   #[OA\Post(
     path: '/api/v1/orders/{Id}/products',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Insert product to order by given Id',
     operationId: 'InsertOrderProduct',
     parameters: [

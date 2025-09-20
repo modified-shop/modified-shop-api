@@ -22,7 +22,7 @@
 
   #[OA\Delete(
     path: '/api/v1/orders/{Id}/products_attributes/{aId}',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Delete single order product attribute by given Id',
     operationId: 'DeleteProductAttributes',
     parameters: [

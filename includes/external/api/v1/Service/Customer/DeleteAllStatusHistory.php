@@ -21,7 +21,7 @@
 
   #[OA\Delete(
     path: '/api/v1/customers/{Id}/status_history',
-    tags: ['Customers'],
+    tags: ['Customer'],
     description: 'Delete all status history from a customer by given Id',
     operationId: 'DeleteAllStatusHistory',
     parameters: [

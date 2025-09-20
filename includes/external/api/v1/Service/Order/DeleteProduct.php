@@ -22,7 +22,7 @@
 
   #[OA\Delete(
     path: '/api/v1/orders/{Id}/products/{pId}',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Delete single order product by given Id',
     operationId: 'DeleteProduct',
     parameters: [

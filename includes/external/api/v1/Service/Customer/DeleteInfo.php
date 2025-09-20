@@ -21,7 +21,7 @@
 
   #[OA\Delete(
     path: '/api/v1/customers/{Id}/info',
-    tags: ['Customers'],
+    tags: ['Customer'],
     description: 'Delete customer info by given Id',
     operationId: 'DeleteInfo',
     parameters: [

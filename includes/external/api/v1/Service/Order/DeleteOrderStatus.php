@@ -21,7 +21,7 @@
 
   #[OA\Delete(
     path: '/api/v1/orders/status/{Id}',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Delete single order status by given Id',
     operationId: 'DeleteOrderStatus',
     parameters: [

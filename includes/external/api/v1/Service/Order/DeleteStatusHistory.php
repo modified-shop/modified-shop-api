@@ -22,7 +22,7 @@
 
   #[OA\Delete(
     path: '/api/v1/orders/{Id}/status_history/{hId}',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Delete single order histroy by given Id',
     operationId: 'DeleteStatusHistory',
     parameters: [

@@ -21,7 +21,7 @@
 
   #[OA\Get(
     path: '/api/v1/orders/{Id}/status_history',
-    tags: ['Orders'],
+    tags: ['Order'],
     description: 'Get order status history data by given Id',
     operationId: 'GetOrderStatusHistory',
     parameters: [
