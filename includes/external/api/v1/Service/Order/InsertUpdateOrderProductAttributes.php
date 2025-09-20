@@ -33,7 +33,7 @@
           type: 'integer',
         ),
         description: 'order Id'
-      )
+      ),
       new OA\Parameter(
         name: 'aId', 
         in: 'path',
