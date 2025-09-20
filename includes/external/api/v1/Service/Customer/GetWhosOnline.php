@@ -17,10 +17,62 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/customers/whos_online',
+    tags: ['Customer'],
+    description: 'Get customer whos online data',
+    operationId: 'GetWhosOnline',
+    parameters: [
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      ),
+      new OA\Parameter(
+        name: 'from', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Timestamp time_entry'
+      ),
+      new OA\Parameter(
+        name: 'to', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Timestamp time_last_click'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'customer whos online data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no customer whos online found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetWhosOnline']]
+    ]
+  )]
+  
   final class GetWhosOnline extends BaseService
   {
       /**

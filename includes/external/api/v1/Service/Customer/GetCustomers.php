@@ -17,10 +17,78 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/customers',
+    tags: ['Customer'],
+    description: 'Get customers data',
+    operationId: 'GetCustomers',
+    parameters: [
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      ),
+      new OA\Parameter(
+        name: 'status', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Status of customer'
+      ),
+      new OA\Parameter(
+        name: 'from', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Timestamp date_added'
+      ),
+      new OA\Parameter(
+        name: 'to', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Timestamp date_added'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: info, ip, memo, history, address, basket, wishlist'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'customer data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no customer found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetCustomers']]
+    ]
+  )]
+  
   final class GetCustomers extends BaseService
   {
       /**

@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/customers/{Id}/info',
+    tags: ['Customer'],
+    description: 'Get customer info data by given Id',
+    operationId: 'GetCustomerInfo',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'customer Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'customer info data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no customer info found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'customer Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetCustomerInfo']]
+    ]
+  )]
+  
   final class GetCustomerInfo extends BaseService
   {
       /**

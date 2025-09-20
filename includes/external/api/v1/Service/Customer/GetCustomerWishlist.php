@@ -17,10 +17,43 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/customers/{Id}/wishlist',
+    tags: ['Customer'],
+    description: 'Get customer wishlist data by given Id',
+    operationId: 'GetCustomerWishlist',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'customer Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'customer wishlist data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no customer wishlist found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'customer Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetCustomerWishlist']]
+    ]
+  )]
+  
   final class GetCustomerWishlist extends BaseService
   {
       /**
