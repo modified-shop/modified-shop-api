@@ -15,7 +15,6 @@
   use api\v1\Utility\LoggerHandler;
   use Psr\Log\LoggerInterface;
   use Exception;
-  use OpenApi\Attributes as OA;
 
   // include needed functions
   //require_once(DIR_FS_INC.'get_products_status_by_id.inc.php');
@@ -26,11 +25,9 @@
   // include needed classes
   require_once(DIR_WS_CLASSES.'upload.php');
 
-  #[OA\Info(
-    version: '1.0.0', 
-    title: 'modified eCommerce Shopsoftware API',
-    description: ''
-  )]  
+  /**
+   * BaseAction
+   */
   class BaseAction
   {
       /**

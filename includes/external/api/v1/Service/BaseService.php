@@ -14,11 +14,15 @@
 
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
   use Exception;
 
-  /**
-   * Service.
-   */
+  #[OA\Info(
+    version: '1.0.0', 
+    title: 'modified eCommerce Shopsoftware API',
+    description: ''
+  )]
+
   class BaseService
   {
       /**
