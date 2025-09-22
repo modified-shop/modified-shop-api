@@ -17,10 +17,78 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/products/{Id}/offer',
+    tags: ['Product'],
+    description: 'Insert products offer by given Id',
+    operationId: 'UpdateProductsPersonalOffer',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'product Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'product offer data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'product not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'product Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdatePersonalOffer']]
+    ]
+  )]
+
+  #[OA\Put(
+    path: '/api/v1/products/{Id}/offer',
+    tags: ['Product'],
+    description: 'Update products offer by given Id',
+    operationId: 'InsertProductsPersonalOffer',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'product Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'product offer data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'product not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'product Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdatePersonalOffer']]
+    ]
+  )]
+
   final class InsertUpdatePersonalOffer extends BaseService
   {
       /**

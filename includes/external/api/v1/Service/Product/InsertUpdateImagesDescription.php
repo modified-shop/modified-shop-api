@@ -17,10 +17,96 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/products/{Id}/images/{iId}/description',
+    tags: ['Product'],
+    description: 'Insert products images by given Id',
+    operationId: 'UpdateProductsImagesDescription',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'product Id'
+      ),
+      new OA\Parameter(
+        name: 'iId', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'image Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'product images data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'product not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'product Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateImagesDescription']]
+    ]
+  )]
+
+  #[OA\Put(
+    path: '/api/v1/products/{Id}/images/{iId}/description',
+    tags: ['Product'],
+    description: 'Update products images by given Id',
+    operationId: 'InsertProductsImagesDescription',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'product Id'
+      ),
+      new OA\Parameter(
+        name: 'iId', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'image Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'product images data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'product not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'product Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateImagesDescription']]
+    ]
+  )]
+
   final class InsertUpdateImagesDescription extends BaseService
   {
       /**

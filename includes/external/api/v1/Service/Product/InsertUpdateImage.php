@@ -17,10 +17,78 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/products/{Id}/image',
+    tags: ['Product'],
+    description: 'Insert products image by given Id',
+    operationId: 'UpdateProductsImage',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'product Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'product data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'product not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'product Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateImage']]
+    ]
+  )]
+
+  #[OA\Put(
+    path: '/api/v1/products/{Id}/image',
+    tags: ['Product'],
+    description: 'Update products image by given Id',
+    operationId: 'InsertProductsImage',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'product Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'product data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'product not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'product Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateImage']]
+    ]
+  )]
+
   final class InsertUpdateImage extends BaseService
   {
       /**

@@ -17,10 +17,78 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Post(
+    path: '/api/v1/products/{Id}/categories',
+    tags: ['Product'],
+    description: 'Insert products category by given Id',
+    operationId: 'UpdateProductsCategory',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'product Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'product category data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'product not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'product Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateCategories']]
+    ]
+  )]
+
+  #[OA\Put(
+    path: '/api/v1/products/{Id}/categories',
+    tags: ['Product'],
+    description: 'Update products category by given Id',
+    operationId: 'InsertProductsCategory',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'product Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 201, 
+        description: 'product category data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'product not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'product Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['InsertUpdateCategories']]
+    ]
+  )]
+
   final class InsertUpdateCategories extends BaseService
   {
       /**
