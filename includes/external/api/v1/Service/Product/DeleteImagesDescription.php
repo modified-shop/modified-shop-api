@@ -17,10 +17,61 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use Exception;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/products/{Id}/images/{iId}/description',
+    tags: ['Product'],
+    description: 'Delete single image description from a product by given Id',
+    operationId: 'DeleteProductImagesDescription',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'product Id'
+      ),
+      new OA\Parameter(
+        name: 'iId', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'image Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'product not found'
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'image not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'product Id required'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'image Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteImagesDescription']]
+    ]
+  )]
+
   final class DeleteImagesDescription extends BaseService
   {
       /**
@@ -63,6 +114,11 @@
 
           $productId = (int)$args['id'];
           $imageId = (int)$args['iid'];
+
+          // Input validation
+          if (empty($imageId)) {
+              throw new Exception('Image ID required');
+          }
           
           $result = $this->productAction->DeleteImagesDescription($productId, $imageId);
 

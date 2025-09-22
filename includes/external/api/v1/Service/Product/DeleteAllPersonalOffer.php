@@ -17,10 +17,60 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Delete(
+    path: '/api/v1/products/{Id}/offer/{cId}',
+    tags: ['Product'],
+    description: 'Delete all personal offer from a product by given Id',
+    operationId: 'DeleteAllPersonalOffer',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'product Id'
+      ),
+      new OA\Parameter(
+        name: 'cId', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'customer status Id'
+      )
+    ],
+    responses:[
+      new OA\Response(
+        response: 204, 
+        description: 'no data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'product not found'
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'customer status not found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'product Id required'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'customer status Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['DeleteAllPersonalOffer']]
+    ]
+  )]
+
   final class DeleteAllPersonalOffer extends BaseService
   {
       /**
