@@ -21,7 +21,7 @@
 
   #[OA\Post(
     path: '/api/v1/products',
-    tags: ['Products'],
+    tags: ['Product'],
     description: 'Insert single order',
     operationId: 'InsertProduct',
     responses:[
