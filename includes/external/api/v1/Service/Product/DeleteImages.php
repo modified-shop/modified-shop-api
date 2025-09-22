@@ -24,7 +24,7 @@
     path: '/api/v1/products/{Id}/images/{iId}',
     tags: ['Product'],
     description: 'Delete single image from a product by given Id',
-    operationId: 'DeleteProductImage',
+    operationId: 'DeleteImagesProducts',
     parameters: [
       new OA\Parameter(
         name: 'Id', 
@@ -68,7 +68,7 @@
       )
     ],
     security: [
-      ['modified_auth' => ['DeleteImage']]
+      ['modified_auth' => ['DeleteImages']]
     ]
   )]
 

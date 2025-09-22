@@ -24,7 +24,7 @@
     path: '/api/v1/orders/{Id}/products/{pId}',
     tags: ['Order'],
     description: 'Delete single order product by given Id',
-    operationId: 'DeleteProduct',
+    operationId: 'DeleteProductOrders',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

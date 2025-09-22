@@ -24,7 +24,7 @@
     path: '/api/v1/products/{Id}/content/{cId}',
     tags: ['Product'],
     description: 'Delete single content from a product by given Id',
-    operationId: 'DeleteProductContents',
+    operationId: 'DeleteContentsProducts',
     parameters: [
       new OA\Parameter(
         name: 'Id', 

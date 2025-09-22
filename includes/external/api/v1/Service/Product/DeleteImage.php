@@ -23,7 +23,7 @@
     path: '/api/v1/products/{Id}/image',
     tags: ['Product'],
     description: 'Delete image from a product by given Id',
-    operationId: 'DeleteProductImage',
+    operationId: 'DeleteImageProducts',
     parameters: [
       new OA\Parameter(
         name: 'Id', 
