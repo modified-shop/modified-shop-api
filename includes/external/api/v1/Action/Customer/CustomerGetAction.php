@@ -370,7 +370,7 @@
                                                    WHERE customers_id = '".(int)$customerId."'
                                                 ORDER BY address_book_id ASC");
               while ($address_book = xtc_db_fetch_array($address_book_query)) {
-                  $address_books[] = $this->GetCustomerAddressBook($customerId, $address_book['address_book_id']);
+                  $address_books[] = $this->GetSingleCustomerAddressBook($customerId, $address_book['address_book_id']);
               }
           }
 
@@ -388,7 +388,7 @@
        *
        * @return array The address book data
        */
-      public function GetCustomerAddressBook(int $customerId, int $addressBookId): array
+      public function GetSingleCustomerAddressBook(int $customerId, int $addressBookId): array
       {
           // Input validation
           if (empty($customerId)) {

@@ -19,7 +19,7 @@
   $app->get('/customers/{id}/memo',                 \api\v1\Service\Customer\GetCustomerMemos::class);
   $app->get('/customers/{id}/status_history',       \api\v1\Service\Customer\GetCustomerStatusHistory::class);
   $app->get('/customers/{id}/address_book',         \api\v1\Service\Customer\GetCustomerAddressBooks::class);
-  $app->get('/customers/{id}/address_book/{aid}',   \api\v1\Service\Customer\GetCustomerAddressBook::class);
+  $app->get('/customers/{id}/address_book/{aid}',   \api\v1\Service\Customer\GetSingleCustomerAddressBook::class);
   $app->get('/customers/{id}/basket',               \api\v1\Service\Customer\GetCustomerBasket::class);
   $app->get('/customers/{id}/wishlist',             \api\v1\Service\Customer\GetCustomerWishlist::class);
   

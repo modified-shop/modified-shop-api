@@ -23,7 +23,7 @@
     path: '/api/v1/customers/{Id}/address_book/{aId}',
     tags: ['Customer'],
     description: 'Get single customer address book data by given Id',
-    operationId: 'GetCustomerAddressBook',
+    operationId: 'GetSingleCustomerAddressBook',
     parameters: [
       new OA\Parameter(
         name: 'Id', 
@@ -63,11 +63,11 @@
       )
     ],
     security: [
-      ['modified_auth' => ['GetCustomerAddressBook']]
+      ['modified_auth' => ['GetSingleCustomerAddressBook']]
     ]
   )]
   
-  final class GetCustomerAddressBook extends BaseService
+  final class GetSingleCustomerAddressBook extends BaseService
   {
       /**
        * @var CustomerAction
@@ -110,7 +110,7 @@
           $customerId = (int)$args['id'];
           $addressBookId = (int)$args['aid'];
 
-          $result = $this->customerAction->GetCustomerAddressBook($customerId, $addressBookId);
+          $result = $this->customerAction->GetSingleCustomerAddressBook($customerId, $addressBookId);
 
           if (isset($result['errormessage'])) {
               return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
