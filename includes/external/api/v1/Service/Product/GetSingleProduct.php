@@ -17,10 +17,51 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/products/{Id}',
+    tags: ['Order'],
+    description: 'Get single product data by given Id',
+    operationId: 'GetSingleProduct',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'product Id'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: categories, images, xsell, attributes, tags, content, offer, specials, reviews'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'product data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no product found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'product Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetSingleProduct']]
+    ]
+  )]
+  
   final class GetSingleProduct extends BaseService
   {
       /**

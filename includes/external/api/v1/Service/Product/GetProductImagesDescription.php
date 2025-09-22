@@ -18,9 +18,41 @@
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/products/{Id}/images/description',
+    tags: ['Product'],
+    description: 'Get products images description data by given Id',
+    operationId: 'GetProductImagesDescription',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'product Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'product images description data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no product images description found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'product Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetProductImagesDescription']]
+    ]
+  )]
+  
   final class GetProductImagesDescription extends BaseService
   {
       /**

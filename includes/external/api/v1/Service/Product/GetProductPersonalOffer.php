@@ -18,9 +18,41 @@
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/products/{Id}/offer',
+    tags: ['Product'],
+    description: 'Get products personal offer data by given Id',
+    operationId: 'GetProductPersonalOffer',
+    parameters: [
+      new OA\Parameter(
+        name: 'Id', 
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+          type: 'integer',
+        ),
+        description: 'product Id'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'product personal offer data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no product personal offer found'
+      ),
+      new OA\Response(
+        response: 500,
+        description: 'product Id required'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetProductPersonalOffer']]
+    ]
+  )]
+  
   final class GetProductPersonalOffer extends BaseService
   {
       /**

@@ -17,10 +17,78 @@
   use api\v1\Utility\Responder;
   use Psr\Http\Message\ResponseInterface;
   use Psr\Http\Message\ServerRequestInterface;
+  use OpenApi\Attributes as OA;
 
-  /**
-   * Action
-   */
+  #[OA\Get(
+    path: '/api/v1/products',
+    tags: ['Product'],
+    description: 'Get products data',
+    operationId: 'GetProducts',
+    parameters: [
+      new OA\Parameter(
+        name: 'page', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of page'
+      ),
+      new OA\Parameter(
+        name: 'limit', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Number of results per page'
+      ),
+      new OA\Parameter(
+        name: 'status', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Status of product'
+      ),
+      new OA\Parameter(
+        name: 'from', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Timestamp products_date_added'
+      ),
+      new OA\Parameter(
+        name: 'to', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'integer'
+        ),
+        description: 'Timestamp products_date_added'
+      ),
+      new OA\Parameter(
+        name: 'with', 
+        in: 'query',
+        schema: new OA\Schema(
+          type: 'string'
+        ),
+        description: 'included results (comma separated list). Possible values: categories, images, xsell, attributes, tags, content, offer, specials, reviews'
+      )
+    ],
+    responses: [
+      new OA\Response(
+        response: 200, 
+        description: 'product data',
+      ),
+      new OA\Response(
+        response: 403,
+        description: 'no product found'
+      )
+    ],
+    security: [
+      ['modified_auth' => ['GetProducts']]
+    ]
+  )]
+  
   final class GetProducts extends BaseService
   {
       /**
