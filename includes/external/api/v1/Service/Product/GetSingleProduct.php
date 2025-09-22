@@ -21,7 +21,7 @@
 
   #[OA\Get(
     path: '/api/v1/products/{Id}',
-    tags: ['Order'],
+    tags: ['Product'],
     description: 'Get single product data by given Id',
     operationId: 'GetSingleProduct',
     parameters: [
