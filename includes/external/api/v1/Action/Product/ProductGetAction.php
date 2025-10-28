@@ -152,7 +152,7 @@
           $products_query = xtc_db_query("SELECT products_id
                                             FROM ".TABLE_PRODUCTS."
                                                  ".$where."
-                                        ORDER BY products_date_added DESC
+                                        ORDER BY products_date_added DESC, products_id ASC
                                            LIMIT ".(($this->options['page'] - 1) * $this->options['limit']).", ".$this->options['limit']);
           while ($products = xtc_db_fetch_array($products_query)) {
               $data[] = $this->GetProductDetails($products['products_id']);
@@ -585,7 +585,7 @@
                                                         JOIN ".TABLE_REVIEWS_DESCRIPTION." rd
                                                              ON r.reviews_id = rd.reviews_id
                                                        WHERE r.products_id = '".(int)$productId."'
-                                                    ORDER BY r.reviews_id ASC");
+                                                    ORDER BY r.date_added DESC, r.reviews_id ASC");
               while ($products_reviews = xtc_db_fetch_array($products_reviews_query)) {
                   $reviews[] = $products_reviews;
               }
