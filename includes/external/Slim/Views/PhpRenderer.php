@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim Framework (https://slimframework.com)
  *
@@ -11,26 +12,24 @@ namespace Slim\Views;
 
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
 use Slim\Views\Exception\PhpTemplateNotFoundException;
 use Throwable;
 
 class PhpRenderer
 {
+    protected string $templatePath;
+
     /**
-     * @var string
+     * @var array<string, mixed>
      */
-    protected $templatePath;
-/**
-     * @var array
-     */
-    protected $attributes;
-/**
-     * @var string
-     */
-    protected $layout;
-/**
+    protected array $attributes;
+
+    protected string $layout;
+
+    /**
      * @param string $templatePath
-     * @param array  $attributes
+     * @param array<string, mixed> $attributes
      * @param string $layout
      */
     public function __construct(string $templatePath = '', array $attributes = [], string $layout = '')
@@ -42,12 +41,12 @@ class PhpRenderer
 
     /**
      * @param ResponseInterface $response
-     * @param string            $template
-     * @param array             $data
-     *
-     * @return ResponseInterface
+     * @param string $template
+     * @param array<string, mixed> $data
      *
      * @throws Throwable
+     *
+     * @return ResponseInterface
      */
     public function render(ResponseInterface $response, string $template, array $data = []): ResponseInterface
     {
@@ -66,22 +65,22 @@ class PhpRenderer
 
     /**
      * @param string $layout
+     *
+     * @throws PhpTemplateNotFoundException
+     *
+     * @return void
      */
     public function setLayout(string $layout): void
     {
-        if ($layout === '' || $layout === null) {
-            $this->layout = null;
-        } else {
-            $layoutPath = $this->templatePath . $layout;
-            if (!is_file($layoutPath)) {
-                throw new PhpTemplateNotFoundException('Layout template "' . $layout . '" does not exist');
-            }
-            $this->layout = $layout;
+        if ($layout && !$this->templateExists($layout)) {
+            throw new PhpTemplateNotFoundException('Layout template "' . $layout . '" does not exist');
         }
+
+        $this->layout = $layout;
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getAttributes(): array
     {
@@ -89,7 +88,7 @@ class PhpRenderer
     }
 
     /**
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      *
      * @return void
      */
@@ -100,7 +99,7 @@ class PhpRenderer
 
     /**
      * @param string $key
-     * @param        $value
+     * @param mixed $value
      *
      * @return void
      */
@@ -141,17 +140,17 @@ class PhpRenderer
 
     /**
      * @param string $template
-     * @param array  $data
-     * @param bool   $useLayout
-     *
-     * @return string
+     * @param array<string, mixed> $data
+     * @param bool $useLayout
      *
      * @throws Throwable
+     *
+     * @return string
      */
     public function fetch(string $template, array $data = [], bool $useLayout = false): string
     {
         $output = $this->fetchTemplate($template, $data);
-        if ($this->layout !== null && $useLayout) {
+        if ($this->layout && $useLayout) {
             $data['content'] = $output;
             $output = $this->fetchTemplate($this->layout, $data);
         }
@@ -161,11 +160,11 @@ class PhpRenderer
 
     /**
      * @param string $template
-     * @param array  $data
-     *
-     * @return string
+     * @param array<string, mixed> $data
      *
      * @throws Throwable
+     *
+     * @return string
      */
     public function fetchTemplate(string $template, array $data = []): string
     {
@@ -173,9 +172,10 @@ class PhpRenderer
             throw new InvalidArgumentException('Duplicate template key found');
         }
 
-        if (!is_file($this->templatePath . $template)) {
-            throw new PhpTemplateNotFoundException('View cannot render "' . $template
-                                                   . '" because the template does not exist');
+        if (!$this->templateExists($template)) {
+            throw new PhpTemplateNotFoundException(
+                'View cannot render "' . $template . '" because the template does not exist'
+            );
         }
 
         $data = array_merge($this->attributes, $data);
@@ -183,6 +183,9 @@ class PhpRenderer
             ob_start();
             $this->protectedIncludeScope($this->templatePath . $template, $data);
             $output = ob_get_clean();
+            if ($output === false) {
+                throw new RuntimeException('Failed to fetch the template output');
+            }
         } catch (Throwable $e) {
             ob_end_clean();
             throw $e;
@@ -192,8 +195,21 @@ class PhpRenderer
     }
 
     /**
+     * Returns true is template exists, false if not
+     *
      * @param string $template
-     * @param array  $data
+     *
+     * @return bool
+     */
+    public function templateExists(string $template): bool
+    {
+        $path = $this->templatePath . $template;
+        return is_file($path) && is_readable($path);
+    }
+
+    /**
+     * @param string $template
+     * @param array<string, mixed> $data
      *
      * @return void
      */

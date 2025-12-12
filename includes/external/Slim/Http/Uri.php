@@ -14,10 +14,7 @@ use Psr\Http\Message\UriInterface;
 
 class Uri implements UriInterface
 {
-    /**
-     * @var UriInterface
-     */
-    protected $uri;
+    protected UriInterface $uri;
 
     /**
      * @param UriInterface $uri
@@ -35,7 +32,6 @@ class Uri implements UriInterface
      */
     public function __set($name, $value)
     {
-        return;
     }
 
     /**
@@ -105,7 +101,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withFragment($fragment)
+    public function withFragment($fragment): UriInterface
     {
         $uri = $this->uri->withFragment($fragment);
         return new static($uri);
@@ -114,7 +110,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withHost($host)
+    public function withHost($host): UriInterface
     {
         $uri = $this->uri->withHost($host);
         return new static($uri);
@@ -123,7 +119,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withPath($path)
+    public function withPath($path): UriInterface
     {
         $uri = $this->uri->withPath($path);
         return new static($uri);
@@ -132,7 +128,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withPort($port)
+    public function withPort($port): UriInterface
     {
         $uri = $this->uri->withPort($port);
         return new static($uri);
@@ -141,7 +137,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withQuery($query)
+    public function withQuery($query): UriInterface
     {
         $uri = $this->uri->withQuery($query);
         return new static($uri);
@@ -150,7 +146,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withScheme($scheme)
+    public function withScheme($scheme): UriInterface
     {
         $uri = $this->uri->withScheme($scheme);
         return new static($uri);
@@ -159,7 +155,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withUserInfo($user, $password = null)
+    public function withUserInfo($user, $password = null): UriInterface
     {
         $uri = $this->uri->withUserInfo($user, $password);
         return new static($uri);

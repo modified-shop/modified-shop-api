@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace Slim\Http;
 
 use InvalidArgumentException;
+use Psr\Http\Message\MessageInterface;
+use Slim\Http\Interfaces\ResponseInterface as DecoratedResponseInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
@@ -34,17 +36,11 @@ use function substr;
 
 use const JSON_ERROR_NONE;
 
-class Response implements ResponseInterface
+class Response implements DecoratedResponseInterface
 {
-    /**
-     * @var ResponseInterface
-     */
-    protected $response;
+    protected ResponseInterface $response;
 
-    /**
-     * @var StreamFactoryInterface
-     */
-    protected $streamFactory;
+    protected StreamFactoryInterface $streamFactory;
 
     /**
      * EOL characters used for HTTP response.
@@ -71,13 +67,12 @@ class Response implements ResponseInterface
      */
     public function __set($name, $value)
     {
-        return;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getBody()
+    public function getBody(): StreamInterface
     {
         return $this->response->getBody();
     }
@@ -141,7 +136,7 @@ class Response implements ResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function withAddedHeader($name, $value)
+    public function withAddedHeader($name, $value): MessageInterface
     {
         $response = $this->response->withAddedHeader($name, $value);
         return new static($response, $this->streamFactory);
@@ -150,7 +145,7 @@ class Response implements ResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function withBody(StreamInterface $body)
+    public function withBody(StreamInterface $body): MessageInterface
     {
         $response = $this->response->withBody($body);
         return new static($response, $this->streamFactory);
@@ -159,7 +154,7 @@ class Response implements ResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function withHeader($name, $value)
+    public function withHeader($name, $value): MessageInterface
     {
         $response = $this->response->withHeader($name, $value);
         return new static($response, $this->streamFactory);
@@ -168,7 +163,7 @@ class Response implements ResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function withoutHeader($name)
+    public function withoutHeader($name): MessageInterface
     {
         $response = $this->response->withoutHeader($name);
         return new static($response, $this->streamFactory);
@@ -177,7 +172,7 @@ class Response implements ResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function withProtocolVersion($version)
+    public function withProtocolVersion($version): MessageInterface
     {
         $response = $this->response->withProtocolVersion($version);
         return new static($response, $this->streamFactory);
@@ -186,7 +181,7 @@ class Response implements ResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function withStatus($code, $reasonPhrase = '')
+    public function withStatus($code, $reasonPhrase = ''): ResponseInterface
     {
         $response = $this->response->withStatus($code, $reasonPhrase);
         return new static($response, $this->streamFactory);
@@ -208,7 +203,7 @@ class Response implements ResponseInterface
      */
     public function withJson($data, ?int $status = null, int $options = 0, int $depth = 512): ResponseInterface
     {
-        $json = (string) json_encode($data, $options, $depth);
+        $json = (string) json_encode($data, $options, $depth > 0 ? $depth : 512);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new RuntimeException(json_last_error_msg(), json_last_error());
@@ -503,7 +498,7 @@ class Response implements ResponseInterface
         }
 
         $output .= self::EOL;
-        $output .= (string) $this->response->getBody();
+        $output .= $this->response->getBody();
 
         return $output;
     }
