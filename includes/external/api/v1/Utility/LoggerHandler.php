@@ -24,6 +24,16 @@
        */
       private $path;
 
+     /**
+       * @var string
+       */
+      private $filename;
+
+     /**
+       * @var string
+       */
+      private $name;
+
       /**
        * @var int
        */
