@@ -239,7 +239,7 @@
         if (xtc_db_num_rows($check_query) < 1) {
           xtc_db_query("ALTER TABLE `api_access` ADD ".$column." int(1) NOT NULL DEFAULT '0'");
           xtc_db_query("UPDATE `api_access` SET ".$column." = 1  WHERE customers_id = '1'");
-          xtc_db_query("UPDATE `api_access` SET ".$column." = 130 WHERE customers_id = 'groups'");
+          xtc_db_query("UPDATE `api_access` SET ".$column." = 140 WHERE customers_id = 'groups'");
         }
       }
   
