@@ -119,6 +119,10 @@
       'name' =>  TEXT_HEADING_COUPONS,
       'color' => '#aa6f73',
     ),
+    '140' => array(
+      'name' =>  TEXT_HEADING_SCHEMA,
+      'color' => '#ffecef',
+    ),
   );
 
 require (DIR_WS_INCLUDES.'head.php');
