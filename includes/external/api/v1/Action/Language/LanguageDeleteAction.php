@@ -42,7 +42,7 @@
                                             FROM ".TABLE_LANGUAGES."
                                            WHERE languages_id = '".(int)$languageId."'");
           if (xtc_db_num_rows($language_query) < 1) {
-              $this->errormessage(sprintf('Language not found: %s', $languageId));
+              return $this->errormessage(sprintf('Language not found: %s', $languageId));
           } else {
               //delete
               xtc_db_query("DELETE FROM ".TABLE_LANGUAGES." WHERE languages_id = '".(int)$languageId."'");

@@ -42,7 +42,7 @@
                                               FROM ".TABLE_NEWSLETTER_RECIPIENTS."
                                              WHERE mail_id = '".(int)$newsletterId."'");
           if (xtc_db_num_rows($newsletter_query) < 1) {
-            $this->errormessage(sprintf('Newsletter not found: %s', $newsletterId));
+              return $this->errormessage(sprintf('Newsletter not found: %s', $newsletterId));
           } else {
               //delete
               xtc_db_query("DELETE FROM ".TABLE_NEWSLETTER_RECIPIENTS." WHERE mail_id = '".(int)$newsletterId."'");

@@ -58,7 +58,7 @@
                                                   FROM ".TABLE_NEWSLETTER_RECIPIENTS."
                                                  WHERE mail_id = '".(int)$newsletterId."'");
               if (xtc_db_num_rows($newsletter_query) < 1) {
-                  $this->errormessage(sprintf('Newsletter not found: %s', $newsletterId));
+                  return $this->errormessage(sprintf('Newsletter not found: %s', $newsletterId));
               } else {
                   $newsletter = xtc_db_fetch_array($newsletter_query);
               }
@@ -79,7 +79,7 @@
                                              FROM ".TABLE_NEWSLETTER_RECIPIENTS."
                                             WHERE customers_email_address = '".xtc_db_input($newsletter['customers_email_address'])."'");
               if (xtc_db_num_rows($check_query) > 0) {
-                  $this->errormessage('Newsletter Email Address already exists', 400);
+                  return $this->errormessage('Newsletter Email Address already exists', 400);
               }
           }
           

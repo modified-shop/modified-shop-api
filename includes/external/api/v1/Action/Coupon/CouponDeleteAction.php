@@ -42,7 +42,7 @@
                                           FROM ".TABLE_COUPONS."
                                          WHERE coupon_id = '".(int)$couponId."'");
           if (xtc_db_num_rows($coupon_query) < 1) {
-              $this->errormessage(sprintf('Coupon not found: %s', $couponId));
+              return $this->errormessage(sprintf('Coupon not found: %s', $couponId));
           } else {
               xtc_db_query("DELETE FROM ".TABLE_COUPONS." WHERE coupon_id = '".(int)$couponId."'");
               xtc_db_query("DELETE FROM ".TABLE_COUPONS_DESCRIPTION." WHERE coupon_id = '".(int)$couponId."'");

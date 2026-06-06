@@ -58,7 +58,7 @@
                                                 FROM ".TABLE_LANGUAGES."
                                                WHERE languages_id = '".(int)$languageId."'");
               if (xtc_db_num_rows($language_query) < 1) {
-                  $this->errormessage(sprintf('Language not found: %s', $languageId));
+                  return $this->errormessage(sprintf('Language not found: %s', $languageId));
               } else {
                   $language = xtc_db_fetch_array($language_query);
               }
@@ -78,7 +78,7 @@
                                              FROM ".TABLE_LANGUAGES."
                                             WHERE code = '".xtc_db_input($language['code'])."'");
               if (xtc_db_num_rows($check_query) > 0) {
-                  $this->errormessage('Language Code already exists', 400);
+                  return $this->errormessage('Language Code already exists', 400);
               }
           }
           

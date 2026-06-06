@@ -42,7 +42,7 @@
                                            FROM ".TABLE_COUNTRIES."
                                           WHERE countries_id = '".(int)$countryId."'");
           if (xtc_db_num_rows($country_query) < 1) {
-              $this->errormessage(sprintf('Country not found: %s', $countryId));
+              return $this->errormessage(sprintf('Country not found: %s', $countryId));
           } else {
               $country = xtc_db_fetch_array($country_query);
 
@@ -118,7 +118,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              $this->errormessage('no Country found');
+              return $this->errormessage('no Country found');
           }
           
           $data = [];
@@ -200,7 +200,7 @@
                                             FROM ".TABLE_GEO_ZONES."
                                            WHERE geo_zone_id = '".(int)$geoZoneId."'");
           if (xtc_db_num_rows($geo_zone_query) < 1) {
-              $this->errormessage(sprintf('Geo Zone not found: %s', $geoZoneId));
+              return $this->errormessage(sprintf('Geo Zone not found: %s', $geoZoneId));
           } else {
               $geo_zone = xtc_db_fetch_array($geo_zone_query);
               $geo_zone['geo_zone_name'] = $this->parse_multi_language_value($geo_zone['geo_zone_name']);
@@ -259,7 +259,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              $this->errormessage('no Geo Zone found');
+              return $this->errormessage('no Geo Zone found');
           }
           
           $data = [];
@@ -340,7 +340,7 @@
                                              FROM ".TABLE_TAX_CLASS."
                                             WHERE tax_class_id = '".(int)$taxClassId."'");
           if (xtc_db_num_rows($tax_class_query) < 1) {
-              $this->errormessage(sprintf('Tax Class not found: %s', $taxClassId));
+              return $this->errormessage(sprintf('Tax Class not found: %s', $taxClassId));
           } else {
               $tax_class = xtc_db_fetch_array($tax_class_query);
               $tax_class['tax_class_title'] = $this->parse_multi_language_value($tax_class['tax_class_title']);
@@ -368,7 +368,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              $this->errormessage('no Tax Class found');
+              return $this->errormessage('no Tax Class found');
           }
           
           $data = [];
@@ -419,7 +419,7 @@
                                              FROM ".TABLE_TAX_RATES."
                                             WHERE tax_rates_id = '".(int)$taxRateId."'");
           if (xtc_db_num_rows($tax_rates_query) < 1) {
-              $this->errormessage(sprintf('Tax Rate not found: %s', $taxRateId));
+              return $this->errormessage(sprintf('Tax Rate not found: %s', $taxRateId));
           } else {
               $tax_rates = xtc_db_fetch_array($tax_rates_query);
               $tax_rates['tax_description'] = $this->parse_multi_language_value($tax_rates['tax_description']);
@@ -460,7 +460,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              $this->errormessage('no Tax Rate found');
+              return $this->errormessage('no Tax Rate found');
           }
           
           $data = [];

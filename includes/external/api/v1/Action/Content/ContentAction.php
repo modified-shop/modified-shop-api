@@ -122,7 +122,7 @@
                                             FROM ".TABLE_CONTENT_MANAGER."
                                            WHERE content_group = '".(int)$contentGroupId."'");
           if (xtc_db_num_rows($products_query) < 1) {
-              $this->errormessage(sprintf('Content not found: %s', $productId));
+              return $this->errormessage(sprintf('Content not found: %s', $productId));
           } else {
               $languages_query = xtc_db_query("SELECT *
                                                  FROM ".TABLE_LANGUAGES);
@@ -136,7 +136,7 @@
                                                       WHERE content_manager_id = '".(int)$contentGroupId."'
                                                             ".$where);
                       if (xtc_db_num_rows($content_query) < 1) {
-                          $this->errormessage(sprintf('Content ID invalid'), 400);
+                          return $this->errormessage(sprintf('Content ID invalid'), 400);
                       } else {
                           $action = 'update';
                           $content = xtc_db_fetch_array($content_query);

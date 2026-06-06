@@ -42,7 +42,7 @@
                                                 FROM ".TABLE_MANUFACTURERS."
                                                WHERE manufacturers_id = '".(int)$manufacturerId."'");
           if (xtc_db_num_rows($manufacturer_query) < 1) {
-            $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
+            return $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
           } else {
               // disable Exception
               $this->throw_exception = false;
@@ -86,7 +86,7 @@
                                                WHERE manufacturers_id = '".(int)$manufacturerId."'
                                                      ".$where);
           if (xtc_db_num_rows($manufacturer_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Manufacturer product not found: %s', $manufacturerId));
+              return $this->errormessage(sprintf('Manufacturer product not found: %s', $manufacturerId));
           } else {
               while ($manufacturer = xtc_db_fetch_array($manufacturer_query)) {
                   xtc_db_query("UPDATE ".TABLE_PRODUCTS." 
@@ -136,7 +136,7 @@
                                          WHERE manufacturers_id = '".(int)$manufacturerId."'
                                            AND manufacturers_image != ''");
           if (xtc_db_num_rows($images_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Manufacturer image not found: %s', $manufacturerId));
+              return $this->errormessage(sprintf('Manufacturer image not found: %s', $manufacturerId));
           } else {
               $images = xtc_db_fetch_array($images_query);
               

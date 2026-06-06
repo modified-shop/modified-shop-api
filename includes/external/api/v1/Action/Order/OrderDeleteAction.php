@@ -42,7 +42,7 @@
                                          FROM ".TABLE_ORDERS."
                                         WHERE orders_id = '".(int)$orderId."'");
           if (xtc_db_num_rows($order_query) < 1) {
-              $this->errormessage(sprintf('Order not found: %s', $orderId));
+              return $this->errormessage(sprintf('Order not found: %s', $orderId));
           } else {            
               // disable Exception
               $this->throw_exception = false;
@@ -86,7 +86,7 @@
                                         WHERE orders_id = '".(int)$orderId."'
                                               ".$where);
           if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Order products not found: %s', $orderId));
+              return $this->errormessage(sprintf('Order products not found: %s', $orderId));
           } else {
               while ($order = xtc_db_fetch_array($order_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_ORDERS_PRODUCTS_ATTRIBUTES." 
@@ -150,7 +150,7 @@
                                         WHERE orders_id = '".(int)$orderId."'
                                               ".$where);
           if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Order products attributes not found: %s', $orderId));
+              return $this->errormessage(sprintf('Order products attributes not found: %s', $orderId));
           } else {
               while ($order = xtc_db_fetch_array($order_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_ORDERS_PRODUCTS_ATTRIBUTES." 
@@ -187,7 +187,7 @@
                                         WHERE orders_id = '".(int)$orderId."'
                                               ".$where);
           if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Order products download not found: %s', $orderId));
+              return $this->errormessage(sprintf('Order products download not found: %s', $orderId));
           } else {
               while ($order = xtc_db_fetch_array($order_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_ORDERS_PRODUCTS_DOWNLOAD." 
@@ -224,7 +224,7 @@
                                         WHERE orders_id = '".(int)$orderId."'
                                               ".$where);
           if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Order status history not found: %s', $orderId));
+              return $this->errormessage(sprintf('Order status history not found: %s', $orderId));
           } else {
               while ($order = xtc_db_fetch_array($order_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_ORDERS_STATUS_HISTORY." 
@@ -280,7 +280,7 @@
                                         WHERE orders_id = '".(int)$orderId."'
                                               ".$where);
           if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Order total not found: %s', $orderId));
+              return $this->errormessage(sprintf('Order total not found: %s', $orderId));
           } else {
               while ($order = xtc_db_fetch_array($order_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_ORDERS_TOTAL." 
@@ -336,7 +336,7 @@
                                         WHERE orders_id = '".(int)$orderId."'
                                               ".$where);
           if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Order tracking not found: %s', $orderId));
+              return $this->errormessage(sprintf('Order tracking not found: %s', $orderId));
           } else {
               while ($order = xtc_db_fetch_array($order_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_ORDERS_TRACKING." 
@@ -385,7 +385,7 @@
                                                 FROM ".TABLE_ORDERS_STATUS."
                                                WHERE orders_status_id = '".(int)$orderStatusId."'");
           if (xtc_db_num_rows($order_status_query) < 1) {
-              $this->errormessage(sprintf('Order Status not found: %s', $orderStatusId));
+              return $this->errormessage(sprintf('Order Status not found: %s', $orderStatusId));
           } else {
               //delete
               xtc_db_query("DELETE FROM ".TABLE_ORDERS_STATUS." WHERE orders_status_id = '".(int)$orderStatusId."'");

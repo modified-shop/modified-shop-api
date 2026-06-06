@@ -43,7 +43,7 @@
                                           FROM ".TABLE_PRODUCTS_OPTIONS."
                                          WHERE products_options_id = '".(int)$optionId."'");
           if (xtc_db_num_rows($option_query) < 1) {
-              $this->errormessage(sprintf('Option not found: %s', $optionId));
+              return $this->errormessage(sprintf('Option not found: %s', $optionId));
           } else {
               $options_query = xtc_db_query("SELECT po.*,
                                                     l.code
@@ -83,7 +83,7 @@
           ];
           
           if ($count['total'] < 1) {
-              $this->errormessage('no Options found');
+              return $this->errormessage('no Options found');
           }
           
           $data = [];
@@ -136,7 +136,7 @@
                                          FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
                                         WHERE products_options_values_id = '".(int)$valueId."'");
           if (xtc_db_num_rows($value_query) < 1) {
-              $this->errormessage(sprintf('Value not found: %s', $valueId));
+              return $this->errormessage(sprintf('Value not found: %s', $valueId));
           } else {
               $values_query = xtc_db_query("SELECT pov.*,
                                                    l.code
@@ -176,7 +176,7 @@
           ];
           
           if ($count['total'] < 1) {
-              $this->errormessage('no Values found');
+              return $this->errormessage('no Values found');
           }
           
           $data = [];
@@ -227,7 +227,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              $this->errormessage('no Attributes found');
+              return $this->errormessage('no Attributes found');
           }
           
           $data = [];

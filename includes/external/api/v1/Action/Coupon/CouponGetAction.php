@@ -42,7 +42,7 @@
                                           FROM ".TABLE_COUPONS."
                                          WHERE coupon_id = '".(int)$couponId."'");
           if (xtc_db_num_rows($coupon_query) < 1) {
-              $this->errormessage(sprintf('Coupon not found: %s', $couponId));
+              return $this->errormessage(sprintf('Coupon not found: %s', $couponId));
           } else {
               // disable Exception
               $this->throw_exception = false;
@@ -101,7 +101,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              $this->errormessage('no Coupon found');
+              return $this->errormessage('no Coupon found');
           }
           
           $data = [];
@@ -176,7 +176,7 @@
                                           FROM ".TABLE_COUPONS."
                                          WHERE coupon_id = '".(int)$couponId."'");
           if (xtc_db_num_rows($coupon_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Coupon not found: %s', $couponId));
+              return $this->errormessage(sprintf('Coupon not found: %s', $couponId));
           } else {
               $coupon = xtc_db_fetch_array($coupon_query);
           }
@@ -205,7 +205,7 @@
                                             FROM ".TABLE_COUPONS_DESCRIPTION."
                                            WHERE coupon_id = '".(int)$couponId."'");
           if (xtc_db_num_rows($coupon_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Coupon description not found: %s', $couponId));
+              return $this->errormessage(sprintf('Coupon description not found: %s', $couponId));
           } else {
               $description = [];
               $coupon_description_query = xtc_db_query("SELECT cd.*,

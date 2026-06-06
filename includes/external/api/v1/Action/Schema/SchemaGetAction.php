@@ -41,7 +41,7 @@
           $schema = [];
           $schema_query = xtc_db_query("SHOW TABLES LIKE '".xtc_db_input($table)."'");
           if (xtc_db_num_rows($schema_query) < 1) {
-              $this->errormessage(sprintf('Table not found: %s', $table));
+              return $this->errormessage(sprintf('Table not found: %s', $table));
           } else {
               $schema = $this->getDefaultTableInfo($table);
           }

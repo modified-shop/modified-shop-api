@@ -42,7 +42,7 @@
                                            FROM ".TABLE_CONTENT_MANAGER."
                                           WHERE content_group = '".(int)$contentGroupId."'");
           if (xtc_db_num_rows($content_query) < 1) {
-              $this->errormessage(sprintf('Content Group not found: %s', $contentGroupId));
+              return $this->errormessage(sprintf('Content Group not found: %s', $contentGroupId));
           } else {
               // disable Exception
               $this->throw_exception = false;
@@ -125,7 +125,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              $this->errormessage('no Content found');
+              return $this->errormessage('no Content found');
           }
           
           $data = [];
@@ -181,7 +181,7 @@
                                                 ON l.languages_id = cm.languages_id
                                           WHERE cm.content_group = '".(int)$contentGroupId."'");
           if (xtc_db_num_rows($content_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Content Group not found: %s', $contentGroupId));
+              return $this->errormessage(sprintf('Content Group not found: %s', $contentGroupId));
           } else {
               $data = [];
               while ($content = xtc_db_fetch_array($content_query)) {
@@ -217,7 +217,7 @@
                                            FROM ".TABLE_CONTENT_MANAGER_CONTENT."
                                           WHERE content_manager_id = '".(int)$contentGroupId."'");
           if (xtc_db_num_rows($content_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Content Group not found: %s', $contentGroupId));
+              return $this->errormessage(sprintf('Content Group not found: %s', $contentGroupId));
           } else {
               $data = [];
               $content_query = xtc_db_query("SELECT cmc.*,
@@ -257,7 +257,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              $this->errormessage('no File Flag found');
+              return $this->errormessage('no File Flag found');
           }
           
           $data = [];

@@ -42,7 +42,7 @@
                                                 FROM ".TABLE_MANUFACTURERS."
                                                WHERE manufacturers_id = '".(int)$manufacturerId."'");
           if (xtc_db_num_rows($manufacturer_query) < 1) {
-              $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
+              return $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
           } else {
               // disable Exception
               $this->throw_exception = false;
@@ -121,7 +121,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              $this->errormessage('no Manufacturer found');
+              return $this->errormessage('no Manufacturer found');
           }
           
           $data = [];
@@ -174,7 +174,7 @@
                                                 FROM ".TABLE_MANUFACTURERS."
                                                WHERE manufacturers_id = '".(int)$manufacturerId."'");
           if (xtc_db_num_rows($manufacturer_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
+              return $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
           } else {
               $manufacturer = xtc_db_fetch_array($manufacturer_query);
           }
@@ -204,7 +204,7 @@
                                                 FROM ".TABLE_MANUFACTURERS_INFO."
                                                WHERE manufacturers_id = '".(int)$manufacturerId."'");
           if (xtc_db_num_rows($manufacturer_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Manufacturer description not found: %s', $manufacturerId));
+              return $this->errormessage(sprintf('Manufacturer description not found: %s', $manufacturerId));
           } else {
               $manufacturers_description_query = xtc_db_query("SELECT mi.*,
                                                                       l.code
@@ -245,7 +245,7 @@
                                                 FROM ".TABLE_PRODUCTS."
                                                WHERE manufacturers_id = '".(int)$manufacturerId."'");
           if (xtc_db_num_rows($manufacturer_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Manufacturer products not found: %s', $manufacturerId));
+              return $this->errormessage(sprintf('Manufacturer products not found: %s', $manufacturerId));
           } else {
               $manufacturers_products_query = xtc_db_query("SELECT products_id,
                                                                    manufacturers_id

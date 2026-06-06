@@ -42,7 +42,7 @@
                                             FROM ".TABLE_CUSTOMERS."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1) {
-              $this->errormessage(sprintf('Customer not found: %s', $customerId));
+              return $this->errormessage(sprintf('Customer not found: %s', $customerId));
           } else {
               // disable Exception
               $this->throw_exception = false;
@@ -81,7 +81,7 @@
                                             FROM ".TABLE_CUSTOMERS_INFO."
                                            WHERE customers_info_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Customer info not found: %s', $customerId));
+              return $this->errormessage(sprintf('Customer info not found: %s', $customerId));
           } else {
               xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_INFO." 
                                   WHERE customers_info_id = '".(int)$customerId."'");
@@ -115,7 +115,7 @@
                                            WHERE customers_id = '".(int)$customerId."'
                                                  ".$where);
           if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Customer ip not found: %s', $customerId));
+              return $this->errormessage(sprintf('Customer ip not found: %s', $customerId));
           } else {
               while ($customer = xtc_db_fetch_array($customer_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_IP." 
@@ -171,7 +171,7 @@
                                            WHERE customers_id = '".(int)$customerId."'
                                                  ".$where);
           if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Customer memo not found: %s', $customerId));
+              return $this->errormessage(sprintf('Customer memo not found: %s', $customerId));
           } else {
               while ($customer = xtc_db_fetch_array($customer_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_MEMO." 
@@ -227,7 +227,7 @@
                                            WHERE customers_id = '".(int)$customerId."'
                                                  ".$where);
           if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Customer status history not found: %s', $customerId));
+              return $this->errormessage(sprintf('Customer status history not found: %s', $customerId));
           } else {
               while ($customer = xtc_db_fetch_array($customer_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_STATUS_HISTORY." 
@@ -283,7 +283,7 @@
                                            WHERE customers_id = '".(int)$customerId."'
                                                  ".$where);
           if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Customer address book not found: %s', $customerId));
+              return $this->errormessage(sprintf('Customer address book not found: %s', $customerId));
           } else {
               while ($customer = xtc_db_fetch_array($customer_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_ADDRESS_BOOK." 
@@ -339,7 +339,7 @@
                                            WHERE customers_id = '".(int)$customerId."'
                                                  ".$where);
           if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Customer basket not found: %s', $customerId));
+              return $this->errormessage(sprintf('Customer basket not found: %s', $customerId));
           } else {
               while ($customer = xtc_db_fetch_array($customer_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_BASKET." 
@@ -399,7 +399,7 @@
                                            WHERE customers_id = '".(int)$customerId."'
                                                  ".$where);
           if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Customer wishlist not found: %s', $customerId));
+              return $this->errormessage(sprintf('Customer wishlist not found: %s', $customerId));
           } else {
               while ($customer = xtc_db_fetch_array($customer_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_CUSTOMERS_WISHLIST." 

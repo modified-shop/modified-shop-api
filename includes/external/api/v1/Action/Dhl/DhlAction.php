@@ -44,7 +44,7 @@
           $order = new \order($orderId);
 
           if (!isset($order->info['orders_id'])) {
-              $this->errormessage(sprintf('Order not found: %s', $orderId));
+              return $this->errormessage(sprintf('Order not found: %s', $orderId));
           }
           
           $this->options = [
@@ -72,7 +72,7 @@
           $response = $dhl->CreateLabel($orderId);
 
           if (is_array($response) && isset($response['message'])) {
-              $this->errormessage($response['message'], 400);
+              return $this->errormessage($response['message'], 400);
           }
 
           $result_query = xtc_db_query("SELECT *
@@ -104,7 +104,7 @@
           $order = new \order($orderId);
 
           if (!isset($order->info['orders_id'])) {
-              $this->errormessage(sprintf('Order not found: %s', $orderId));
+              return $this->errormessage(sprintf('Order not found: %s', $orderId));
           }
 
           /* Store passed in options overwriting any defaults */
@@ -125,14 +125,14 @@
           $result = xtc_db_fetch_array($result_query);
 
           if (count($result) < 1) {
-              $this->errormessage(sprintf('Tracking not found'));
+              return $this->errormessage(sprintf('Tracking not found'));
           }
                     
           $dhl = new \DHLBusinessShipment(array());
           $response = $dhl->DeleteLabel($result['parcel_id']);
 
           if (is_array($response) && isset($response['message'])) {
-              $this->errormessage($response['message'], 400);
+              return $this->errormessage($response['message'], 400);
           }
           
           xtc_db_query("DELETE FROM ".TABLE_ORDERS_TRACKING." 

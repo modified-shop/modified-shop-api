@@ -77,7 +77,7 @@
                                                 FROM ".TABLE_CUSTOMERS."
                                                WHERE customers_id = '".(int)$customerId."'");
               if (xtc_db_num_rows($customer_query) < 1) {
-                  $this->errormessage(sprintf('Customer not found: %s', $customerId));
+                  return $this->errormessage(sprintf('Customer not found: %s', $customerId));
               } else {
                   $customer = xtc_db_fetch_array($customer_query);
                   $customer['customers_last_modified'] = 'now()';
@@ -130,7 +130,7 @@
                                             FROM ".TABLE_CUSTOMERS."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1) {
-              $this->errormessage(sprintf('Customer not found: %s', $customerId));
+              return $this->errormessage(sprintf('Customer not found: %s', $customerId));
           } else {
               $customers_info_query = xtc_db_query("SELECT *
                                                       FROM ".TABLE_CUSTOMERS_INFO."
@@ -198,7 +198,7 @@
                                             FROM ".TABLE_CUSTOMERS."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1) {
-              $this->errormessage(sprintf('Customer not found: %s', $customerId));
+              return $this->errormessage(sprintf('Customer not found: %s', $customerId));
           } else {
               if ($memoId > 0) {     
                   $action = 'update';
@@ -207,7 +207,7 @@
                                                          WHERE customers_id = '".(int)$customerId."'
                                                            AND memo_id = '".(int)$memoId."'");
                   if (xtc_db_num_rows($customers_memo_query) < 1) {
-                      $this->errormessage(sprintf('Customer Memo Id not found: %s', $memoId));
+                      return $this->errormessage(sprintf('Customer Memo Id not found: %s', $memoId));
                   } else {
                       $customers_memo = xtc_db_fetch_array($customers_memo_query);
                   }
@@ -272,7 +272,7 @@
                                             FROM ".TABLE_CUSTOMERS."
                                            WHERE customers_id = '".(int)$customerId."'");
           if (xtc_db_num_rows($customer_query) < 1) {
-              $this->errormessage(sprintf('Customer not found: %s', $customerId));
+              return $this->errormessage(sprintf('Customer not found: %s', $customerId));
           } else {
               $where = '';
               if ($addressBookId > 0) {     
@@ -281,7 +281,7 @@
                                                        WHERE customers_id = '".(int)$customerId."'
                                                          AND address_book_id = '".(int)$addressBookId."'");
                   if (xtc_db_num_rows($address_book_query) < 1) {
-                      $this->errormessage(sprintf('Address book Id not found: %s', $addressBookId));
+                      return $this->errormessage(sprintf('Address book Id not found: %s', $addressBookId));
                   } else {
                       $action = 'update';
                       $address_book = xtc_db_fetch_array($address_book_query);

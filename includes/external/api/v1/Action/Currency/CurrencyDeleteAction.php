@@ -42,7 +42,7 @@
                                             FROM ".TABLE_CURRENCIES."
                                            WHERE currencies_id = '".(int)$currencyId."'");
           if (xtc_db_num_rows($currency_query) < 1) {
-            throw new Exception(sprintf('Currency not found: %s', $currencyId));
+              return $this->errormessage(sprintf('Currency not found: %s', $currencyId));
           } else {
               //delete
               xtc_db_query("DELETE FROM ".TABLE_CURRENCIES." WHERE currencies_id = '".(int)$currencyId."'");

@@ -42,7 +42,7 @@
                                                  FROM ".TABLE_CONFIGURATION."
                                                 WHERE configuration_group_id = '".(int)$configurationGroupId."'");
           if (xtc_db_num_rows($configuration_query) < 1) {
-              $this->errormessage(sprintf('Configuration Group not found: %s', $configurationGroupId));
+              return $this->errormessage(sprintf('Configuration Group not found: %s', $configurationGroupId));
           } else {
               $data = [];
               while ($configuration = xtc_db_fetch_array($configuration_query)) {
@@ -77,7 +77,7 @@
                                                  FROM ".TABLE_CONFIGURATION_GROUP."
                                                 WHERE configuration_group_id = '".(int)$configurationGroupId."'");
           if (xtc_db_num_rows($configuration_query) < 1) {
-              $this->errormessage(sprintf('Configuration Group not found: %s', $configurationGroupId));
+              return $this->errormessage(sprintf('Configuration Group not found: %s', $configurationGroupId));
           } else {
               $configuration = xtc_db_fetch_array($configuration_query);
 
@@ -134,7 +134,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              $this->errormessage('no Configuration found');
+              return $this->errormessage('no Configuration found');
           }
           
           $data = [];

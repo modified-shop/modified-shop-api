@@ -42,7 +42,7 @@
                                             FROM ".TABLE_CAMPAIGNS."
                                            WHERE campaigns_id = '".(int)$campaignId."'");
           if (xtc_db_num_rows($campaign_query) < 1) {
-            $this->errormessage(sprintf('Campaign not found: %s', $campaignId));
+            return $this->errormessage(sprintf('Campaign not found: %s', $campaignId));
           } else {
               //delete
               xtc_db_query("DELETE FROM ".TABLE_CAMPAIGNS." WHERE campaigns_id = '".(int)$campaignId."'");

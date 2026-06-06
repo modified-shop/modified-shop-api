@@ -201,7 +201,7 @@
                                                    WHERE products_options_id = '".(int)$optionId."'
                                                      AND products_options_values_id = '".(int)$this->options['products_options_values_id']."'");
               if (xtc_db_num_rows($option_value_query) > 0) {
-                  $this->errormessage('Value ID already exists', 400);
+                  return $this->errormessage('Value ID already exists', 400);
               } else {
                   $option = $this->getDefaultTableValues(TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS);
                   $option['products_options_id'] = $optionId;

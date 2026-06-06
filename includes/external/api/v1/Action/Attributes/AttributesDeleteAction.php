@@ -42,7 +42,7 @@
                                           FROM ".TABLE_PRODUCTS_OPTIONS."
                                          WHERE products_options_id = '".(int)$optionId."'");
           if (xtc_db_num_rows($option_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Option not found: %s', $optionId));
+              return $this->errormessage(sprintf('Option not found: %s', $optionId));
           } else {
               xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_OPTIONS." 
                                   WHERE products_options_id = '".(int)$optionId."'");
@@ -72,7 +72,7 @@
                                          FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
                                         WHERE products_options_values_id = '".(int)$valueId."'");
           if (xtc_db_num_rows($value_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Option value not found: %s', $valueId));
+              return $this->errormessage(sprintf('Option value not found: %s', $valueId));
           } else {
               xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_OPTIONS_VALUES." 
                                   WHERE products_options_values_id = '".(int)$valueId."'");
@@ -109,7 +109,7 @@
                                              WHERE products_options_id = '".(int)$optionId."'
                                                    ".$where);
           if (xtc_db_num_rows($attributes_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Option value not found: %s', $optionId));
+              return $this->errormessage(sprintf('Option value not found: %s', $optionId));
           } else {
               while ($attributes = xtc_db_fetch_array($attributes_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS." 

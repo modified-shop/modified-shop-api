@@ -42,21 +42,21 @@
                                             FROM ".TABLE_CATEGORIES."
                                            WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($category_query) < 1) {
-              $this->errormessage(sprintf('Category not found: %s', $categoryId));
+              return $this->errormessage(sprintf('Category not found: %s', $categoryId));
           } else {
               $subcategories_query = xtc_db_query("SELECT *
                                                      FROM ".TABLE_CATEGORIES."
                                                     WHERE parent_id = '".(int)$categoryId."'");
               $count = xtc_db_num_rows($subcategories_query);
               if ($count > 0) {
-                  $this->errormessage(sprintf('Category can not get deleted due to connected categories: %s', $count), 400);
+                  return $this->errormessage(sprintf('Category can not get deleted due to connected categories: %s', $count), 400);
               } else {
                   $products_query = xtc_db_query("SELECT *
                                                     FROM ".TABLE_PRODUCTS_TO_CATEGORIES." 
                                                    WHERE categories_id = '".(int)$categoryId."'");
                   $count = xtc_db_num_rows($products_query);
                   if ($count > 0) {
-                      $this->errormessage(sprintf('Category can not get deleted due to connected products: %s', $count), 400);
+                      return $this->errormessage(sprintf('Category can not get deleted due to connected products: %s', $count), 400);
                   } else {
                       // disable Exception
                       $this->throw_exception = false;
@@ -100,7 +100,7 @@
                                            WHERE categories_id = '".(int)$categoryId."'
                                                  ".$where);
           if (xtc_db_num_rows($category_query) < 1 && $this->throw_exception === true) {
-              $this->errormessage(sprintf('Category products not found: %s', $categoryId));
+              return $this->errormessage(sprintf('Category products not found: %s', $categoryId));
           } else {
               while ($category = xtc_db_fetch_array($category_query)) {
                   xtc_db_query("DELETE FROM ".TABLE_PRODUCTS_TO_CATEGORIES." 
@@ -149,7 +149,7 @@
                                             FROM ".TABLE_CATEGORIES."
                                            WHERE categories_id = '".(int)$categoryId."'");
           if (xtc_db_num_rows($category_query) < 1) {
-              $this->errormessage(sprintf('Category not found: %s', $categoryId));
+              return $this->errormessage(sprintf('Category not found: %s', $categoryId));
           } else {
               $category_image_query = xtc_db_query("SELECT *
                                                       FROM ".TABLE_CATEGORIES." 

@@ -93,7 +93,7 @@
                                                 FROM ".TABLE_PRODUCTS."
                                                WHERE products_id = '".(int)$productId."'");
               if (xtc_db_num_rows($products_query) < 1) {
-                  $this->errormessage(sprintf('Product not found: %s', $productId));
+                  return $this->errormessage(sprintf('Product not found: %s', $productId));
               } else {
                   $products = xtc_db_fetch_array($products_query);
                   $products['products_last_modified'] = 'now()';
@@ -146,7 +146,7 @@
                                             FROM ".TABLE_PRODUCTS."
                                            WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($products_query) < 1) {
-              $this->errormessage(sprintf('Product not found: %s', $productId));
+              return $this->errormessage(sprintf('Product not found: %s', $productId));
           } else {
               $languages_query = xtc_db_query("SELECT *
                                                  FROM ".TABLE_LANGUAGES);
@@ -204,7 +204,7 @@
                                             FROM ".TABLE_PRODUCTS."
                                            WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($products_query) < 1) {
-              $this->errormessage(sprintf('Product not found: %s', $productId));
+              return $this->errormessage(sprintf('Product not found: %s', $productId));
           } else {
               if (!isset($this->options['categories_id'])) {
                   throw new Exception(sprintf('Category ID required'));
@@ -257,7 +257,7 @@
                                            FROM ".TABLE_PRODUCTS."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1) {
-              $this->errormessage(sprintf('Product not found: %s', $productId));
+              return $this->errormessage(sprintf('Product not found: %s', $productId));
           } else {
               define('_VALID_XTC', true);
 
@@ -309,7 +309,7 @@
                                             FROM ".TABLE_PRODUCTS."
                                            WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($products_query) < 1) {
-              $this->errormessage(sprintf('Product not found: %s', $productId));
+              return $this->errormessage(sprintf('Product not found: %s', $productId));
           } else {
               define('_VALID_XTC', true);
 
@@ -400,7 +400,7 @@
                                            FROM ".TABLE_PRODUCTS_IMAGES."
                                           WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($product_query) < 1 && $this->Exception === true) {
-              $this->errormessage(sprintf('Product images not found: %s', $productId));
+              return $this->errormessage(sprintf('Product images not found: %s', $productId));
           } else {
               $languages_query = xtc_db_query("SELECT *
                                                  FROM ".TABLE_LANGUAGES);
@@ -460,7 +460,7 @@
                                             FROM ".TABLE_PRODUCTS."
                                            WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($products_query) < 1) {
-              $this->errormessage(sprintf('Product not found: %s', $productId));
+              return $this->errormessage(sprintf('Product not found: %s', $productId));
           } else {
               if (!isset($this->options['xsell_id'])) {
                   throw new Exception(sprintf('Xsell ID required'));
@@ -517,7 +517,7 @@
                                             FROM ".TABLE_PRODUCTS."
                                            WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($products_query) < 1) {
-              $this->errormessage(sprintf('Product not found: %s', $productId));
+              return $this->errormessage(sprintf('Product not found: %s', $productId));
           } else {
               if (!isset($this->options['options_id']) || !isset($this->options['options_values_id'])) {
                   throw new Exception('Options ID and Options Values ID required');
@@ -526,14 +526,14 @@
                                                    FROM ".TABLE_PRODUCTS_OPTIONS."
                                                   WHERE products_options_id = '".(int)$this->options['options_id']."'");
                   if (xtc_db_num_rows($options_query) < 1) {
-                      $this->errormessage('Options ID invalid', 400);
+                      return $this->errormessage('Options ID invalid', 400);
                   }
                   
                   $values_query = xtc_db_query("SELECT *
                                                   FROM ".TABLE_PRODUCTS_OPTIONS_VALUES."
                                                  WHERE products_options_values_id = '".(int)$this->options['options_values_id']."'");
                   if (xtc_db_num_rows($values_query) < 1) {
-                      $this->errormessage('Options Values ID invalid', 400);
+                      return $this->errormessage('Options Values ID invalid', 400);
                   }
 
                   $options_values_query = xtc_db_query("SELECT *
@@ -541,7 +541,7 @@
                                                          WHERE products_options_id = '".(int)$this->options['options_id']."'
                                                            AND products_options_values_id = '".(int)$this->options['options_values_id']."'");
                   if (xtc_db_num_rows($options_values_query) < 1) {
-                      $this->errormessage('Options ID and Options Values ID invalid', 400);
+                      return $this->errormessage('Options ID and Options Values ID invalid', 400);
                   }
                   
                   $where = '';
@@ -552,7 +552,7 @@
                                                          WHERE products_id = '".(int)$productId."'
                                                                ".$where);
                       if (xtc_db_num_rows($attributes_query) < 1) {
-                          $this->errormessage('Attributes ID invalid', 400);
+                          return $this->errormessage('Attributes ID invalid', 400);
                       } else {
                           $action = 'update';
                           $attributes = xtc_db_fetch_array($attributes_query);
@@ -602,7 +602,7 @@
                                             FROM ".TABLE_PRODUCTS."
                                            WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($products_query) < 1) {
-              $this->errormessage(sprintf('Product not found: %s', $productId));
+              return $this->errormessage(sprintf('Product not found: %s', $productId));
           } else {
               if (!isset($this->options['options_id']) || !isset($this->options['values_id'])) {
                   throw new Exception('Options ID and Values ID required');
@@ -611,7 +611,7 @@
                                                    FROM ".TABLE_PRODUCTS_TAGS_OPTIONS."
                                                   WHERE options_id = '".(int)$this->options['options_id']."'");
                   if (xtc_db_num_rows($options_query) < 1) {
-                      $this->errormessage('Options ID invalid', 400);
+                      return $this->errormessage('Options ID invalid', 400);
                   }
                   
                   $values_query = xtc_db_query("SELECT *
@@ -619,7 +619,7 @@
                                                  WHERE options_id = '".(int)$this->options['options_id']."'
                                                    AND values_id = '".(int)$this->options['values_id']."'");
                   if (xtc_db_num_rows($values_query) < 1) {
-                      $this->errormessage('Values ID invalid', 400);
+                      return $this->errormessage('Values ID invalid', 400);
                   }
                   
                   $where = '';
@@ -630,7 +630,7 @@
                                                    WHERE products_id = '".(int)$productId."'
                                                          ".$where);
                       if (xtc_db_num_rows($tags_query) < 1) {
-                          $this->errormessage('Tags ID invalid', 400);
+                          return $this->errormessage('Tags ID invalid', 400);
                       } else {
                           $action = 'update';
                           $tags = xtc_db_fetch_array($tags_query);
@@ -680,7 +680,7 @@
                                             FROM ".TABLE_PRODUCTS."
                                            WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($products_query) < 1) {
-              $this->errormessage(sprintf('Product not found: %s', $productId));
+              return $this->errormessage(sprintf('Product not found: %s', $productId));
           } else {
               $languages_query = xtc_db_query("SELECT *
                                                  FROM ".TABLE_LANGUAGES);
@@ -694,7 +694,7 @@
                                                       WHERE products_id = '".(int)$productId."'
                                                             ".$where);
                       if (xtc_db_num_rows($content_query) < 1) {
-                          $this->errormessage('Content ID invalid', 400);
+                          return $this->errormessage('Content ID invalid', 400);
                       } else {
                           $action = 'update';
                           $content = xtc_db_fetch_array($content_query);
@@ -763,7 +763,7 @@
                                             FROM ".TABLE_PRODUCTS."
                                            WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($products_query) < 1) {
-              $this->errormessage(sprintf('Product not found: %s', $productId));
+              return $this->errormessage(sprintf('Product not found: %s', $productId));
           } else {
               $where = '';
               if (isset($this->options['specials_id'])) {
@@ -773,7 +773,7 @@
                                                    WHERE products_id = '".(int)$productId."'
                                                          ".$where);
                   if (xtc_db_num_rows($specials_query) < 1) {
-                      $this->errormessage('Specials ID invalid', 400);
+                      return $this->errormessage('Specials ID invalid', 400);
                   } else {
                       $action = 'update';
                       $specials = xtc_db_fetch_array($specials_query);
@@ -824,7 +824,7 @@
                                             FROM ".TABLE_PRODUCTS."
                                            WHERE products_id = '".(int)$productId."'");
           if (xtc_db_num_rows($products_query) < 1) {
-              $this->errormessage(sprintf('Product not found: %s', $productId));
+              return $this->errormessage(sprintf('Product not found: %s', $productId));
           } else {
               if (!isset($this->options['status_id'])) {
                   throw new Exception('Status ID required');
@@ -837,7 +837,7 @@
                                                              WHERE products_id = '".(int)$productId."'
                                                                    ".$where);
                       if (xtc_db_num_rows($personal_offer_query) < 1) {
-                          $this->errormessage('Price ID invalid', 400);
+                          return $this->errormessage('Price ID invalid', 400);
                       } else {
                           $action = 'update';
                           $personal_offer = xtc_db_fetch_array($personal_offer_query);

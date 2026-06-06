@@ -42,7 +42,7 @@
                                            FROM ".TABLE_CARRIERS."
                                           WHERE carrier_id = '".(int)$carrierId."'");
           if (xtc_db_num_rows($carrier_query) < 1) {
-              $this->errormessage(sprintf('Carrier not found: %s', $carrierId));
+              return $this->errormessage(sprintf('Carrier not found: %s', $carrierId));
           } else {
               $carrier = xtc_db_fetch_array($carrier_query);
           }
@@ -68,7 +68,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              $this->errormessage('no Carrier found');
+              return $this->errormessage('no Carrier found');
           }
           
           $data = [];
@@ -122,7 +122,7 @@
                                                         ON l.languages_id = ss.language_id
                                                   WHERE ss.shipping_status_id = '".(int)$shippingStatusId."'");
           if (xtc_db_num_rows($shipping_status_query) < 1) {
-              $this->errormessage(sprintf('Shipping Status not found: %s', $shippingStatusId));
+              return $this->errormessage(sprintf('Shipping Status not found: %s', $shippingStatusId));
           } else {
               $shipping = [];
               while ($shipping_status = xtc_db_fetch_array($shipping_status_query)) {
@@ -154,7 +154,7 @@
           $count = xtc_db_fetch_array($count_query);
           
           if ($count['total'] < 1) {
-              $this->errormessage('no Shipping Status found');
+              return $this->errormessage('no Shipping Status found');
           }
           
           $data = [];

@@ -77,7 +77,7 @@
                                                  FROM ".TABLE_MANUFACTURERS."
                                                 WHERE manufacturers_id = '".(int)$manufacturerId."'");
           if (xtc_db_num_rows($manufacturers_query) < 1) {
-              $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
+              return $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
           } else {
               if (isset($this->options[TABLE_MANUFACTURERS])) {
                   $manufacturers = $this->InsertUpdateManufacturer($manufacturerId, $this->options[TABLE_MANUFACTURERS]);
@@ -88,7 +88,7 @@
                                                  FROM ".TABLE_MANUFACTURERS_INFO."
                                                 WHERE manufacturers_id = '".(int)$manufacturerId."'");
           if (xtc_db_num_rows($manufacturers_query) < 1) {
-              $this->errormessage(sprintf('Manufacturer description not found: %s', $manufacturerId));
+              return $this->errormessage(sprintf('Manufacturer description not found: %s', $manufacturerId));
           } else {
               if (isset($this->options[TABLE_MANUFACTURERS_INFO])) {
                   $manufacturers_description = $this->InsertUpdateDescription($manufacturerId, $this->options[TABLE_MANUFACTURERS_INFO]);
@@ -117,7 +117,7 @@
                                                      FROM ".TABLE_MANUFACTURERS."
                                                     WHERE manufacturers_id = '".(int)$manufacturerId."'");
               if (xtc_db_num_rows($manufacturers_query) < 1) {
-                  $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
+                  return $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
               } else {
                   $manufacturers = xtc_db_fetch_array($manufacturers_query);
                   $manufacturers['last_modified'] = 'now()';
@@ -170,7 +170,7 @@
                                                  FROM ".TABLE_MANUFACTURERS."
                                                 WHERE manufacturers_id = '".(int)$manufacturerId."'");
           if (xtc_db_num_rows($manufacturers_query) < 1) {
-              $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
+              return $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
           } else {
               $languages_query = xtc_db_query("SELECT *
                                                  FROM ".TABLE_LANGUAGES);
@@ -228,7 +228,7 @@
                                                  FROM ".TABLE_MANUFACTURERS."
                                                 WHERE manufacturers_id = '".(int)$manufacturerId."'");
           if (xtc_db_num_rows($manufacturers_query) < 1) {
-              $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
+              return $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
           } else {
               if (!isset($this->options['products_id'])) {
                   throw new Exception(sprintf('Product ID required'));
@@ -262,7 +262,7 @@
                                                 FROM ".TABLE_MANUFACTURERS."
                                                WHERE manufacturers_id = '".(int)$manufacturerId."'");
           if (xtc_db_num_rows($manufacturer_query) < 1) {
-              $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
+              return $this->errormessage(sprintf('Manufacturer not found: %s', $manufacturerId));
           } else {
               define('_VALID_XTC', true);
 
