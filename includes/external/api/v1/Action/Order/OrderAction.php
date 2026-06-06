@@ -404,6 +404,7 @@
                   $action = 'insert';
                   $order_status_history = $this->getDefaultTableValues(TABLE_ORDERS_STATUS_HISTORY);
                   $order_status_history['orders_id'] = (int)$orderId;
+                  $order_status_history['date_added'] = 'now()';
               }
 
               if (isset($this->options['orders_status_id'])) {
