@@ -85,6 +85,9 @@
               // dhl
               include __DIR__ . '/dhl.php';
 
+              // schema
+              include __DIR__ . '/schema.php';
+
           }
       )->add(JwtAuthentication::class);
   };
