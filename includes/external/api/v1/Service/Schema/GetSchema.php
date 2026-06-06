@@ -94,7 +94,7 @@
       ): ResponseInterface {
           $this->CheckAccess($request, $response);
 
-          $table = (int)$args['table'];
+          $table = (string)$args['table'];
           
           $result = $this->schemaAction->GetSchema($table);
 
