@@ -14,16 +14,15 @@
 
 namespace api\v1\Action\Schema;
 
-  use api\v1\Action\BaseAction;
-  use api\v1\Utility\LoggerHandler;
-  use Psr\Log\LoggerInterface;
-  use Exception;
-  
-  /**
-   * Service.
-   */
-  final class SchemaAction extends BaseAction
-  {
-      use SchemaGetAction;
+use api\v1\Action\BaseAction;
+use api\v1\Utility\LoggerHandler;
+use Psr\Log\LoggerInterface;
+use Exception;
 
-  }
+/**
+ * Service.
+ */
+final class SchemaAction extends BaseAction
+{
+    use SchemaGetAction;
+}

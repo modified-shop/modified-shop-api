@@ -14,76 +14,76 @@
 
 namespace api\v1\Service\Tags;
 
-  use api\v1\Service\BaseService;
-  use api\v1\Action\Tags\TagsAction;
-  use api\v1\Utility\Responder;
-  use Psr\Http\Message\ResponseInterface;
-  use Psr\Http\Message\ServerRequestInterface;
-  use OpenApi\Attributes as OA;
+use api\v1\Service\BaseService;
+use api\v1\Action\Tags\TagsAction;
+use api\v1\Utility\Responder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use OpenApi\Attributes as OA;
 
-  #[OA\Post(
+#[OA\Post(
     path: '/api/v1/tags/options',
     tags: ['Tags'],
     description: 'Insert single option',
     operationId: 'InsertTagsOption',
     responses:[
-      new OA\Response(
-        response: 201, 
-        description: 'options data',
-      )
+        new OA\Response(
+            response: 201,
+            description: 'options data',
+        )
     ],
     security: [
-      ['modified_auth' => ['InsertOption']]
+        ['modified_auth' => ['InsertOption']]
     ]
-  )]
+)]
 
-  final class InsertOption extends BaseService
-  {
-      /**
-       * @var TagsAction
-       */
-      private $tagsAction;
+final class InsertOption extends BaseService
+{
+    /**
+     * @var TagsAction
+     */
+    private $tagsAction;
 
-      /**
-       * @var Responder
-       */
-      private $responder;
+    /**
+     * @var Responder
+     */
+    private $responder;
 
-      /**
-       * The constructor.
-       *
-       * @param TagsAction $tagsAction The customer reader
-       * @param Responder $responder The responder
-       */
-      public function __construct(TagsAction $tagsAction, Responder $responder)
-      {
-          $this->tagsAction = $tagsAction;
-          $this->responder = $responder;
-      }
+    /**
+     * The constructor.
+     *
+     * @param TagsAction $tagsAction The customer reader
+     * @param Responder $responder The responder
+     */
+    public function __construct(TagsAction $tagsAction, Responder $responder)
+    {
+        $this->tagsAction = $tagsAction;
+        $this->responder = $responder;
+    }
 
-      /**
-       * Invoke.
-       *
-       * @param ServerRequestInterface $request The request
-       * @param ResponseInterface $response The response
-       * @param array<mixed> $args The route arguments
-       *
-       * @return ResponseInterface The response
-       */
-      public function __invoke(
-          ServerRequestInterface $request,
-          ResponseInterface $response,
-          array $args
-      ): ResponseInterface {
-          $this->CheckAccess($request, $response);
+    /**
+     * Invoke.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array<mixed> $args The route arguments
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        $this->CheckAccess($request, $response);
 
-          $data = (array)$request->getParsedBody();
-                    
-          $result = $this->tagsAction->InsertOption($data);
+        $data = (array)$request->getParsedBody();
 
-          if (isset($result['errormessage'])) {
-              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
-          }
-          return $this->responder->withJson($response, $result);
-      }
-  }
+        $result = $this->tagsAction->InsertOption($data);
+
+        if (isset($result['errormessage'])) {
+            return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+        }
+        return $this->responder->withJson($response, $result);
+    }
+}

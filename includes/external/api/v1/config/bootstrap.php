@@ -13,25 +13,25 @@
  */
 
 use DI\ContainerBuilder;
-  use Slim\App;
+use Slim\App;
 
-  require_once(DIR_FS_EXTERNAL.'Slim/autoload.php');
+require_once(DIR_FS_EXTERNAL . 'Slim/autoload.php');
 
-  $containerBuilder = new ContainerBuilder();
+$containerBuilder = new ContainerBuilder();
 
-  // Add DI container definitions
-  $containerBuilder->addDefinitions(__DIR__ . '/container.php');
+// Add DI container definitions
+$containerBuilder->addDefinitions(__DIR__ . '/container.php');
 
-  // Create DI container instance
-  $container = $containerBuilder->build();
+// Create DI container instance
+$container = $containerBuilder->build();
 
-  // Create Slim App instance
-  $app = $container->get(App::class);
-  
-  // Register routes
-  (require __DIR__ . '/routes.php')($app);
+// Create Slim App instance
+$app = $container->get(App::class);
 
-  // Register middleware
-  (require __DIR__ . '/middleware.php')($app);
+// Register routes
+(require __DIR__ . '/routes.php')($app);
 
-  return $app;
+// Register middleware
+(require __DIR__ . '/middleware.php')($app);
+
+return $app;

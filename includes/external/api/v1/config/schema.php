@@ -13,4 +13,4 @@
  */
 
 // schema
-  $app->get('/schema/{table}',                  \api\v1\Service\Schema\GetSchema::class);
+$app->get('/schema/{table}', \api\v1\Service\Schema\GetSchema::class);

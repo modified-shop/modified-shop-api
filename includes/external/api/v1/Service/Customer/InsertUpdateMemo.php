@@ -14,114 +14,114 @@
 
 namespace api\v1\Service\Customer;
 
-  use api\v1\Service\BaseService;
-  use api\v1\Action\Customer\CustomerAction;
-  use api\v1\Utility\Responder;
-  use Psr\Http\Message\ResponseInterface;
-  use Psr\Http\Message\ServerRequestInterface;
-  use OpenApi\Attributes as OA;
+use api\v1\Service\BaseService;
+use api\v1\Action\Customer\CustomerAction;
+use api\v1\Utility\Responder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use OpenApi\Attributes as OA;
 
-  #[OA\Put(
+#[OA\Put(
     path: '/api/v1/customers/{Id}/memo/{mId}',
     tags: ['Customer'],
     description: 'Update customer memo data by given Id',
     operationId: 'InsertUpdateMemo',
     parameters: [
-      new OA\Parameter(
-        name: 'Id', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
+        new OA\Parameter(
+            name: 'Id',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'customer Id'
         ),
-        description: 'customer Id'
-      ),
-      new OA\Parameter(
-        name: 'mId', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
-        ),
-        description: 'memo Id'
-      )
+        new OA\Parameter(
+            name: 'mId',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'memo Id'
+        )
     ],
     responses: [
-      new OA\Response(
-        response: 201, 
-        description: 'memo data',
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'customer not found'
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'memo not found'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'customer Id required'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'memo Id required'
-      )
+        new OA\Response(
+            response: 201,
+            description: 'memo data',
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'customer not found'
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'memo not found'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'customer Id required'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'memo Id required'
+        )
     ],
     security: [
-      ['modified_auth' => ['InsertUpdateMemo']]
+        ['modified_auth' => ['InsertUpdateMemo']]
     ]
-  )]
+)]
 
-  final class InsertUpdateMemo extends BaseService
-  {
-      /**
-       * @var CustomerAction
-       */
-      private $customerAction;
+final class InsertUpdateMemo extends BaseService
+{
+    /**
+     * @var CustomerAction
+     */
+    private $customerAction;
 
-      /**
-       * @var Responder
-       */
-      private $responder;
+    /**
+     * @var Responder
+     */
+    private $responder;
 
-      /**
-       * The constructor.
-       *
-       * @param CustomerAction $customerAction The customer reader
-       * @param Responder $responder The responder
-       */
-      public function __construct(CustomerAction $customerAction, Responder $responder)
-      {
-          $this->customerAction = $customerAction;
-          $this->responder = $responder;
-      }
+    /**
+     * The constructor.
+     *
+     * @param CustomerAction $customerAction The customer reader
+     * @param Responder $responder The responder
+     */
+    public function __construct(CustomerAction $customerAction, Responder $responder)
+    {
+        $this->customerAction = $customerAction;
+        $this->responder = $responder;
+    }
 
-      /**
-       * Invoke.
-       *
-       * @param ServerRequestInterface $request The request
-       * @param ResponseInterface $response The response
-       * @param array<mixed> $args The route arguments
-       *
-       * @return ResponseInterface The response
-       */
-      public function __invoke(
-          ServerRequestInterface $request,
-          ResponseInterface $response,
-          array $args
-      ): ResponseInterface {
-          $this->CheckAccess($request, $response);
+    /**
+     * Invoke.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array<mixed> $args The route arguments
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        $this->CheckAccess($request, $response);
 
-          $customerId = (int)$args['id'];
-          $memoId = (int)$args['mid'];
-          $data = (array)$request->getParsedBody();
-                    
-          $result = $this->customerAction->InsertUpdateMemo($customerId, $memoId, $data);
+        $customerId = (int)$args['id'];
+        $memoId = (int)$args['mid'];
+        $data = (array)$request->getParsedBody();
 
-          if (isset($result['errormessage'])) {
-              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
-          }
-          return $this->responder->withJson($response, $result);
-      }
-  }
+        $result = $this->customerAction->InsertUpdateMemo($customerId, $memoId, $data);
+
+        if (isset($result['errormessage'])) {
+            return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+        }
+        return $this->responder->withJson($response, $result);
+    }
+}

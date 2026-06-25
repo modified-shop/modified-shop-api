@@ -14,95 +14,95 @@
 
 namespace api\v1\Service\Product;
 
-  use api\v1\Service\BaseService;
-  use api\v1\Action\Product\ProductAction;
-  use api\v1\Utility\Responder;
-  use Psr\Http\Message\ResponseInterface;
-  use Psr\Http\Message\ServerRequestInterface;
-  use OpenApi\Attributes as OA;
+use api\v1\Service\BaseService;
+use api\v1\Action\Product\ProductAction;
+use api\v1\Utility\Responder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use OpenApi\Attributes as OA;
 
-  #[OA\Get(
+#[OA\Get(
     path: '/api/v1/products/{Id}/categories',
     tags: ['Product'],
     description: 'Get products categories data by given Id',
     operationId: 'GetProductDescription',
     parameters: [
-      new OA\Parameter(
-        name: 'Id', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
-        ),
-        description: 'product Id'
-      )
+        new OA\Parameter(
+            name: 'Id',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'product Id'
+        )
     ],
     responses: [
-      new OA\Response(
-        response: 200, 
-        description: 'product categories data',
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'no product categories found'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'product Id required'
-      )
+        new OA\Response(
+            response: 200,
+            description: 'product categories data',
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'no product categories found'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'product Id required'
+        )
     ],
     security: [
-      ['modified_auth' => ['GetProductDescription']]
+        ['modified_auth' => ['GetProductDescription']]
     ]
-  )]
-  
-  final class GetProductDescription extends BaseService
-  {
-      /**
-       * @var ProductAction
-       */
-      private $productAction;
+)]
 
-      /**
-       * @var Responder
-       */
-      private $responder;
+final class GetProductDescription extends BaseService
+{
+    /**
+     * @var ProductAction
+     */
+    private $productAction;
 
-      /**
-       * The constructor.
-       *
-       * @param ProductAction $productAction The customer reader
-       * @param Responder $responder The responder
-       */
-      public function __construct(ProductAction $productAction, Responder $responder)
-      {
-          $this->productAction = $productAction;
-          $this->responder = $responder;
-      }
+    /**
+     * @var Responder
+     */
+    private $responder;
 
-      /**
-       * Invoke.
-       *
-       * @param ServerRequestInterface $request The request
-       * @param ResponseInterface $response The response
-       * @param array<mixed> $args The route arguments
-       *
-       * @return ResponseInterface The response
-       */
-      public function __invoke(
-          ServerRequestInterface $request,
-          ResponseInterface $response,
-          array $args
-      ): ResponseInterface {
-          $this->CheckAccess($request, $response);
+    /**
+     * The constructor.
+     *
+     * @param ProductAction $productAction The customer reader
+     * @param Responder $responder The responder
+     */
+    public function __construct(ProductAction $productAction, Responder $responder)
+    {
+        $this->productAction = $productAction;
+        $this->responder = $responder;
+    }
 
-          $productId = (int)$args['id'];
+    /**
+     * Invoke.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array<mixed> $args The route arguments
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        $this->CheckAccess($request, $response);
 
-          $result = $this->productAction->GetProductDescription($productId);
+        $productId = (int)$args['id'];
 
-          if (isset($result['errormessage'])) {
-              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
-          }
-          return $this->responder->withJson($response, $result);
-      }
-  }
+        $result = $this->productAction->GetProductDescription($productId);
+
+        if (isset($result['errormessage'])) {
+            return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+        }
+        return $this->responder->withJson($response, $result);
+    }
+}

@@ -14,386 +14,385 @@
 
 namespace api\v1\Action\Order;
 
-  use api\v1\Action\BaseAction;
-  use api\v1\Utility\LoggerHandler;
-  use Psr\Log\LoggerInterface;
-  use Exception;
+use api\v1\Action\BaseAction;
+use api\v1\Utility\LoggerHandler;
+use Psr\Log\LoggerInterface;
+use Exception;
 
-  /**
-   * Service.
-   */
-  trait OrderDeleteAction
-  {
-      /**
-       * Delete an order by the given order id.
-       *
-       * @param int $orderId The order id
-       *
-       * @throws Exception
-       *
-       * @return void
-       */
-      public function DeleteOrder(int $orderId): void
-      {
-          // Input validation
-          if (empty($orderId)) {
-              throw new Exception('Order ID required');
-          }
+/**
+ * Service.
+ */
+trait OrderDeleteAction
+{
+    /**
+     * Delete an order by the given order id.
+     *
+     * @param int $orderId The order id
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public function DeleteOrder(int $orderId): void
+    {
+        // Input validation
+        if (empty($orderId)) {
+            throw new Exception('Order ID required');
+        }
 
-          $order_query = xtc_db_query("SELECT *
-                                         FROM ".TABLE_ORDERS."
-                                        WHERE orders_id = '".(int)$orderId."'");
-          if (xtc_db_num_rows($order_query) < 1) {
-              return $this->errormessage(sprintf('Order not found: %s', $orderId));
-          } else {            
-              // disable Exception
-              $this->throw_exception = false;
-              
-              $this->DeleteAllProduct($orderId);
-              $this->DeleteAllStatusHistory($orderId);
-              $this->DeleteAllTotal($orderId);
-              $this->DeleteAllTracking($orderId);
+        $order_query = xtc_db_query("SELECT *
+                                         FROM " . TABLE_ORDERS . "
+                                        WHERE orders_id = '" . (int)$orderId . "'");
+        if (xtc_db_num_rows($order_query) < 1) {
+            return $this->errormessage(sprintf('Order not found: %s', $orderId));
+        } else {
+            // disable Exception
+            $this->throw_exception = false;
 
-              //delete
-              xtc_db_query("DELETE FROM ".TABLE_ORDERS." WHERE orders_id = '".(int)$orderId."'");
-          }
+            $this->DeleteAllProduct($orderId);
+            $this->DeleteAllStatusHistory($orderId);
+            $this->DeleteAllTotal($orderId);
+            $this->DeleteAllTracking($orderId);
 
-          $this->logger->info(sprintf('Order deleted successfully: %s', $orderId));
-      }
-      
-      /**
-       * Delete a product by the given order id and order products id.
-       *
-       * @param int $orderId The order id
-       * @param int $orderProductsId The order products id
-       *
-       * @throws Exception
-       *
-       * @return void
-       */
-      public function DeleteProduct(int $orderId, int $orderProductsId): void
-      {
-          // Input validation
-          if (empty($orderId)) {
-              throw new Exception('Order ID required');
-          }
+            //delete
+            xtc_db_query("DELETE FROM " . TABLE_ORDERS . " WHERE orders_id = '" . (int)$orderId . "'");
+        }
 
-          $where = '';
-          if ($orderProductsId > 0) {
-              $where = "AND orders_products_id = '".(int)$orderProductsId."'";
-          }
+        $this->logger->info(sprintf('Order deleted successfully: %s', $orderId));
+    }
 
-          $order_query = xtc_db_query("SELECT *
-                                         FROM ".TABLE_ORDERS_PRODUCTS."
-                                        WHERE orders_id = '".(int)$orderId."'
-                                              ".$where);
-          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              return $this->errormessage(sprintf('Order products not found: %s', $orderId));
-          } else {
-              while ($order = xtc_db_fetch_array($order_query)) {
-                  xtc_db_query("DELETE FROM ".TABLE_ORDERS_PRODUCTS_ATTRIBUTES." 
-                                      WHERE orders_id = '".(int)$orderId."'
-                                        AND orders_products_id = '".(int)$order['orders_products_id']."'");
+    /**
+     * Delete a product by the given order id and order products id.
+     *
+     * @param int $orderId The order id
+     * @param int $orderProductsId The order products id
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public function DeleteProduct(int $orderId, int $orderProductsId): void
+    {
+        // Input validation
+        if (empty($orderId)) {
+            throw new Exception('Order ID required');
+        }
 
-                  xtc_db_query("DELETE FROM ".TABLE_ORDERS_PRODUCTS_DOWNLOAD." 
-                                      WHERE orders_id = '".(int)$orderId."'
-                                        AND orders_products_id = '".(int)$order['orders_products_id']."'");
+        $where = '';
+        if ($orderProductsId > 0) {
+            $where = "AND orders_products_id = '" . (int)$orderProductsId . "'";
+        }
 
-                  xtc_db_query("DELETE FROM ".TABLE_ORDERS_PRODUCTS." 
-                                      WHERE orders_id = '".(int)$orderId."'
-                                        AND orders_products_id = '".(int)$order['orders_products_id']."'");
-              }
-          }
-      }
+        $order_query = xtc_db_query("SELECT *
+                                         FROM " . TABLE_ORDERS_PRODUCTS . "
+                                        WHERE orders_id = '" . (int)$orderId . "'
+                                              " . $where);
+        if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
+            return $this->errormessage(sprintf('Order products not found: %s', $orderId));
+        } else {
+            while ($order = xtc_db_fetch_array($order_query)) {
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . " 
+                                      WHERE orders_id = '" . (int)$orderId . "'
+                                        AND orders_products_id = '" . (int)$order['orders_products_id'] . "'");
 
-      /**
-       * Delete all product by the given order id.
-       *
-       * @param int $orderId The order id
-       *
-       * @throws Exception
-       *
-       * @return void
-       */
-      public function DeleteAllProduct(int $orderId): void
-      {
-          // Input validation
-          if (empty($orderId)) {
-              throw new Exception('Order ID required');
-          }
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS_DOWNLOAD . " 
+                                      WHERE orders_id = '" . (int)$orderId . "'
+                                        AND orders_products_id = '" . (int)$order['orders_products_id'] . "'");
 
-          $this->DeleteProduct($orderId, 0);
-      }
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS . " 
+                                      WHERE orders_id = '" . (int)$orderId . "'
+                                        AND orders_products_id = '" . (int)$order['orders_products_id'] . "'");
+            }
+        }
+    }
 
-      /**
-       * Delete a product attributes by the given order id and order products attributes id.
-       *
-       * @param int $orderId The order id
-       * @param int $orderProductsAttributesId The order products attributes id
-       *
-       * @throws Exception
-       *
-       * @return void
-       */
-      public function DeleteProductAttributes(int $orderId, int $orderProductsAttributesId): void
-      {
-          // Input validation
-          if (empty($orderId)) {
-              throw new Exception('Order ID required');
-          }
+    /**
+     * Delete all product by the given order id.
+     *
+     * @param int $orderId The order id
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public function DeleteAllProduct(int $orderId): void
+    {
+        // Input validation
+        if (empty($orderId)) {
+            throw new Exception('Order ID required');
+        }
 
-          $where = '';
-          if ($orderProductsAttributesId > 0) {
-              $where = "AND orders_products_attributes_id = '".(int)$orderProductsAttributesId."'";
-          }
+        $this->DeleteProduct($orderId, 0);
+    }
 
-          $order_query = xtc_db_query("SELECT *
-                                         FROM ".TABLE_ORDERS_PRODUCTS_ATTRIBUTES."
-                                        WHERE orders_id = '".(int)$orderId."'
-                                              ".$where);
-          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              return $this->errormessage(sprintf('Order products attributes not found: %s', $orderId));
-          } else {
-              while ($order = xtc_db_fetch_array($order_query)) {
-                  xtc_db_query("DELETE FROM ".TABLE_ORDERS_PRODUCTS_ATTRIBUTES." 
-                                      WHERE orders_id = '".(int)$orderId."'
-                                        AND orders_products_attributes_id = '".(int)$order['orders_products_attributes_id']."'");
-              }
-          }
-      }
+    /**
+     * Delete a product attributes by the given order id and order products attributes id.
+     *
+     * @param int $orderId The order id
+     * @param int $orderProductsAttributesId The order products attributes id
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public function DeleteProductAttributes(int $orderId, int $orderProductsAttributesId): void
+    {
+        // Input validation
+        if (empty($orderId)) {
+            throw new Exception('Order ID required');
+        }
 
-      /**
-       * Delete a product download by the given order id and order products download id.
-       *
-       * @param int $orderId The order id
-       * @param int $orderProductsDownloadId The order products download id
-       *
-       * @throws Exception
-       *
-       * @return void
-       */
-      public function DeleteProductDownload(int $orderId, int $orderProductsDownloadId): void
-      {
-          // Input validation
-          if (empty($orderId)) {
-              throw new Exception('Order ID required');
-          }
+        $where = '';
+        if ($orderProductsAttributesId > 0) {
+            $where = "AND orders_products_attributes_id = '" . (int)$orderProductsAttributesId . "'";
+        }
 
-          $where = '';
-          if ($orderProductsDownloadId > 0) {
-              $where = "AND orders_products_download_id = '".(int)$orderProductsDownloadId."'";
-          }
+        $order_query = xtc_db_query("SELECT *
+                                         FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . "
+                                        WHERE orders_id = '" . (int)$orderId . "'
+                                              " . $where);
+        if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
+            return $this->errormessage(sprintf('Order products attributes not found: %s', $orderId));
+        } else {
+            while ($order = xtc_db_fetch_array($order_query)) {
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . " 
+                                      WHERE orders_id = '" . (int)$orderId . "'
+                                        AND orders_products_attributes_id = '" . (int)$order['orders_products_attributes_id'] . "'");
+            }
+        }
+    }
 
-          $order_query = xtc_db_query("SELECT *
-                                         FROM ".TABLE_ORDERS_PRODUCTS_DOWNLOAD."
-                                        WHERE orders_id = '".(int)$orderId."'
-                                              ".$where);
-          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              return $this->errormessage(sprintf('Order products download not found: %s', $orderId));
-          } else {
-              while ($order = xtc_db_fetch_array($order_query)) {
-                  xtc_db_query("DELETE FROM ".TABLE_ORDERS_PRODUCTS_DOWNLOAD." 
-                                      WHERE orders_id = '".(int)$orderId."'
-                                        AND orders_products_download_id = '".(int)$order['orders_products_download_id']."'");
-              }
-          }
-      }
+    /**
+     * Delete a product download by the given order id and order products download id.
+     *
+     * @param int $orderId The order id
+     * @param int $orderProductsDownloadId The order products download id
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public function DeleteProductDownload(int $orderId, int $orderProductsDownloadId): void
+    {
+        // Input validation
+        if (empty($orderId)) {
+            throw new Exception('Order ID required');
+        }
 
-      /**
-       * Delete a status history by the given order id and order status history id.
-       *
-       * @param int $orderId The order id
-       * @param int $orderStatusHistoryId The order status history id
-       *
-       * @throws Exception
-       *
-       * @return void
-       */
-      public function DeleteStatusHistory(int $orderId, int $orderStatusHistoryId): void
-      {
-          // Input validation
-          if (empty($orderId)) {
-              throw new Exception('Order ID required');
-          }
+        $where = '';
+        if ($orderProductsDownloadId > 0) {
+            $where = "AND orders_products_download_id = '" . (int)$orderProductsDownloadId . "'";
+        }
 
-          $where = '';
-          if ($orderStatusHistoryId > 0) {
-              $where = "AND orders_status_history_id = '".(int)$orderStatusHistoryId."'";
-          }
+        $order_query = xtc_db_query("SELECT *
+                                         FROM " . TABLE_ORDERS_PRODUCTS_DOWNLOAD . "
+                                        WHERE orders_id = '" . (int)$orderId . "'
+                                              " . $where);
+        if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
+            return $this->errormessage(sprintf('Order products download not found: %s', $orderId));
+        } else {
+            while ($order = xtc_db_fetch_array($order_query)) {
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS_DOWNLOAD . " 
+                                      WHERE orders_id = '" . (int)$orderId . "'
+                                        AND orders_products_download_id = '" . (int)$order['orders_products_download_id'] . "'");
+            }
+        }
+    }
 
-          $order_query = xtc_db_query("SELECT *
-                                         FROM ".TABLE_ORDERS_STATUS_HISTORY."
-                                        WHERE orders_id = '".(int)$orderId."'
-                                              ".$where);
-          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              return $this->errormessage(sprintf('Order status history not found: %s', $orderId));
-          } else {
-              while ($order = xtc_db_fetch_array($order_query)) {
-                  xtc_db_query("DELETE FROM ".TABLE_ORDERS_STATUS_HISTORY." 
-                                      WHERE orders_id = '".(int)$orderId."'
-                                        AND orders_status_history_id = '".(int)$order['orders_status_history_id']."'");
-              }
-          }
-      }
+    /**
+     * Delete a status history by the given order id and order status history id.
+     *
+     * @param int $orderId The order id
+     * @param int $orderStatusHistoryId The order status history id
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public function DeleteStatusHistory(int $orderId, int $orderStatusHistoryId): void
+    {
+        // Input validation
+        if (empty($orderId)) {
+            throw new Exception('Order ID required');
+        }
 
-      /**
-       * Delete all status history by the given order id.
-       *
-       * @param int $orderId The order id
-       *
-       * @throws Exception
-       *
-       * @return void
-       */
-      public function DeleteAllStatusHistory(int $orderId): void
-      {
-          // Input validation
-          if (empty($orderId)) {
-              throw new Exception('Order ID required');
-          }
+        $where = '';
+        if ($orderStatusHistoryId > 0) {
+            $where = "AND orders_status_history_id = '" . (int)$orderStatusHistoryId . "'";
+        }
 
-          $this->DeleteStatusHistory($orderId, 0);
-      }
+        $order_query = xtc_db_query("SELECT *
+                                         FROM " . TABLE_ORDERS_STATUS_HISTORY . "
+                                        WHERE orders_id = '" . (int)$orderId . "'
+                                              " . $where);
+        if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
+            return $this->errormessage(sprintf('Order status history not found: %s', $orderId));
+        } else {
+            while ($order = xtc_db_fetch_array($order_query)) {
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_STATUS_HISTORY . " 
+                                      WHERE orders_id = '" . (int)$orderId . "'
+                                        AND orders_status_history_id = '" . (int)$order['orders_status_history_id'] . "'");
+            }
+        }
+    }
 
-      /**
-       * Delete a order total by the given order id and order total id.
-       *
-       * @param int $orderId The order id
-       * @param int $orderTotalId The order total id
-       *
-       * @throws Exception
-       *
-       * @return void
-       */
-      public function DeleteTotal(int $orderId, int $orderTotalId): void
-      {
-          // Input validation
-          if (empty($orderId)) {
-              throw new Exception('Order ID required');
-          }
+    /**
+     * Delete all status history by the given order id.
+     *
+     * @param int $orderId The order id
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public function DeleteAllStatusHistory(int $orderId): void
+    {
+        // Input validation
+        if (empty($orderId)) {
+            throw new Exception('Order ID required');
+        }
 
-          $where = '';
-          if ($orderTotalId > 0) {
-              $where = "AND orders_total_id = '".(int)$orderTotalId."'";
-          }
+        $this->DeleteStatusHistory($orderId, 0);
+    }
 
-          $order_query = xtc_db_query("SELECT *
-                                         FROM ".TABLE_ORDERS_TOTAL."
-                                        WHERE orders_id = '".(int)$orderId."'
-                                              ".$where);
-          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              return $this->errormessage(sprintf('Order total not found: %s', $orderId));
-          } else {
-              while ($order = xtc_db_fetch_array($order_query)) {
-                  xtc_db_query("DELETE FROM ".TABLE_ORDERS_TOTAL." 
-                                      WHERE orders_id = '".(int)$orderId."'
-                                        AND orders_total_id = '".(int)$order['orders_total_id']."'");
-              }
-          }
-      }
+    /**
+     * Delete a order total by the given order id and order total id.
+     *
+     * @param int $orderId The order id
+     * @param int $orderTotalId The order total id
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public function DeleteTotal(int $orderId, int $orderTotalId): void
+    {
+        // Input validation
+        if (empty($orderId)) {
+            throw new Exception('Order ID required');
+        }
 
-      /**
-       * Delete all order total by the given order id.
-       *
-       * @param int $orderId The order id
-       *
-       * @throws Exception
-       *
-       * @return void
-       */
-      public function DeleteAllTotal(int $orderId): void
-      {
-          // Input validation
-          if (empty($orderId)) {
-              throw new Exception('Order ID required');
-          }
+        $where = '';
+        if ($orderTotalId > 0) {
+            $where = "AND orders_total_id = '" . (int)$orderTotalId . "'";
+        }
 
-          $this->DeleteTotal($orderId, 0);
-      }
+        $order_query = xtc_db_query("SELECT *
+                                         FROM " . TABLE_ORDERS_TOTAL . "
+                                        WHERE orders_id = '" . (int)$orderId . "'
+                                              " . $where);
+        if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
+            return $this->errormessage(sprintf('Order total not found: %s', $orderId));
+        } else {
+            while ($order = xtc_db_fetch_array($order_query)) {
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_TOTAL . " 
+                                      WHERE orders_id = '" . (int)$orderId . "'
+                                        AND orders_total_id = '" . (int)$order['orders_total_id'] . "'");
+            }
+        }
+    }
 
-      /**
-       * Delete a order tracking by the given order id and tracking id.
-       *
-       * @param int $orderId The order id
-       * @param int $trackingId The tracking id
-       *
-       * @throws Exception
-       *
-       * @return void
-       */
-      public function DeleteTracking(int $orderId, int $trackingId): void
-      {
-          // Input validation
-          if (empty($orderId)) {
-              throw new Exception('Order ID required');
-          }
+    /**
+     * Delete all order total by the given order id.
+     *
+     * @param int $orderId The order id
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public function DeleteAllTotal(int $orderId): void
+    {
+        // Input validation
+        if (empty($orderId)) {
+            throw new Exception('Order ID required');
+        }
 
-          $where = '';
-          if ($trackingId > 0) {
-              $where = "AND tracking_id = '".(int)$trackingId."'";
-          }
+        $this->DeleteTotal($orderId, 0);
+    }
 
-          $order_query = xtc_db_query("SELECT *
-                                         FROM ".TABLE_ORDERS_TRACKING."
-                                        WHERE orders_id = '".(int)$orderId."'
-                                              ".$where);
-          if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
-              return $this->errormessage(sprintf('Order tracking not found: %s', $orderId));
-          } else {
-              while ($order = xtc_db_fetch_array($order_query)) {
-                  xtc_db_query("DELETE FROM ".TABLE_ORDERS_TRACKING." 
-                                      WHERE orders_id = '".(int)$orderId."'
-                                        AND tracking_id = '".(int)$order['tracking_id']."'");
-              }
-          }
-      }
+    /**
+     * Delete a order tracking by the given order id and tracking id.
+     *
+     * @param int $orderId The order id
+     * @param int $trackingId The tracking id
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public function DeleteTracking(int $orderId, int $trackingId): void
+    {
+        // Input validation
+        if (empty($orderId)) {
+            throw new Exception('Order ID required');
+        }
 
-      /**
-       * Delete all order tracking by the given order id.
-       *
-       * @param int $orderId The order id
-       *
-       * @throws Exception
-       *
-       * @return void
-       */
-      public function DeleteAllTracking(int $orderId): void
-      {
-          // Input validation
-          if (empty($orderId)) {
-              throw new Exception('Order ID required');
-          }
+        $where = '';
+        if ($trackingId > 0) {
+            $where = "AND tracking_id = '" . (int)$trackingId . "'";
+        }
 
-          $this->DeleteTracking($orderId, 0);
-      }
+        $order_query = xtc_db_query("SELECT *
+                                         FROM " . TABLE_ORDERS_TRACKING . "
+                                        WHERE orders_id = '" . (int)$orderId . "'
+                                              " . $where);
+        if (xtc_db_num_rows($order_query) < 1 && $this->throw_exception === true) {
+            return $this->errormessage(sprintf('Order tracking not found: %s', $orderId));
+        } else {
+            while ($order = xtc_db_fetch_array($order_query)) {
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_TRACKING . " 
+                                      WHERE orders_id = '" . (int)$orderId . "'
+                                        AND tracking_id = '" . (int)$order['tracking_id'] . "'");
+            }
+        }
+    }
 
-      /**
-       * Delete a order status by the given order status id.
-       *
-       * @param int $orderStatusId The order status id
-       *
-       * @throws Exception
-       *
-       * @return void
-       */
-      public function DeleteOrderStatus(int $orderStatusId): void
-      {
-          // Input validation
-          if (empty($orderStatusId)) {
-              throw new Exception('Order Status ID required');
-          }
+    /**
+     * Delete all order tracking by the given order id.
+     *
+     * @param int $orderId The order id
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public function DeleteAllTracking(int $orderId): void
+    {
+        // Input validation
+        if (empty($orderId)) {
+            throw new Exception('Order ID required');
+        }
 
-          $order_status_query = xtc_db_query("SELECT *
-                                                FROM ".TABLE_ORDERS_STATUS."
-                                               WHERE orders_status_id = '".(int)$orderStatusId."'");
-          if (xtc_db_num_rows($order_status_query) < 1) {
-              return $this->errormessage(sprintf('Order Status not found: %s', $orderStatusId));
-          } else {
-              //delete
-              xtc_db_query("DELETE FROM ".TABLE_ORDERS_STATUS." WHERE orders_status_id = '".(int)$orderStatusId."'");
-          }
-          
-          $this->logger->info(sprintf('Order Status deleted successfully: %s', $orderStatusId));
-      }
+        $this->DeleteTracking($orderId, 0);
+    }
 
-  }
+    /**
+     * Delete a order status by the given order status id.
+     *
+     * @param int $orderStatusId The order status id
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public function DeleteOrderStatus(int $orderStatusId): void
+    {
+        // Input validation
+        if (empty($orderStatusId)) {
+            throw new Exception('Order Status ID required');
+        }
+
+        $order_status_query = xtc_db_query("SELECT *
+                                                FROM " . TABLE_ORDERS_STATUS . "
+                                               WHERE orders_status_id = '" . (int)$orderStatusId . "'");
+        if (xtc_db_num_rows($order_status_query) < 1) {
+            return $this->errormessage(sprintf('Order Status not found: %s', $orderStatusId));
+        } else {
+            //delete
+            xtc_db_query("DELETE FROM " . TABLE_ORDERS_STATUS . " WHERE orders_status_id = '" . (int)$orderStatusId . "'");
+        }
+
+        $this->logger->info(sprintf('Order Status deleted successfully: %s', $orderStatusId));
+    }
+}

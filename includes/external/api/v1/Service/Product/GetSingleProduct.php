@@ -14,106 +14,106 @@
 
 namespace api\v1\Service\Product;
 
-  use api\v1\Service\BaseService;
-  use api\v1\Action\Product\ProductAction;
-  use api\v1\Utility\Responder;
-  use Psr\Http\Message\ResponseInterface;
-  use Psr\Http\Message\ServerRequestInterface;
-  use OpenApi\Attributes as OA;
+use api\v1\Service\BaseService;
+use api\v1\Action\Product\ProductAction;
+use api\v1\Utility\Responder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use OpenApi\Attributes as OA;
 
-  #[OA\Get(
+#[OA\Get(
     path: '/api/v1/products/{Id}',
     tags: ['Product'],
     description: 'Get single product data by given Id',
     operationId: 'GetSingleProduct',
     parameters: [
-      new OA\Parameter(
-        name: 'Id', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
+        new OA\Parameter(
+            name: 'Id',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'product Id'
         ),
-        description: 'product Id'
-      ),
-      new OA\Parameter(
-        name: 'with', 
-        in: 'query',
-        schema: new OA\Schema(
-          type: 'string'
-        ),
-        description: 'included results (comma separated list). Possible values: categories, images, xsell, attributes, tags, content, offer, specials, reviews'
-      )
+        new OA\Parameter(
+            name: 'with',
+            in: 'query',
+            schema: new OA\Schema(
+                type: 'string'
+            ),
+            description: 'included results (comma separated list). Possible values: categories, images, xsell, attributes, tags, content, offer, specials, reviews'
+        )
     ],
     responses: [
-      new OA\Response(
-        response: 200, 
-        description: 'product data',
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'no product found'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'product Id required'
-      )
+        new OA\Response(
+            response: 200,
+            description: 'product data',
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'no product found'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'product Id required'
+        )
     ],
     security: [
-      ['modified_auth' => ['GetSingleProduct']]
+        ['modified_auth' => ['GetSingleProduct']]
     ]
-  )]
-  
-  final class GetSingleProduct extends BaseService
-  {
-      /**
-       * @var ProductAction
-       */
-      private $productAction;
+)]
 
-      /**
-       * @var Responder
-       */
-      private $responder;
+final class GetSingleProduct extends BaseService
+{
+    /**
+     * @var ProductAction
+     */
+    private $productAction;
 
-      /**
-       * The constructor.
-       *
-       * @param ProductAction $productAction The customer reader
-       * @param Responder $responder The responder
-       */
-      public function __construct(ProductAction $productAction, Responder $responder)
-      {
-          $this->productAction = $productAction;
-          $this->responder = $responder;
-      }
+    /**
+     * @var Responder
+     */
+    private $responder;
 
-      /**
-       * Invoke.
-       *
-       * @param ServerRequestInterface $request The request
-       * @param ResponseInterface $response The response
-       * @param array<mixed> $args The route arguments
-       *
-       * @return ResponseInterface The response
-       */
-      public function __invoke(
-          ServerRequestInterface $request,
-          ResponseInterface $response,
-          array $args
-      ): ResponseInterface {
-          $this->CheckAccess($request, $response);
+    /**
+     * The constructor.
+     *
+     * @param ProductAction $productAction The customer reader
+     * @param Responder $responder The responder
+     */
+    public function __construct(ProductAction $productAction, Responder $responder)
+    {
+        $this->productAction = $productAction;
+        $this->responder = $responder;
+    }
 
-          $params = $request->getQueryParams();
-          $params['path'] = $request->getUri()->getPath();
+    /**
+     * Invoke.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array<mixed> $args The route arguments
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        $this->CheckAccess($request, $response);
 
-          $productId = (int)$args['id'];
+        $params = $request->getQueryParams();
+        $params['path'] = $request->getUri()->getPath();
 
-          $result = $this->productAction->GetSingleProduct($productId, $params);
+        $productId = (int)$args['id'];
 
-          if (isset($result['errormessage'])) {
-              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
-          }
-          return $this->responder->withJson($response, $result);
-      }
-  }
+        $result = $this->productAction->GetSingleProduct($productId, $params);
+
+        if (isset($result['errormessage'])) {
+            return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+        }
+        return $this->responder->withJson($response, $result);
+    }
+}

@@ -14,17 +14,16 @@
 
 namespace api\v1\Action\Country;
 
-  use api\v1\Action\BaseAction;
-  use api\v1\Utility\LoggerHandler;
-  use Psr\Log\LoggerInterface;
-  use Exception;
-  
-  /**
-   * Service.
-   */
-  final class CountryAction extends BaseAction
-  {
-      use CountryGetAction;
-      use CountryDeleteAction;
-      
-  }
+use api\v1\Action\BaseAction;
+use api\v1\Utility\LoggerHandler;
+use Psr\Log\LoggerInterface;
+use Exception;
+
+/**
+ * Service.
+ */
+final class CountryAction extends BaseAction
+{
+    use CountryGetAction;
+    use CountryDeleteAction;
+}

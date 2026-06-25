@@ -13,83 +13,81 @@
  */
 
 use Slim\App;
-  use Slim\Routing\RouteCollectorProxy;
-  use Tuupola\Middleware\HttpBasicAuthentication;
-  use Tuupola\Middleware\JwtAuthentication;
-  use api\v1\Auth\Authentication;
-  use OpenApi\Generator as OpenApiGenerator;
-  use Symfony\Component\Finder\Finder;
+use Slim\Routing\RouteCollectorProxy;
+use Tuupola\Middleware\HttpBasicAuthentication;
+use Tuupola\Middleware\JwtAuthentication;
+use api\v1\Auth\Authentication;
+use OpenApi\Generator as OpenApiGenerator;
+use Symfony\Component\Finder\Finder;
 
-  return function (App $app) {
-      // oauth
-      $app->post('/v1/oauth', \api\v1\Auth\JwtAuth::class)->add(Authentication::class);
-      
-      // docs
-      $app->get('/v1/swagger.json', function ($request, $response, $args) {
-          $swagger = OpenApiGenerator::scan([DIR_FS_EXTERNAL.'api/v1/Service/']);
-          $response->getBody()->write(json_encode($swagger));
-          return $response->withHeader('Content-Type', 'application/json');
-      }); 
+return function (App $app) {
+    // oauth
+    $app->post('/v1/oauth', \api\v1\Auth\JwtAuth::class)->add(Authentication::class);
 
-      // routes
-      $app->group(
-          '/v1',
-          function (RouteCollectorProxy $app) {
-          
-              // customers
-              include __DIR__ . '/customers.php';
-                            
-              // categories
-              include __DIR__ . '/categories.php';
+    // docs
+    $app->get('/v1/swagger.json', function ($request, $response, $args) {
+        $swagger = OpenApiGenerator::scan([DIR_FS_EXTERNAL . 'api/v1/Service/']);
+        $response->getBody()->write(json_encode($swagger));
+        return $response->withHeader('Content-Type', 'application/json');
+    });
 
-              // products
-              include __DIR__ . '/products.php';
+    // routes
+    $app->group(
+        '/v1',
+        function (RouteCollectorProxy $app) {
+            // customers
+            include __DIR__ . '/customers.php';
 
-              // manufacturers
-              include __DIR__ . '/manufacturers.php';
+            // categories
+            include __DIR__ . '/categories.php';
 
-              // attributes
-              include __DIR__ . '/attributes.php';
+            // products
+            include __DIR__ . '/products.php';
 
-              // tags
-              include __DIR__ . '/tags.php';
-              
-              // orders
-              include __DIR__ . '/orders.php';
+            // manufacturers
+            include __DIR__ . '/manufacturers.php';
 
-              // countries
-              include __DIR__ . '/countries.php';
+            // attributes
+            include __DIR__ . '/attributes.php';
 
-              // shipping
-              include __DIR__ . '/shipping.php';
+            // tags
+            include __DIR__ . '/tags.php';
 
-              // contents
-              include __DIR__ . '/contents.php';
-              
-              // campaigns
-              include __DIR__ . '/campaigns.php';
+            // orders
+            include __DIR__ . '/orders.php';
 
-              // currencies
-              include __DIR__ . '/currencies.php';
+            // countries
+            include __DIR__ . '/countries.php';
 
-              // languages
-              include __DIR__ . '/languages.php';
+            // shipping
+            include __DIR__ . '/shipping.php';
 
-              // newsletters
-              include __DIR__ . '/newsletters.php';
+            // contents
+            include __DIR__ . '/contents.php';
 
-              // configurations
-              include __DIR__ . '/configurations.php';
+            // campaigns
+            include __DIR__ . '/campaigns.php';
 
-              // coupons
-              include __DIR__ . '/coupons.php';
+            // currencies
+            include __DIR__ . '/currencies.php';
 
-              // dhl
-              include __DIR__ . '/dhl.php';
+            // languages
+            include __DIR__ . '/languages.php';
 
-              // schema
-              include __DIR__ . '/schema.php';
+            // newsletters
+            include __DIR__ . '/newsletters.php';
 
-          }
-      )->add(JwtAuthentication::class);
-  };
+            // configurations
+            include __DIR__ . '/configurations.php';
+
+            // coupons
+            include __DIR__ . '/coupons.php';
+
+            // dhl
+            include __DIR__ . '/dhl.php';
+
+            // schema
+            include __DIR__ . '/schema.php';
+        }
+    )->add(JwtAuthentication::class);
+};

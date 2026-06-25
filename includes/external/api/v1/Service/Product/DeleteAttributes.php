@@ -14,119 +14,119 @@
 
 namespace api\v1\Service\Product;
 
-  use api\v1\Service\BaseService;
-  use api\v1\Action\Product\ProductAction;
-  use api\v1\Utility\Responder;
-  use Psr\Http\Message\ResponseInterface;
-  use Psr\Http\Message\ServerRequestInterface;
-  use Exception;
-  use OpenApi\Attributes as OA;
+use api\v1\Service\BaseService;
+use api\v1\Action\Product\ProductAction;
+use api\v1\Utility\Responder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Exception;
+use OpenApi\Attributes as OA;
 
-  #[OA\Delete(
+#[OA\Delete(
     path: '/api/v1/products/{Id}/attributes/{aId}',
     tags: ['Product'],
     description: 'Delete single attribute from a product by given Id',
     operationId: 'DeleteAttributesProducts',
     parameters: [
-      new OA\Parameter(
-        name: 'Id', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
+        new OA\Parameter(
+            name: 'Id',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'product Id'
         ),
-        description: 'product Id'
-      ),
-      new OA\Parameter(
-        name: 'aId', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
-        ),
-        description: 'attribute Id'
-      )
+        new OA\Parameter(
+            name: 'aId',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'attribute Id'
+        )
     ],
     responses:[
-      new OA\Response(
-        response: 204, 
-        description: 'no data',
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'product not found'
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'attribute not found'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'product Id required'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'attribute Id required'
-      )
+        new OA\Response(
+            response: 204,
+            description: 'no data',
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'product not found'
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'attribute not found'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'product Id required'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'attribute Id required'
+        )
     ],
     security: [
-      ['modified_auth' => ['DeleteAttributes']]
+        ['modified_auth' => ['DeleteAttributes']]
     ]
-  )]
+)]
 
-  final class DeleteAttributes extends BaseService
-  {
-      /**
-       * @var ProductAction
-       */
-      private $productAction;
+final class DeleteAttributes extends BaseService
+{
+    /**
+     * @var ProductAction
+     */
+    private $productAction;
 
-      /**
-       * @var Responder
-       */
-      private $responder;
+    /**
+     * @var Responder
+     */
+    private $responder;
 
-      /**
-       * The constructor.
-       *
-       * @param ProductAction $productAction The customer reader
-       * @param Responder $responder The responder
-       */
-      public function __construct(ProductAction $productAction, Responder $responder)
-      {
-          $this->productAction = $productAction;
-          $this->responder = $responder;
-      }
+    /**
+     * The constructor.
+     *
+     * @param ProductAction $productAction The customer reader
+     * @param Responder $responder The responder
+     */
+    public function __construct(ProductAction $productAction, Responder $responder)
+    {
+        $this->productAction = $productAction;
+        $this->responder = $responder;
+    }
 
-      /**
-       * Invoke.
-       *
-       * @param ServerRequestInterface $request The request
-       * @param ResponseInterface $response The response
-       * @param array<mixed> $args The route arguments
-       *
-       * @return ResponseInterface The response
-       */
-      public function __invoke(
-          ServerRequestInterface $request,
-          ResponseInterface $response,
-          array $args
-      ): ResponseInterface {
-          $this->CheckAccess($request, $response);
+    /**
+     * Invoke.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array<mixed> $args The route arguments
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        $this->CheckAccess($request, $response);
 
-          $productId = (int)$args['id'];
-          $attributesId = (int)$args['aid'];
-          
-          // Input validation
-          if (empty($attributesId)) {
-              throw new Exception('Attribute ID required');
-          }
+        $productId = (int)$args['id'];
+        $attributesId = (int)$args['aid'];
 
-          $result = $this->productAction->DeleteAttributes($productId, $attributesId);
+        // Input validation
+        if (empty($attributesId)) {
+            throw new Exception('Attribute ID required');
+        }
 
-          if (isset($result['errormessage'])) {
-              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
-          }
-          return $this->responder->withJson($response)->withStatus(204);
-      }
-  }
+        $result = $this->productAction->DeleteAttributes($productId, $attributesId);
+
+        if (isset($result['errormessage'])) {
+            return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+        }
+        return $this->responder->withJson($response)->withStatus(204);
+    }
+}

@@ -14,115 +14,115 @@
 
 namespace api\v1\Service\Content;
 
-  use api\v1\Service\BaseService;
-  use api\v1\Action\Content\ContentAction;
-  use api\v1\Utility\Responder;
-  use Psr\Http\Message\ResponseInterface;
-  use Psr\Http\Message\ServerRequestInterface;
-  use OpenApi\Attributes as OA;
-  use Exception;
+use api\v1\Service\BaseService;
+use api\v1\Action\Content\ContentAction;
+use api\v1\Utility\Responder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use OpenApi\Attributes as OA;
+use Exception;
 
-  #[OA\Delete(
+#[OA\Delete(
     path: '/api/v1/contents/{Id}/content/{cId}',
     tags: ['Content'],
     description: 'Delete single content from a content by given Id',
     operationId: 'DeleteContentContent',
     parameters: [
-      new OA\Parameter(
-        name: 'Id', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
+        new OA\Parameter(
+            name: 'Id',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'content group Id'
         ),
-        description: 'content group Id'
-      ),
-      new OA\Parameter(
-        name: 'cId', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
-        ),
-        description: 'content Id'
-      )
+        new OA\Parameter(
+            name: 'cId',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'content Id'
+        )
     ],
     responses:[
-      new OA\Response(
-        response: 204, 
-        description: 'no data',
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'content not found'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'content group Id required'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'content Id required'
-      )
+        new OA\Response(
+            response: 204,
+            description: 'no data',
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'content not found'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'content group Id required'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'content Id required'
+        )
     ],
     security: [
-      ['modified_auth' => ['DeleteContentContent']]
+        ['modified_auth' => ['DeleteContentContent']]
     ]
-  )]
+)]
 
-  final class DeleteContentContent extends BaseService
-  {
-      /**
-       * @var ContentAction
-       */
-      private $contentAction;
+final class DeleteContentContent extends BaseService
+{
+    /**
+     * @var ContentAction
+     */
+    private $contentAction;
 
-      /**
-       * @var Responder
-       */
-      private $responder;
+    /**
+     * @var Responder
+     */
+    private $responder;
 
-      /**
-       * The constructor.
-       *
-       * @param ContentAction $contentAction The customer reader
-       * @param Responder $responder The responder
-       */
-      public function __construct(ContentAction $contentAction, Responder $responder)
-      {
-          $this->contentAction = $contentAction;
-          $this->responder = $responder;
-      }
+    /**
+     * The constructor.
+     *
+     * @param ContentAction $contentAction The customer reader
+     * @param Responder $responder The responder
+     */
+    public function __construct(ContentAction $contentAction, Responder $responder)
+    {
+        $this->contentAction = $contentAction;
+        $this->responder = $responder;
+    }
 
-      /**
-       * Invoke.
-       *
-       * @param ServerRequestInterface $request The request
-       * @param ResponseInterface $response The response
-       * @param array<mixed> $args The route arguments
-       *
-       * @return ResponseInterface The response
-       */
-      public function __invoke(
-          ServerRequestInterface $request,
-          ResponseInterface $response,
-          array $args
-      ): ResponseInterface {
-          $this->CheckAccess($request, $response);
+    /**
+     * Invoke.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array<mixed> $args The route arguments
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        $this->CheckAccess($request, $response);
 
-          $contentGroupId = (int)$args['id'];
-          $contentId = (int)$args['cid'];
-          
-          // Input validation
-          if (empty($contentId)) {
-              throw new Exception('Content ID required');
-          }
+        $contentGroupId = (int)$args['id'];
+        $contentId = (int)$args['cid'];
 
-          $result = $this->contentAction->DeleteContentContent($contentGroupId, $contentId);
+        // Input validation
+        if (empty($contentId)) {
+            throw new Exception('Content ID required');
+        }
 
-          if (isset($result['errormessage'])) {
-              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
-          }
-          return $this->responder->withJson($response)->withStatus(204);
-      }
-  }
+        $result = $this->contentAction->DeleteContentContent($contentGroupId, $contentId);
+
+        if (isset($result['errormessage'])) {
+            return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+        }
+        return $this->responder->withJson($response)->withStatus(204);
+    }
+}

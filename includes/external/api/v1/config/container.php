@@ -13,118 +13,117 @@
  */
 
 use Slim\App;
-  use Slim\Factory\AppFactory;
-  use Slim\Middleware\ErrorMiddleware;
-  use Slim\Psr7\Factory\StreamFactory;
-  use Slim\Interfaces\RouteParserInterface;
-  use Selective\BasePath\BasePathMiddleware;
-  use Selective\Validation\Encoder\JsonEncoder;
-  use Selective\Validation\Middleware\ValidationExceptionMiddleware;
-  use Selective\Validation\Transformer\ErrorDetailsResultTransformer;
-  use Psr\Container\ContainerInterface;
-  use Psr\Http\Message\ResponseFactoryInterface;
-  use Tuupola\Middleware\HttpBasicAuthentication;
-  use Tuupola\Middleware\JwtAuthentication;
-  use api\v1\Auth\Authentication;
-  use api\v1\Utility\LoggerHandler;
-  use api\v1\Utility\ErrorHandler;
-  
-  return [
-      'settings' => function () {
-          return require __DIR__ . '/settings.php';
-      },
+use Slim\Factory\AppFactory;
+use Slim\Middleware\ErrorMiddleware;
+use Slim\Psr7\Factory\StreamFactory;
+use Slim\Interfaces\RouteParserInterface;
+use Selective\BasePath\BasePathMiddleware;
+use Selective\Validation\Encoder\JsonEncoder;
+use Selective\Validation\Middleware\ValidationExceptionMiddleware;
+use Selective\Validation\Transformer\ErrorDetailsResultTransformer;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Tuupola\Middleware\HttpBasicAuthentication;
+use Tuupola\Middleware\JwtAuthentication;
+use api\v1\Auth\Authentication;
+use api\v1\Utility\LoggerHandler;
+use api\v1\Utility\ErrorHandler;
 
-      App::class => function (ContainerInterface $container) {
-          AppFactory::setContainer($container);
+return [
+    'settings' => function () {
+        return require __DIR__ . '/settings.php';
+    },
 
-          return AppFactory::create();
-      },
+    App::class => function (ContainerInterface $container) {
+        AppFactory::setContainer($container);
 
-      ResponseFactoryInterface::class => function (ContainerInterface $container) {
-          return $container->get(App::class)->getResponseFactory();
-      },
+        return AppFactory::create();
+    },
 
-      StreamFactoryInterface::class => function () {
-          return new StreamFactory();
-      },
+    ResponseFactoryInterface::class => function (ContainerInterface $container) {
+        return $container->get(App::class)->getResponseFactory();
+    },
 
-      RouteParserInterface::class => function (ContainerInterface $container) {
-          return $container->get(App::class)->getRouteCollector()->getRouteParser();
-      },
+    StreamFactoryInterface::class => function () {
+        return new StreamFactory();
+    },
 
-      LoggerHandler::class => function (ContainerInterface $container) {
-          return new LoggerHandler($container->get('settings')['logger']);
-      },
+    RouteParserInterface::class => function (ContainerInterface $container) {
+        return $container->get(App::class)->getRouteCollector()->getRouteParser();
+    },
 
-      ValidationExceptionMiddleware::class => function (ContainerInterface $container) {
-          $factory = $container->get(ResponseFactoryInterface::class);
+    LoggerHandler::class => function (ContainerInterface $container) {
+        return new LoggerHandler($container->get('settings')['logger']);
+    },
 
-          return new ValidationExceptionMiddleware(
-              $factory,
-              new ErrorDetailsResultTransformer(),
-              new JsonEncoder()
-          );
-      },
+    ValidationExceptionMiddleware::class => function (ContainerInterface $container) {
+        $factory = $container->get(ResponseFactoryInterface::class);
 
-      ErrorMiddleware::class => function (ContainerInterface $container) {
-          $settings = $container->get('settings')['error'];
-          $app = $container->get(App::class);
+        return new ValidationExceptionMiddleware(
+            $factory,
+            new ErrorDetailsResultTransformer(),
+            new JsonEncoder()
+        );
+    },
 
-          $logger = $container->get(LoggerHandler::class)->createLogger();
+    ErrorMiddleware::class => function (ContainerInterface $container) {
+        $settings = $container->get('settings')['error'];
+        $app = $container->get(App::class);
 
-          $errorMiddleware = new ErrorMiddleware(
-              $app->getCallableResolver(),
-              $app->getResponseFactory(),
-              (bool)$settings['display_error_details'],
-              (bool)$settings['log_errors'],
-              (bool)$settings['log_error_details'],
-              $logger
-          );
+        $logger = $container->get(LoggerHandler::class)->createLogger();
 
-          $errorMiddleware->setDefaultErrorHandler($container->get(ErrorHandler::class));
+        $errorMiddleware = new ErrorMiddleware(
+            $app->getCallableResolver(),
+            $app->getResponseFactory(),
+            (bool)$settings['display_error_details'],
+            (bool)$settings['log_errors'],
+            (bool)$settings['log_error_details'],
+            $logger
+        );
 
-          return $errorMiddleware;
-      },
+        $errorMiddleware->setDefaultErrorHandler($container->get(ErrorHandler::class));
 
-      BasePathMiddleware::class => function (ContainerInterface $container) {
-          return new BasePathMiddleware($container->get(App::class));
-      },
+        return $errorMiddleware;
+    },
 
-      Authentication::class => function (ContainerInterface $container) {
-          return new Authentication([
-              'error' => function ($response, $arguments) {              
-                  $data = [
+    BasePathMiddleware::class => function (ContainerInterface $container) {
+        return new BasePathMiddleware($container->get(App::class));
+    },
+
+    Authentication::class => function (ContainerInterface $container) {
+        return new Authentication([
+            'error' => function ($response, $arguments) {
+                $data = [
                     'error' => [
-                      'message' => $arguments['message']
+                        'message' => $arguments['message']
                     ]
-                  ];
-                  
-                  $response->getBody()->write((string)json_encode($data));
-                  return $response->withHeader('Content-Type', 'application/json');
-              }
-          ]);
-      },
+                ];
 
-      JwtAuthentication::class => function (ContainerInterface $container) {
-          if (!defined('MODULE_API_ACCESS_SECRET')
-              || empty(MODULE_API_ACCESS_SECRET)
-              )
-          {
-              throw new \RuntimeException("modified API not installed");
-          }
+                $response->getBody()->write((string)json_encode($data));
+                return $response->withHeader('Content-Type', 'application/json');
+            }
+        ]);
+    },
 
-          return new JwtAuthentication([
-              'secret' => MODULE_API_ACCESS_SECRET,
-              'error' => function ($response, $arguments) {              
-                  $data = [
+    JwtAuthentication::class => function (ContainerInterface $container) {
+        if (!defined('MODULE_API_ACCESS_SECRET')
+            || empty(MODULE_API_ACCESS_SECRET)
+        ) {
+            throw new \RuntimeException("modified API not installed");
+        }
+
+        return new JwtAuthentication([
+            'secret' => MODULE_API_ACCESS_SECRET,
+            'error' => function ($response, $arguments) {
+                $data = [
                     'error' => [
-                      'message' => $arguments['message']
+                        'message' => $arguments['message']
                     ]
-                  ];
-                  
-                  $response->getBody()->write((string)json_encode($data));
-                  return $response->withHeader('Content-Type', 'application/json');
-              }
-          ]);
-      },
-  ];
+                ];
+
+                $response->getBody()->write((string)json_encode($data));
+                return $response->withHeader('Content-Type', 'application/json');
+            }
+        ]);
+    },
+];

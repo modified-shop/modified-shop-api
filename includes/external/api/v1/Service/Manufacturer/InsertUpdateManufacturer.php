@@ -14,99 +14,99 @@
 
 namespace api\v1\Service\Manufacturer;
 
-  use api\v1\Service\BaseService;
-  use api\v1\Action\Manufacturer\ManufacturerAction;
-  use api\v1\Utility\Responder;
-  use Psr\Http\Message\ResponseInterface;
-  use Psr\Http\Message\ServerRequestInterface;
-  use OpenApi\Attributes as OA;
+use api\v1\Service\BaseService;
+use api\v1\Action\Manufacturer\ManufacturerAction;
+use api\v1\Utility\Responder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use OpenApi\Attributes as OA;
 
-  #[OA\Put(
+#[OA\Put(
     path: '/api/v1/manufacturers/{Id}/manufacturers',
     tags: ['Manufacturer'],
     description: 'Update manufacturers data by given Id',
     operationId: 'InsertUpdateManufacturer',
     parameters: [
-      new OA\Parameter(
-        name: 'Id', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
-        ),
-        description: 'manufacturer Id'
-      )
+        new OA\Parameter(
+            name: 'Id',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'manufacturer Id'
+        )
     ],
     responses: [
-      new OA\Response(
-        response: 201, 
-        description: 'manufacturers data',
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'manufacturer not found'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'manufacturer Id required'
-      )
+        new OA\Response(
+            response: 201,
+            description: 'manufacturers data',
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'manufacturer not found'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'manufacturer Id required'
+        )
     ],
     security: [
-      ['modified_auth' => ['InsertUpdateManufacturer']]
+        ['modified_auth' => ['InsertUpdateManufacturer']]
     ]
-  )]
+)]
 
-  final class InsertUpdateManufacturer extends BaseService
-  {
-      /**
-       * @var ManufacturerAction
-       */
-      private $manufacturerAction;
+final class InsertUpdateManufacturer extends BaseService
+{
+    /**
+     * @var ManufacturerAction
+     */
+    private $manufacturerAction;
 
-      /**
-       * @var Responder
-       */
-      private $responder;
+    /**
+     * @var Responder
+     */
+    private $responder;
 
-      /**
-       * The constructor.
-       *
-       * @param ManufacturerAction $manufacturerAction The customer reader
-       * @param Responder $responder The responder
-       */
-      public function __construct(ManufacturerAction $manufacturerAction, Responder $responder)
-      {
-          $this->manufacturerAction = $manufacturerAction;
-          $this->responder = $responder;
-      }
+    /**
+     * The constructor.
+     *
+     * @param ManufacturerAction $manufacturerAction The customer reader
+     * @param Responder $responder The responder
+     */
+    public function __construct(ManufacturerAction $manufacturerAction, Responder $responder)
+    {
+        $this->manufacturerAction = $manufacturerAction;
+        $this->responder = $responder;
+    }
 
-      /**
-       * Invoke.
-       *
-       * @param ServerRequestInterface $request The request
-       * @param ResponseInterface $response The response
-       * @param array<mixed> $args The route arguments
-       *
-       * @return ResponseInterface The response
-       */
-      public function __invoke(
-          ServerRequestInterface $request,
-          ResponseInterface $response,
-          array $args
-      ): ResponseInterface {
-          $this->CheckAccess($request, $response);
+    /**
+     * Invoke.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array<mixed> $args The route arguments
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        $this->CheckAccess($request, $response);
 
-          $manufacturerId = ((isset($args['id'])) ? (int)$args['id'] : 0);
-          $data = (array)$request->getParsedBody();
-                    
-          $result = $this->manufacturerAction->InsertUpdateManufacturer($manufacturerId, $data);
-          
-          if (isset($result['errormessage'])) {
-              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
-          }
-          if ($manufacturerId > 0) {
-              return $this->responder->withJson($response, $result);
-          }
-          return $this->responder->withJson($response, $result)->withStatus(201);
-      }
-  }
+        $manufacturerId = ((isset($args['id'])) ? (int)$args['id'] : 0);
+        $data = (array)$request->getParsedBody();
+
+        $result = $this->manufacturerAction->InsertUpdateManufacturer($manufacturerId, $data);
+
+        if (isset($result['errormessage'])) {
+            return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+        }
+        if ($manufacturerId > 0) {
+            return $this->responder->withJson($response, $result);
+        }
+        return $this->responder->withJson($response, $result)->withStatus(201);
+    }
+}

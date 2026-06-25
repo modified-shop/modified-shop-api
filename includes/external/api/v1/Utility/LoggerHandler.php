@@ -14,57 +14,57 @@
 
 namespace api\v1\Utility;
 
-  use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
-  /**
-   * Factory.
-   */
-  final class LoggerHandler
-  {
-      /**
-       * @var string
-       */
-      private $path;
+/**
+ * Factory.
+ */
+final class LoggerHandler
+{
+    /**
+     * @var string
+     */
+    private $path;
 
-     /**
-       * @var string
-       */
-      private $filename;
+    /**
+      * @var string
+      */
+    private $filename;
 
-     /**
-       * @var string
-       */
-      private $name;
+    /**
+      * @var string
+      */
+    private $name;
 
-      /**
-       * @var int
-       */
-      private $level;
+    /**
+     * @var int
+     */
+    private $level;
 
-      /**
-       * The constructor.
-       *
-       * @param array<mixed> $settings The settings
-       */
-      public function __construct(array $settings)
-      {
-          $this->path = (string)$settings['path'];
-          $this->filename = (string)$settings['filename'];
-          $this->name = (string)$settings['name'];
-          $this->level = (string)$settings['level'];
-      }
+    /**
+     * The constructor.
+     *
+     * @param array<mixed> $settings The settings
+     */
+    public function __construct(array $settings)
+    {
+        $this->path = (string)$settings['path'];
+        $this->filename = (string)$settings['filename'];
+        $this->name = (string)$settings['name'];
+        $this->level = (string)$settings['level'];
+    }
 
-      /**
-       * Build the logger.
-       *
-       * @param string|null $name The logging channel
-       *
-       * @return LoggerInterface The logger
-       */
-      public function createLogger(): LoggerInterface
-      {
-          $logger = new \LoggingManager($this->path.$this->filename, $this->name, $this->level);
+    /**
+     * Build the logger.
+     *
+     * @param string|null $name The logging channel
+     *
+     * @return LoggerInterface The logger
+     */
+    public function createLogger(): LoggerInterface
+    {
+        $logger = new \LoggingManager($this->path . $this->filename, $this->name, $this->level);
 
-          return $logger;
-      }
-  }
+        return $logger;
+    }
+}

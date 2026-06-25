@@ -13,7 +13,7 @@
  */
 
 // dhl
-  $app->get('/dhl/{id}',                      \api\v1\Service\Dhl\GetDhl::class);
+$app->get('/dhl/{id}', \api\v1\Service\Dhl\GetDhl::class);
 
-  // delete dhl
-  $app->delete('/dhl/{id}',                   \api\v1\Service\Dhl\DeleteDhl::class);
+// delete dhl
+$app->delete('/dhl/{id}', \api\v1\Service\Dhl\DeleteDhl::class);

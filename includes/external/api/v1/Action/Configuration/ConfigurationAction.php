@@ -14,17 +14,16 @@
 
 namespace api\v1\Action\Configuration;
 
-  use api\v1\Action\BaseAction;
-  use api\v1\Utility\LoggerHandler;
-  use Psr\Log\LoggerInterface;
-  use Exception;
-  
-  /**
-   * Service.
-   */
-  final class ConfigurationAction extends BaseAction
-  {
-      use ConfigurationGetAction;
-      use ConfigurationDeleteAction;
-      
-  }
+use api\v1\Action\BaseAction;
+use api\v1\Utility\LoggerHandler;
+use Psr\Log\LoggerInterface;
+use Exception;
+
+/**
+ * Service.
+ */
+final class ConfigurationAction extends BaseAction
+{
+    use ConfigurationGetAction;
+    use ConfigurationDeleteAction;
+}

@@ -14,95 +14,95 @@
 
 namespace api\v1\Service\Coupon;
 
-  use api\v1\Service\BaseService;
-  use api\v1\Action\Coupon\CouponAction;
-  use api\v1\Utility\Responder;
-  use Psr\Http\Message\ResponseInterface;
-  use Psr\Http\Message\ServerRequestInterface;
-  use OpenApi\Attributes as OA;
+use api\v1\Service\BaseService;
+use api\v1\Action\Coupon\CouponAction;
+use api\v1\Utility\Responder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use OpenApi\Attributes as OA;
 
-  #[OA\Get(
+#[OA\Get(
     path: '/api/v1/coupons/{Id}/description',
     tags: ['Coupon'],
     description: 'Get coupons description data',
     operationId: 'GetCouponDescription',
     parameters: [
-      new OA\Parameter(
-        name: 'Id', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
-        ),
-        description: 'coupons Id'
-      )
+        new OA\Parameter(
+            name: 'Id',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'coupons Id'
+        )
     ],
     responses: [
-      new OA\Response(
-        response: 200, 
-        description: 'coupons description data',
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'no coupons description found'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'coupons Id required'
-      )
+        new OA\Response(
+            response: 200,
+            description: 'coupons description data',
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'no coupons description found'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'coupons Id required'
+        )
     ],
     security: [
-      ['modified_auth' => ['GetCouponDescription']]
+        ['modified_auth' => ['GetCouponDescription']]
     ]
-  )]
-  
-  final class GetCouponDescription extends BaseService
-  {
-      /**
-       * @var CouponAction
-       */
-      private $couponAction;
+)]
 
-      /**
-       * @var Responder
-       */
-      private $responder;
+final class GetCouponDescription extends BaseService
+{
+    /**
+     * @var CouponAction
+     */
+    private $couponAction;
 
-      /**
-       * The constructor.
-       *
-       * @param CouponAction $couponAction The customer reader
-       * @param Responder $responder The responder
-       */
-      public function __construct(CouponAction $couponAction, Responder $responder)
-      {
-          $this->couponAction = $couponAction;
-          $this->responder = $responder;
-      }
+    /**
+     * @var Responder
+     */
+    private $responder;
 
-      /**
-       * Invoke.
-       *
-       * @param ServerRequestInterface $request The request
-       * @param ResponseInterface $response The response
-       * @param array<mixed> $args The route arguments
-       *
-       * @return ResponseInterface The response
-       */
-      public function __invoke(
-          ServerRequestInterface $request,
-          ResponseInterface $response,
-          array $args
-      ): ResponseInterface {
-          $this->CheckAccess($request, $response);
+    /**
+     * The constructor.
+     *
+     * @param CouponAction $couponAction The customer reader
+     * @param Responder $responder The responder
+     */
+    public function __construct(CouponAction $couponAction, Responder $responder)
+    {
+        $this->couponAction = $couponAction;
+        $this->responder = $responder;
+    }
 
-          $couponId = (int)$args['id'];
+    /**
+     * Invoke.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array<mixed> $args The route arguments
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        $this->CheckAccess($request, $response);
 
-          $result = $this->couponAction->GetCouponDescription($couponId);
+        $couponId = (int)$args['id'];
 
-          if (isset($result['errormessage'])) {
-              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
-          }
-          return $this->responder->withJson($response, $result);
-      }
-  }
+        $result = $this->couponAction->GetCouponDescription($couponId);
+
+        if (isset($result['errormessage'])) {
+            return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+        }
+        return $this->responder->withJson($response, $result);
+    }
+}
