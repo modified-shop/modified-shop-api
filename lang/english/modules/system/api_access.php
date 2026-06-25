@@ -1,17 +1,19 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /lang/english/modules/system/api_access.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
+define('MODULE_API_ACCESS_TEXT_TITLE', 'API Access');
+define('MODULE_API_ACCESS_TEXT_DESCRIPTION', 'API Access');
 
-  define('MODULE_API_ACCESS_TEXT_TITLE', 'API Access');
-  define('MODULE_API_ACCESS_TEXT_DESCRIPTION', 'API Access');
-
-  define('MODULE_API_ACCESS_STATUS_TITLE', 'Status');
-  define('MODULE_API_ACCESS_STATUS_DESC', 'Module activate');
+define('MODULE_API_ACCESS_STATUS_TITLE', 'Status');
+define('MODULE_API_ACCESS_STATUS_DESC', 'Module activate');

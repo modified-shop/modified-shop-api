@@ -1,52 +1,55 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /admin/api_access.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
+require('includes/application_top.php');
 
-  require('includes/application_top.php');
+$confirm_save_entry = ' onclick="ButtonClicked(this);"';
+$confirm_submit = defined('CONFIRM_SAVE_ENTRY') && CONFIRM_SAVE_ENTRY == 'true' ? ' onsubmit="return confirmSubmit(\'\',\'' . SAVE_ENTRY . '\',this)"' : '';
 
-  $confirm_save_entry = ' onclick="ButtonClicked(this);"';
-  $confirm_submit = defined('CONFIRM_SAVE_ENTRY') && CONFIRM_SAVE_ENTRY == 'true' ? ' onsubmit="return confirmSubmit(\'\',\''. SAVE_ENTRY .'\',this)"' : '';
-
-  if (isset($_GET['action'])) {
+if (isset($_GET['action'])) {
     switch ($_GET['action']) {
-      case 'save':
+        case 'save':
+          // reset values before writing
+            $admin_access_query = xtc_db_query("SELECT *
+                                                  FROM `api_access`
+                                                 WHERE customers_id = '" . (int)$_GET['cID'] . "'");
+            $admin_access = xtc_db_fetch_array($admin_access_query);
 
-        // reset values before writing
-        $admin_access_query = xtc_db_query("SELECT *
-                                              FROM `api_access`
-                                             WHERE customers_id = '" . (int)$_GET['cID'] . "'");
-        $admin_access = xtc_db_fetch_array($admin_access_query);
+            $fields = xtc_db_query("SHOW COLUMNS FROM ``api_access`` FROM `" . DB_DATABASE . "`");
+            $columns = xtc_db_num_rows($fields);
 
-        $fields = xtc_db_query("SHOW COLUMNS FROM ``api_access`` FROM `".DB_DATABASE."`");
-        $columns = xtc_db_num_rows($fields);
+            while ($field = xtc_db_fetch_array($fields)) {
+                if ($field['Field'] != 'customers_id') {
+                    xtc_db_query("UPDATE `api_access`
+                             SET " . $field['Field'] . " = '0'
+                           WHERE customers_id = '" . (int)$_GET['cID'] . "'");
+                }
+            }
 
-        while ($field = xtc_db_fetch_array($fields)) {
-          if ($field['Field'] != 'customers_id') {
-            xtc_db_query("UPDATE `api_access`
-                             SET ".$field['Field']." = '0'
-                           WHERE customers_id = '".(int)$_GET['cID']."'");
-          }
-        }
-
-        if (isset($_POST['access'])) foreach($_POST['access'] as $key){
-          xtc_db_query("UPDATE `api_access`
-                           SET ".$key." = '1'
-                         WHERE customers_id = '".(int)$_GET['cID']."'");
-        }
-        xtc_redirect(xtc_href_link(FILENAME_CUSTOMERS, xtc_get_all_get_params(array('cID','action')).'cID=' . (int)$_GET['cID'], 'NONSSL'));
-        break;
+            if (isset($_POST['access'])) {
+                foreach ($_POST['access'] as $key) {
+                              xtc_db_query("UPDATE `api_access`
+                           SET " . $key . " = '1'
+                         WHERE customers_id = '" . (int)$_GET['cID'] . "'");
+                }
+            }
+            xtc_redirect(xtc_href_link(FILENAME_CUSTOMERS, xtc_get_all_get_params(array('cID','action')) . 'cID=' . (int)$_GET['cID'], 'NONSSL'));
+            break;
     }
-  }
+}
 
-  if ($_GET['cID'] != '') {
+if ($_GET['cID'] != '') {
     $allow_edit_query = xtc_db_query("SELECT customers_status,
                                              customers_firstname,
                                              customers_lastname
@@ -54,10 +57,10 @@
                                        WHERE customers_id = '" . (int)$_GET['cID'] . "'");
     $allow_edit = xtc_db_fetch_array($allow_edit_query);
     if (xtc_db_num_rows($allow_edit_query) < 1 || $allow_edit['customers_status'] == DEFAULT_CUSTOMERS_STATUS_ID_GUEST) {
-      xtc_redirect(xtc_href_link(FILENAME_CUSTOMERS, xtc_get_all_get_params(array('cID','action')).'cID=' . (int)$_GET['cID'], 'NONSSL'));
+        xtc_redirect(xtc_href_link(FILENAME_CUSTOMERS, xtc_get_all_get_params(array('cID','action')) . 'cID=' . (int)$_GET['cID'], 'NONSSL'));
     }
-  }
-  
+}
+
   $naming_array = array(
     '10' => array(
       'name' =>  TEXT_HEADING_CUSTOMERS,
@@ -70,7 +73,7 @@
     '30' => array(
       'name' =>  TEXT_HEADING_PRODUCTS,
       'color' => '#aacfe2',
-    ),   
+    ),
     '31' => array(
       'name' =>  TEXT_HEADING_MANUFACTURERS,
       'color' => '#ebd397',
@@ -125,8 +128,8 @@
     ),
   );
 
-require (DIR_WS_INCLUDES.'head.php');
-?>
+  require(DIR_WS_INCLUDES . 'head.php');
+    ?>
 <script type="text/javascript">
   function set_checkbox(val, cid) {
     if (cid == 1) {
@@ -176,22 +179,22 @@ require (DIR_WS_INCLUDES.'head.php');
   <tr>
     <?php //left_navigation
     if (USE_ADMIN_TOP_MENU == 'false') {
-      echo '<td class="columnLeft2">'.PHP_EOL;
-      echo '<!-- left_navigation //-->'.PHP_EOL;
-      require_once(DIR_WS_INCLUDES . 'column_left.php');
-      echo '<!-- left_navigation eof //-->'.PHP_EOL;
-      echo '</td>'.PHP_EOL;
+        echo '<td class="columnLeft2">' . PHP_EOL;
+        echo '<!-- left_navigation //-->' . PHP_EOL;
+        require_once(DIR_WS_INCLUDES . 'column_left.php');
+        echo '<!-- left_navigation eof //-->' . PHP_EOL;
+        echo '</td>' . PHP_EOL;
     }
     ?>
     <!-- body_text //-->
     <td class="boxCenter" width="100%" valign="top">
       <div class="div_box mrg5">
-        <div class="pageHeading pdg2"><?php echo TEXT_ACCOUNTING.' '.$allow_edit['customers_lastname'].' '.$allow_edit['customers_firstname'] . ' ['. (int)$_GET['cID'] .']'; ?>
+        <div class="pageHeading pdg2"><?php echo TEXT_ACCOUNTING . ' ' . $allow_edit['customers_lastname'] . ' ' . $allow_edit['customers_firstname'] . ' [' . (int)$_GET['cID'] . ']'; ?>
           <div class="main flt-r"><?php echo xtc_draw_checkbox_field('complete', false) . ' ' . BUTTON_SET; ?></div>
         </div>
         <?php if ($_GET['cID'] == '1') { ?>
         <div class="main important_info" style="margin-top: 5px;">
-          <?php  echo TEXT_ACCOUNTING_INFO ?> 
+            <?php  echo TEXT_ACCOUNTING_INFO ?> 
         </div>
         <?php } ?>
         <br/>
@@ -206,10 +209,10 @@ require (DIR_WS_INCLUDES.'head.php');
                                                       FROM `api_access`
                                                      WHERE customers_id = '" . (int)$_GET['cID'] . "'");
                 if (xtc_db_num_rows($admin_access_query) < 1) {
-                  xtc_db_query("INSERT INTO `api_access` (customers_id) VALUES ('" . (int)$_GET['cID'] . "')");
-                  $admin_access_query = xtc_db_query("SELECT *
-                                                        FROM `api_access`
-                                                       WHERE customers_id = '" . (int)$_GET['cID'] . "'");
+                    xtc_db_query("INSERT INTO `api_access` (customers_id) VALUES ('" . (int)$_GET['cID'] . "')");
+                    $admin_access_query = xtc_db_query("SELECT *
+                                                          FROM `api_access`
+                                                         WHERE customers_id = '" . (int)$_GET['cID'] . "'");
                 }
                 $admin_access = xtc_db_fetch_array($admin_access_query);
 
@@ -218,78 +221,76 @@ require (DIR_WS_INCLUDES.'head.php');
                                               WHERE customers_id = 'groups'");
                 $group_access = xtc_db_fetch_array($group_query);
 
-                $fields = xtc_db_query("SHOW COLUMNS FROM `api_access` FROM `".DB_DATABASE."`");
+                $fields = xtc_db_query("SHOW COLUMNS FROM `api_access` FROM `" . DB_DATABASE . "`");
                 while ($field = xtc_db_fetch_array($fields)) {
-              
-                  if ($field['Field'] != 'customers_id') {
-                
-                    $params = '';
-                    $checked = false;
-                    $params = '';
-                    $checked = false;
-                    $hidden_field = '';
-                    if ($admin_access[$field['Field']] == '1') {
-                      $checked = true;
-                      if ($_GET['cID'] == '1') {
-                        $params = ' disabled="disabled"';
-                        $hidden_field =  xtc_draw_hidden_field('access[]', $field['Field']).PHP_EOL;
-                      }
-                    }
+                    if ($field['Field'] != 'customers_id') {
+                        $params = '';
+                        $checked = false;
+                        $params = '';
+                        $checked = false;
+                        $hidden_field = '';
+                        if ($admin_access[$field['Field']] == '1') {
+                            $checked = true;
+                            if ($_GET['cID'] == '1') {
+                                $params = ' disabled="disabled"';
+                                $hidden_field =  xtc_draw_hidden_field('access[]', $field['Field']) . PHP_EOL;
+                            }
+                        }
 
-                    $accounting_array[$group_access[$field['Field']]][$field['Field']] = array(
-                      'key' => $field['Field'],
-                      'hidden' => $hidden_field,
-                      'params' => $params,
-                      'checked' => $checked,
-                    );
-                    ksort($accounting_array[$group_access[$field['Field']]]);
-                  }
+                        $accounting_array[$group_access[$field['Field']]][$field['Field']] = array(
+                        'key' => $field['Field'],
+                        'hidden' => $hidden_field,
+                        'params' => $params,
+                        'checked' => $checked,
+                        );
+                        ksort($accounting_array[$group_access[$field['Field']]]);
+                    }
                 }
                 ksort($accounting_array);
-                
+
                 if (isset($accounting_array[0])) {
-                  $accounting_tmp = $accounting_array[0];
-                  unset($accounting_array[0]);
-                  $accounting_array[0] = $accounting_tmp;
+                    $accounting_tmp = $accounting_array[0];
+                    unset($accounting_array[0]);
+                    $accounting_array[0] = $accounting_tmp;
                 }
                 $accounting_array = array_values($accounting_array);
                 $naming_array = array_values($naming_array);
-                
+
                 $total = count($accounting_array);
-                $divide = ceil($total/2);
-                
+                $divide = ceil($total / 2);
+
                 echo '<div class="accounting_container">';
                 echo '<div class="accounting_col">';
-                for ($i=0; $i<$total; $i++) {
-                  $totalaccess = count($accounting_array[$i]);
-                  $totalchecked = array_sum(array_column($accounting_array[$i], 'checked'));
-                  ?>
+                for ($i = 0; $i < $total; $i++) {
+                    $totalaccess = count($accounting_array[$i]);
+                    $totalchecked = array_sum(array_column($accounting_array[$i], 'checked'));
+                    ?>
                   <table class="tableBoxCenter collapse">
                     <tr class="dataTableHeadingRow">
                       <td class="dataTableHeadingContent column<?php echo $i; ?>" colspan="2" style="vertical-align:middle;"><?php echo $naming_array[$i]['name']; ?></td>
-                      <td class="dataTableHeadingContent txta-c column<?php echo $i; ?>" style="width:60px;vertical-align:middle;"><?php echo $totalchecked.'/'.$totalaccess; ?></td>
-                      <td class="dataTableHeadingContent" style="width:90px;vertical-align:middle;"><?php echo TEXT_ALLOWED.' '.xtc_draw_checkbox_field('checkall'.$i, '', ($totalchecked === $totalaccess), '', 'class="checkall'.$i.'" onclick="set_checkbox('.$i.', '.$_GET['cID'].')"'); ?></td>
+                      <td class="dataTableHeadingContent txta-c column<?php echo $i; ?>" style="width:60px;vertical-align:middle;"><?php echo $totalchecked . '/' . $totalaccess; ?></td>
+                      <td class="dataTableHeadingContent" style="width:90px;vertical-align:middle;"><?php echo TEXT_ALLOWED . ' ' . xtc_draw_checkbox_field('checkall' . $i, '', ($totalchecked === $totalaccess), '', 'class="checkall' . $i . '" onclick="set_checkbox(' . $i . ', ' . $_GET['cID'] . ')"'); ?></td>
                     </tr>
                     <?php
                     foreach ($accounting_array[$i] as $details) {
-                      ?>
+                        ?>
                       <tr class="dataTableRow detail<?php echo $i; ?>" style="display:none;">
                         <td class="dataTableContent" style="width:18px; background:<?php echo $naming_array[$i]['color']; ?>;"></td>
                         <td class="dataTableContent" colspan="2"><?php echo $details['key']; ?></td>
-                        <td class="dataTableContent txta-c" style="width:90px;"><?php echo xtc_draw_checkbox_field('access[]', $details['key'], $details['checked'], '', $details['params'].' class="access'.$i.'"').$details['hidden']; ?></td>
+                        <td class="dataTableContent txta-c" style="width:90px;"><?php echo xtc_draw_checkbox_field('access[]', $details['key'], $details['checked'], '', $details['params'] . ' class="access' . $i . '"') . $details['hidden']; ?></td>
                       </tr>
-                      <?php
+                        <?php
                     }
                     ?>
                     <tr><td>&nbsp;</td></tr>
                   </table>
-                  <?php
-                  if (($i + 1) % $divide == 0 || ($i + 1) == $total) {
-                    echo '</div>';
-                    if (($i + 1) < $total) {
-                      echo '<div class="accounting_col">';
+                    <?php
+                    if (($i + 1) % $divide == 0 || ($i + 1) == $total) {
+                        echo '</div>';
+                        if (($i + 1) < $total) {
+                            echo '<div class="accounting_col">';
+                        }
                     }
-                  }
                 }
                 echo '</div>';
                 ?>
