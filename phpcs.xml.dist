@@ -24,13 +24,21 @@
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>*/node_modules/*</exclude-pattern>
     <exclude-pattern>*/.vscode/*</exclude-pattern>
-    <exclude-pattern>*/includes/external/GuzzleHttp/*</exclude-pattern>
-    <exclude-pattern>*/includes/external/magnalister/*</exclude-pattern>
-    <exclude-pattern>*/includes/external/nusoap/*</exclude-pattern>
-    <exclude-pattern>*/includes/external/Phpfastcache/*</exclude-pattern>
-    <exclude-pattern>*/includes/external/phpmailer/*</exclude-pattern>
+    <exclude-pattern>*/includes/external/DI/*</exclude-pattern>
+    <exclude-pattern>*/includes/external/FastRoute/*</exclude-pattern>
+    <exclude-pattern>*/includes/external/Fig/*</exclude-pattern>
+    <exclude-pattern>*/includes/external/Firebase/*</exclude-pattern>
+    <exclude-pattern>*/includes/external/Invoker/*</exclude-pattern>
+    <exclude-pattern>*/includes/external/Laravel/*</exclude-pattern>
+    <exclude-pattern>*/includes/external/OpenApi/*</exclude-pattern>
+    <exclude-pattern>*/includes/external/Opis/*</exclude-pattern>
+    <exclude-pattern>*/includes/external/PhpDocReader/*</exclude-pattern>
+    <exclude-pattern>*/includes/external/PhpParser/*</exclude-pattern>
     <exclude-pattern>*/includes/external/Psr/*</exclude-pattern>
-    <exclude-pattern>*/includes/external/smarty/*</exclude-pattern>
+    <exclude-pattern>*/includes/external/Selective/*</exclude-pattern>
+    <exclude-pattern>*/includes/external/Slim/*</exclude-pattern>
+    <exclude-pattern>*/includes/external/Symfony/*</exclude-pattern>
+    <exclude-pattern>*/includes/external/Tuupola/*</exclude-pattern>
 
     <!-- Basis: kompletter PSR-12 Standard -->
     <rule ref="PSR12"/>
