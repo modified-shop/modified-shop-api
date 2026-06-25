@@ -31,9 +31,9 @@ trait ManufacturerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteManufacturer(int $manufacturerId): void
+    public function DeleteManufacturer(int $manufacturerId): ?array
     {
         // Input validation
         if (empty($manufacturerId)) {
@@ -59,6 +59,7 @@ trait ManufacturerDeleteAction
         }
 
         $this->logger->info(sprintf('Manufacturer deleted successfully: %s', $manufacturerId));
+        return null;
     }
 
     /**
@@ -69,9 +70,9 @@ trait ManufacturerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteProduct(int $manufacturerId, int $productId): void
+    public function DeleteProduct(int $manufacturerId, int $productId): ?array
     {
         // Input validation
         if (empty($manufacturerId)) {
@@ -91,11 +92,12 @@ trait ManufacturerDeleteAction
             return $this->errormessage(sprintf('Manufacturer product not found: %s', $manufacturerId));
         } else {
             while ($manufacturer = xtc_db_fetch_array($manufacturer_query)) {
-                xtc_db_query("UPDATE " . TABLE_PRODUCTS . " 
+                xtc_db_query("UPDATE " . TABLE_PRODUCTS . "
                                    SET manufacturers_id = '0'
                                  WHERE products_id = '" . (int)$manufacturer['products_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -124,9 +126,9 @@ trait ManufacturerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteImage(int $manufacturerId): void
+    public function DeleteImage(int $manufacturerId): ?array
     {
         // Input validation
         if (empty($manufacturerId)) {
@@ -144,10 +146,11 @@ trait ManufacturerDeleteAction
 
             $this->deleteImageFile($images['manufacturers_image']);
 
-            xtc_db_query("UPDATE " . TABLE_MANUFACTURERS . " 
+            xtc_db_query("UPDATE " . TABLE_MANUFACTURERS . "
                                SET manufacturers_image = ''
                              WHERE manufacturers_id = '" . (int)$manufacturerId . "'");
         }
+        return null;
     }
 
     /**

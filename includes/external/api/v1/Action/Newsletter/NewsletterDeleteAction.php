@@ -31,9 +31,9 @@ trait NewsletterDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteNewsletterRecipients(int $newsletterId): void
+    public function DeleteNewsletterRecipients(int $newsletterId): ?array
     {
         // Input validation
         if (empty($newsletterId)) {
@@ -51,5 +51,6 @@ trait NewsletterDeleteAction
         }
 
         $this->logger->info(sprintf('Newsletter deleted successfully: %s', $newsletterId));
+        return null;
     }
 }

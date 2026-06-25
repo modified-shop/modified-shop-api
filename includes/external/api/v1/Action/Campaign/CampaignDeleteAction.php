@@ -31,9 +31,9 @@ trait CampaignDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteCampaign(int $campaignId): void
+    public function DeleteCampaign(int $campaignId): ?array
     {
         // Input validation
         if (empty($campaignId)) {
@@ -51,5 +51,6 @@ trait CampaignDeleteAction
         }
 
         $this->logger->info(sprintf('Campaign deleted successfully: %s', $campaignId));
+        return null;
     }
 }
