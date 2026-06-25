@@ -1,16 +1,18 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /includes/external/api/v1/config/campaigns.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
-
-  // campaigns
+// campaigns
   $app->get('/campaigns',                       \api\v1\Service\Campaign\GetCampaigns::class);
   $app->get('/campaigns/{id}/ip',               \api\v1\Service\Campaign\GetCampaignsIp::class);
 

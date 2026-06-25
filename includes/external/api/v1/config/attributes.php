@@ -1,16 +1,18 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /includes/external/api/v1/config/attributes.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
-
-  // options
+// options
   $app->get('/attributes/options',                    \api\v1\Service\Attributes\GetOptions::class);
   $app->get('/attributes/options/{id}',               \api\v1\Service\Attributes\GetSingleOption::class);
 

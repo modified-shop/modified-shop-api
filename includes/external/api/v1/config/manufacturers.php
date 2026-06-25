@@ -1,16 +1,18 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /includes/external/api/v1/config/manufacturers.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
-
-  // manufacturers
+// manufacturers
   $app->get('/manufacturers',                            \api\v1\Service\Manufacturer\GetManufacturers::class);
   $app->get('/manufacturers/{id}',                       \api\v1\Service\Manufacturer\GetSingleManufacturer::class);
   $app->get('/manufacturers/{id}/description',           \api\v1\Service\Manufacturer\GetManufacturerDescription::class);

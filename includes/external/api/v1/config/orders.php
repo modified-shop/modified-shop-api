@@ -1,16 +1,18 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /includes/external/api/v1/config/orders.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
-
-  // orders
+// orders
   $app->get('/orders',                              \api\v1\Service\Order\GetOrders::class);
   $app->get('/orders/status',                       \api\v1\Service\Order\GetOrderStatus::class);
   $app->get('/orders/status/{id}',                  \api\v1\Service\Order\GetSingleOrderStatus::class);

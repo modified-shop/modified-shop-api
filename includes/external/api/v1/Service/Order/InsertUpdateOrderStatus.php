@@ -1,16 +1,18 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /includes/external/api/v1/Service/Order/InsertUpdateOrderStatus.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
-
-  namespace api\v1\Service\Order;
+namespace api\v1\Service\Order;
 
   use api\v1\Service\BaseService;
   use api\v1\Action\Order\OrderAction;

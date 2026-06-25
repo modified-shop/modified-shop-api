@@ -1,16 +1,18 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /includes/external/api/v1/config/newsletters.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
-
-  // newsletters
+// newsletters
   $app->get('/newsletters/recipients',                       \api\v1\Service\Newsletter\GetNewsletterRecipients::class);
   $app->get('/newsletters/recipients/history',               \api\v1\Service\Newsletter\GetNewsletterRecipientsHistory::class);
   $app->get('/newsletters/recipients/{id}',                  \api\v1\Service\Newsletter\GetSingleNewsletterRecipients::class);
