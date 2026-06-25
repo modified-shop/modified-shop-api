@@ -94,9 +94,9 @@ final class DhlAction extends BaseAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteDhl(int $orderId, array $options): void
+    public function DeleteDhl(int $orderId, array $options): ?array
     {
         // Input validation
         if (empty($orderId)) {
@@ -137,9 +137,10 @@ final class DhlAction extends BaseAction
             return $this->errormessage($response['message'], 400);
         }
 
-        xtc_db_query("DELETE FROM " . TABLE_ORDERS_TRACKING . " 
+        xtc_db_query("DELETE FROM " . TABLE_ORDERS_TRACKING . "
                               WHERE tracking_id = '" . (int)$result['tracking_id'] . "'");
 
         $this->logger->info(sprintf('Tracking deleted successfully: %s', $result['parcel_id']));
+        return null;
     }
 }

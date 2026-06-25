@@ -31,9 +31,9 @@ trait ShippingDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteCarrier(int $carrierId): void
+    public function DeleteCarrier(int $carrierId): ?array
     {
         // Input validation
         if (empty($carrierId)) {
@@ -51,6 +51,7 @@ trait ShippingDeleteAction
         }
 
         $this->logger->info(sprintf('Carrier deleted successfully: %s', $carrierId));
+        return null;
     }
 
     /**
@@ -60,9 +61,9 @@ trait ShippingDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteShippingStatus(int $shippingStatusId): void
+    public function DeleteShippingStatus(int $shippingStatusId): ?array
     {
         // Input validation
         if (empty($shippingStatusId)) {
@@ -80,5 +81,6 @@ trait ShippingDeleteAction
         }
 
         $this->logger->info(sprintf('Shipping Status deleted successfully: %s', $shippingStatusId));
+        return null;
     }
 }

@@ -31,9 +31,9 @@ trait AttributesDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteOption(int $optionId): void
+    public function DeleteOption(int $optionId): ?array
     {
         // Input validation
         if (empty($optionId)) {
@@ -46,12 +46,13 @@ trait AttributesDeleteAction
         if (xtc_db_num_rows($option_query) < 1 && $this->throw_exception === true) {
             return $this->errormessage(sprintf('Option not found: %s', $optionId));
         } else {
-            xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_OPTIONS . " 
+            xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_OPTIONS . "
                                   WHERE products_options_id = '" . (int)$optionId . "'");
 
-            xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS . " 
+            xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS . "
                                   WHERE products_options_id = '" . (int)$optionId . "'");
         }
+        return null;
     }
 
     /**
@@ -61,9 +62,9 @@ trait AttributesDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteValue(int $valueId): void
+    public function DeleteValue(int $valueId): ?array
     {
         // Input validation
         if (empty($valueId)) {
@@ -76,12 +77,13 @@ trait AttributesDeleteAction
         if (xtc_db_num_rows($value_query) < 1 && $this->throw_exception === true) {
             return $this->errormessage(sprintf('Option value not found: %s', $valueId));
         } else {
-            xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_OPTIONS_VALUES . " 
+            xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_OPTIONS_VALUES . "
                                   WHERE products_options_values_id = '" . (int)$valueId . "'");
 
-            xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS . " 
+            xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS . "
                                   WHERE products_options_values_id = '" . (int)$valueId . "'");
         }
+        return null;
     }
 
     /**
@@ -92,9 +94,9 @@ trait AttributesDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAttributes(int $optionId, int $valueId): void
+    public function DeleteAttributes(int $optionId, int $valueId): ?array
     {
         // Input validation
         if (empty($optionId)) {
@@ -114,11 +116,12 @@ trait AttributesDeleteAction
             return $this->errormessage(sprintf('Option value not found: %s', $optionId));
         } else {
             while ($attributes = xtc_db_fetch_array($attributes_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS . " 
+                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS . "
                                       WHERE products_options_id = '" . (int)$optionId . "'
                                         AND products_options_values_id = '" . (int)$attributes['products_options_values_id'] . "'");
             }
         }
+        return null;
     }
 
     /**

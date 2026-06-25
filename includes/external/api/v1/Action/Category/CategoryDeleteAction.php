@@ -31,9 +31,9 @@ trait CategoryDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteCategory(int $categoryId): void
+    public function DeleteCategory(int $categoryId): ?array
     {
         // Input validation
         if (empty($categoryId)) {
@@ -73,6 +73,7 @@ trait CategoryDeleteAction
                 }
             }
         }
+        return null;
     }
 
     /**
@@ -83,9 +84,9 @@ trait CategoryDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteProduct(int $categoryId, int $productId): void
+    public function DeleteProduct(int $categoryId, int $productId): ?array
     {
         // Input validation
         if (empty($categoryId)) {
@@ -105,11 +106,12 @@ trait CategoryDeleteAction
             return $this->errormessage(sprintf('Category products not found: %s', $categoryId));
         } else {
             while ($category = xtc_db_fetch_array($category_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_TO_CATEGORIES . " 
+                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_TO_CATEGORIES . "
                                       WHERE categories_id = '" . (int)$categoryId . "'
                                         AND products_id = '" . (int)$category['products_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -138,9 +140,9 @@ trait CategoryDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteImages(int $categoryId): void
+    public function DeleteImages(int $categoryId): ?array
     {
         // Input validation
         if (empty($categoryId)) {
@@ -178,5 +180,6 @@ trait CategoryDeleteAction
                 }
             }
         }
+        return null;
     }
 }

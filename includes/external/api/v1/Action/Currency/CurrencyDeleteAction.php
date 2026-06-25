@@ -31,9 +31,9 @@ trait CurrencyDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteCurrency(int $currencyId): void
+    public function DeleteCurrency(int $currencyId): ?array
     {
         // Input validation
         if (empty($currencyId)) {
@@ -51,5 +51,6 @@ trait CurrencyDeleteAction
         }
 
         $this->logger->info(sprintf('Currency deleted successfully: %s', $currencyId));
+        return null;
     }
 }

@@ -287,9 +287,9 @@ final class CategoryAction extends BaseAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function InsertUpdateImages(int $categoryId): void
+    public function InsertUpdateImages(int $categoryId): ?array
     {
         // Input validation
         if (empty($categoryId)) {
@@ -329,5 +329,6 @@ final class CategoryAction extends BaseAction
                 }
             }
         }
+        return null;
     }
 }

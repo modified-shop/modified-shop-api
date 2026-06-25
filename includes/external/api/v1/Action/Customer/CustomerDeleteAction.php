@@ -31,9 +31,9 @@ trait CustomerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteCustomer(int $customerId): void
+    public function DeleteCustomer(int $customerId): ?array
     {
         // Input validation
         if (empty($customerId)) {
@@ -61,6 +61,7 @@ trait CustomerDeleteAction
         }
 
         $this->logger->info(sprintf('Customer deleted successfully: %s', $customerId));
+        return null;
     }
 
     /**
@@ -70,9 +71,9 @@ trait CustomerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteInfo(int $customerId): void
+    public function DeleteInfo(int $customerId): ?array
     {
         // Input validation
         if (empty($customerId)) {
@@ -85,9 +86,10 @@ trait CustomerDeleteAction
         if (xtc_db_num_rows($customer_query) < 1 && $this->throw_exception === true) {
             return $this->errormessage(sprintf('Customer info not found: %s', $customerId));
         } else {
-            xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_INFO . " 
+            xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_INFO . "
                                   WHERE customers_info_id = '" . (int)$customerId . "'");
         }
+        return null;
     }
 
     /**
@@ -98,9 +100,9 @@ trait CustomerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteIp(int $customerId, int $customerIpId): void
+    public function DeleteIp(int $customerId, int $customerIpId): ?array
     {
         // Input validation
         if (empty($customerId)) {
@@ -120,11 +122,12 @@ trait CustomerDeleteAction
             return $this->errormessage(sprintf('Customer ip not found: %s', $customerId));
         } else {
             while ($customer = xtc_db_fetch_array($customer_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_IP . " 
+                xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_IP . "
                                       WHERE customers_id = '" . (int)$customerId . "'
                                         AND customers_ip_id = '" . (int)$customer['customers_ip_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -154,9 +157,9 @@ trait CustomerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteMemo(int $customerId, int $memoId): void
+    public function DeleteMemo(int $customerId, int $memoId): ?array
     {
         // Input validation
         if (empty($customerId)) {
@@ -176,11 +179,12 @@ trait CustomerDeleteAction
             return $this->errormessage(sprintf('Customer memo not found: %s', $customerId));
         } else {
             while ($customer = xtc_db_fetch_array($customer_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_MEMO . " 
+                xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_MEMO . "
                                       WHERE customers_id = '" . (int)$customerId . "'
                                         AND memo_id = '" . (int)$customer['memo_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -210,9 +214,9 @@ trait CustomerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteStatusHistory(int $customerId, int $customerStatusHistoryId): void
+    public function DeleteStatusHistory(int $customerId, int $customerStatusHistoryId): ?array
     {
         // Input validation
         if (empty($customerId)) {
@@ -232,11 +236,12 @@ trait CustomerDeleteAction
             return $this->errormessage(sprintf('Customer status history not found: %s', $customerId));
         } else {
             while ($customer = xtc_db_fetch_array($customer_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_STATUS_HISTORY . " 
+                xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_STATUS_HISTORY . "
                                       WHERE customers_id = '" . (int)$customerId . "'
                                         AND customers_status_history_id = '" . (int)$customer['customers_status_history_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -266,9 +271,9 @@ trait CustomerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAddressBook(int $customerId, int $addressBookId): void
+    public function DeleteAddressBook(int $customerId, int $addressBookId): ?array
     {
         // Input validation
         if (empty($customerId)) {
@@ -288,11 +293,12 @@ trait CustomerDeleteAction
             return $this->errormessage(sprintf('Customer address book not found: %s', $customerId));
         } else {
             while ($customer = xtc_db_fetch_array($customer_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_ADDRESS_BOOK . " 
+                xtc_db_query("DELETE FROM " . TABLE_ADDRESS_BOOK . "
                                       WHERE customers_id = '" . (int)$customerId . "'
                                         AND address_book_id = '" . (int)$customer['address_book_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -322,9 +328,9 @@ trait CustomerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteBasket(int $customerId, int $customersBasketId): void
+    public function DeleteBasket(int $customerId, int $customersBasketId): ?array
     {
         // Input validation
         if (empty($customerId)) {
@@ -344,15 +350,16 @@ trait CustomerDeleteAction
             return $this->errormessage(sprintf('Customer basket not found: %s', $customerId));
         } else {
             while ($customer = xtc_db_fetch_array($customer_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_BASKET . " 
+                xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_BASKET . "
                                       WHERE customers_id = '" . (int)$customerId . "'
                                         AND customers_basket_id = '" . (int)$customer['customers_basket_id'] . "'");
 
-                xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_BASKET_ATTRIBUTES . " 
+                xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_BASKET_ATTRIBUTES . "
                                       WHERE customers_id = '" . (int)$customerId . "'
                                         AND products_id = '" . xtc_db_input($customer['products_id']) . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -382,9 +389,9 @@ trait CustomerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteWishlist(int $customerId, int $customersBasketId): void
+    public function DeleteWishlist(int $customerId, int $customersBasketId): ?array
     {
         // Input validation
         if (empty($customerId)) {
@@ -404,15 +411,16 @@ trait CustomerDeleteAction
             return $this->errormessage(sprintf('Customer wishlist not found: %s', $customerId));
         } else {
             while ($customer = xtc_db_fetch_array($customer_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_WISHLIST . " 
+                xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_WISHLIST . "
                                       WHERE customers_id = '" . (int)$customerId . "'
                                         AND customers_basket_id = '" . (int)$customer['customers_basket_id'] . "'");
 
-                xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_WISHLIST_ATTRIBUTES . " 
+                xtc_db_query("DELETE FROM " . TABLE_CUSTOMERS_WISHLIST_ATTRIBUTES . "
                                       WHERE customers_id = '" . (int)$customerId . "'
                                         AND products_id = '" . xtc_db_input($customer['products_id']) . "'");
             }
         }
+        return null;
     }
 
     /**

@@ -31,9 +31,9 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteProduct(int $productId): void
+    public function DeleteProduct(int $productId): ?array
     {
         // Input validation
         if (empty($productId)) {
@@ -77,6 +77,7 @@ trait ProductDeleteAction
         }
 
         $this->logger->info(sprintf('Product deleted successfully: %s', $productId));
+        return null;
     }
 
     /**
@@ -87,9 +88,9 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteCategory(int $productId, int $categoryId): void
+    public function DeleteCategory(int $productId, int $categoryId): ?array
     {
         // Input validation
         if (empty($productId)) {
@@ -109,11 +110,12 @@ trait ProductDeleteAction
             return $this->errormessage(sprintf('Product categories not found: %s', $productId));
         } else {
             while ($product = xtc_db_fetch_array($product_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_TO_CATEGORIES . " 
+                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_TO_CATEGORIES . "
                                       WHERE products_id = '" . (int)$productId . "'
                                         AND categories_id = '" . (int)$product['categories_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -142,9 +144,9 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteImage(int $productId): void
+    public function DeleteImage(int $productId): ?array
     {
         // Input validation
         if (empty($productId)) {
@@ -162,10 +164,11 @@ trait ProductDeleteAction
 
             $this->deleteImageFile($images['products_image']);
 
-            xtc_db_query("UPDATE " . TABLE_PRODUCTS . " 
+            xtc_db_query("UPDATE " . TABLE_PRODUCTS . "
                                SET products_image = ''
                              WHERE products_id = '" . (int)$productId . "'");
         }
+        return null;
     }
 
     /**
@@ -176,9 +179,9 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteImages(int $productId, int $imageId): void
+    public function DeleteImages(int $productId, int $imageId): ?array
     {
         // Input validation
         if (empty($productId)) {
@@ -204,11 +207,12 @@ trait ProductDeleteAction
                 $this->deleteImageFile($images['image_name']);
                 $this->DeleteImagesDescription($productId, $images['image_id']);
 
-                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_IMAGES . " 
+                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_IMAGES . "
                                       WHERE products_id = '" . (int)$productId . "'
                                         AND image_id = '" . (int)$images['image_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -238,9 +242,9 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteImagesDescription(int $productId, int $imageId): void
+    public function DeleteImagesDescription(int $productId, int $imageId): ?array
     {
         // Input validation
         if (empty($productId)) {
@@ -260,11 +264,12 @@ trait ProductDeleteAction
             return $this->errormessage(sprintf('Product more images not found: %s', $productId));
         } else {
             while ($images = xtc_db_fetch_array($images_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_IMAGES_DESCRIPTION . " 
+                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_IMAGES_DESCRIPTION . "
                                       WHERE products_id = '" . (int)$productId . "'
                                         AND image_id = '" . (int)$images['image_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -275,9 +280,9 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteXsell(int $productId, int $xsellId): void
+    public function DeleteXsell(int $productId, int $xsellId): ?array
     {
         // Input validation
         if (empty($productId)) {
@@ -297,11 +302,12 @@ trait ProductDeleteAction
             return $this->errormessage(sprintf('Product xsell not found: %s', $productId));
         } else {
             while ($xsell = xtc_db_fetch_array($xsell_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_XSELL . " 
+                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_XSELL . "
                                       WHERE products_id = '" . (int)$productId . "'
                                         AND ID = '" . (int)$xsell['ID'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -331,9 +337,9 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteSpecials(int $productId, int $specialsId): void
+    public function DeleteSpecials(int $productId, int $specialsId): ?array
     {
         // Input validation
         if (empty($productId)) {
@@ -353,11 +359,12 @@ trait ProductDeleteAction
             return $this->errormessage(sprintf('Product specials not found: %s', $productId));
         } else {
             while ($specials = xtc_db_fetch_array($specials_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_SPECIALS . " 
+                xtc_db_query("DELETE FROM " . TABLE_SPECIALS . "
                                       WHERE products_id = '" . (int)$productId . "'
                                         AND specials_id = '" . (int)$specials['specials_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -387,9 +394,9 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAttributes(int $productId, int $attributesId): void
+    public function DeleteAttributes(int $productId, int $attributesId): ?array
     {
         // Input validation
         if (empty($productId)) {
@@ -409,14 +416,15 @@ trait ProductDeleteAction
             return $this->errormessage(sprintf('Product attributes not found: %s', $productId));
         } else {
             while ($attributes = xtc_db_fetch_array($attributes_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_ATTRIBUTES . " 
+                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_ATTRIBUTES . "
                                       WHERE products_id = '" . (int)$productId . "'
                                         AND products_attributes_id = '" . (int)$attributes['products_attributes_id'] . "'");
 
-                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD . " 
+                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD . "
                                       WHERE products_attributes_id = '" . (int)$attributes['products_attributes_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -446,9 +454,9 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteTags(int $productId, int $tagsId): void
+    public function DeleteTags(int $productId, int $tagsId): ?array
     {
         // Input validation
         if (empty($productId)) {
@@ -468,11 +476,12 @@ trait ProductDeleteAction
             return $this->errormessage(sprintf('Product tags not found: %s', $productId));
         } else {
             while ($tags = xtc_db_fetch_array($tags_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_TAGS . " 
+                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_TAGS . "
                                       WHERE products_id = '" . (int)$productId . "'
                                         AND products_tags_id = '" . (int)$tags['products_tags_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -502,9 +511,9 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteContents(int $productId, int $contentId): void
+    public function DeleteContents(int $productId, int $contentId): ?array
     {
         // Input validation
         if (empty($productId)) {
@@ -536,11 +545,12 @@ trait ProductDeleteAction
                     unlink(DIR_FS_CATALOG . 'media/products/' . $content['content_file']);
                 }
 
-                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_CONTENT . " 
+                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_CONTENT . "
                                       WHERE products_id = '" . (int)$productId . "'
                                         AND content_id = '" . (int)$content['content_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -571,9 +581,9 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeletePersonalOffer(int $productId, int $statusId, int $priceId): void
+    public function DeletePersonalOffer(int $productId, int $statusId, int $priceId): ?array
     {
         // Input validation
         if (empty($productId)) {
@@ -601,6 +611,7 @@ trait ProductDeleteAction
                                         AND price_id = '" . (int)$personal_offer['price_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -659,9 +670,9 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteReviews(int $productId, int $reviewsId): void
+    public function DeleteReviews(int $productId, int $reviewsId): ?array
     {
         // Input validation
         if (empty($productId)) {
@@ -689,6 +700,7 @@ trait ProductDeleteAction
                                       WHERE reviews_id = '" . (int)$reviews['reviews_id'] . "'");
             }
         }
+        return null;
     }
 
     /**

@@ -31,9 +31,9 @@ trait CouponDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteCoupon(int $couponId): void
+    public function DeleteCoupon(int $couponId): ?array
     {
         // Input validation
         if (empty($couponId)) {
@@ -51,5 +51,6 @@ trait CouponDeleteAction
 
             $this->logger->info(sprintf('Coupon deleted successfully: %s', $couponId));
         }
+        return null;
     }
 }

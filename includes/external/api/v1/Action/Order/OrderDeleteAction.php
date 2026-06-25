@@ -31,9 +31,9 @@ trait OrderDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteOrder(int $orderId): void
+    public function DeleteOrder(int $orderId): ?array
     {
         // Input validation
         if (empty($orderId)) {
@@ -59,6 +59,7 @@ trait OrderDeleteAction
         }
 
         $this->logger->info(sprintf('Order deleted successfully: %s', $orderId));
+        return null;
     }
 
     /**
@@ -69,9 +70,9 @@ trait OrderDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteProduct(int $orderId, int $orderProductsId): void
+    public function DeleteProduct(int $orderId, int $orderProductsId): ?array
     {
         // Input validation
         if (empty($orderId)) {
@@ -91,19 +92,20 @@ trait OrderDeleteAction
             return $this->errormessage(sprintf('Order products not found: %s', $orderId));
         } else {
             while ($order = xtc_db_fetch_array($order_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . " 
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . "
                                       WHERE orders_id = '" . (int)$orderId . "'
                                         AND orders_products_id = '" . (int)$order['orders_products_id'] . "'");
 
-                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS_DOWNLOAD . " 
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS_DOWNLOAD . "
                                       WHERE orders_id = '" . (int)$orderId . "'
                                         AND orders_products_id = '" . (int)$order['orders_products_id'] . "'");
 
-                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS . " 
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS . "
                                       WHERE orders_id = '" . (int)$orderId . "'
                                         AND orders_products_id = '" . (int)$order['orders_products_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -133,9 +135,9 @@ trait OrderDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteProductAttributes(int $orderId, int $orderProductsAttributesId): void
+    public function DeleteProductAttributes(int $orderId, int $orderProductsAttributesId): ?array
     {
         // Input validation
         if (empty($orderId)) {
@@ -155,11 +157,12 @@ trait OrderDeleteAction
             return $this->errormessage(sprintf('Order products attributes not found: %s', $orderId));
         } else {
             while ($order = xtc_db_fetch_array($order_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . " 
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . "
                                       WHERE orders_id = '" . (int)$orderId . "'
                                         AND orders_products_attributes_id = '" . (int)$order['orders_products_attributes_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -170,9 +173,9 @@ trait OrderDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteProductDownload(int $orderId, int $orderProductsDownloadId): void
+    public function DeleteProductDownload(int $orderId, int $orderProductsDownloadId): ?array
     {
         // Input validation
         if (empty($orderId)) {
@@ -192,11 +195,12 @@ trait OrderDeleteAction
             return $this->errormessage(sprintf('Order products download not found: %s', $orderId));
         } else {
             while ($order = xtc_db_fetch_array($order_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS_DOWNLOAD . " 
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_PRODUCTS_DOWNLOAD . "
                                       WHERE orders_id = '" . (int)$orderId . "'
                                         AND orders_products_download_id = '" . (int)$order['orders_products_download_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -207,9 +211,9 @@ trait OrderDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteStatusHistory(int $orderId, int $orderStatusHistoryId): void
+    public function DeleteStatusHistory(int $orderId, int $orderStatusHistoryId): ?array
     {
         // Input validation
         if (empty($orderId)) {
@@ -229,11 +233,12 @@ trait OrderDeleteAction
             return $this->errormessage(sprintf('Order status history not found: %s', $orderId));
         } else {
             while ($order = xtc_db_fetch_array($order_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_ORDERS_STATUS_HISTORY . " 
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_STATUS_HISTORY . "
                                       WHERE orders_id = '" . (int)$orderId . "'
                                         AND orders_status_history_id = '" . (int)$order['orders_status_history_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -263,9 +268,9 @@ trait OrderDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteTotal(int $orderId, int $orderTotalId): void
+    public function DeleteTotal(int $orderId, int $orderTotalId): ?array
     {
         // Input validation
         if (empty($orderId)) {
@@ -285,11 +290,12 @@ trait OrderDeleteAction
             return $this->errormessage(sprintf('Order total not found: %s', $orderId));
         } else {
             while ($order = xtc_db_fetch_array($order_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_ORDERS_TOTAL . " 
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_TOTAL . "
                                       WHERE orders_id = '" . (int)$orderId . "'
                                         AND orders_total_id = '" . (int)$order['orders_total_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -319,9 +325,9 @@ trait OrderDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteTracking(int $orderId, int $trackingId): void
+    public function DeleteTracking(int $orderId, int $trackingId): ?array
     {
         // Input validation
         if (empty($orderId)) {
@@ -341,11 +347,12 @@ trait OrderDeleteAction
             return $this->errormessage(sprintf('Order tracking not found: %s', $orderId));
         } else {
             while ($order = xtc_db_fetch_array($order_query)) {
-                xtc_db_query("DELETE FROM " . TABLE_ORDERS_TRACKING . " 
+                xtc_db_query("DELETE FROM " . TABLE_ORDERS_TRACKING . "
                                       WHERE orders_id = '" . (int)$orderId . "'
                                         AND tracking_id = '" . (int)$order['tracking_id'] . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -374,9 +381,9 @@ trait OrderDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteOrderStatus(int $orderStatusId): void
+    public function DeleteOrderStatus(int $orderStatusId): ?array
     {
         // Input validation
         if (empty($orderStatusId)) {
@@ -394,5 +401,6 @@ trait OrderDeleteAction
         }
 
         $this->logger->info(sprintf('Order Status deleted successfully: %s', $orderStatusId));
+        return null;
     }
 }

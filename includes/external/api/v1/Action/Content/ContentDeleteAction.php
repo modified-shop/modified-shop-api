@@ -31,9 +31,9 @@ trait ContentDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteContent(int $contentGroupId): void
+    public function DeleteContent(int $contentGroupId): ?array
     {
         // Input validation
         if (empty($contentGroupId)) {
@@ -57,6 +57,7 @@ trait ContentDeleteAction
         }
 
         $this->logger->info(sprintf('Content Group deleted successfully: %s', $contentGroupId));
+        return null;
     }
 
     /**
@@ -67,9 +68,9 @@ trait ContentDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteContentContent(int $contentGroupId, int $contentId): void
+    public function DeleteContentContent(int $contentGroupId, int $contentId): ?array
     {
         // Input validation
         if (empty($contentGroupId)) {
@@ -101,11 +102,12 @@ trait ContentDeleteAction
                     unlink(DIR_FS_CATALOG . 'media/content/' . $content['content_file']);
                 }
 
-                xtc_db_query("DELETE FROM " . TABLE_CONTENT_MANAGER_CONTENT . " 
+                xtc_db_query("DELETE FROM " . TABLE_CONTENT_MANAGER_CONTENT . "
                                       WHERE content_manager_id = '" . (int)$contentGroupId . "'
                                         AND content_id = '" . (int)$content['content_id'] . "'");
             }
         }
+        return null;
     }
 
     /**

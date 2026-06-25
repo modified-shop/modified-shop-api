@@ -31,9 +31,9 @@ trait TagsDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteOption(int $optionId): void
+    public function DeleteOption(int $optionId): ?array
     {
         // Input validation
         if (empty($optionId)) {
@@ -47,16 +47,17 @@ trait TagsDeleteAction
             return $this->errormessage(sprintf('Option not found: %s', $optionId));
         } else {
             $products_query = xtc_db_query("SELECT *
-                                                FROM " . TABLE_PRODUCTS_TAGS_VALUES . " 
+                                                FROM " . TABLE_PRODUCTS_TAGS_VALUES . "
                                                WHERE options_id = '" . (int)$optionId . "'");
             $count = xtc_db_num_rows($products_query);
             if ($count > 0) {
                 return $this->errormessage(sprintf('Option can not get deleted due to connected values: %s', $count), 400);
             } else {
-                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_TAGS_OPTIONS . " 
+                xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_TAGS_OPTIONS . "
                                       WHERE options_id = '" . (int)$optionId . "'");
             }
         }
+        return null;
     }
 
     /**
@@ -66,9 +67,9 @@ trait TagsDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteValue(int $valueId): void
+    public function DeleteValue(int $valueId): ?array
     {
         // Input validation
         if (empty($valueId)) {
@@ -81,8 +82,9 @@ trait TagsDeleteAction
         if (xtc_db_num_rows($value_query) < 1 && $this->throw_exception === true) {
             return $this->errormessage(sprintf('Value not found: %s', $valueId));
         } else {
-            xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_TAGS_VALUES . " 
+            xtc_db_query("DELETE FROM " . TABLE_PRODUCTS_TAGS_VALUES . "
                                   WHERE values_id = '" . (int)$valueId . "'");
         }
+        return null;
     }
 }

@@ -31,9 +31,9 @@ trait LanguageDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteLanguage(int $languageId): void
+    public function DeleteLanguage(int $languageId): ?array
     {
         // Input validation
         if (empty($languageId)) {
@@ -51,5 +51,6 @@ trait LanguageDeleteAction
         }
 
         $this->logger->info(sprintf('Language deleted successfully: %s', $languageId));
+        return null;
     }
 }
