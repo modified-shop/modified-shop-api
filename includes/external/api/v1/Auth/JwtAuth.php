@@ -16,7 +16,6 @@ namespace api\v1\Auth;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-
 use Firebase\JWT\JWT;
 use Tuupola\Base62;
 
