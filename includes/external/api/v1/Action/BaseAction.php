@@ -178,7 +178,8 @@ class BaseAction
                 $value = $default['Default'];
             } elseif (strtolower($default['Null']) == 'yes') {
                 $value = 'null';
-            } elseif (strtolower($default['Null']) == 'no'
+            } elseif (
+                strtolower($default['Null']) == 'no'
                       && (
                           strpos(strtolower($default['Type']), 'int') !== false
                           || strpos(strtolower($default['Type']), 'decimal') !== false
@@ -229,12 +230,14 @@ class BaseAction
         $error = [];
         $default_array = $this->getDefaultTableInfo($table);
         foreach ($default_array as $key => $info) {
-            if (strpos($info['type'], 'int') !== false
+            if (
+                strpos($info['type'], 'int') !== false
                 && is_numeric($data[$key]) === false
                 && $info['null'] == 'no'
             ) {
                 $error[$key][] = sprintf('Not expected format: %s', $info['type']);
-            } elseif (strpos($info['type'], 'int') === false
+            } elseif (
+                strpos($info['type'], 'int') === false
                       && $info['length'] > 0
                       && $data[$key] != ''
                       && strlen($data[$key]) > $info['length']

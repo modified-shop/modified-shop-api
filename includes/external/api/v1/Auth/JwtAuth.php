@@ -16,7 +16,6 @@ namespace api\v1\Auth;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-
 use Firebase\JWT\JWT;
 use Tuupola\Base62;
 
@@ -46,7 +45,8 @@ final class JwtAuth
         ResponseInterface $response,
         array $args = []
     ): ResponseInterface {
-        if (!defined('MODULE_API_ACCESS_SECRET')
+        if (
+            !defined('MODULE_API_ACCESS_SECRET')
             || empty(MODULE_API_ACCESS_SECRET)
         ) {
             throw new \RuntimeException("modified API not installed");

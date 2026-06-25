@@ -73,7 +73,8 @@ final class Authentication implements MiddlewareInterface
         }
 
         /* If array of users was passed in options create an authenticator */
-        if (defined('MODULE_API_ACCESS_STATUS')
+        if (
+            defined('MODULE_API_ACCESS_STATUS')
             && MODULE_API_ACCESS_STATUS == 'true'
         ) {
             $access_query = xtc_db_query("SELECT *
@@ -119,7 +120,8 @@ final class Authentication implements MiddlewareInterface
             /* if 'headers' is in the 'relaxed' key, then we check for forwarding */
             $allowedForward = false;
             if (in_array("headers", $this->options["relaxed"])) {
-                if ($request->getHeaderLine("X-Forwarded-Proto") === "https"
+                if (
+                    $request->getHeaderLine("X-Forwarded-Proto") === "https"
                     && $request->getHeaderLine('X-Forwarded-Port') === "443"
                 ) {
                     $allowedForward = true;

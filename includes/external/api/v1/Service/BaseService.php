@@ -53,7 +53,8 @@ class BaseService
                                          WHERE c.customers_email_address = '" . xtc_db_input($token['sub']) . "'");
         $access = xtc_db_fetch_array($access_query);
 
-        if (!isset($access[$className])
+        if (
+            !isset($access[$className])
             || $access[$className] == 0
         ) {
             throw new Exception(sprintf('Access for %s required', $className));
