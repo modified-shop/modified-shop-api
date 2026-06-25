@@ -1,107 +1,109 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /includes/external/api/v1/Service/Currency/InsertUpdateCurrency.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
+namespace api\v1\Service\Currency;
 
-  namespace api\v1\Service\Currency;
+use api\v1\Service\BaseService;
+use api\v1\Action\Currency\CurrencyAction;
+use api\v1\Utility\Responder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use OpenApi\Attributes as OA;
 
-  use api\v1\Service\BaseService;
-  use api\v1\Action\Currency\CurrencyAction;
-  use api\v1\Utility\Responder;
-  use Psr\Http\Message\ResponseInterface;
-  use Psr\Http\Message\ServerRequestInterface;
-  use OpenApi\Attributes as OA;
-
-  #[OA\Put(
+#[OA\Put(
     path: '/api/v1/currencies/{Id}',
     tags: ['Currency'],
     description: 'Update single currency data by given Id',
     operationId: 'InsertUpdateCurrency',
     parameters: [
-      new OA\Parameter(
-        name: 'Id', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
-        ),
-        description: 'currencies Id'
-      )
+        new OA\Parameter(
+            name: 'Id',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'currencies Id'
+        )
     ],
     responses:[
-      new OA\Response(
-        response: 201, 
-        description: 'currencies data',
-      ),
-      new OA\Response(
-        response: 400,
-        description: 'invalid code supplied'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'currency Id required'
-      )
+        new OA\Response(
+            response: 201,
+            description: 'currencies data',
+        ),
+        new OA\Response(
+            response: 400,
+            description: 'invalid code supplied'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'currency Id required'
+        )
     ],
     security: [
-      ['modified_auth' => ['InsertUpdateCurrency']]
+        ['modified_auth' => ['InsertUpdateCurrency']]
     ]
-  )]
+)]
 
-  final class InsertUpdateCurrency extends BaseService
-  {
-      /**
-       * @var CurrencyAction
-       */
-      private $currencyAction;
+final class InsertUpdateCurrency extends BaseService
+{
+    /**
+     * @var CurrencyAction
+     */
+    private $currencyAction;
 
-      /**
-       * @var Responder
-       */
-      private $responder;
+    /**
+     * @var Responder
+     */
+    private $responder;
 
-      /**
-       * The constructor.
-       *
-       * @param CurrencyAction $currencyAction The currency reader
-       * @param Responder $responder The responder
-       */
-      public function __construct(CurrencyAction $currencyAction, Responder $responder)
-      {
-          $this->currencyAction = $currencyAction;
-          $this->responder = $responder;
-      }
+    /**
+     * The constructor.
+     *
+     * @param CurrencyAction $currencyAction The currency reader
+     * @param Responder $responder The responder
+     */
+    public function __construct(CurrencyAction $currencyAction, Responder $responder)
+    {
+        $this->currencyAction = $currencyAction;
+        $this->responder = $responder;
+    }
 
-      /**
-       * Invoke.
-       *
-       * @param ServerRequestInterface $request The request
-       * @param ResponseInterface $response The response
-       * @param array<mixed> $args The route arguments
-       *
-       * @return ResponseInterface The response
-       */
-      public function __invoke(
-          ServerRequestInterface $request,
-          ResponseInterface $response,
-          array $args
-      ): ResponseInterface {
-          $this->CheckAccess($request, $response);
+    /**
+     * Invoke.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array<mixed> $args The route arguments
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        $this->CheckAccess($request, $response);
 
-          $currencyId = (int)$args['id'];
-          $data = (array)$request->getParsedBody();
-                    
-          $result = $this->currencyAction->InsertUpdateCurrency($currencyId, $data);
+        $currencyId = (int)$args['id'];
+        $data = (array)$request->getParsedBody();
 
-          if (isset($result['errormessage'])) {
-              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
-          }
-          return $this->responder->withJson($response, $result)->withStatus(201);
-      }
-  }
+        $result = $this->currencyAction->InsertUpdateCurrency($currencyId, $data);
+
+        if (isset($result['errormessage'])) {
+            return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+        }
+        return $this->responder->withJson($response, $result)->withStatus(201);
+    }
+}

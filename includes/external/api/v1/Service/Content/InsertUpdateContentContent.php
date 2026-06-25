@@ -1,142 +1,144 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /includes/external/api/v1/Service/Content/InsertUpdateContentContent.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
+namespace api\v1\Service\Content;
 
-  namespace api\v1\Service\Content;
+use api\v1\Service\BaseService;
+use api\v1\Action\Content\ContentAction;
+use api\v1\Utility\Responder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use OpenApi\Attributes as OA;
 
-  use api\v1\Service\BaseService;
-  use api\v1\Action\Content\ContentAction;
-  use api\v1\Utility\Responder;
-  use Psr\Http\Message\ResponseInterface;
-  use Psr\Http\Message\ServerRequestInterface;
-  use OpenApi\Attributes as OA;
-
-  #[OA\Post(
+#[OA\Post(
     path: '/api/v1/contents/{Id}/content',
     tags: ['Content'],
     description: 'insert content for a content data by given Id',
     operationId: 'InsertContentContent',
     parameters: [
-      new OA\Parameter(
-        name: 'Id', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
-        ),
-        description: 'content group Id'
-      )
+        new OA\Parameter(
+            name: 'Id',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'content group Id'
+        )
     ],
     responses: [
-      new OA\Response(
-        response: 201, 
-        description: 'contents data',
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'contents not found'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'content group Id required'
-      )
+        new OA\Response(
+            response: 201,
+            description: 'contents data',
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'contents not found'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'content group Id required'
+        )
     ],
     security: [
-      ['modified_auth' => ['InsertUpdateContentContent']]
+        ['modified_auth' => ['InsertUpdateContentContent']]
     ]
-  )]
+)]
 
-  #[OA\Put(
+#[OA\Put(
     path: '/api/v1/contents/{Id}/content',
     tags: ['Content'],
     description: 'Update content for a content data by given Id',
     operationId: 'UpdateContentContent',
     parameters: [
-      new OA\Parameter(
-        name: 'Id', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
-        ),
-        description: 'content group Id'
-      )
+        new OA\Parameter(
+            name: 'Id',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'content group Id'
+        )
     ],
     responses: [
-      new OA\Response(
-        response: 201, 
-        description: 'contents data',
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'contents not found'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'content group Id required'
-      )
+        new OA\Response(
+            response: 201,
+            description: 'contents data',
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'contents not found'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'content group Id required'
+        )
     ],
     security: [
-      ['modified_auth' => ['InsertUpdateContentContent']]
+        ['modified_auth' => ['InsertUpdateContentContent']]
     ]
-  )]
-  
-  final class InsertUpdateContentContent extends BaseService
-  {
-      /**
-       * @var ContentAction
-       */
-      private $contentAction;
+)]
 
-      /**
-       * @var Responder
-       */
-      private $responder;
+final class InsertUpdateContentContent extends BaseService
+{
+    /**
+     * @var ContentAction
+     */
+    private $contentAction;
 
-      /**
-       * The constructor.
-       *
-       * @param ContentAction $contentAction The customer reader
-       * @param Responder $responder The responder
-       */
-      public function __construct(ContentAction $contentAction, Responder $responder)
-      {
-          $this->contentAction = $contentAction;
-          $this->responder = $responder;
-      }
+    /**
+     * @var Responder
+     */
+    private $responder;
 
-      /**
-       * Invoke.
-       *
-       * @param ServerRequestInterface $request The request
-       * @param ResponseInterface $response The response
-       * @param array<mixed> $args The route arguments
-       *
-       * @return ResponseInterface The response
-       */
-      public function __invoke(
-          ServerRequestInterface $request,
-          ResponseInterface $response,
-          array $args
-      ): ResponseInterface {
-          $this->CheckAccess($request, $response);
+    /**
+     * The constructor.
+     *
+     * @param ContentAction $contentAction The customer reader
+     * @param Responder $responder The responder
+     */
+    public function __construct(ContentAction $contentAction, Responder $responder)
+    {
+        $this->contentAction = $contentAction;
+        $this->responder = $responder;
+    }
 
-          $contentGroupId = (int)$args['id'];
-          $data = (array)$request->getParsedBody();
-          
-          $result = $this->contentAction->InsertUpdateContentContent($contentGroupId, $data);
+    /**
+     * Invoke.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array<mixed> $args The route arguments
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        $this->CheckAccess($request, $response);
 
-          if (isset($result['errormessage'])) {
-              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
-          }
-          return $this->responder->withJson($response, $result);
-      }
-  }
+        $contentGroupId = (int)$args['id'];
+        $data = (array)$request->getParsedBody();
+
+        $result = $this->contentAction->InsertUpdateContentContent($contentGroupId, $data);
+
+        if (isset($result['errormessage'])) {
+            return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+        }
+        return $this->responder->withJson($response, $result);
+    }
+}

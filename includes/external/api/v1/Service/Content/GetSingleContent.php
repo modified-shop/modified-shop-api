@@ -1,116 +1,118 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /includes/external/api/v1/Service/Content/GetSingleContent.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
+namespace api\v1\Service\Content;
 
-  namespace api\v1\Service\Content;
+use api\v1\Service\BaseService;
+use api\v1\Action\Content\ContentAction;
+use api\v1\Utility\Responder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use OpenApi\Attributes as OA;
 
-  use api\v1\Service\BaseService;
-  use api\v1\Action\Content\ContentAction;
-  use api\v1\Utility\Responder;
-  use Psr\Http\Message\ResponseInterface;
-  use Psr\Http\Message\ServerRequestInterface;
-  use OpenApi\Attributes as OA;
-
-  #[OA\Get(
+#[OA\Get(
     path: '/api/v1/contents/{Id}',
     tags: ['Content'],
     description: 'Get single content data by given Id',
     operationId: 'GetSingleContent',
     parameters: [
-      new OA\Parameter(
-        name: 'Id', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
+        new OA\Parameter(
+            name: 'Id',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'content group Id'
         ),
-        description: 'content group Id'
-      ),
-      new OA\Parameter(
-        name: 'with', 
-        in: 'query',
-        schema: new OA\Schema(
-          type: 'string'
-        ),
-        description: 'included results (comma separated list). Possible values: content'
-      )
+        new OA\Parameter(
+            name: 'with',
+            in: 'query',
+            schema: new OA\Schema(
+                type: 'string'
+            ),
+            description: 'included results (comma separated list). Possible values: content'
+        )
     ],
     responses: [
-      new OA\Response(
-        response: 200, 
-        description: 'contents data',
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'no contents found'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'content group Id required'
-      )
+        new OA\Response(
+            response: 200,
+            description: 'contents data',
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'no contents found'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'content group Id required'
+        )
     ],
     security: [
-      ['modified_auth' => ['GetSingleContent']]
+        ['modified_auth' => ['GetSingleContent']]
     ]
-  )]
-  
-  final class GetSingleContent extends BaseService
-  {
-      /**
-       * @var ContentAction
-       */
-      private $contentAction;
+)]
 
-      /**
-       * @var Responder
-       */
-      private $responder;
+final class GetSingleContent extends BaseService
+{
+    /**
+     * @var ContentAction
+     */
+    private $contentAction;
 
-      /**
-       * The constructor.
-       *
-       * @param ContentAction $contentAction The customer reader
-       * @param Responder $responder The responder
-       */
-      public function __construct(ContentAction $contentAction, Responder $responder)
-      {
-          $this->contentAction = $contentAction;
-          $this->responder = $responder;
-      }
+    /**
+     * @var Responder
+     */
+    private $responder;
 
-      /**
-       * Invoke.
-       *
-       * @param ServerRequestInterface $request The request
-       * @param ResponseInterface $response The response
-       * @param array<mixed> $args The route arguments
-       *
-       * @return ResponseInterface The response
-       */
-      public function __invoke(
-          ServerRequestInterface $request,
-          ResponseInterface $response,
-          array $args
-      ): ResponseInterface {
-          $this->CheckAccess($request, $response);
+    /**
+     * The constructor.
+     *
+     * @param ContentAction $contentAction The customer reader
+     * @param Responder $responder The responder
+     */
+    public function __construct(ContentAction $contentAction, Responder $responder)
+    {
+        $this->contentAction = $contentAction;
+        $this->responder = $responder;
+    }
 
-          $contentGroupId = (int)$args['id'];
-          $params = $request->getQueryParams();
-          $params['path'] = $request->getUri()->getPath();
+    /**
+     * Invoke.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array<mixed> $args The route arguments
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        $this->CheckAccess($request, $response);
 
-          $result = $this->contentAction->GetSingleContent($contentGroupId, $params);
+        $contentGroupId = (int)$args['id'];
+        $params = $request->getQueryParams();
+        $params['path'] = $request->getUri()->getPath();
 
-          if (isset($result['errormessage'])) {
-              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
-          }
-          return $this->responder->withJson($response, $result);
-      }
-  }
+        $result = $this->contentAction->GetSingleContent($contentGroupId, $params);
+
+        if (isset($result['errormessage'])) {
+            return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+        }
+        return $this->responder->withJson($response, $result);
+    }
+}

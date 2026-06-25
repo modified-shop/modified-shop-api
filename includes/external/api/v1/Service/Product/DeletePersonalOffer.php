@@ -1,148 +1,150 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /includes/external/api/v1/Service/Product/DeletePersonalOffer.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
+namespace api\v1\Service\Product;
 
-  namespace api\v1\Service\Product;
+use api\v1\Service\BaseService;
+use api\v1\Action\Product\ProductAction;
+use api\v1\Utility\Responder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Exception;
+use OpenApi\Attributes as OA;
 
-  use api\v1\Service\BaseService;
-  use api\v1\Action\Product\ProductAction;
-  use api\v1\Utility\Responder;
-  use Psr\Http\Message\ResponseInterface;
-  use Psr\Http\Message\ServerRequestInterface;
-  use Exception;
-  use OpenApi\Attributes as OA;
-
-  #[OA\Delete(
+#[OA\Delete(
     path: '/api/v1/products/{Id}/offer/{cId}/{pId}',
     tags: ['Product'],
     description: 'Delete single personal offer from a product by given Id',
     operationId: 'DeletePersonalOffer',
     parameters: [
-      new OA\Parameter(
-        name: 'Id', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
+        new OA\Parameter(
+            name: 'Id',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'product Id'
         ),
-        description: 'product Id'
-      ),
-      new OA\Parameter(
-        name: 'cId', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
+        new OA\Parameter(
+            name: 'cId',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'customer status Id'
         ),
-        description: 'customer status Id'
-      ),
-      new OA\Parameter(
-        name: 'pId', 
-        in: 'path',
-        required: true,
-        schema: new OA\Schema(
-          type: 'integer',
-        ),
-        description: 'price Id'
-      )
+        new OA\Parameter(
+            name: 'pId',
+            in: 'path',
+            required: true,
+            schema: new OA\Schema(
+                type: 'integer',
+            ),
+            description: 'price Id'
+        )
     ],
     responses:[
-      new OA\Response(
-        response: 204, 
-        description: 'no data',
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'product not found'
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'customer status not found'
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'price not found'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'product Id required'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'customer status Id required'
-      ),
-      new OA\Response(
-        response: 500,
-        description: 'price Id required'
-      )
+        new OA\Response(
+            response: 204,
+            description: 'no data',
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'product not found'
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'customer status not found'
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'price not found'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'product Id required'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'customer status Id required'
+        ),
+        new OA\Response(
+            response: 500,
+            description: 'price Id required'
+        )
     ],
     security: [
-      ['modified_auth' => ['DeletePersonalOffer']]
+        ['modified_auth' => ['DeletePersonalOffer']]
     ]
-  )]
+)]
 
-  final class DeletePersonalOffer extends BaseService
-  {
-      /**
-       * @var ProductAction
-       */
-      private $productAction;
+final class DeletePersonalOffer extends BaseService
+{
+    /**
+     * @var ProductAction
+     */
+    private $productAction;
 
-      /**
-       * @var Responder
-       */
-      private $responder;
+    /**
+     * @var Responder
+     */
+    private $responder;
 
-      /**
-       * The constructor.
-       *
-       * @param ProductAction $productAction The customer reader
-       * @param Responder $responder The responder
-       */
-      public function __construct(ProductAction $productAction, Responder $responder)
-      {
-          $this->productAction = $productAction;
-          $this->responder = $responder;
-      }
+    /**
+     * The constructor.
+     *
+     * @param ProductAction $productAction The customer reader
+     * @param Responder $responder The responder
+     */
+    public function __construct(ProductAction $productAction, Responder $responder)
+    {
+        $this->productAction = $productAction;
+        $this->responder = $responder;
+    }
 
-      /**
-       * Invoke.
-       *
-       * @param ServerRequestInterface $request The request
-       * @param ResponseInterface $response The response
-       * @param array<mixed> $args The route arguments
-       *
-       * @return ResponseInterface The response
-       */
-      public function __invoke(
-          ServerRequestInterface $request,
-          ResponseInterface $response,
-          array $args
-      ): ResponseInterface {
-          $this->CheckAccess($request, $response);
+    /**
+     * Invoke.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array<mixed> $args The route arguments
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        $this->CheckAccess($request, $response);
 
-          $productId = (int)$args['id'];
-          $statusId = (int)$args['cid'];
-          $priceId = (int)$args['pid'];
-          
-          // Input validation
-          if (empty($priceId)) {
-              throw new Exception('Price ID required');
-          }
+        $productId = (int)$args['id'];
+        $statusId = (int)$args['cid'];
+        $priceId = (int)$args['pid'];
 
-          $result = $this->productAction->DeletePersonalOffer($productId, $statusId, $priceId);
+        // Input validation
+        if (empty($priceId)) {
+            throw new Exception('Price ID required');
+        }
 
-          if (isset($result['errormessage'])) {
-              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
-          }
-          return $this->responder->withJson($response)->withStatus(204);
-      }
-  }
+        $result = $this->productAction->DeletePersonalOffer($productId, $statusId, $priceId);
+
+        if (isset($result['errormessage'])) {
+            return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+        }
+        return $this->responder->withJson($response)->withStatus(204);
+    }
+}

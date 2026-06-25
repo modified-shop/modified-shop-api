@@ -1,87 +1,89 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /includes/external/api/v1/Service/Category/InsertCategory.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
+namespace api\v1\Service\Category;
 
-  namespace api\v1\Service\Category;
+use api\v1\Service\BaseService;
+use api\v1\Action\Category\CategoryAction;
+use api\v1\Utility\Responder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use OpenApi\Attributes as OA;
 
-  use api\v1\Service\BaseService;
-  use api\v1\Action\Category\CategoryAction;
-  use api\v1\Utility\Responder;
-  use Psr\Http\Message\ResponseInterface;
-  use Psr\Http\Message\ServerRequestInterface;
-  use OpenApi\Attributes as OA;
-
-  #[OA\Post(
+#[OA\Post(
     path: '/api/v1/categories',
     tags: ['Category'],
     description: 'Insert single category',
     operationId: 'InsertCategory',
     responses:[
-      new OA\Response(
-        response: 201, 
-        description: 'categories data',
-      )
+        new OA\Response(
+            response: 201,
+            description: 'categories data',
+        )
     ],
     security: [
-      ['modified_auth' => ['InsertCategory']]
+        ['modified_auth' => ['InsertCategory']]
     ]
-  )]
+)]
 
-  final class InsertCategory extends BaseService
-  {
-      /**
-       * @var CategoryAction
-       */
-      private $categoryAction;
+final class InsertCategory extends BaseService
+{
+    /**
+     * @var CategoryAction
+     */
+    private $categoryAction;
 
-      /**
-       * @var Responder
-       */
-      private $responder;
+    /**
+     * @var Responder
+     */
+    private $responder;
 
-      /**
-       * The constructor.
-       *
-       * @param CategoryAction $categoryAction The customer reader
-       * @param Responder $responder The responder
-       */
-      public function __construct(CategoryAction $categoryAction, Responder $responder)
-      {
-          $this->categoryAction = $categoryAction;
-          $this->responder = $responder;
-      }
+    /**
+     * The constructor.
+     *
+     * @param CategoryAction $categoryAction The customer reader
+     * @param Responder $responder The responder
+     */
+    public function __construct(CategoryAction $categoryAction, Responder $responder)
+    {
+        $this->categoryAction = $categoryAction;
+        $this->responder = $responder;
+    }
 
-      /**
-       * Invoke.
-       *
-       * @param ServerRequestInterface $request The request
-       * @param ResponseInterface $response The response
-       * @param array<mixed> $args The route arguments
-       *
-       * @return ResponseInterface The response
-       */
-      public function __invoke(
-          ServerRequestInterface $request,
-          ResponseInterface $response,
-          array $args
-      ): ResponseInterface {
-          $this->CheckAccess($request, $response);
+    /**
+     * Invoke.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array<mixed> $args The route arguments
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        $this->CheckAccess($request, $response);
 
-          $data = (array)$request->getParsedBody();
-                    
-          $result = $this->categoryAction->InsertCategory($data);
+        $data = (array)$request->getParsedBody();
 
-          if (isset($result['errormessage'])) {
-              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
-          }
-          return $this->responder->withJson($response, $result)->withStatus(201);
-      }
-  }
+        $result = $this->categoryAction->InsertCategory($data);
+
+        if (isset($result['errormessage'])) {
+            return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+        }
+        return $this->responder->withJson($response, $result)->withStatus(201);
+    }
+}

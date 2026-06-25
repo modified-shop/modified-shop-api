@@ -1,93 +1,93 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /includes/external/api/v1/config/routes.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
+use Slim\App;
+use Slim\Routing\RouteCollectorProxy;
+use Tuupola\Middleware\HttpBasicAuthentication;
+use Tuupola\Middleware\JwtAuthentication;
+use api\v1\Auth\Authentication;
+use OpenApi\Generator as OpenApiGenerator;
+use Symfony\Component\Finder\Finder;
 
-  use Slim\App;
-  use Slim\Routing\RouteCollectorProxy;
-  use Tuupola\Middleware\HttpBasicAuthentication;
-  use Tuupola\Middleware\JwtAuthentication;
-  use api\v1\Auth\Authentication;
-  use OpenApi\Generator as OpenApiGenerator;
-  use Symfony\Component\Finder\Finder;
+return function (App $app) {
+    // oauth
+    $app->post('/v1/oauth', \api\v1\Auth\JwtAuth::class)->add(Authentication::class);
 
-  return function (App $app) {
-      // oauth
-      $app->post('/v1/oauth', \api\v1\Auth\JwtAuth::class)->add(Authentication::class);
-      
-      // docs
-      $app->get('/v1/swagger.json', function ($request, $response, $args) {
-          $swagger = OpenApiGenerator::scan([DIR_FS_EXTERNAL.'api/v1/Service/']);
-          $response->getBody()->write(json_encode($swagger));
-          return $response->withHeader('Content-Type', 'application/json');
-      }); 
+    // docs
+    $app->get('/v1/swagger.json', function ($request, $response, $args) {
+        $swagger = OpenApiGenerator::scan([DIR_FS_EXTERNAL . 'api/v1/Service/']);
+        $response->getBody()->write(json_encode($swagger));
+        return $response->withHeader('Content-Type', 'application/json');
+    });
 
-      // routes
-      $app->group(
-          '/v1',
-          function (RouteCollectorProxy $app) {
-          
-              // customers
-              include __DIR__ . '/customers.php';
-                            
-              // categories
-              include __DIR__ . '/categories.php';
+    // routes
+    $app->group(
+        '/v1',
+        function (RouteCollectorProxy $app) {
+            // customers
+            include __DIR__ . '/customers.php';
 
-              // products
-              include __DIR__ . '/products.php';
+            // categories
+            include __DIR__ . '/categories.php';
 
-              // manufacturers
-              include __DIR__ . '/manufacturers.php';
+            // products
+            include __DIR__ . '/products.php';
 
-              // attributes
-              include __DIR__ . '/attributes.php';
+            // manufacturers
+            include __DIR__ . '/manufacturers.php';
 
-              // tags
-              include __DIR__ . '/tags.php';
-              
-              // orders
-              include __DIR__ . '/orders.php';
+            // attributes
+            include __DIR__ . '/attributes.php';
 
-              // countries
-              include __DIR__ . '/countries.php';
+            // tags
+            include __DIR__ . '/tags.php';
 
-              // shipping
-              include __DIR__ . '/shipping.php';
+            // orders
+            include __DIR__ . '/orders.php';
 
-              // contents
-              include __DIR__ . '/contents.php';
-              
-              // campaigns
-              include __DIR__ . '/campaigns.php';
+            // countries
+            include __DIR__ . '/countries.php';
 
-              // currencies
-              include __DIR__ . '/currencies.php';
+            // shipping
+            include __DIR__ . '/shipping.php';
 
-              // languages
-              include __DIR__ . '/languages.php';
+            // contents
+            include __DIR__ . '/contents.php';
 
-              // newsletters
-              include __DIR__ . '/newsletters.php';
+            // campaigns
+            include __DIR__ . '/campaigns.php';
 
-              // configurations
-              include __DIR__ . '/configurations.php';
+            // currencies
+            include __DIR__ . '/currencies.php';
 
-              // coupons
-              include __DIR__ . '/coupons.php';
+            // languages
+            include __DIR__ . '/languages.php';
 
-              // dhl
-              include __DIR__ . '/dhl.php';
+            // newsletters
+            include __DIR__ . '/newsletters.php';
 
-              // schema
-              include __DIR__ . '/schema.php';
+            // configurations
+            include __DIR__ . '/configurations.php';
 
-          }
-      )->add(JwtAuthentication::class);
-  };
+            // coupons
+            include __DIR__ . '/coupons.php';
+
+            // dhl
+            include __DIR__ . '/dhl.php';
+
+            // schema
+            include __DIR__ . '/schema.php';
+        }
+    )->add(JwtAuthentication::class);
+};

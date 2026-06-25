@@ -1,110 +1,112 @@
 <?php
-/* -----------------------------------------------------------------------------------------
-   $Id$
 
-   modified eCommerce Shopsoftware
-   http://www.modified-shop.org
+/**
+ * /includes/external/api/v1/Service/Country/GetTaxClass.php
+ *
+ * @package   modified-shop
+ * @link      https://www.modified-shop.org
+ *
+ * Copyright (c) modified eCommerce Shopsoftware
+ *
+ * Released under the GNU General Public License (GPL)
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
-   Copyright (c) 2009 - 2021 [www.modified-shop.org]
-   -----------------------------------------------------------------------------------------
-   Released under the GNU General Public License
-   ---------------------------------------------------------------------------------------*/
+namespace api\v1\Service\Country;
 
-  namespace api\v1\Service\Country;
+use api\v1\Service\BaseService;
+use api\v1\Action\Country\CountryAction;
+use api\v1\Utility\Responder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use OpenApi\Attributes as OA;
 
-  use api\v1\Service\BaseService;
-  use api\v1\Action\Country\CountryAction;
-  use api\v1\Utility\Responder;
-  use Psr\Http\Message\ResponseInterface;
-  use Psr\Http\Message\ServerRequestInterface;
-  use OpenApi\Attributes as OA;
-
-  #[OA\Get(
+#[OA\Get(
     path: '/api/v1/countries/tax_class',
     tags: ['Country'],
     description: 'Get tax classes data',
     operationId: 'GetTaxClass',
     parameters: [
-      new OA\Parameter(
-        name: 'page', 
-        in: 'query',
-        schema: new OA\Schema(
-          type: 'integer'
+        new OA\Parameter(
+            name: 'page',
+            in: 'query',
+            schema: new OA\Schema(
+                type: 'integer'
+            ),
+            description: 'Number of page'
         ),
-        description: 'Number of page'
-      ),
-      new OA\Parameter(
-        name: 'limit', 
-        in: 'query',
-        schema: new OA\Schema(
-          type: 'integer'
-        ),
-        description: 'Number of results per page'
-      )
+        new OA\Parameter(
+            name: 'limit',
+            in: 'query',
+            schema: new OA\Schema(
+                type: 'integer'
+            ),
+            description: 'Number of results per page'
+        )
     ],
     responses: [
-      new OA\Response(
-        response: 200, 
-        description: 'tax classes data',
-      ),
-      new OA\Response(
-        response: 403,
-        description: 'tax classes not found'
-      )
+        new OA\Response(
+            response: 200,
+            description: 'tax classes data',
+        ),
+        new OA\Response(
+            response: 403,
+            description: 'tax classes not found'
+        )
     ],
     security: [
-      ['modified_auth' => ['GetTaxClass']]
+        ['modified_auth' => ['GetTaxClass']]
     ]
-  )]
-  
-  final class GetTaxClass extends BaseService
-  {
-      /**
-       * @var CountryAction
-       */
-      private $countryAction;
+)]
 
-      /**
-       * @var Responder
-       */
-      private $responder;
+final class GetTaxClass extends BaseService
+{
+    /**
+     * @var CountryAction
+     */
+    private $countryAction;
 
-      /**
-       * The constructor.
-       *
-       * @param CountryAction $countryAction The customer reader
-       * @param Responder $responder The responder
-       */
-      public function __construct(CountryAction $countryAction, Responder $responder)
-      {
-          $this->countryAction = $countryAction;
-          $this->responder = $responder;
-      }
+    /**
+     * @var Responder
+     */
+    private $responder;
 
-      /**
-       * Invoke.
-       *
-       * @param ServerRequestInterface $request The request
-       * @param ResponseInterface $response The response
-       * @param array<mixed> $args The route arguments
-       *
-       * @return ResponseInterface The response
-       */
-      public function __invoke(
-          ServerRequestInterface $request,
-          ResponseInterface $response,
-          array $args
-      ): ResponseInterface {
-          $this->CheckAccess($request, $response);
+    /**
+     * The constructor.
+     *
+     * @param CountryAction $countryAction The customer reader
+     * @param Responder $responder The responder
+     */
+    public function __construct(CountryAction $countryAction, Responder $responder)
+    {
+        $this->countryAction = $countryAction;
+        $this->responder = $responder;
+    }
 
-          $params = $request->getQueryParams();
-          $params['path'] = $request->getUri()->getPath();
-          
-          $result = $this->countryAction->GetTaxClass($params);
+    /**
+     * Invoke.
+     *
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array<mixed> $args The route arguments
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface {
+        $this->CheckAccess($request, $response);
 
-          if (isset($result['errormessage'])) {
-              return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
-          }
-          return $this->responder->withJson($response, $result);
-      }
-  }
+        $params = $request->getQueryParams();
+        $params['path'] = $request->getUri()->getPath();
+
+        $result = $this->countryAction->GetTaxClass($params);
+
+        if (isset($result['errormessage'])) {
+            return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);
+        }
+        return $this->responder->withJson($response, $result);
+    }
+}
