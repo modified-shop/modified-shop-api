@@ -1,0 +1,105 @@
+name: Bug Report
+description: Report a bug in the modified-shop system
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for your bug report.
+        Please describe the bug as best you can.
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: Issue Type
+      options:
+        - Bug
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affected_version
+    attributes:
+      label: Affected version
+      description: Which version of modified-shop is affected?
+      options:
+        - "1.06"
+        - "2.0.0.0"
+        - "2.0.1.0"
+        - "2.0.2.0"
+        - "2.0.2.1"
+        - "2.0.2.2"
+        - "2.0.3.0"
+        - "2.0.4.0"
+        - "2.0.4.1"
+        - "2.0.4.2"
+        - "2.0.5.0"
+        - "2.0.5.1"
+        - "2.0.6.0"
+        - "2.0.7.0"
+        - "2.0.7.1"
+        - "2.0.7.2"
+        - "3.0.0"
+        - "3.0.1"
+        - "3.0.2"
+        - "3.1.0"
+        - "3.1.1"
+        - "3.1.2"
+        - "3.1.3"
+        - "3.1.4"
+        - "3.1.5"
+        - "3.1.6"
+        - "3.2.0"
+        - "3.2.1"
+        - "3.3.0"
+        - "trunk"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this issue?
+      options:
+        - low
+        - medium
+        - high
+    validations:
+      required: false
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component is affected?
+      options:
+        - Admin
+        - Installer
+        - Shop
+        - Module
+        - Security
+        - Template
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Error Description
+      description: What isn't working? What happens instead?
+      placeholder: |
+        Briefly describe the problem.
+
+        Optionally, you can also include:
+        - How to reproduce the error
+        - What you expected to happen
+        - Error messages or screenshots
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional information (optional)
+      description: Links, Examples, or Background Information

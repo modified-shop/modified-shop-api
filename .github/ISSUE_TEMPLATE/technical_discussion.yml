@@ -1,0 +1,100 @@
+name: Technical Discussion
+description: Discuss technical topics related to modified-shop
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for your question.
+        Please ask your question as clearly as you can.
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: Issue Type
+      options:
+        - Question
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affected_version
+    attributes:
+      label: Affected version
+      description: Which version of modified-shop is affected?
+      options:
+        - "1.06"
+        - "2.0.0.0"
+        - "2.0.1.0"
+        - "2.0.2.0"
+        - "2.0.2.1"
+        - "2.0.2.2"
+        - "2.0.3.0"
+        - "2.0.4.0"
+        - "2.0.4.1"
+        - "2.0.4.2"
+        - "2.0.5.0"
+        - "2.0.5.1"
+        - "2.0.6.0"
+        - "2.0.7.0"
+        - "2.0.7.1"
+        - "2.0.7.2"
+        - "3.0.0"
+        - "3.0.1"
+        - "3.0.2"
+        - "3.1.0"
+        - "3.1.1"
+        - "3.1.2"
+        - "3.1.3"
+        - "3.1.4"
+        - "3.1.5"
+        - "3.1.6"
+        - "3.2.0"
+        - "3.2.1"
+        - "3.3.0"
+        - "trunk"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this issue?
+      options:
+        - low
+        - medium
+        - high
+    validations:
+      required: false
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component is affected?
+      options:
+        - Admin
+        - Installer
+        - Shop
+        - Module
+        - Security
+        - Template
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Topic / Description
+      description: What is this discussion about?
+      placeholder: |
+        Describe the topic or the research question.
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional information (optional)
+      description: Links, Examples, or Background Information
