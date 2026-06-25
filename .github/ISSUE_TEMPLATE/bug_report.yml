@@ -1,5 +1,5 @@
 name: Bug Report
-description: Report a bug in the modified-shop API
+description: Report a bug in the modified-shop system
 
 body:
   - type: markdown
