@@ -45,7 +45,8 @@ final class JwtAuth
         ResponseInterface $response,
         array $args = []
     ): ResponseInterface {
-        if (!defined('MODULE_API_ACCESS_SECRET')
+        if (
+            !defined('MODULE_API_ACCESS_SECRET')
             || empty(MODULE_API_ACCESS_SECRET)
         ) {
             throw new \RuntimeException("modified API not installed");

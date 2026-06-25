@@ -529,7 +529,8 @@ trait ProductDeleteAction
                                                             WHERE content_file = '" . xtc_db_input($content['content_file']) . "' 
                                                               AND products_id != '" . (int)$productId . "'");
                 $duplicate_content = xtc_db_fetch_array($duplicate_content_query);
-                if ($duplicate_content['total'] == 0
+                if (
+                    $duplicate_content['total'] == 0
                     && is_file(DIR_FS_CATALOG . 'media/products/' . $content['content_file'])
                 ) {
                     unlink(DIR_FS_CATALOG . 'media/products/' . $content['content_file']);

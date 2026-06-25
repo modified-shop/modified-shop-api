@@ -94,7 +94,8 @@ trait ContentDeleteAction
                                                             WHERE content_file = '" . xtc_db_input($content['content_file']) . "' 
                                                               AND content_manager_id != '" . (int)$contentGroupId . "'");
                 $duplicate_content = xtc_db_fetch_array($duplicate_content_query);
-                if ($duplicate_content['total'] == 0
+                if (
+                    $duplicate_content['total'] == 0
                     && is_file(DIR_FS_CATALOG . 'media/content/' . $content['content_file'])
                 ) {
                     unlink(DIR_FS_CATALOG . 'media/content/' . $content['content_file']);

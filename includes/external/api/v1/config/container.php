@@ -106,7 +106,8 @@ return [
     },
 
     JwtAuthentication::class => function (ContainerInterface $container) {
-        if (!defined('MODULE_API_ACCESS_SECRET')
+        if (
+            !defined('MODULE_API_ACCESS_SECRET')
             || empty(MODULE_API_ACCESS_SECRET)
         ) {
             throw new \RuntimeException("modified API not installed");
