@@ -51,13 +51,21 @@
 $finder = (new PhpCsFixer\Finder())
     ->in(__DIR__)
     ->exclude([
-        'includes/external/GuzzleHttp',
-        'includes/external/magnalister',
-        'includes/external/nusoap',
-        'includes/external/Phpfastcache',
-        'includes/external/phpmailer',
+        'includes/external/DI',
+        'includes/external/FastRoute',
+        'includes/external/Fig',
+        'includes/external/Firebase',
+        'includes/external/Invoker',
+        'includes/external/Laravel',
+        'includes/external/OpenApi',
+        'includes/external/Opis',
+        'includes/external/PhpDocReader',
+        'includes/external/PhpParser',
         'includes/external/Psr',
-        'includes/external/smarty',
+        'includes/external/Selective',
+        'includes/external/Slim',
+        'includes/external/Symfony',
+        'includes/external/Tuupola',
     ]);
 
 return (new PhpCsFixer\Config())
