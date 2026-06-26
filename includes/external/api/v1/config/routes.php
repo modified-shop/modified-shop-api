@@ -31,6 +31,12 @@ return function (App $app) {
         return $response->withHeader('Content-Type', 'application/json');
     });
 
+    // version
+    $app->get('/v1/version', function ($request, $response, $args) {
+        $response->getBody()->write(json_encode(['version' => '1.0.0']));
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+
     // routes
     $app->group(
         '/v1',
