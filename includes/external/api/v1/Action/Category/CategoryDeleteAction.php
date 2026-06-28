@@ -121,16 +121,16 @@ trait CategoryDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllProducts(int $categoryId): void
+    public function DeleteAllProducts(int $categoryId): ?array
     {
         // Input validation
         if (empty($categoryId)) {
             throw new Exception('Category ID required');
         }
 
-        $this->DeleteProduct($categoryId, 0);
+        return $this->DeleteProduct($categoryId, 0);
     }
 
     /**

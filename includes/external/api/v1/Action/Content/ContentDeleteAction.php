@@ -63,7 +63,7 @@ trait ContentDeleteAction
     /**
      * Delete a content by the given product id and content group id.
      *
-     * @param int $$contentGroupId The content group id
+     * @param int $contentGroupId The content group id
      * @param int $contentId The content id
      *
      * @throws Exception
@@ -113,19 +113,19 @@ trait ContentDeleteAction
     /**
      * Delete all contents by the given content group id.
      *
-     * @param int $contentId The content group id
+     * @param int $contentGroupId The content group id
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllContentContent(int $contentGroupId): void
+    public function DeleteAllContentContent(int $contentGroupId): ?array
     {
         // Input validation
         if (empty($contentGroupId)) {
             throw new Exception('Content Group ID required');
         }
 
-        $this->DeleteContentContent($contentGroupId, 0);
+        return $this->DeleteContentContent($contentGroupId, 0);
     }
 }

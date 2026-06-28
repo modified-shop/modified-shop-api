@@ -115,16 +115,16 @@ trait OrderDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllProduct(int $orderId): void
+    public function DeleteAllProduct(int $orderId): ?array
     {
         // Input validation
         if (empty($orderId)) {
             throw new Exception('Order ID required');
         }
 
-        $this->DeleteProduct($orderId, 0);
+        return $this->DeleteProduct($orderId, 0);
     }
 
     /**
@@ -248,16 +248,16 @@ trait OrderDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllStatusHistory(int $orderId): void
+    public function DeleteAllStatusHistory(int $orderId): ?array
     {
         // Input validation
         if (empty($orderId)) {
             throw new Exception('Order ID required');
         }
 
-        $this->DeleteStatusHistory($orderId, 0);
+        return $this->DeleteStatusHistory($orderId, 0);
     }
 
     /**
@@ -305,16 +305,16 @@ trait OrderDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllTotal(int $orderId): void
+    public function DeleteAllTotal(int $orderId): ?array
     {
         // Input validation
         if (empty($orderId)) {
             throw new Exception('Order ID required');
         }
 
-        $this->DeleteTotal($orderId, 0);
+        return $this->DeleteTotal($orderId, 0);
     }
 
     /**
@@ -362,16 +362,16 @@ trait OrderDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllTracking(int $orderId): void
+    public function DeleteAllTracking(int $orderId): ?array
     {
         // Input validation
         if (empty($orderId)) {
             throw new Exception('Order ID required');
         }
 
-        $this->DeleteTracking($orderId, 0);
+        return $this->DeleteTracking($orderId, 0);
     }
 
     /**

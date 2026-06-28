@@ -295,7 +295,7 @@ trait CountryGetAction
     /**
      * Read a zone countries by the given geo zone id.
      *
-     * @param int $countryId The country id
+     * @param int $geoZoneId The geo zone id
      *
      * @throws Exception
      *

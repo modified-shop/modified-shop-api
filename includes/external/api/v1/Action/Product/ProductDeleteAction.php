@@ -125,16 +125,16 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllCategory(int $productId): void
+    public function DeleteAllCategory(int $productId): ?array
     {
         // Input validation
         if (empty($productId)) {
             throw new Exception('Product ID required');
         }
 
-        $this->DeleteCategory($productId, 0);
+        return $this->DeleteCategory($productId, 0);
     }
 
     /**
@@ -222,16 +222,16 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllImages(int $productId): void
+    public function DeleteAllImages(int $productId): ?array
     {
         // Input validation
         if (empty($productId)) {
             throw new Exception('Product ID required');
         }
 
-        $this->DeleteImages($productId, 0);
+        return $this->DeleteImages($productId, 0);
     }
 
     /**
@@ -317,16 +317,16 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllXsell(int $productId): void
+    public function DeleteAllXsell(int $productId): ?array
     {
         // Input validation
         if (empty($productId)) {
             throw new Exception('Product ID required');
         }
 
-        $this->DeleteXsell($productId, 0);
+        return $this->DeleteXsell($productId, 0);
     }
 
     /**
@@ -374,16 +374,16 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllSpecials(int $productId): void
+    public function DeleteAllSpecials(int $productId): ?array
     {
         // Input validation
         if (empty($productId)) {
             throw new Exception('Product ID required');
         }
 
-        $this->DeleteSpecials($productId, 0);
+        return $this->DeleteSpecials($productId, 0);
     }
 
     /**
@@ -434,16 +434,16 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllAttributes(int $productId): void
+    public function DeleteAllAttributes(int $productId): ?array
     {
         // Input validation
         if (empty($productId)) {
             throw new Exception('Product ID required');
         }
 
-        $this->DeleteAttributes($productId, 0);
+        return $this->DeleteAttributes($productId, 0);
     }
 
     /**
@@ -491,16 +491,16 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllTags(int $productId): void
+    public function DeleteAllTags(int $productId): ?array
     {
         // Input validation
         if (empty($productId)) {
             throw new Exception('Product ID required');
         }
 
-        $this->DeleteTags($productId, 0);
+        return $this->DeleteTags($productId, 0);
     }
 
     /**
@@ -560,16 +560,16 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllContents(int $productId): void
+    public function DeleteAllContents(int $productId): ?array
     {
         // Input validation
         if (empty($productId)) {
             throw new Exception('Product ID required');
         }
 
-        $this->DeleteContents($productId, 0);
+        return $this->DeleteContents($productId, 0);
     }
 
     /**
@@ -622,9 +622,9 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllPersonalOffer(int $productId, int $statusId): void
+    public function DeleteAllPersonalOffer(int $productId, int $statusId): ?array
     {
         // Input validation
         if (empty($productId)) {
@@ -634,7 +634,7 @@ trait ProductDeleteAction
             throw new Exception('Status ID required');
         }
 
-        $this->DeletePersonalOffer($productId, $statusId, 0);
+        return $this->DeletePersonalOffer($productId, $statusId, 0);
     }
 
     /**
@@ -644,9 +644,9 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllPersonalOffers(int $productId): void
+    public function DeleteAllPersonalOffers(int $productId): ?array
     {
         // Input validation
         if (empty($productId)) {
@@ -656,10 +656,20 @@ trait ProductDeleteAction
         // disable Exception
         $this->throw_exception = false;
 
+        $errors = [];
         $customers_statuses_array = xtc_get_customers_statuses();
         foreach ($customers_statuses_array as $customers_status) {
-            $this->DeleteAllPersonalOffer($productId, $customers_status['id']);
+            $result = $this->DeleteAllPersonalOffer($productId, $customers_status['id']);
+            if ($result !== null) {
+                $errors[] = $result['errormessage']['error']['message'];
+            }
         }
+
+        if (!empty($errors)) {
+            return $this->errormessage($errors);
+        }
+
+        return null;
     }
 
     /**
@@ -710,16 +720,16 @@ trait ProductDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllReviews(int $productId): void
+    public function DeleteAllReviews(int $productId): ?array
     {
         // Input validation
         if (empty($productId)) {
             throw new Exception('Product ID required');
         }
 
-        $this->DeleteReviews($productId, 0);
+        return $this->DeleteReviews($productId, 0);
     }
 
     /**
