@@ -84,6 +84,19 @@ A live OpenAPI 3 specification is generated from the codebase and available at:
 GET /v1/swagger.json
 ```
 
+## Version
+
+The currently running API version can be checked without authentication:
+
+```
+GET /v1/version
+```
+```json
+{
+  "version": "1.0.0"
+}
+```
+
 ## Contributing
 
 Contributions are welcome!
