@@ -50,7 +50,7 @@ trait ManufacturerGetAction
             $this->throw_exception = false;
 
             $result = [
-                'manufacturers' => $this->GetManufacturer($manufacturerId, false),
+                'manufacturers' => $this->GetManufacturer($manufacturerId),
                 'manufacturers_description' => $this->GetManufacturerDescription($manufacturerId),
             ];
 

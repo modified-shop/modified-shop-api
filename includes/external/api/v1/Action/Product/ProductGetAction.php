@@ -50,7 +50,7 @@ trait ProductGetAction
             $this->throw_exception = false;
 
             $result = [
-                'products' => $this->GetProduct($productId, false),
+                'products' => $this->GetProduct($productId),
                 'products_description' => $this->GetProductDescription($productId),
             ];
 

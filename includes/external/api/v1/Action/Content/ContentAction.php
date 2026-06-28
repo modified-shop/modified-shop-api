@@ -103,7 +103,7 @@ final class ContentAction extends BaseAction
     /**
      * Insert or Update a content content by the given content group id.
      *
-     * @param int $$contentGroupId The content group id
+     * @param int $contentGroupId The content group id
      * @param mixed[] $options
      *
      * @throws Exception

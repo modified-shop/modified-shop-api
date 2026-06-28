@@ -131,15 +131,15 @@ trait AttributesDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllAttributes(int $optionId): void
+    public function DeleteAllAttributes(int $optionId): ?array
     {
         // Input validation
         if (empty($optionId)) {
             throw new Exception('Option ID required');
         }
 
-        $this->DeleteAttributes($optionId, 0);
+        return $this->DeleteAttributes($optionId, 0);
     }
 }

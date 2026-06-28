@@ -53,7 +53,7 @@ final class CustomerAction extends BaseAction
                 $customers_info = $this->InsertUpdateInfo($customerId, $this->options[TABLE_CUSTOMERS_INFO]);
             }
             if (isset($this->options[TABLE_ADDRESS_BOOK])) {
-                $address_book = $this->InsertUpdateAddressBook($customerId, $this->options[TABLE_ADDRESS_BOOK]);
+                $address_book = $this->InsertUpdateAddressBook($customerId, $this->options[TABLE_ADDRESS_BOOK], $options);
             }
         }
 
@@ -228,7 +228,7 @@ final class CustomerAction extends BaseAction
 
             // Input validation
             $this->checkTableData(TABLE_CUSTOMERS_MEMO, $customers_memo);
-            xtc_db_perform(TABLE_CUSTOMERS_MEMO, $customers_memo, $action, "customers_id = '" . (int)$customerId . "' " . $where);
+            xtc_db_perform(TABLE_CUSTOMERS_MEMO, $customers_memo, $action, "memo_id = '" . (int)$memoId . "'");
         }
 
         return $this->GetCustomerMemos($customerId);
@@ -276,7 +276,6 @@ final class CustomerAction extends BaseAction
         if (xtc_db_num_rows($customer_query) < 1) {
             return $this->errormessage(sprintf('Customer not found: %s', $customerId));
         } else {
-            $where = '';
             if ($addressBookId > 0) {
                 $address_book_query = xtc_db_query("SELECT *
                                                         FROM " . TABLE_ADDRESS_BOOK . "
@@ -304,7 +303,7 @@ final class CustomerAction extends BaseAction
 
             // Input validation
             $this->checkTableData(TABLE_ADDRESS_BOOK, $address_book);
-            xtc_db_perform(TABLE_ADDRESS_BOOK, $address_book, $action, "customers_id = '" . (int)$customerId . "' " . $where);
+            xtc_db_perform(TABLE_ADDRESS_BOOK, $address_book, $action, "address_book_id = '" . (int)$addressBookId . "'");
         }
 
         return $this->GetCustomerAddressBooks($customerId);

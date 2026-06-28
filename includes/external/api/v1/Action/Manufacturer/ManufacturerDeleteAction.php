@@ -107,16 +107,16 @@ trait ManufacturerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllProducts(int $manufacturerId): void
+    public function DeleteAllProducts(int $manufacturerId): ?array
     {
         // Input validation
         if (empty($manufacturerId)) {
             throw new Exception('Manufacturer ID required');
         }
 
-        $this->DeleteProduct($manufacturerId, 0);
+        return $this->DeleteProduct($manufacturerId, 0);
     }
 
     /**

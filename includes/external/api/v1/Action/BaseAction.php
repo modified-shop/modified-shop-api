@@ -46,12 +46,12 @@ class BaseAction
     ];
 
     /**
-     * @var Excetion
+     * @var bool
      */
     protected $throw_exception = true;
 
     /**
-     * @var accepted files
+     * @var string[]
      */
     protected $accepted_image_extensions = ["jpg","jpeg","jpe","gif","png","tiff","tif","bmp","svg"];
     protected $accepted_image_mime_types = ["image/jpeg","image/gif","image/png","image/bmp","image/svg","image/svg+xml"];
@@ -72,7 +72,7 @@ class BaseAction
     protected $accepted_compressed_mime_types = ["application/x-tar","application/zip","application/x-rar-compressed","application/x-7z-compressed","application/vnd.ms-cab-compressed"];
 
     /**
-     * @var LoggerInterface
+     * @var Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -90,7 +90,7 @@ class BaseAction
     /**
      * encoding given array or string.
      *
-     * @param mixed[] $data
+     * @param mixed[] $string
      *
      * @return mixed
      */

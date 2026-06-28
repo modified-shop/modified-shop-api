@@ -134,9 +134,9 @@ trait NewsletterGetAction
     }
 
     /**
-     * Read a newsletter by the given newsletter id.
+     * Read a newsletter by the given newsletter email address.
      *
-     * @param int $newsletterId The newsletter id
+     * @param string $newsletterEmailAddress The newsletter email address
      *
      * @throws Exception
      *

@@ -137,16 +137,16 @@ trait CustomerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllIp(int $customerId): void
+    public function DeleteAllIp(int $customerId): ?array
     {
         // Input validation
         if (empty($customerId)) {
             throw new Exception('Customer ID required');
         }
 
-        $this->DeleteIp($customerId, 0);
+        return $this->DeleteIp($customerId, 0);
     }
 
     /**
@@ -194,16 +194,16 @@ trait CustomerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllMemo(int $customerId): void
+    public function DeleteAllMemo(int $customerId): ?array
     {
         // Input validation
         if (empty($customerId)) {
             throw new Exception('Customer ID required');
         }
 
-        $this->DeleteMemo($customerId, 0);
+        return $this->DeleteMemo($customerId, 0);
     }
 
     /**
@@ -251,16 +251,16 @@ trait CustomerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllStatusHistory(int $customerId): void
+    public function DeleteAllStatusHistory(int $customerId): ?array
     {
         // Input validation
         if (empty($customerId)) {
             throw new Exception('Customer ID required');
         }
 
-        $this->DeleteStatusHistory($customerId, 0);
+        return $this->DeleteStatusHistory($customerId, 0);
     }
 
     /**
@@ -308,16 +308,16 @@ trait CustomerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllAddressBook(int $customerId): void
+    public function DeleteAllAddressBook(int $customerId): ?array
     {
         // Input validation
         if (empty($customerId)) {
             throw new Exception('Customer ID required');
         }
 
-        $this->DeleteAddressBook($customerId, 0);
+        return $this->DeleteAddressBook($customerId, 0);
     }
 
     /**
@@ -369,16 +369,16 @@ trait CustomerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllBasket(int $customerId): void
+    public function DeleteAllBasket(int $customerId): ?array
     {
         // Input validation
         if (empty($customerId)) {
             throw new Exception('Customer ID required');
         }
 
-        $this->DeleteBasket($customerId, 0);
+        return $this->DeleteBasket($customerId, 0);
     }
 
     /**
@@ -430,15 +430,15 @@ trait CustomerDeleteAction
      *
      * @throws Exception
      *
-     * @return void
+     * @return array<mixed>|null
      */
-    public function DeleteAllWishlist(int $customerId): void
+    public function DeleteAllWishlist(int $customerId): ?array
     {
         // Input validation
         if (empty($customerId)) {
             throw new Exception('Customer ID required');
         }
 
-        $this->DeleteWishlist($customerId, 0);
+        return $this->DeleteWishlist($customerId, 0);
     }
 }
