@@ -19,7 +19,7 @@ The API lets merchants and developers connect modified to external systems - ERP
 
 - 🔐 JWT-based authentication with short-lived access tokens
 - 🧩 Resource-oriented endpoints for customers, products, categories, orders, manufacturers, attributes, tags, coupons, campaigns, shipping, countries, contents, newsletters, currencies, languages, configurations and DHL
-- 📜 Auto-generated OpenAPI/Swagger documentation (`/v1/swagger.json`)
+- 📜 Auto-generated OpenAPI/Swagger documentation with an interactive Swagger UI (`/api/v1/docs/`)
 - 🧱 Built on Slim 4 (PSR-7/PSR-15) with dependency injection
 - 👤 Per-customer, per-endpoint access management via the shop backend
 - 📦 JSON request/response format throughout
@@ -32,11 +32,37 @@ The API lets merchants and developers connect modified to external systems - ERP
 - JWT (Firebase JWT / Tuupola middleware), HS256
 - OpenAPI 3 (zircote/swagger-php)
 
+## Quick Start
+
+Enable API access for a customer in the shop backend (**Customers → API Access**), then pick either way:
+
+**In the browser (Swagger UI)**
+
+1. Open `/api/v1/docs/` in your browser.
+2. Click **Authorize**, enter the customer's username (email) and password.
+3. Try any endpoint directly from the UI - the token is attached automatically.
+
+**From the command line (cURL)**
+
+```bash
+# 1. Get a token (valid for 10 minutes)
+curl -X POST https://your-shop.tld/api/v1/oauth \
+  -H "username: api@example.com" \
+  -H "password: your-password"
+# → {"access_token":"<JWT>","token_type":"Bearer","expires":1735000000}
+
+# 2. Call an endpoint with the token
+curl https://your-shop.tld/api/v1/manufacturers \
+  -H "Authorization: Bearer <JWT>"
+```
+
+> Replace `https://your-shop.tld` with your shop URL. If the shop runs in a subdirectory, prefix the paths accordingly (e.g. `https://your-shop.tld/shop/api/v1/...`).
+
 ## Authentication
 
 Access is granted per customer account in the shop backend (**Customers → API Access**), then used in two steps:
 
-1. **Get a token** - `POST /v1/oauth` with HTTP Basic-style credentials (`user`/`username` + `password` headers) for a customer with API access enabled. Returns a JWT valid for 10 minutes:
+1. **Get a token** - `POST /v1/oauth` with the credentials of a customer that has API access enabled. Credentials may be sent either as request headers (`user`/`username` + `password`) or as form fields (`username` + `password`, e.g. an OAuth2 *password* grant). Returns a JWT valid for 10 minutes:
    ```json
    {
      "access_token": "<JWT>",
@@ -48,6 +74,8 @@ Access is granted per customer account in the shop backend (**Customers → API 
    ```
    Authorization: Bearer <JWT>
    ```
+
+In the interactive docs you can skip the manual steps: click **Authorize**, enter the customer's username and password, and Swagger UI fetches the token and attaches it to every request automatically.
 
 HTTPS is required in production; only `localhost`/`127.0.0.1` are allowed over plain HTTP.
 
@@ -78,7 +106,15 @@ All routes are served under `/api/v1/` (Slim group `/v1`). Resources cover full 
 
 ## Documentation
 
-A live OpenAPI 3 specification is generated from the codebase and available at:
+An interactive **Swagger UI** is available in the browser:
+
+```
+/api/v1/docs/
+```
+
+It is generated from the codebase and lets you browse every endpoint, inspect the schemas and call the API directly - including the built-in **Authorize** login (see *Authentication*). The docs resolve their paths relative to the current install, so they also work when the shop runs in a subdirectory.
+
+The raw OpenAPI 3 specification is served at:
 
 ```
 GET /v1/swagger.json

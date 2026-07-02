@@ -30,7 +30,23 @@ return function (App $app) {
             DIR_FS_EXTERNAL . 'api/v1/Service/',
             DIR_FS_EXTERNAL . 'api/v1/Auth/',
         ]);
-        $response->getBody()->write(json_encode($swagger));
+
+        // Resolve the mount point from the request so the spec also works when
+        // the shop is installed in a subdirectory (e.g. /shop/api/v1/...).
+        $prefix = (string)preg_replace(
+            '#/api/v1/swagger\.json$#',
+            '',
+            $request->getUri()->getPath()
+        );
+
+        $spec = json_decode((string)json_encode($swagger), true);
+        $spec['servers'] = [['url' => $prefix === '' ? '/' : $prefix]];
+        if (isset($spec['components']['securitySchemes']['modified_auth']['flows']['password'])) {
+            $spec['components']['securitySchemes']['modified_auth']['flows']['password']['tokenUrl']
+                = $prefix . '/api/v1/oauth';
+        }
+
+        $response->getBody()->write((string)json_encode($spec));
         return $response->withHeader('Content-Type', 'application/json');
     });
 
