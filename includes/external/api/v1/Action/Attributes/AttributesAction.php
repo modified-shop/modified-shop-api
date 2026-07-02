@@ -62,7 +62,7 @@ final class AttributesAction extends BaseAction
             $where = '';
             if ($optionId > 0) {
                 $where = "AND products_options_id = '" . (int)$optionId . "'";
-                $option_query = xtc_db_query("SELECT *
+                $option_query = \xtc_db_query("SELECT *
                                                   FROM " . TABLE_PRODUCTS_OPTIONS . "
                                                  WHERE language_id = '" . (int)$languages['languages_id'] . "'
                                                        " . $where);

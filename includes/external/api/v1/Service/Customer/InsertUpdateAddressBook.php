@@ -114,9 +114,10 @@ final class InsertUpdateAddressBook extends BaseService
         $this->CheckAccess($request, $response);
 
         $customerId = (int)$args['id'];
+        $addressBookId = (int)$args['aid'];
         $data = (array)$request->getParsedBody();
 
-        $result = $this->customerAction->InsertUpdateAddressBook($customerId, $data);
+        $result = $this->customerAction->InsertUpdateAddressBook($customerId, $addressBookId, $data);
 
         if (isset($result['errormessage'])) {
             return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);

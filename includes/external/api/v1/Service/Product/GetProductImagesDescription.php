@@ -19,6 +19,7 @@ use api\v1\Action\Product\ProductAction;
 use api\v1\Utility\Responder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use OpenApi\Attributes as OA;
 
 #[OA\Get(
     path: '/api/v1/products/{Id}/images/description',

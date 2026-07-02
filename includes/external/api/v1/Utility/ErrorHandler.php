@@ -166,7 +166,7 @@ final class ErrorHandler
             $errorMessage = sprintf(
                 '%s - Error details: %s',
                 $errorMessage,
-                $this->getExceptionText($exception)
+                implode("\n", $this->getExceptionText($exception))
             );
         }
 
@@ -179,7 +179,7 @@ final class ErrorHandler
      * @param Throwable $exception Error
      * @param int $maxLength The max length of the error message
      *
-     * @return string The full error message
+     * @return array The full error message
      */
     private function getExceptionText(Throwable $exception, int $maxLength = 0): array
     {

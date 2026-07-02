@@ -19,6 +19,7 @@ use api\v1\Action\Product\ProductAction;
 use api\v1\Utility\Responder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use OpenApi\Attributes as OA;
 
 #[OA\Get(
     path: '/api/v1/products/{Id}/offer',
@@ -96,9 +97,8 @@ final class GetProductPersonalOffer extends BaseService
         $this->CheckAccess($request, $response);
 
         $productId = (int)$args['id'];
-        $statusId = (int)$args['cid'];
 
-        $result = $this->productAction->GetProductPersonalOffer($productId, $statusId);
+        $result = $this->productAction->GetProductPersonalOffer($productId);
 
         if (isset($result['errormessage'])) {
             return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);

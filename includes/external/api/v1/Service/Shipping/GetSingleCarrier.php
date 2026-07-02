@@ -97,10 +97,8 @@ final class GetSingleCarrier extends BaseService
         $this->CheckAccess($request, $response);
 
         $carrierId = (int)$args['id'];
-        $params = $request->getQueryParams();
-        $params['path'] = $request->getUri()->getPath();
 
-        $result = $this->shippingAction->GetSingleCarrier($carrierId, $params);
+        $result = $this->shippingAction->GetSingleCarrier($carrierId);
 
         if (isset($result['errormessage'])) {
             return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);

@@ -72,7 +72,7 @@ class BaseAction
     protected $accepted_compressed_mime_types = ["application/x-tar","application/zip","application/x-rar-compressed","application/x-7z-compressed","application/vnd.ms-cab-compressed"];
 
     /**
-     * @var Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 

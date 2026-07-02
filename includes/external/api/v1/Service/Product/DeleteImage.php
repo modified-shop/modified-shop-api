@@ -97,9 +97,8 @@ final class DeleteImage extends BaseService
         $this->CheckAccess($request, $response);
 
         $productId = (int)$args['id'];
-        $imageId = (int)$args['iid'];
 
-        $result = $this->productAction->DeleteImage($productId, $imageId);
+        $result = $this->productAction->DeleteImage($productId);
 
         if (isset($result['errormessage'])) {
             return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);

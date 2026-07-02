@@ -401,7 +401,7 @@ final class ProductAction extends BaseAction
         $product_query = xtc_db_query("SELECT *
                                            FROM " . TABLE_PRODUCTS_IMAGES . "
                                           WHERE products_id = '" . (int)$productId . "'");
-        if (xtc_db_num_rows($product_query) < 1 && $this->Exception === true) {
+        if (xtc_db_num_rows($product_query) < 1 && $this->throw_exception === true) {
             return $this->errormessage(sprintf('Product images not found: %s', $productId));
         } else {
             $languages_query = xtc_db_query("SELECT *

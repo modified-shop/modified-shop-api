@@ -97,10 +97,8 @@ final class GetSingleShippingStatus extends BaseService
         $this->CheckAccess($request, $response);
 
         $shippingStatusId = (int)$args['id'];
-        $params = $request->getQueryParams();
-        $params['path'] = $request->getUri()->getPath();
 
-        $result = $this->shippingAction->GetSingleShippingStatus($shippingStatusId, $params);
+        $result = $this->shippingAction->GetSingleShippingStatus($shippingStatusId);
 
         if (isset($result['errormessage'])) {
             return $this->responder->withJson($response, $result['errormessage'])->withStatus($result['code']);

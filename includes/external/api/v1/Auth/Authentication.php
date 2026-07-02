@@ -183,11 +183,13 @@ final class Authentication implements MiddlewareInterface
     }
 
     /**
-     * Hydrate all options from given array.
+     * Hydrate options from given array.
      *
      * @param mixed[] $data
+     *
+     * @return void
      */
-    private function hydrate(array $data = []): void
+    protected function hydrate(array $data = []): void
     {
         foreach ($data as $key => $value) {
             $key = str_replace(".", " ", $key);

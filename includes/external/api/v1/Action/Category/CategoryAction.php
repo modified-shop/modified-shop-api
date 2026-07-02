@@ -308,7 +308,7 @@ final class CategoryAction extends BaseAction
             require_once(DIR_FS_CATALOG . DIR_ADMIN . 'includes/classes/' . IMAGE_MANIPULATOR);
 
             foreach ($this->images_type_array as $image_type) {
-                if ($categories_image = xtc_try_upload('categories_image' . $image_type, DIR_FS_CATALOG . DIR_WS_IMAGES . 'categories/original_images/', '777', $this->accepted_image_files_extensions, $this->accepted_image_files_mime_types)) {
+                if ($categories_image = xtc_try_upload('categories_image' . $image_type, DIR_FS_CATALOG . DIR_WS_IMAGES . 'categories/original_images/', '777', $this->accepted_image_extensions, $this->accepted_image_mime_types)) {
                     $categories_image_name = preg_replace('/[^\d\w\-\_\.]/', '', $categories_image->filename);
 
                     rename(DIR_FS_CATALOG . DIR_WS_IMAGES . 'categories/original_images/' . $categories_image->filename, DIR_FS_CATALOG . DIR_WS_IMAGES . 'categories/original_images/' . $categories_image_name);
