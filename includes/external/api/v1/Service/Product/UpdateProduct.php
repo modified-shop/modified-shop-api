@@ -52,7 +52,7 @@ use OpenApi\Attributes as OA;
         )
     ],
     security: [
-        ['modified_auth' => ['UpdateProduct']]
+        ['modified_auth' => []]
     ]
 )]
 

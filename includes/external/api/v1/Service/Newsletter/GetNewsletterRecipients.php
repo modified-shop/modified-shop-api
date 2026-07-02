@@ -95,7 +95,7 @@ use OpenApi\Attributes as OA;
         )
     ],
     security: [
-        ['modified_auth' => ['GetNewsletterRecipients']]
+        ['modified_auth' => []]
     ]
 )]
 

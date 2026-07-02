@@ -84,7 +84,7 @@ use OpenApi\Attributes as OA;
         )
     ],
     security: [
-        ['modified_auth' => ['GetCampaignsIp']]
+        ['modified_auth' => []]
     ]
 )]
 

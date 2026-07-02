@@ -22,9 +22,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use OpenApi\Attributes as OA;
 
 #[OA\Get(
-    path: '/api/v1/products/{Id}/categories',
+    path: '/api/v1/products/{Id}/description',
     tags: ['Product'],
-    description: 'Get products categories data by given Id',
+    description: 'Get products description data by given Id',
     operationId: 'GetProductDescription',
     parameters: [
         new OA\Parameter(
@@ -40,11 +40,11 @@ use OpenApi\Attributes as OA;
     responses: [
         new OA\Response(
             response: 200,
-            description: 'product categories data',
+            description: 'product description data',
         ),
         new OA\Response(
             response: 403,
-            description: 'no product categories found'
+            description: 'no product description found'
         ),
         new OA\Response(
             response: 500,
@@ -52,7 +52,7 @@ use OpenApi\Attributes as OA;
         )
     ],
     security: [
-        ['modified_auth' => ['GetProductDescription']]
+        ['modified_auth' => []]
     ]
 )]
 

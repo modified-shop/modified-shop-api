@@ -50,7 +50,7 @@ use Exception;
     responses:[
         new OA\Response(
             response: 204,
-            description: 'no data',
+            description: 'no data'
         ),
         new OA\Response(
             response: 403,
@@ -58,15 +58,11 @@ use Exception;
         ),
         new OA\Response(
             response: 500,
-            description: 'content group Id required'
+            description: 'content group Id required or content Id required'
         ),
-        new OA\Response(
-            response: 500,
-            description: 'content Id required'
-        )
     ],
     security: [
-        ['modified_auth' => ['DeleteContentContent']]
+        ['modified_auth' => []]
     ]
 )]
 

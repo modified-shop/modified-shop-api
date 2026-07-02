@@ -37,7 +37,7 @@ use OpenApi\Attributes as OA;
         )
     ],
     security: [
-        ['modified_auth' => ['Insertlanguage']]
+        ['modified_auth' => []]
     ]
 )]
 

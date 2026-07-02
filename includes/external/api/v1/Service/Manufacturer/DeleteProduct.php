@@ -50,7 +50,7 @@ use OpenApi\Attributes as OA;
     responses:[
         new OA\Response(
             response: 204,
-            description: 'no data',
+            description: 'no data'
         ),
         new OA\Response(
             response: 403,
@@ -58,15 +58,11 @@ use OpenApi\Attributes as OA;
         ),
         new OA\Response(
             response: 500,
-            description: 'manufacturer Id required'
+            description: 'manufacturer Id required or products Id required'
         ),
-        new OA\Response(
-            response: 500,
-            description: 'products Id required'
-        )
     ],
     security: [
-        ['modified_auth' => ['DeleteProduct']]
+        ['modified_auth' => []]
     ]
 )]
 

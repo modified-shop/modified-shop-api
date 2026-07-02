@@ -22,7 +22,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use OpenApi\Attributes as OA;
 
 #[OA\Get(
-    path: '/api/v1/categories/{Id}',
+    path: '/api/v1/categories/{Id}/categories',
     tags: ['Category'],
     description: 'Get categories data by given Id',
     operationId: 'GetCategory',
@@ -68,7 +68,7 @@ use OpenApi\Attributes as OA;
         )
     ],
     security: [
-        ['modified_auth' => ['GetCategory']]
+        ['modified_auth' => []]
     ]
 )]
 

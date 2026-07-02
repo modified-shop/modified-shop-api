@@ -52,7 +52,7 @@ use OpenApi\Attributes as OA;
         )
     ],
     security: [
-        ['modified_auth' => ['InsertUpdateContentContent']]
+        ['modified_auth' => []]
     ]
 )]
 
@@ -87,7 +87,7 @@ use OpenApi\Attributes as OA;
         )
     ],
     security: [
-        ['modified_auth' => ['InsertUpdateContentContent']]
+        ['modified_auth' => []]
     ]
 )]
 

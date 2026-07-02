@@ -24,6 +24,12 @@ use Exception;
     title: 'modified eCommerce Shopsoftware API',
     description: ''
 )]
+#[OA\SecurityScheme(
+    securityScheme: 'modified_auth',
+    type: 'http',
+    scheme: 'bearer',
+    bearerFormat: 'JWT'
+)]
 
 class BaseService
 {

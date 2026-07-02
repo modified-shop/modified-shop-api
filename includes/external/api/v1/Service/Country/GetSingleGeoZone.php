@@ -76,7 +76,7 @@ use OpenApi\Attributes as OA;
         )
     ],
     security: [
-        ['modified_auth' => ['GetSingleGeoZone']]
+        ['modified_auth' => []]
     ]
 )]
 

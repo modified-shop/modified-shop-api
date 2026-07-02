@@ -49,27 +49,19 @@ use OpenApi\Attributes as OA;
     responses: [
         new OA\Response(
             response: 201,
-            description: 'order status history data',
+            description: 'order status history data'
         ),
         new OA\Response(
             response: 403,
-            description: 'order not found'
-        ),
-        new OA\Response(
-            response: 403,
-            description: 'order status history not found'
+            description: 'order not found or order status history not found'
         ),
         new OA\Response(
             response: 500,
-            description: 'order Id required'
+            description: 'order Id required or order status history Id required'
         ),
-        new OA\Response(
-            response: 500,
-            description: 'order status history Id required'
-        )
     ],
     security: [
-        ['modified_auth' => ['InsertUpdateOrderStatusHistory']]
+        ['modified_auth' => []]
     ]
 )]
 
