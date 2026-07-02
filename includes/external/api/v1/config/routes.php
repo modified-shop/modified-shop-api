@@ -43,6 +43,31 @@ return function (App $app) {
 
         $spec = json_decode((string)json_encode($swagger), true);
         $spec['info']['version'] = $settings['version'];
+
+        // /version is a plain inline route (no annotated class), so document it here.
+        $spec['paths']['/api/v1/version']['get'] = [
+            'tags' => ['Meta'],
+            'description' => 'Get the API version and the minimum required shop version.',
+            'operationId' => 'version',
+            'security' => [],
+            'responses' => [
+                '200' => [
+                    'description' => 'Version information',
+                    'content' => [
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'version' => ['type' => 'string'],
+                                    'requires' => ['type' => 'string'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
         $spec['servers'] = [['url' => $prefix === '' ? '/' : $prefix]];
         if (isset($spec['components']['securitySchemes']['modified_auth']['flows']['password'])) {
             $spec['components']['securitySchemes']['modified_auth']['flows']['password']['tokenUrl']
