@@ -10,25 +10,25 @@ use OpenApi\Analysis;
 use OpenApi\Annotations as OA;
 use OpenApi\Context;
 use OpenApi\Generator;
+use OpenApi\GeneratorAwareTrait;
 use OpenApi\OpenApiException;
 
 /**
  * OpenApi analyser using reflection.
  *
- * Can read either PHP `DocBlock`s or `Attribute`s.
+ * Can read either PHP <code>DocBlock</code>s or <code>Attribute</code>s.
  *
- * Due to the nature of reflection this requires all related classes
- * to be auto-loadable.
+ * Due to the nature of reflection, this requires all related classes to be auto-loadable.
  */
 class ReflectionAnalyser implements AnalyserInterface
 {
     use GeneratorAwareTrait;
 
-    /** @var AnnotationFactoryInterface[] */
+    /** @var list<AnnotationFactoryInterface> */
     protected array $annotationFactories = [];
 
     /**
-     * @param array<AnnotationFactoryInterface> $annotationFactories
+     * @param list<AnnotationFactoryInterface> $annotationFactories
      */
     public function __construct(array $annotationFactories = [])
     {
@@ -37,18 +37,21 @@ class ReflectionAnalyser implements AnalyserInterface
                 $this->annotationFactories[] = $annotationFactory;
             }
         }
+
         if (!$this->annotationFactories) {
             throw new OpenApiException('No suitable annotation factory found. At least one of "Doctrine Annotations" or PHP 8.1 are required');
         }
     }
 
-    public function setGenerator(Generator $generator): void
+    public function setGenerator(Generator $generator): static
     {
         $this->generator = $generator;
 
         foreach ($this->annotationFactories as $annotationFactory) {
             $annotationFactory->setGenerator($generator);
         }
+
+        return $this;
     }
 
     public function fromFile(string $filename, Context $context): Analysis
@@ -90,7 +93,9 @@ class ReflectionAnalyser implements AnalyserInterface
         }
 
         $rc = new \ReflectionClass($fqdn);
-        $contextType = $rc->isInterface() ? 'interface' : ($rc->isTrait() ? 'trait' : ((method_exists($rc, 'isEnum') && $rc->isEnum()) ? 'enum' : 'class'));
+        $contextType = $rc->isInterface()
+            ? 'interface'
+            : ($rc->isTrait() ? 'trait' : ($rc->isEnum() ? 'enum' : 'class'));
         $context = new Context([
             $contextType => $rc->getShortName(),
             'namespace' => $rc->getNamespaceName() ?: null,
@@ -100,6 +105,7 @@ class ReflectionAnalyser implements AnalyserInterface
             'line' => $rc->getStartLine(),
             'annotations' => [],
             'scanned' => $details,
+            'reflector' => $rc,
         ], $analysis->context);
 
         $definition = [
@@ -111,7 +117,7 @@ class ReflectionAnalyser implements AnalyserInterface
             'methods' => [],
             'context' => $context,
         ];
-        $normaliseClass = fn (string $name): string => '\\' . ltrim($name, '\\');
+        $normaliseClass = static fn (string $name): string => '\\' . ltrim($name, '\\');
         if ($parentClass = $rc->getParentClass()) {
             $definition['extends'] = $normaliseClass($parentClass->getName());
         }
@@ -130,9 +136,11 @@ class ReflectionAnalyser implements AnalyserInterface
                     'filename' => $method->getFileName() ?: null,
                     'line' => $method->getStartLine(),
                     'annotations' => [],
+                    'reflector' => $method,
                 ], $context);
                 foreach ($this->annotationFactories as $annotationFactory) {
-                    $analysis->addAnnotations($annotationFactory->build($method, $ctx), $ctx);
+                    $annotations = $annotationFactory->build($method, $ctx);
+                    $analysis->addAnnotations($annotations, $ctx);
                 }
             }
         }
@@ -143,19 +151,10 @@ class ReflectionAnalyser implements AnalyserInterface
                     'property' => $property->getName(),
                     'comment' => $property->getDocComment() ?: null,
                     'annotations' => [],
+                    'reflector' => $property,
                 ], $context);
                 if ($property->isStatic()) {
                     $ctx->static = true;
-                }
-                if (\PHP_VERSION_ID >= 70400 && ($type = $property->getType())) {
-                    $ctx->nullable = $type->allowsNull();
-                    if ($type instanceof \ReflectionNamedType) {
-                        $ctx->type = $type->getName();
-                        // Context::fullyQualifiedName(...) expects this
-                        if (class_exists($absFqn = '\\' . $ctx->type)) {
-                            $ctx->type = $absFqn;
-                        }
-                    }
                 }
                 foreach ($this->annotationFactories as $annotationFactory) {
                     $analysis->addAnnotations($annotationFactory->build($property, $ctx), $ctx);
@@ -169,15 +168,10 @@ class ReflectionAnalyser implements AnalyserInterface
                     'constant' => $constant->getName(),
                     'comment' => $constant->getDocComment() ?: null,
                     'annotations' => [],
+                    'reflector' => $constant,
                 ], $context);
                 foreach ($annotationFactory->build($constant, $ctx) as $annotation) {
                     if ($annotation instanceof OA\Property) {
-                        if (Generator::isDefault($annotation->property)) {
-                            $annotation->property = $constant->getName();
-                        }
-                        if (Generator::isDefault($annotation->const)) {
-                            $annotation->const = $constant->getValue();
-                        }
                         $analysis->addAnnotation($annotation, $ctx);
                     }
                 }

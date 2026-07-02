@@ -9,7 +9,6 @@ namespace OpenApi\Annotations;
 use OpenApi\Analysis;
 use OpenApi\Generator;
 use OpenApi\OpenApiException;
-use OpenApi\Util;
 
 /**
  * This is the root document object for the API specification.
@@ -21,18 +20,27 @@ use OpenApi\Util;
 class OpenApi extends AbstractAnnotation
 {
     public const VERSION_3_0_0 = '3.0.0';
+
     public const VERSION_3_1_0 = '3.1.0';
+
+    public const VERSION_3_2_0 = '3.2.0';
+
     public const DEFAULT_VERSION = self::VERSION_3_0_0;
-    public const SUPPORTED_VERSIONS = [self::VERSION_3_0_0, self::VERSION_3_1_0];
+
+    public const SUPPORTED_VERSIONS = [
+        self::VERSION_3_0_0, '3.0.1',  '3.0.2', '3.0.3', '3.0.4',
+        self::VERSION_3_1_0, '3.1.1', '3.1.2',
+        self::VERSION_3_2_0,
+    ];
 
     /**
      * The semantic version number of the OpenAPI Specification version that the OpenAPI document uses.
      *
      * The openapi field should be used by tooling specifications and clients to interpret the OpenAPI document.
      *
-     * A version specified via `Generator::setVersion()` will overwrite this value.
+     * A version specified via <code>Generator::setVersion()</code> will overwrite this value.
      *
-     * This is not related to the API info::version string.
+     * NOTE: This is not related to the API info::version string.
      *
      * @var string
      */
@@ -50,14 +58,14 @@ class OpenApi extends AbstractAnnotation
      *
      * If not provided, or is an empty array, the default value would be a Server Object with an url value of <code>/</code>.
      *
-     * @var Server[]
+     * @var list<Server>
      */
     public $servers = Generator::UNDEFINED;
 
     /**
      * The available paths and operations for the API.
      *
-     * @var PathItem[]
+     * @var array<PathItem>
      */
     public $paths = Generator::UNDEFINED;
 
@@ -74,7 +82,7 @@ class OpenApi extends AbstractAnnotation
      * The list of values includes alternative security requirement objects that can be used.
      * Only one of the security requirement objects need to be satisfied to authorize a request.
      * Individual operations can override this definition.
-     * To make security optional, an empty security requirement `({})` can be included in the array.
+     * To make security optional, an empty security requirement (<code>{}</code>) can be included in the array.
      *
      * @var array
      */
@@ -88,7 +96,7 @@ class OpenApi extends AbstractAnnotation
      * The tags that are not declared may be organized randomly or based on the tools' logic.
      * Each tag name in the list must be unique.
      *
-     * @var Tag[]
+     * @var list<Tag>
      */
     public $tags = Generator::UNDEFINED;
 
@@ -102,7 +110,8 @@ class OpenApi extends AbstractAnnotation
     /**
      * The available webhooks for the API.
      *
-     * @var Webhook[]
+     * @since OpenAPI 3.1.0
+     * @var list<Webhook>
      */
     public $webhooks = Generator::UNDEFINED;
 
@@ -135,39 +144,65 @@ class OpenApi extends AbstractAnnotation
      */
     public static $_types = [];
 
-    /**
-     * @inheritdoc
-     */
-    public function validate(?array $stack = null, ?array $skip = null, string $ref = '', $context = null): bool
+    public function __construct(array $properties)
     {
-        if ($stack !== null || $skip !== null || $ref !== '') {
-            $this->_context->logger->warning('Nested validation for ' . $this->identity() . ' not allowed');
+        parent::__construct($properties);
 
-            return false;
+        if ($this->_context->root()->version) {
+            // override via `Generator::setVersion()`
+            $this->openapi = $this->_context->root()->version;
+        } else {
+            $this->_context->root()->version = $this->openapi;
+        }
+    }
+
+    #[\Override]
+    public function validate(?Analysis $analysis = null, string $version = OpenApi::DEFAULT_VERSION, ?object $context = null): bool
+    {
+        $isValid = parent::validate($analysis, $version, $context);
+
+        if (!in_array($this->openapi, OpenApi::SUPPORTED_VERSIONS)) {
+            $this->_context->logger->warning('Unsupported OpenAPI version "' . $this->openapi . '". Allowed versions are: ' . implode(', ', OpenApi::SUPPORTED_VERSIONS));
+            $isValid = false;
         }
 
-        if (!in_array($this->openapi, self::SUPPORTED_VERSIONS)) {
-            $this->_context->logger->warning('Unsupported OpenAPI version "' . $this->openapi . '". Allowed versions are: ' . implode(', ', self::SUPPORTED_VERSIONS));
-
-            return false;
-        }
-
-        /* paths is optional in 3.1.0 */
-        if ($this->openapi === self::VERSION_3_0_0 && Generator::isDefault($this->paths)) {
+        /* paths is optional in 3.1.x */
+        if (OpenApi::versionMatch($version, '3.0.x') && Generator::isDefault($this->paths)) {
             $this->_context->logger->warning('Required @OA\PathItem() not found');
+            $isValid = false;
         }
 
-        if ($this->openapi === self::VERSION_3_1_0
+        if (OpenApi::versionMatch($version, '3.1.x')
             && Generator::isDefault($this->paths)
             && Generator::isDefault($this->webhooks)
             && Generator::isDefault($this->components)
         ) {
-            $this->_context->logger->warning("At least one of 'Required @OA\PathItem(), @OA\Components() or @OA\Webhook() not found'");
-
-            return false;
+            $this->_context->logger->warning('At least one of @OA\PathItem(), @OA\Components() or @OA\Webhook() required');
+            $isValid = false;
         }
 
-        return parent::validate([], [], '#', new \stdClass());
+        return $isValid;
+    }
+
+    /**
+     * Compare OpenApi version numbers.
+     *
+     * Allows patch version placeholder `x`; e.g. `3.1.x`.
+     */
+    public static function versionMatch(string $version1, string $version2): bool
+    {
+        $expand = static function (string $v): array {
+            if (!str_ends_with($v, '.x')) {
+                return [$v];
+            }
+            $minor = str_replace('.x', '', $v);
+
+            return array_filter(self::SUPPORTED_VERSIONS, static fn (string $sv): bool => str_starts_with($sv, $minor));
+        };
+        $versions1 = $expand($version1);
+        $versions2 = $expand($version2);
+
+        return array_intersect($versions1, $versions2) !== [];
     }
 
     /**
@@ -189,22 +224,22 @@ class OpenApi extends AbstractAnnotation
     /**
      * Look up an annotation with a $ref url.
      *
-     * @param string $ref The $ref value, for example: "#/components/schemas/Product"
+     * @param string $ref The $ref value; example: "#/components/schemas/Product"
      */
     public function ref(string $ref)
     {
-        if (substr($ref, 0, 2) !== '#/') {
-            // @todo Add support for external (http) refs?
+        if (!str_starts_with($ref, '#/')) {
             throw new OpenApiException('Unsupported $ref "' . $ref . '", it should start with "#/"');
         }
 
-        return $this->resolveRef($ref, '#/', $this, []);
+        return self::resolveRef($ref, '#/', $this, []);
     }
 
     /**
      * Recursive helper for ref().
      *
-     * @param array|AbstractAnnotation $container
+     * @param array|AbstractAnnotation                                     $container
+     * @param array<class-string<AbstractAnnotation>,string|array<string>> $mapping
      */
     private static function resolveRef(string $ref, string $resolved, $container, array $mapping)
     {
@@ -215,15 +250,25 @@ class OpenApi extends AbstractAnnotation
         $slash = strpos($path, '/');
 
         $subpath = $slash === false ? $path : substr($path, 0, $slash);
-        $property = Util::refDecode($subpath);
+        $property = Components::refDecode($subpath);
         $unresolved = $slash === false ? $resolved . $subpath : $resolved . $subpath . '/';
 
         if (is_object($container)) {
-            if (property_exists($container, $property) === false) {
+            // support use x-* in ref
+            $xKey = str_starts_with($property, 'x-') ? substr($property, 2) : null;
+            if ($xKey) {
+                if (!is_array($container->x) || !array_key_exists($xKey, $container->x)) {
+                    $xKey = null;
+                }
+            }
+            if (property_exists($container, $property) === false && !$xKey) {
                 throw new OpenApiException('$ref "' . $ref . '" not found');
             }
+
+            $nextContainer = $xKey ? $container->x[$xKey] : $container->{$property};
+
             if ($slash === false) {
-                return $container->{$property};
+                return $nextContainer;
             }
             $mapping = [];
             foreach ($container::$_nested as $nestedClass => $nested) {
@@ -232,7 +277,7 @@ class OpenApi extends AbstractAnnotation
                 }
             }
 
-            return self::resolveRef($ref, $unresolved, $container->{$property}, $mapping);
+            return self::resolveRef($ref, $unresolved, $nextContainer, $mapping);
         } elseif (is_array($container)) {
             if (array_key_exists($property, $container)) {
                 return self::resolveRef($ref, $unresolved, $container[$property], []);
@@ -249,15 +294,11 @@ class OpenApi extends AbstractAnnotation
         throw new OpenApiException('$ref "' . $unresolved . '" not found');
     }
 
-    /**
-     * @inheritdoc
-     */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): \stdClass
     {
         $data = parent::jsonSerialize();
 
-        if (!$this->_context->isVersion(OpenApi::VERSION_3_1_0)) {
+        if ($this->_context->isVersion('3.0.x')) {
             unset($data->webhooks);
         }
 

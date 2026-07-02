@@ -6,11 +6,12 @@
 
 namespace OpenApi\Annotations;
 
-use OpenApi\Generator;
+use OpenApi\Analysis;
 use OpenApi\Annotations as OA;
+use OpenApi\Generator;
 
 /**
- * Base class for `@OA\Get`,  `@OA\Post`,  `@OA\Put`,  etc.
+ * Base class for <code>@OA\Get</code>,  <code>@OA\Post</code>,  <code>@OA\Put</code>,  etc.
  *
  * Describes a single API operation on a path.
  *
@@ -32,7 +33,7 @@ abstract class Operation extends AbstractAnnotation
      *
      * Tags can be used for logical grouping of operations by resources or any other qualifier.
      *
-     * @var string[]
+     * @var list<string>
      */
     public $tags = Generator::UNDEFINED;
 
@@ -90,7 +91,7 @@ abstract class Operation extends AbstractAnnotation
      * The list can use the Reference Object to link to parameters that are defined at the OpenAPI Object's
      * components/parameters.
      *
-     * @var Parameter[]
+     * @var list<Parameter>
      */
     public $parameters = Generator::UNDEFINED;
 
@@ -108,7 +109,7 @@ abstract class Operation extends AbstractAnnotation
     /**
      * The list of possible responses as they are returned from executing this operation.
      *
-     * @var Response[]
+     * @var list<Response>
      */
     public $responses = Generator::UNDEFINED;
 
@@ -156,7 +157,7 @@ abstract class Operation extends AbstractAnnotation
      * If an alternative server object is specified at the Path Item Object or Root level, it will be overridden by
      * this value.
      *
-     * @var Server[]
+     * @var list<Server>
      */
     public $servers = Generator::UNDEFINED;
 
@@ -190,11 +191,7 @@ abstract class Operation extends AbstractAnnotation
         Attachable::class => ['attachables'],
     ];
 
-    /**
-     * @inheritdoc
-     */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): \stdClass
     {
         $data = parent::jsonSerialize();
 
@@ -211,39 +208,33 @@ abstract class Operation extends AbstractAnnotation
         return $data;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function validate(array $stack = [], array $skip = [], string $ref = '', $context = null): bool
+    #[\Override]
+    public function validate(?Analysis $analysis = null, string $version = OpenApi::DEFAULT_VERSION, ?object $context = null): bool
     {
-        if (in_array($this, $skip, true)) {
-            return true;
-        }
-
-        $valid = parent::validate($stack, $skip, $ref, $context);
+        $isValid = parent::validate($analysis, $version, $context);
 
         if (!Generator::isDefault($this->responses)) {
             foreach ($this->responses as $response) {
                 if (!Generator::isDefault($response->response) && $response->response !== 'default' && preg_match('/^([12345]{1}\d{2})|([12345]{1}XX)$/', (string) $response->response) === 0) {
-                    $this->_context->logger->warning('Invalid value "' . $response->response . '" for ' . $response->_identity([]) . '->response, expecting "default", a HTTP Status Code or HTTP Status Code range definition in ' . $response->_context);
-                    $valid = false;
+                    $this->_context->logger->warning('Invalid value "' . $response->response . '" for ' . $response->identity([]) . '->response, expecting "default", a HTTP Status Code or HTTP Status Code range definition in ' . $response->_context);
+                    $isValid = false;
                 }
             }
         }
 
-        if (is_object($context) && !Generator::isDefault($this->operationId)) {
+        if (!Generator::isDefault($this->operationId)) {
             if (!property_exists($context, 'operationIds')) {
                 $context->operationIds = [];
             }
 
             if (in_array($this->operationId, $context->operationIds)) {
                 $this->_context->logger->warning('operationId must be unique. Duplicate value found: "' . $this->operationId . '"');
-                $valid = false;
+                $isValid = false;
             }
 
             $context->operationIds[] = $this->operationId;
         }
 
-        return $valid;
+        return $isValid;
     }
 }

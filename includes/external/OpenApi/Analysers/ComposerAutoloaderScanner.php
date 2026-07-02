@@ -11,7 +11,7 @@ use Composer\Autoload\ClassLoader;
 /**
  * Scans for classes/interfaces/traits.
  *
- * Relies on a `composer --optimized` run in order to utilize
+ * Relies on a <code>composer --optimized</code> run in order to utilize
  * the generated class map.
  */
 class ComposerAutoloaderScanner
@@ -19,17 +19,17 @@ class ComposerAutoloaderScanner
     /**
      * Collect all classes/interfaces/traits known by composer.
      *
-     * @param array<string> $namespaces
+     * @param list<string> $namespaces
      *
-     * @return array<string>
+     * @return list<string>
      */
     public function scan(array $namespaces): array
     {
         $units = [];
-        if ($autoloader = $this->getComposerAutoloader()) {
+        if ($autoloader = static::getComposerAutoloader()) {
             foreach (array_keys($autoloader->getClassMap()) as $unit) {
                 foreach ($namespaces as $namespace) {
-                    if (0 === strpos($unit, $namespace)) {
+                    if (str_starts_with($unit, $namespace)) {
                         $units[] = $unit;
                         break;
                     }

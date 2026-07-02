@@ -6,15 +6,16 @@
 
 namespace OpenApi\Attributes;
 
-use OpenApi\Generator;
 use OpenApi\Annotations as OA;
+use OpenApi\Generator;
 
 #[\Attribute(\Attribute::TARGET_CLASS)]
 class Flow extends OA\Flow
 {
     /**
-     * @param array<string,mixed>|null $x
-     * @param Attachable[]|null        $attachables
+     * @param 'implicit'|'password'|'authorizationCode'|'clientCredentials'|null $flow
+     * @param array<string,mixed>|null                                           $x
+     * @param list<Attachable>|null                                              $attachables
      */
     public function __construct(
         ?string $authorizationUrl = null,
@@ -22,7 +23,8 @@ class Flow extends OA\Flow
         ?string $refreshUrl = null,
         ?string $flow = null,
         ?array $scopes = null,
-        // annotation
+
+        // abstract annotation
         ?array $x = null,
         ?array $attachables = null
     ) {
@@ -33,7 +35,7 @@ class Flow extends OA\Flow
                 'flow' => $flow ?? Generator::UNDEFINED,
                 'scopes' => $scopes ?? Generator::UNDEFINED,
                 'x' => $x ?? Generator::UNDEFINED,
-                'value' => $this->combine($attachables),
+                'attachables' => $attachables ?? Generator::UNDEFINED,
             ]);
     }
 }

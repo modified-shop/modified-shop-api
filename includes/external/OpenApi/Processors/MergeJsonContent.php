@@ -16,9 +16,8 @@ use OpenApi\Generator;
  */
 class MergeJsonContent
 {
-    public function __invoke(Analysis $analysis)
+    public function __invoke(Analysis $analysis): void
     {
-        /** @var OA\JsonContent[] $annotations */
         $annotations = $analysis->getAnnotationsOfType(OA\JsonContent::class);
 
         foreach ($annotations as $jsonContent) {
@@ -38,6 +37,7 @@ class MergeJsonContent
                 'schema' => $jsonContent,
                 'example' => $jsonContent->example,
                 'examples' => $jsonContent->examples,
+                'encoding' => $jsonContent->encoding,
                 '_context' => new Context(['generated' => true], $jsonContent->_context),
             ]);
             $analysis->addAnnotation($mediaType, $mediaType->_context);
@@ -46,11 +46,15 @@ class MergeJsonContent
             }
             $jsonContent->example = Generator::UNDEFINED;
             $jsonContent->examples = Generator::UNDEFINED;
+            /* @phpstan-ignore assign.propertyType */
+            $jsonContent->encoding = Generator::UNDEFINED;
+            $jsonContent->_context = new Context(['nested' => $mediaType, 'generated' => true], $mediaType->_context);
 
             $index = array_search($jsonContent, $parent->_unmerged, true);
             if ($index !== false) {
                 array_splice($parent->_unmerged, $index, 1);
             }
+            $analysis->removeAnnotation($jsonContent);
         }
     }
 }

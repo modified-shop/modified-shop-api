@@ -7,15 +7,14 @@
 namespace OpenApi\Annotations;
 
 /**
- * A `@OA\Request` cookie parameter.
+ * A <code>@OA\Request</code> cookie parameter.
  *
  * @Annotation
  */
 class CookieParameter extends Parameter
 {
     /**
-     * @inheritdoc
-     * This takes 'cookie' as the default location.
+     * @var string
      */
     public $in = 'cookie';
 }

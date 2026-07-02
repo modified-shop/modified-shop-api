@@ -9,15 +9,15 @@ namespace OpenApi\Annotations;
 use OpenApi\Annotations as OA;
 
 /**
- * A `@OA\Request` query parameter.
+ * A <code>@OA\Request</code> query parameter.
  *
  * @Annotation
  */
 class QueryParameter extends Parameter
 {
     /**
-     * @inheritdoc
-     * This takes 'query' as the default location.
+     * @var string
+     *             This takes 'query' as the default location
      */
     public $in = 'query';
 }
