@@ -18,10 +18,49 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Firebase\JWT\JWT;
 use Tuupola\Base62;
+use OpenApi\Attributes as OA;
 
-/**
- * Action
- */
+#[OA\Post(
+    path: '/api/v1/oauth',
+    tags: ['Auth'],
+    description: 'Obtain a JWT access token. Credentials can be sent either as request headers '
+        . '(username, password) or as form fields (username, password). The returned token is '
+        . 'valid for 10 minutes and must be sent as a Bearer token on all protected endpoints.',
+    operationId: 'oauth',
+    security: [],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/x-www-form-urlencoded',
+            schema: new OA\Schema(
+                required: ['username', 'password'],
+                properties: [
+                    new OA\Property(
+                        property: 'username',
+                        type: 'string',
+                        description: 'Customer email address with API access enabled'
+                    ),
+                    new OA\Property(
+                        property: 'password',
+                        type: 'string',
+                        description: 'Customer password'
+                    )
+                ]
+            )
+        )
+    ),
+    responses: [
+        new OA\Response(
+            response: 200,
+            description: 'JWT access token'
+        ),
+        new OA\Response(
+            response: 401,
+            description: 'Authentication failed'
+        )
+    ]
+)]
+
 final class JwtAuth
 {
     /**
@@ -52,11 +91,22 @@ final class JwtAuth
             throw new \RuntimeException("modified API not installed");
         }
 
+        /* Subject may be provided as a request header (user/username) */
+        /* or as a parsed body field (e.g. OAuth2 password grant from Swagger UI). */
+        $usr = "";
         if ($user = $request->getHeaderLine("user")) {
             $usr = $user;
         }
         if ($user = $request->getHeaderLine("username")) {
             $usr = $user;
+        }
+        if ($usr === "") {
+            $body = (array)$request->getParsedBody();
+            if (isset($body["username"])) {
+                $usr = (string)$body["username"];
+            } elseif (isset($body["user"])) {
+                $usr = (string)$body["user"];
+            }
         }
 
         $now = new \DateTime();

@@ -137,17 +137,33 @@ final class Authentication implements MiddlewareInterface
             }
         }
 
-        /* Just in case. */
-        $params = [
-            "password" => $request->getHeaderLine("password")
-        ];
+        /* Credentials may be sent as request headers (user/username + password) */
+        /* or as parsed body fields (e.g. OAuth2 password grant from Swagger UI). */
+        $body = (array)$request->getParsedBody();
 
-        if ($user = $request->getHeaderLine("user")) {
-            $params["user"] = $user;
+        $password = $request->getHeaderLine("password");
+        if ($password === "" && isset($body["password"])) {
+            $password = (string)$body["password"];
         }
-        if ($user = $request->getHeaderLine("username")) {
-            $params["user"] = $user;
+
+        $user = "";
+        if ($header = $request->getHeaderLine("user")) {
+            $user = $header;
         }
+        if ($header = $request->getHeaderLine("username")) {
+            $user = $header;
+        }
+        if ($user === "" && isset($body["username"])) {
+            $user = (string)$body["username"];
+        }
+        if ($user === "" && isset($body["user"])) {
+            $user = (string)$body["user"];
+        }
+
+        $params = [
+            "user" => $user,
+            "password" => $password
+        ];
 
         /* Check if user authenticates. */
         if (false === $this->options["authenticator"]($params)) {

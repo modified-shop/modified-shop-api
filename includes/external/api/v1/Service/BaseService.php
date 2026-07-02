@@ -26,9 +26,14 @@ use Exception;
 )]
 #[OA\SecurityScheme(
     securityScheme: 'modified_auth',
-    type: 'http',
-    scheme: 'bearer',
-    bearerFormat: 'JWT'
+    type: 'oauth2',
+    flows: [
+        new OA\Flow(
+            flow: 'password',
+            tokenUrl: '/api/v1/oauth',
+            scopes: []
+        )
+    ]
 )]
 
 class BaseService
