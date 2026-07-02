@@ -57,8 +57,6 @@ final class LoggerHandler
     /**
      * Build the logger.
      *
-     * @param string|null $name The logging channel
-     *
      * @return LoggerInterface The logger
      */
     public function createLogger(): LoggerInterface

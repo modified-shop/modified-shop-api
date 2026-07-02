@@ -124,7 +124,7 @@ final class ContentAction extends BaseAction
                                             FROM " . TABLE_CONTENT_MANAGER . "
                                            WHERE content_group = '" . (int)$contentGroupId . "'");
         if (xtc_db_num_rows($products_query) < 1) {
-            return $this->errormessage(sprintf('Content not found: %s', $productId));
+            return $this->errormessage(sprintf('Content not found: %s', $contentGroupId));
         } else {
             $languages_query = xtc_db_query("SELECT *
                                                  FROM " . TABLE_LANGUAGES);

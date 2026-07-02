@@ -96,6 +96,7 @@ final class InsertAddressBook extends BaseService
     ): ResponseInterface {
         $this->CheckAccess($request, $response);
 
+        $customerId = (int)$args['id'];
         $data = (array)$request->getParsedBody();
 
         $result = $this->customerAction->InsertAddressBook($customerId, $data);
