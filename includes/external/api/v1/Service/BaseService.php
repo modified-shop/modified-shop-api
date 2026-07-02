@@ -22,7 +22,11 @@ use Exception;
 #[OA\Info(
     version: '1.0.0',
     title: 'modified eCommerce Shopsoftware API',
-    description: ''
+    description: 'REST API for the modified eCommerce Shopsoftware, giving external applications '
+        . 'programmatic access to shop data (customers, products, categories, orders and more). '
+        . 'Access is granted per customer account in the shop backend (Customers -> API Access). '
+        . 'Use the Authorize button to log in with your API credentials (username and password); '
+        . 'the returned JWT is valid for 10 minutes and is sent as a Bearer token on all protected endpoints.'
 )]
 #[OA\SecurityScheme(
     securityScheme: 'modified_auth',
