@@ -33,8 +33,6 @@ return function (App $app) {
             DIR_FS_EXTERNAL . 'api/v1/Auth/',
         ]);
 
-        // Resolve the mount point from the request so the spec also works when
-        // the shop is installed in a subdirectory (e.g. /shop/api/v1/...).
         $prefix = (string)preg_replace(
             '#/api/v1/swagger\.json$#',
             '',
@@ -44,7 +42,6 @@ return function (App $app) {
         $spec = json_decode((string)json_encode($swagger), true);
         $spec['info']['version'] = $settings['version'];
 
-        // /version is a plain inline route (no annotated class), so document it here.
         $spec['paths']['/api/v1/version']['get'] = [
             'tags' => ['Meta'],
             'description' => 'Get the API version and the minimum required shop version.',
