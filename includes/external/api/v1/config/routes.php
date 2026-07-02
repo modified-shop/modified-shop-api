@@ -26,7 +26,10 @@ return function (App $app) {
 
     // docs
     $app->get('/v1/swagger.json', function ($request, $response, $args) {
-        $swagger = (new OpenApiGenerator())->generate([DIR_FS_EXTERNAL . 'api/v1/Service/']);
+        $swagger = (new OpenApiGenerator())->generate([
+            DIR_FS_EXTERNAL . 'api/v1/Service/',
+            DIR_FS_EXTERNAL . 'api/v1/Auth/',
+        ]);
         $response->getBody()->write(json_encode($swagger));
         return $response->withHeader('Content-Type', 'application/json');
     });
