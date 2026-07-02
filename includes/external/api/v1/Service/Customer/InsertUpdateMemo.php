@@ -49,27 +49,19 @@ use OpenApi\Attributes as OA;
     responses: [
         new OA\Response(
             response: 201,
-            description: 'memo data',
+            description: 'memo data'
         ),
         new OA\Response(
             response: 403,
-            description: 'customer not found'
-        ),
-        new OA\Response(
-            response: 403,
-            description: 'memo not found'
+            description: 'customer not found or memo not found'
         ),
         new OA\Response(
             response: 500,
-            description: 'customer Id required'
+            description: 'customer Id required or memo Id required'
         ),
-        new OA\Response(
-            response: 500,
-            description: 'memo Id required'
-        )
     ],
     security: [
-        ['modified_auth' => ['InsertUpdateMemo']]
+        ['modified_auth' => []]
     ]
 )]
 

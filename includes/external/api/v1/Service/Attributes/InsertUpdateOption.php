@@ -48,7 +48,7 @@ use OpenApi\Attributes as OA;
         )
     ],
     security: [
-        ['modified_auth' => ['InsertUpdateOption']]
+        ['modified_auth' => []]
     ]
 )]
 

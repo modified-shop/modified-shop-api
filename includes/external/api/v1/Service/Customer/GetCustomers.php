@@ -87,7 +87,7 @@ use OpenApi\Attributes as OA;
         )
     ],
     security: [
-        ['modified_auth' => ['GetCustomers']]
+        ['modified_auth' => []]
     ]
 )]
 

@@ -50,27 +50,19 @@ use OpenApi\Attributes as OA;
     responses:[
         new OA\Response(
             response: 204,
-            description: 'no data',
+            description: 'no data'
         ),
         new OA\Response(
             response: 403,
-            description: 'customer not found'
-        ),
-        new OA\Response(
-            response: 403,
-            description: 'customer basket not found'
+            description: 'customer not found or customer basket not found'
         ),
         new OA\Response(
             response: 500,
-            description: 'customer Id required'
+            description: 'customer Id required or customer basket Id required'
         ),
-        new OA\Response(
-            response: 500,
-            description: 'customer basket Id required'
-        )
     ],
     security: [
-        ['modified_auth' => ['DeleteBasket']]
+        ['modified_auth' => []]
     ]
 )]
 

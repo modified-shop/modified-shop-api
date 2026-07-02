@@ -52,7 +52,7 @@ use OpenApi\Attributes as OA;
         )
     ],
     security: [
-        ['modified_auth' => ['GetSingleShippingStatus']]
+        ['modified_auth' => []]
     ]
 )]
 

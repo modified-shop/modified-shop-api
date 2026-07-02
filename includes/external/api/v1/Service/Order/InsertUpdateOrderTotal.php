@@ -49,27 +49,19 @@ use OpenApi\Attributes as OA;
     responses: [
         new OA\Response(
             response: 201,
-            description: 'order total data',
+            description: 'order total data'
         ),
         new OA\Response(
             response: 403,
-            description: 'order not found'
-        ),
-        new OA\Response(
-            response: 403,
-            description: 'order total not found'
+            description: 'order not found or order total not found'
         ),
         new OA\Response(
             response: 500,
-            description: 'order Id required'
+            description: 'order Id required or order total Id required'
         ),
-        new OA\Response(
-            response: 500,
-            description: 'order total Id required'
-        )
     ],
     security: [
-        ['modified_auth' => ['InsertUpdateOrderTotal']]
+        ['modified_auth' => []]
     ]
 )]
 

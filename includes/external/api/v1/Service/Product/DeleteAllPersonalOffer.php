@@ -49,27 +49,19 @@ use OpenApi\Attributes as OA;
     responses:[
         new OA\Response(
             response: 204,
-            description: 'no data',
+            description: 'no data'
         ),
         new OA\Response(
             response: 403,
-            description: 'product not found'
-        ),
-        new OA\Response(
-            response: 403,
-            description: 'customer status not found'
+            description: 'product not found or customer status not found'
         ),
         new OA\Response(
             response: 500,
-            description: 'product Id required'
+            description: 'product Id required or customer status Id required'
         ),
-        new OA\Response(
-            response: 500,
-            description: 'customer status Id required'
-        )
     ],
     security: [
-        ['modified_auth' => ['DeleteAllPersonalOffer']]
+        ['modified_auth' => []]
     ]
 )]
 

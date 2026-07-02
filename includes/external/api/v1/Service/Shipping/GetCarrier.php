@@ -55,7 +55,7 @@ use OpenApi\Attributes as OA;
         )
     ],
     security: [
-        ['modified_auth' => ['GetCarrier']]
+        ['modified_auth' => []]
     ]
 )]
 

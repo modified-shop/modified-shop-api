@@ -49,7 +49,7 @@ use OpenApi\Attributes as OA;
     responses: [
         new OA\Response(
             response: 200,
-            description: 'customer address book data',
+            description: 'customer address book data'
         ),
         new OA\Response(
             response: 403,
@@ -57,15 +57,11 @@ use OpenApi\Attributes as OA;
         ),
         new OA\Response(
             response: 500,
-            description: 'customer Id required'
+            description: 'customer Id required or customer address book Id required'
         ),
-        new OA\Response(
-            response: 500,
-            description: 'customer address book Id required'
-        )
     ],
     security: [
-        ['modified_auth' => ['GetSingleCustomerAddressBook']]
+        ['modified_auth' => []]
     ]
 )]
 

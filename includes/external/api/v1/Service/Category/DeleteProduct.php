@@ -50,7 +50,7 @@ use Exception;
     responses:[
         new OA\Response(
             response: 204,
-            description: 'no data',
+            description: 'no data'
         ),
         new OA\Response(
             response: 403,
@@ -58,15 +58,11 @@ use Exception;
         ),
         new OA\Response(
             response: 500,
-            description: 'category Id required'
+            description: 'category Id required or product Id required'
         ),
-        new OA\Response(
-            response: 500,
-            description: 'product Id required'
-        )
     ],
     security: [
-        ['modified_auth' => ['DeleteProduct']]
+        ['modified_auth' => []]
     ]
 )]
 

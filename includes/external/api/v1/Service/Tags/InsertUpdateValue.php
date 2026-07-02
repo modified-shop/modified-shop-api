@@ -49,27 +49,19 @@ use OpenApi\Attributes as OA;
     responses: [
         new OA\Response(
             response: 201,
-            description: 'values data',
+            description: 'values data'
         ),
         new OA\Response(
             response: 403,
-            description: 'option not found'
-        ),
-        new OA\Response(
-            response: 403,
-            description: 'value not found'
+            description: 'option not found or value not found'
         ),
         new OA\Response(
             response: 500,
-            description: 'option Id required'
+            description: 'option Id required or value Id required'
         ),
-        new OA\Response(
-            response: 500,
-            description: 'value Id required'
-        )
     ],
     security: [
-        ['modified_auth' => ['InsertUpdateValue']]
+        ['modified_auth' => []]
     ]
 )]
 

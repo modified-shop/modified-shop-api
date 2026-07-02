@@ -49,27 +49,19 @@ use OpenApi\Attributes as OA;
     responses: [
         new OA\Response(
             response: 201,
-            description: 'address book data',
+            description: 'address book data'
         ),
         new OA\Response(
             response: 403,
-            description: 'customer not found'
-        ),
-        new OA\Response(
-            response: 403,
-            description: 'address book not found'
+            description: 'customer not found or address book not found'
         ),
         new OA\Response(
             response: 500,
-            description: 'customer Id required'
+            description: 'customer Id required or address book Id required'
         ),
-        new OA\Response(
-            response: 500,
-            description: 'address book Id required'
-        )
     ],
     security: [
-        ['modified_auth' => ['InsertUpdateAddressBook']]
+        ['modified_auth' => []]
     ]
 )]
 

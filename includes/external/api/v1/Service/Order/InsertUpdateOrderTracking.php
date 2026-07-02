@@ -49,27 +49,19 @@ use OpenApi\Attributes as OA;
     responses: [
         new OA\Response(
             response: 201,
-            description: 'order tracking data',
+            description: 'order tracking data'
         ),
         new OA\Response(
             response: 403,
-            description: 'order not found'
-        ),
-        new OA\Response(
-            response: 403,
-            description: 'order tracking not found'
+            description: 'order not found or order tracking not found'
         ),
         new OA\Response(
             response: 500,
-            description: 'order Id required'
+            description: 'order Id required or order tracking Id required'
         ),
-        new OA\Response(
-            response: 500,
-            description: 'order tracking Id required'
-        )
     ],
     security: [
-        ['modified_auth' => ['InsertUpdateOrderTracking']]
+        ['modified_auth' => []]
     ]
 )]
 

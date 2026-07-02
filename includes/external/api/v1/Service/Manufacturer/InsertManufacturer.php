@@ -33,7 +33,7 @@ use OpenApi\Attributes as OA;
         )
     ],
     security: [
-        ['modified_auth' => ['InsertManufacturer']]
+        ['modified_auth' => []]
     ]
 )]
 
