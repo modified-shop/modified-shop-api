@@ -21,11 +21,13 @@ use OpenApi\Generator as OpenApiGenerator;
 use Symfony\Component\Finder\Finder;
 
 return function (App $app) {
+    $settings = $app->getContainer()->get('settings');
+
     // oauth
     $app->post('/v1/oauth', \api\v1\Auth\JwtAuth::class)->add(Authentication::class);
 
     // docs
-    $app->get('/v1/swagger.json', function ($request, $response, $args) {
+    $app->get('/v1/swagger.json', function ($request, $response, $args) use ($settings) {
         $swagger = (new OpenApiGenerator())->generate([
             DIR_FS_EXTERNAL . 'api/v1/Service/',
             DIR_FS_EXTERNAL . 'api/v1/Auth/',
@@ -40,6 +42,7 @@ return function (App $app) {
         );
 
         $spec = json_decode((string)json_encode($swagger), true);
+        $spec['info']['version'] = $settings['version'];
         $spec['servers'] = [['url' => $prefix === '' ? '/' : $prefix]];
         if (isset($spec['components']['securitySchemes']['modified_auth']['flows']['password'])) {
             $spec['components']['securitySchemes']['modified_auth']['flows']['password']['tokenUrl']
@@ -51,8 +54,12 @@ return function (App $app) {
     });
 
     // version
-    $app->get('/v1/version', function ($request, $response, $args) {
-        $response->getBody()->write(json_encode(['version' => '1.0.0']));
+    $app->get('/v1/version', function ($request, $response, $args) use ($settings) {
+        $data = [
+            'version' => $settings['version'],
+            'requires' => $settings['min_shop_version'],
+        ];
+        $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json');
     });
 

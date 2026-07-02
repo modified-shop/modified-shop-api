@@ -18,6 +18,10 @@ date_default_timezone_set('Europe/Berlin');
 // Settings
 $settings = [];
 
+// API version and requirements (single source of truth)
+$settings['version'] = '1.0.0';
+$settings['min_shop_version'] = '3.2.0';
+
 // Path settings
 $settings['root'] = dirname(__DIR__);
 $settings['public'] = $settings['root'];

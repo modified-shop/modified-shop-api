@@ -32,6 +32,13 @@ The API lets merchants and developers connect modified to external systems - ERP
 - JWT (Firebase JWT / Tuupola middleware), HS256
 - OpenAPI 3 (zircote/swagger-php)
 
+## Requirements
+
+- modified eCommerce Shopsoftware **3.2.0** or higher
+- PHP **8.4** or higher
+
+The minimum shop version is enforced at runtime and reported by the [`/v1/version`](#version) endpoint. Both the API version and the minimum shop version are defined in one place in the API (`version` / `min_shop_version` in `config/settings.php`).
+
 ## Quick Start
 
 Enable API access for a customer in the shop backend (**Customers → API Access**), then pick either way:
@@ -129,9 +136,12 @@ GET /v1/version
 ```
 ```json
 {
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "requires": "3.2.0"
 }
 ```
+
+`requires` is the minimum shop version the API needs. The actually running shop version is not exposed.
 
 ## Contributing
 
