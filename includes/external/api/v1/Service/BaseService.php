@@ -19,6 +19,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use OpenApi\Attributes as OA;
 use Exception;
 
+// Note: the version below is overridden at runtime from settings['version']
+// (see config/routes.php); the literal only serves as a static fallback.
 #[OA\Info(
     version: '1.0.0',
     title: 'modified eCommerce Shopsoftware API',
