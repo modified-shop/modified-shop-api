@@ -12,11 +12,11 @@ use OpenApi\Context;
 use OpenApi\Generator;
 
 /**
- * Merge reusable annotation into @OA\Schemas.
+ * Merge reusable annotation into <code>@OA\Schemas</code>.
  */
 class MergeIntoComponents
 {
-    public function __invoke(Analysis $analysis)
+    public function __invoke(Analysis $analysis): void
     {
         $components = $analysis->openapi->components;
         if (Generator::isDefault($components)) {
@@ -29,7 +29,7 @@ class MergeIntoComponents
                 && in_array(OA\Components::class, $annotation::$_parents)
                 && false === $annotation->_context->is('nested')) {
                 // A top level annotation.
-                $components->merge([$annotation], true);
+                $analysis->mergeAnnotations($components, [$annotation], true);
                 $analysis->openapi->components = $components;
             }
         }

@@ -49,7 +49,7 @@ class Flow extends AbstractAnnotation
      *
      * One of ['implicit', 'password', 'authorizationCode', 'clientCredentials'].
      *
-     * @var string
+     * @var 'authorizationCode'|'clientCredentials'|'implicit'|'password'
      */
     public $flow = Generator::UNDEFINED;
 
@@ -91,11 +91,7 @@ class Flow extends AbstractAnnotation
         Attachable::class => ['attachables'],
     ];
 
-    /**
-     * @inheritdoc
-     */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): \stdClass
     {
         if ($this->scopes === []) {
             $this->scopes = new \stdClass();

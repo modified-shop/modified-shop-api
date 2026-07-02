@@ -34,12 +34,10 @@ class Pipeline
             throw new OpenApiException('pipe or callable must not be empty');
         }
 
-        // allow matching on class name in $pipe in a string
+        // allow matching on class name if $pipe in a string
         if (is_string($pipe) && !$matcher) {
             $pipeClass = $pipe;
-            $matcher = function ($pipe) use ($pipeClass) {
-                return !$pipe instanceof $pipeClass;
-            };
+            $matcher = (static fn ($pipe): bool => !$pipe instanceof $pipeClass);
         }
 
         if ($matcher) {
@@ -66,14 +64,14 @@ class Pipeline
 
     /**
      * @param callable|class-string $matcher used to determine the position to insert
-     *                                       either an `int` from a callable or, in the case of `$matcher` being
-     *                                       a `class-string`, the position before the first pipe of that class
+     *                                       either an <code>int</code> from a callable or, in the case of <code>$matcher</code> being
+     *                                       a <code>class-string</code>, the position before the first pipe of that class
      */
     public function insert(callable $pipe, $matcher): Pipeline
     {
         if (is_string($matcher)) {
             $before = $matcher;
-            $matcher = function (array $pipes) use ($before) {
+            $matcher = static function (array $pipes) use ($before): int|string|null {
                 foreach ($pipes as $ii => $current) {
                     if ($current instanceof $before) {
                         return $ii;
@@ -104,14 +102,11 @@ class Pipeline
     }
 
     /**
-     * @param mixed $payload
-     *
      * @return mixed
      */
-    public function process($payload)
+    public function process(mixed $payload)
     {
         foreach ($this->pipes as $pipe) {
-            /** @deprecated null payload returned from pipe */
             $payload = $pipe($payload) ?: $payload;
         }
 

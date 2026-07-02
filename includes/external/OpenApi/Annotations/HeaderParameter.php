@@ -9,15 +9,14 @@ namespace OpenApi\Annotations;
 use OpenApi\Annotations as OA;
 
 /**
- * A `@OA\Request` header parameter.
+ * A <code>@OA\Request</code> header parameter.
  *
  * @Annotation
  */
 class HeaderParameter extends Parameter
 {
     /**
-     * @inheritdoc
-     * This takes 'header' as the default location.
+     * @var string
      */
     public $in = 'header';
 }

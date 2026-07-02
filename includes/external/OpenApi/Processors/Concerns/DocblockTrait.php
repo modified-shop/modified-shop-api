@@ -9,18 +9,26 @@ namespace OpenApi\Processors\Concerns;
 use OpenApi\Annotations as OA;
 use OpenApi\Attributes as OAT;
 use OpenApi\Generator;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\Parser\ConstExprParser;
+use PHPStan\PhpDocParser\Parser\PhpDocParser;
+use PHPStan\PhpDocParser\Parser\TokenIterator;
+use PHPStan\PhpDocParser\Parser\TypeParser;
+use PHPStan\PhpDocParser\ParserConfig;
 
 trait DocblockTrait
 {
     /**
-     * An annotation is a root if it is the top-level / outermost annotation in a PHP docblock.
+     * An annotation is a docblock root if it is the top-level / outermost annotation in a PHP docblock.
      */
-    public function isRoot(OA\AbstractAnnotation $annotation): bool
+    public function isDocblockRoot(OA\AbstractAnnotation $annotation): bool
     {
-        if (!$annotation->_context) {
-            return true;
-        }
-
         if (1 == count($annotation->_context->annotations)) {
             return true;
         }
@@ -37,11 +45,11 @@ trait DocblockTrait
             OA\Schema::class => true,
             OAT\Schema::class => true,
         ];
-        // try to find best root match
+        // try to find the best root match
         foreach ($matchPriorityMap as $className => $strict) {
             foreach ($annotation->_context->annotations as $contextAnnotation) {
                 if ($strict) {
-                    if ($className === get_class($contextAnnotation)) {
+                    if ($className === $contextAnnotation::class) {
                         return $annotation === $contextAnnotation;
                     }
                 } else {
@@ -55,89 +63,123 @@ trait DocblockTrait
         return false;
     }
 
-    protected function handleTag(string $line, ?array &$tags = null): void
+    /**
+     * Parse a docblock string into a PhpDocNode.
+     */
+    protected function parsePhpDoc(?string $docblock): ?PhpDocNode
     {
-        if (null === $tags) {
-            return;
+        if (!$docblock || Generator::isDefault($docblock)) {
+            return null;
         }
 
-        // split of tag name
-        $token = preg_split("@[\s+　]@u", $line, 2);
-        if (2 == count($token)) {
-            $tag = substr($token[0], 1);
-            $tail = $token[1];
-            if (!array_key_exists($tag, $tags)) {
-                $tags[$tag] = [];
-            }
+        // Normalize single-star comments to PHPDoc format
+        $normalized = preg_replace('#^/\*(?!\*)#', '/**', $docblock);
 
-            if (false !== ($dpos = strpos($tail, '$'))) {
-                $type = trim(substr($tail, 0, $dpos));
-                $token = preg_split("@[\s+　]@u", substr($tail, $dpos), 2);
-                $name = trim(substr($token[0], 1));
-                $description = 2 == count($token) ? trim($token[1]) : null;
+        // Ensure docblock has proper closing
+        if (!str_contains((string) $normalized, '*/')) {
+            $normalized = rtrim((string) $normalized) . '/';
+        }
 
-                $tags[$tag][$name] = [
-                    'type' => $type,
-                    'description' => $description,
-                ];
-            }
+        $config = new ParserConfig([]);
+        $lexer = new Lexer($config);
+        $phpDocParser = new PhpDocParser(
+            $config,
+            new TypeParser($config, $constExprParser = new ConstExprParser($config)),
+            $constExprParser,
+        );
+
+        try {
+            $tokens = new TokenIterator($lexer->tokenize($normalized));
+
+            return $phpDocParser->parse($tokens);
+        } catch (\Throwable) {
+            return null;
         }
     }
 
     /**
-     * The text contents of the phpdoc comment (excl. tags).
+     * Format a type node as a compact string (without wrapping parentheses for union/intersection types).
      */
-    public function extractContent(?string $docblock, ?array &$tags = null): string
+    protected function formatType(TypeNode $typeNode): string
     {
-        if (Generator::isDefault($docblock)) {
+        if ($typeNode instanceof UnionTypeNode) {
+            return implode('|', array_map(strval(...), $typeNode->types));
+        }
+
+        if ($typeNode instanceof IntersectionTypeNode) {
+            return implode('&', array_map(strval(...), $typeNode->types));
+        }
+
+        return (string) $typeNode;
+    }
+
+    /**
+     * Parse a docblock and return the full content/text.
+     */
+    public function parseDocblock(?string $docblock, ?array &$tags = null): string
+    {
+        $docNode = $this->parsePhpDoc($docblock);
+        if (!$docNode) {
             return Generator::UNDEFINED;
         }
 
-        $comment = preg_split('/(\n|\r\n)/', (string) $docblock);
-        $comment[0] = preg_replace('/[ \t]*\\/\*\*/', '', $comment[0]); // strip '/**'
-        $ii = count($comment) - 1;
-        $comment[$ii] = preg_replace('/\*\/[ \t]*$/', '', $comment[$ii]); // strip '*/'
+        // Extract @param tags if requested
+        if (null !== $tags) {
+            if (!array_key_exists('param', $tags)) {
+                $tags['param'] = [];
+            }
+            foreach ($docNode->getParamTagValues() as $param) {
+                $name = ltrim((string) $param->parameterName, '$');
+                $tags['param'][$name] = [
+                    'type' => (string) $param->type ?: null,
+                    'description' => $param->description !== '' ? $param->description : null,
+                ];
+            }
+            foreach ($docNode->getTypelessParamTagValues() as $param) {
+                $name = ltrim((string) $param->parameterName, '$');
+                $tags['param'][$name] = [
+                    'type' => null,
+                    'description' => $param->description !== '' ? $param->description : null,
+                ];
+            }
+        }
+
+        // Extract description from text nodes before first tag
         $lines = [];
-        $append = false;
-        $skip = false;
-        foreach ($comment as $line) {
-            $line = ltrim($line, "\t *");
-            if (substr($line, 0, 1) === '@') {
-                $this->handleTag($line, $tags);
-                $skip = true;
+        foreach ($docNode->children as $child) {
+            if ($child instanceof PhpDocTagNode) {
+                break;
             }
-            if ($skip) {
-                continue;
+            if ($child instanceof PhpDocTextNode && $child->text !== '') {
+                $lines[] = $child->text;
             }
-            if ($append) {
-                $ii = count($lines) - 1;
-                $lines[$ii] = substr($lines[$ii], 0, -1) . $line;
-            } else {
-                $lines[] = $line;
-            }
-            $append = (substr($line, -1) === '\\');
-        }
-        $description = trim(implode("\n", $lines));
-        if ($description === '') {
-            return Generator::UNDEFINED;
         }
 
-        return $description;
+        $description = trim(implode("\n", $lines));
+        // Handle line continuation with trailing backslash
+        $description = preg_replace('/\\\\\n/', '', $description);
+
+        return $description === ''
+            ? Generator::UNDEFINED
+            : $description;
     }
 
     /**
      * A short piece of text, usually one line, providing the basic function of the associated element.
+     *
+     * @param string $content The full docblock content
      */
-    public function extractSummary(?string $docblock): string
+    public function extractCommentSummary(string $content): string
     {
-        if (!$content = $this->extractContent($docblock)) {
+        if (Generator::isDefault($content)) {
             return Generator::UNDEFINED;
         }
+
         $lines = preg_split('/(\n|\r\n)/', $content);
         $summary = '';
         foreach ($lines as $line) {
             $summary .= $line . "\n";
-            if ($line === '' || substr($line, -1) === '.') {
+            if ($line === '' || str_ends_with($line, '.')) {
                 return trim($summary);
             }
         }
@@ -150,19 +192,23 @@ trait DocblockTrait
     }
 
     /**
-     * An optional longer piece of text providing more details on the associated element’s function.
+     * An optional longer piece of text providing more details on the associated element's function.
      *
-     * This is very useful when working with a complex element.
+     * @param string $content The full docblock content
      */
-    public function extractDescription(?string $docblock): string
+    public function extractCommentDescription(string $content): string
     {
-        $summary = $this->extractSummary($docblock);
-        if (!$summary) {
+        if (Generator::isDefault($content)) {
+            return Generator::UNDEFINED;
+        }
+
+        $summary = $this->extractCommentSummary($content);
+        if (Generator::isDefault($summary)) {
             return Generator::UNDEFINED;
         }
 
         $description = '';
-        if (false !== ($substr = substr($this->extractContent($docblock), strlen($summary)))) {
+        if (($substr = substr($content, strlen((string) $summary))) !== '') {
             $description = trim($substr);
         }
 
@@ -170,37 +216,60 @@ trait DocblockTrait
     }
 
     /**
-     * Extract property type and description from a `@var` dockblock line.
+     * Extract property type and description from a <code>@var</code> dockblock line.
      *
-     * @return array<string, ?string> extracted `type` and `description`; values default to `null`
+     * @return array{type: ?string, description: ?string}
      */
-    public function extractVarTypeAndDescription(?string $docblock): array
+    public function parseVarLine(?string $docblock): array
     {
-        $comment = str_replace("\r\n", "\n", (string) $docblock);
-        $comment = preg_replace('/\*\/[ \t]*$/', '', $comment); // strip '*/'
-        preg_match('/@var\s+(?<type>[^\s]+)([ \t])?(?<description>.+)?$/im', $comment, $matches);
+        $result = ['type' => null, 'description' => null];
 
-        return array_merge(
-            ['type' => null, 'description' => null],
-            array_filter($matches, fn ($key) => in_array($key, ['type', 'description']), ARRAY_FILTER_USE_KEY)
-        );
+        $docNode = $this->parsePhpDoc($docblock);
+        if (!$docNode) {
+            return $result;
+        }
+
+        $varTags = $docNode->getVarTagValues();
+        if ($varTags) {
+            $varTag = reset($varTags);
+            $type = $this->formatType($varTag->type);
+
+            $result['type'] = $type !== '' ? $type : null;
+            $result['description'] = $varTag->description !== '' ? trim((string) $varTag->description) : null;
+        }
+
+        return $result;
     }
 
     /**
-     * Extract example text from a `@example` dockblock line.
+     * Extract example text from a <code>@example</code> dockblock line.
      */
-    public function extractExampleDescription(?string $docblock): ?string
+    public function extractExampleDescription(string $docblock): ?string
     {
-        preg_match('/@example\s+([ \t])?(?<example>.+)?$/im', $docblock, $matches);
+        $docNode = $this->parsePhpDoc($docblock);
+        if (!$docNode) {
+            return null;
+        }
 
-        return isset($matches['example']) ? $matches['example'] : null;
+        foreach ($docNode->getTagsByName('@example') as $tag) {
+            $value = (string) $tag->value;
+
+            return $value !== '' ? trim($value) : null;
+        }
+
+        return null;
     }
 
     /**
-     * Returns true if the `\@deprecated` tag is present, false otherwise.
+     * Returns true if the <code>@deprecated</code> tag is present, false otherwise.
      */
     public function isDeprecated(?string $docblock): bool
     {
-        return 1 === preg_match('/@deprecated\s+([ \t])?(?<deprecated>.+)?$/im', (string) $docblock);
+        $docNode = $this->parsePhpDoc($docblock);
+        if (!$docNode) {
+            return false;
+        }
+
+        return count($docNode->getDeprecatedTagValues()) > 0;
     }
 }

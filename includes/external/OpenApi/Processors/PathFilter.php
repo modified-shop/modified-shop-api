@@ -8,17 +8,17 @@ namespace OpenApi\Processors;
 
 use OpenApi\Analysis;
 use OpenApi\Generator;
-use OpenApi\Processors\Concerns\AnnotationTrait;
 
 /**
  * Allows to filter endpoints based on tags and/or path.
  *
- * If no `tags` or `paths` filters are set, no filtering is performed.
+ * If no <code>tags</code> or <code>paths</code> filters are set, no filtering is performed.
+ *
  * All filter (regular) expressions must be enclosed within delimiter characters as they are used as-is.
  */
 class PathFilter
 {
-    use AnnotationTrait;
+    use Concerns\AnnotationTrait;
 
     protected array $tags;
 
@@ -64,7 +64,7 @@ class PathFilter
         return $this;
     }
 
-    public function __invoke(Analysis $analysis)
+    public function __invoke(Analysis $analysis): void
     {
         if (($this->tags || $this->paths) && !Generator::isDefault($analysis->openapi->paths)) {
             $filtered = [];
@@ -93,7 +93,7 @@ class PathFilter
                 if ($matched) {
                     $filtered[] = $matched;
                 } else {
-                    $this->removeAnnotation($analysis->annotations, $pathItem);
+                    $this->removeAnnotationRecursive($analysis, $pathItem);
                 }
             }
 

@@ -26,7 +26,7 @@ return function (App $app) {
 
     // docs
     $app->get('/v1/swagger.json', function ($request, $response, $args) {
-        $swagger = OpenApiGenerator::scan([DIR_FS_EXTERNAL . 'api/v1/Service/']);
+        $swagger = (new OpenApiGenerator())->generate([DIR_FS_EXTERNAL . 'api/v1/Service/']);
         $response->getBody()->write(json_encode($swagger));
         return $response->withHeader('Content-Type', 'application/json');
     });

@@ -21,9 +21,8 @@ class ExpandClasses
 {
     use Concerns\MergePropertiesTrait;
 
-    public function __invoke(Analysis $analysis)
+    public function __invoke(Analysis $analysis): void
     {
-        /** @var OA\Schema[] $schemas */
         $schemas = $analysis->getAnnotationsOfType(OA\Schema::class, true);
 
         foreach ($schemas as $schema) {
@@ -31,7 +30,7 @@ class ExpandClasses
                 $ancestors = $analysis->getSuperClasses($schema->_context->fullyQualifiedName($schema->_context->class));
                 $existing = [];
                 foreach ($ancestors as $ancestor) {
-                    $ancestorSchema = $analysis->getSchemaForSource($ancestor['context']->fullyQualifiedName($ancestor['class']));
+                    $ancestorSchema = $analysis->getAnnotationForSource($ancestor['context']->fullyQualifiedName($ancestor['class']));
                     if ($ancestorSchema) {
                         $refPath = Generator::isDefault($ancestorSchema->schema) ? $ancestor['class'] : $ancestorSchema->schema;
                         $this->inheritFrom($analysis, $schema, $ancestorSchema, $refPath, $ancestor['context']);

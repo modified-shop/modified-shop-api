@@ -6,6 +6,7 @@
 
 namespace OpenApi\Annotations;
 
+use OpenApi\Analysis;
 use OpenApi\Generator;
 
 /**
@@ -25,16 +26,17 @@ class License extends AbstractAnnotation
     public $name = Generator::UNDEFINED;
 
     /**
-     * An SPDX license expression for the API. The `identifier` field is mutually exclusive of the `url` field.
+     * An SPDX license expression for the API. The <code>identifier</code> field is mutually exclusive of the <code>url</code> field.
      *
+     * @since OpenAPI 3.1.0
      * @var string
      */
     public $identifier = Generator::UNDEFINED;
 
     /**
-     * An URL to the license used for the API. This MUST be in the form of a URL.
+     * A URL to the license used for the API. This MUST be in the form of a URL.
      *
-     * The `url` field is mutually exclusive of the `identifier` field.
+     * The <code>url</code> field is mutually exclusive of the <code>identifier</code> field.
      *
      * @var string
      */
@@ -68,35 +70,29 @@ class License extends AbstractAnnotation
         Attachable::class => ['attachables'],
     ];
 
-    /**
-     * @inheritdoc
-     */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): \stdClass
     {
         $data = parent::jsonSerialize();
 
-        if ($this->_context->isVersion(OpenApi::VERSION_3_0_0)) {
+        if ($this->_context->isVersion('3.0.x')) {
             unset($data->identifier);
         }
 
         return $data;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function validate(array $stack = [], array $skip = [], string $ref = '', $context = null): bool
+    #[\Override]
+    public function validate(?Analysis $analysis = null, string $version = OpenApi::DEFAULT_VERSION, ?object $context = null): bool
     {
-        $valid = parent::validate($stack, $skip, $ref, $context);
+        $isValid = parent::validate($analysis, $version, $context);
 
-        if ($this->_context->isVersion(OpenApi::VERSION_3_1_0)) {
-            if (!Generator::isDefault($this->url) && $this->identifier !== Generator::UNDEFINED) {
-                $this->_context->logger->warning($this->identity() . ' url and identifier are mutually exclusive');
-                $valid = false;
+        if (!OpenApi::versionMatch($version, '3.0.x')) {
+            if (!Generator::isDefault($this->url) && !Generator::isDefault($this->identifier)) {
+                $this->_context->logger->warning($this->identity() . ' url and identifier are mutually exclusive in ' . $this->_context);
+                $isValid = false;
             }
         }
 
-        return $valid;
+        return $isValid;
     }
 }

@@ -23,7 +23,7 @@ class Examples extends AbstractAnnotation
     public $ref = Generator::UNDEFINED;
 
     /**
-     * The key into `#/components/examples`.
+     * The key into <code>#/components/examples</code>.
      *
      * @var string
      */
@@ -81,10 +81,13 @@ class Examples extends AbstractAnnotation
     public static $_required = ['summary'];
 
     public static $_parents = [
+        AdditionalProperties::class,
         Components::class,
+        Items::class,
         Schema::class,
         Parameter::class,
         PathParameter::class,
+        Property::class,
         MediaType::class,
         JsonContent::class,
         XmlContent::class,

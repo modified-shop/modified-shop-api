@@ -11,7 +11,7 @@ use OpenApi\Annotations as OA;
 
 class CleanUnmerged
 {
-    public function __invoke(Analysis $analysis)
+    public function __invoke(Analysis $analysis): void
     {
         $split = $analysis->split();
         $merged = $split->merged->annotations;
@@ -21,7 +21,7 @@ class CleanUnmerged
         foreach ($analysis->annotations as $annotation) {
             if (property_exists($annotation, '_unmerged')) {
                 foreach ($annotation->_unmerged as $ii => $item) {
-                    if ($merged->contains($item)) {
+                    if ($merged->offsetExists($item)) {
                         unset($annotation->_unmerged[$ii]); // Property was merged
                     }
                 }

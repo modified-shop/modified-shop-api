@@ -6,6 +6,7 @@
 
 namespace OpenApi\Annotations;
 
+use OpenApi\Analysis;
 use OpenApi\Generator;
 
 /**
@@ -54,7 +55,7 @@ class Response extends AbstractAnnotation
      *
      * @see [RFC7230](https://tools.ietf.org/html/rfc7230#page-22)
      *
-     * @var Header[]
+     * @var list<Header>
      */
     public $headers = Generator::UNDEFINED;
 
@@ -76,7 +77,7 @@ class Response extends AbstractAnnotation
      * The key of the map is a short name for the link, following the naming constraints of the names for Component
      * Objects.
      *
-     * @var Link[]
+     * @var list<Link>
      */
     public $links = Generator::UNDEFINED;
 
@@ -113,18 +114,16 @@ class Response extends AbstractAnnotation
         Trace::class,
     ];
 
-    /**
-     * @inheritdoc
-     */
-    public function validate(array $stack = [], array $skip = [], string $ref = '', $context = null): bool
+    #[\Override]
+    public function validate(?Analysis $analysis = null, string $version = OpenApi::DEFAULT_VERSION, ?object $context = null): bool
     {
-        $valid = parent::validate($stack, $skip, $ref, $context);
+        $isValid = parent::validate($analysis, $version, $context);
 
         if (Generator::isDefault($this->description) && Generator::isDefault($this->ref)) {
-            $this->_context->logger->warning($this->identity() . ' One of description or ref is required in ' . $this->_context->getDebugLocation());
-            $valid = false;
+            $this->_context->logger->warning($this->identity() . ' One of description or ref is required in ' . $this->_context);
+            $isValid = false;
         }
 
-        return $valid;
+        return $isValid;
     }
 }

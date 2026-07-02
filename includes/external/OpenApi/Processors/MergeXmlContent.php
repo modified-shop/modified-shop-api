@@ -16,9 +16,8 @@ use OpenApi\Generator;
  */
 class MergeXmlContent
 {
-    public function __invoke(Analysis $analysis)
+    public function __invoke(Analysis $analysis): void
     {
-        /** @var OA\XmlContent[] $annotations */
         $annotations = $analysis->getAnnotationsOfType(OA\XmlContent::class);
 
         foreach ($annotations as $xmlContent) {
@@ -46,11 +45,13 @@ class MergeXmlContent
             }
             $xmlContent->example = Generator::UNDEFINED;
             $xmlContent->examples = Generator::UNDEFINED;
+            $xmlContent->_context = new Context(['nested' => $mediaType, 'generated' => true], $mediaType->_context);
 
             $index = array_search($xmlContent, $parent->_unmerged, true);
             if ($index !== false) {
                 array_splice($parent->_unmerged, $index, 1);
             }
+            $analysis->removeAnnotation($xmlContent);
         }
     }
 }
