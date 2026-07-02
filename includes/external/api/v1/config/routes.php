@@ -70,12 +70,10 @@ return function (App $app) {
 
         $spec['servers'] = [['url' => $prefix === '' ? '/' : $prefix]];
         if (isset($spec['components']['securitySchemes']['modified_auth']['flows']['password'])) {
-            $spec['components']['securitySchemes']['modified_auth']['flows']['password']['tokenUrl']
-                = $prefix . '/api/v1/oauth';
-            // json_decode(..., true) turned the empty scopes object into an array;
-            // OpenAPI requires scopes to be an object, so restore it before re-encoding.
-            $spec['components']['securitySchemes']['modified_auth']['flows']['password']['scopes']
-                = new \stdClass();
+            $spec['components']['securitySchemes']['modified_auth']['flows']['password'] = [
+                'tokenUrl' => $prefix . '/api/v1/oauth',
+                'scopes' => new \stdClass(),
+            ];
         }
 
         $response->getBody()->write((string)json_encode($spec));
