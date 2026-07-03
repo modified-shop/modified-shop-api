@@ -26,6 +26,18 @@ use OpenApi\Attributes as OA;
     tags: ['Order'],
     description: 'Insert single order status',
     operationId: 'InsertOrderStatus',
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Per-language order status text, keyed by language code (e.g. "de", "en"). Each '
+                    . 'value is an object of orders_status columns. Discover the exact columns via '
+                    . 'GET /api/v1/schema/orders_status.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

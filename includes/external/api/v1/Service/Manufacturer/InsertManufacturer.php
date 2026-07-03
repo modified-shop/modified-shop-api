@@ -26,6 +26,30 @@ use OpenApi\Attributes as OA;
     tags: ['Manufacturer'],
     description: 'Insert single manufacturer',
     operationId: 'InsertManufacturer',
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                properties: [
+                    new OA\Property(
+                        property: 'manufacturers',
+                        type: 'object',
+                        description: 'Columns of the manufacturers database table. The exact set is '
+                            . 'installation-specific; discover it via GET /api/v1/schema/manufacturers.'
+                    ),
+                    new OA\Property(
+                        property: 'manufacturers_info',
+                        type: 'object',
+                        description: 'Per-language manufacturer text, keyed by language code (e.g. "de", "en"). '
+                            . 'Each value is an object of manufacturers_info columns. Discover the exact columns '
+                            . 'via GET /api/v1/schema/manufacturers_info.'
+                    )
+                ]
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

@@ -26,6 +26,18 @@ use OpenApi\Attributes as OA;
     tags: ['Language'],
     description: 'Insert single language',
     operationId: 'Insertlanguage',
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Columns of the languages database table, sent flat (e.g. code, which must be '
+                    . 'unique). The exact set is installation-specific; discover it via '
+                    . 'GET /api/v1/schema/languages.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

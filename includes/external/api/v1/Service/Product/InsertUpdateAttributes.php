@@ -37,6 +37,37 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['options_id', 'options_values_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'options_id',
+                        type: 'integer',
+                        description: 'The attribute option Id (from /attributes/options)'
+                    ),
+                    new OA\Property(
+                        property: 'options_values_id',
+                        type: 'integer',
+                        description: 'The attribute value Id (from /attributes/values), must be linked to '
+                            . 'options_id'
+                    ),
+                    new OA\Property(
+                        property: 'products_attributes_id',
+                        type: 'integer',
+                        description: 'An existing products_attributes row Id to update (omit to insert a new '
+                            . 'combination)'
+                    )
+                ],
+                description: 'Additional columns of the products_attributes database table may be sent flat. '
+                    . 'Discover the exact set via GET /api/v1/schema/products_attributes.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,
@@ -72,6 +103,37 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['options_id', 'options_values_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'options_id',
+                        type: 'integer',
+                        description: 'The attribute option Id (from /attributes/options)'
+                    ),
+                    new OA\Property(
+                        property: 'options_values_id',
+                        type: 'integer',
+                        description: 'The attribute value Id (from /attributes/values), must be linked to '
+                            . 'options_id'
+                    ),
+                    new OA\Property(
+                        property: 'products_attributes_id',
+                        type: 'integer',
+                        description: 'An existing products_attributes row Id to update (omit to insert a new '
+                            . 'combination)'
+                    )
+                ],
+                description: 'Additional columns of the products_attributes database table may be sent flat. '
+                    . 'Discover the exact set via GET /api/v1/schema/products_attributes.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,

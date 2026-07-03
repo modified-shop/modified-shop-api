@@ -37,6 +37,34 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'multipart/form-data',
+            schema: new OA\Schema(
+                type: 'object',
+                properties: [
+                    new OA\Property(
+                        property: 'image_id',
+                        type: 'integer',
+                        description: 'An existing products_images row Id to update (omit to insert a new image '
+                            . 'row)'
+                    ),
+                    new OA\Property(
+                        property: 'image_name',
+                        type: 'string',
+                        format: 'binary',
+                        description: 'The image file to upload for this row'
+                    )
+                ],
+                description: 'Additional columns of the products_images database table may be sent flat '
+                    . 'alongside image_id. Per-language description fields (keyed by language code, e.g. "de", '
+                    . '"en", each an object of products_images_description columns) may also be included, using '
+                    . 'the same shape as PUT /products/{Id}/images/{iId}/description. Discover the exact column '
+                    . 'sets via GET /api/v1/schema/products_images and GET /api/v1/schema/products_images_description.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,
@@ -72,6 +100,34 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'multipart/form-data',
+            schema: new OA\Schema(
+                type: 'object',
+                properties: [
+                    new OA\Property(
+                        property: 'image_id',
+                        type: 'integer',
+                        description: 'An existing products_images row Id to update (omit to insert a new image '
+                            . 'row)'
+                    ),
+                    new OA\Property(
+                        property: 'image_name',
+                        type: 'string',
+                        format: 'binary',
+                        description: 'The image file to upload for this row'
+                    )
+                ],
+                description: 'Additional columns of the products_images database table may be sent flat '
+                    . 'alongside image_id. Per-language description fields (keyed by language code, e.g. "de", '
+                    . '"en", each an object of products_images_description columns) may also be included, using '
+                    . 'the same shape as PUT /products/{Id}/images/{iId}/description. Discover the exact column '
+                    . 'sets via GET /api/v1/schema/products_images and GET /api/v1/schema/products_images_description.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,

@@ -37,6 +37,23 @@ use OpenApi\Attributes as OA;
             description: 'manufacturer Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['products_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'products_id',
+                        type: 'integer',
+                        description: 'The product Id to assign to this manufacturer'
+                    )
+                ]
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,
@@ -72,6 +89,23 @@ use OpenApi\Attributes as OA;
             description: 'manufacturer Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['products_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'products_id',
+                        type: 'integer',
+                        description: 'The product Id to assign to this manufacturer'
+                    )
+                ]
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,

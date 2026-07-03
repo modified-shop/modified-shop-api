@@ -37,6 +37,18 @@ use OpenApi\Attributes as OA;
             description: 'category Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Columns of the categories database table, sent flat (unlike PUT /categories/{Id}, '
+                    . 'this endpoint does not nest fields under a "categories" key). The exact set is '
+                    . 'installation-specific; discover it via GET /api/v1/schema/categories.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

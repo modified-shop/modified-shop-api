@@ -37,6 +37,25 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['xsell_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'xsell_id',
+                        type: 'integer',
+                        description: 'The Id of the related (cross-sell) product'
+                    )
+                ],
+                description: 'Additional columns of the products_xsell database table may be sent flat '
+                    . 'alongside xsell_id. Discover the exact set via GET /api/v1/schema/products_xsell.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,
@@ -72,6 +91,25 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['xsell_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'xsell_id',
+                        type: 'integer',
+                        description: 'The Id of the related (cross-sell) product'
+                    )
+                ],
+                description: 'Additional columns of the products_xsell database table may be sent flat '
+                    . 'alongside xsell_id. Discover the exact set via GET /api/v1/schema/products_xsell.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,

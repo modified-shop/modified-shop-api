@@ -37,6 +37,26 @@ use OpenApi\Attributes as OA;
             description: 'options Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['products_options_values_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'products_options_values_id',
+                        type: 'integer',
+                        description: 'The attribute value Id to attach to this option'
+                    )
+                ],
+                description: 'Additional columns of the products_options_values_to_products_options database '
+                    . 'table may be sent flat alongside products_options_values_id. Discover the exact set via '
+                    . 'GET /api/v1/schema/products_options_values_to_products_options.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

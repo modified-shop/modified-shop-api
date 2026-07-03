@@ -37,6 +37,35 @@ use OpenApi\Attributes as OA;
             description: 'category Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: false,
+        content: new OA\MediaType(
+            mediaType: 'multipart/form-data',
+            schema: new OA\Schema(
+                type: 'object',
+                properties: [
+                    new OA\Property(
+                        property: 'categories_image',
+                        type: 'string',
+                        format: 'binary',
+                        description: 'Main category image file'
+                    ),
+                    new OA\Property(
+                        property: 'categories_image_list',
+                        type: 'string',
+                        format: 'binary',
+                        description: 'List/thumbnail variant image file'
+                    ),
+                    new OA\Property(
+                        property: 'categories_image_mobile',
+                        type: 'string',
+                        format: 'binary',
+                        description: 'Mobile variant image file'
+                    )
+                ]
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,
@@ -72,6 +101,35 @@ use OpenApi\Attributes as OA;
             description: 'category Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: false,
+        content: new OA\MediaType(
+            mediaType: 'multipart/form-data',
+            schema: new OA\Schema(
+                type: 'object',
+                properties: [
+                    new OA\Property(
+                        property: 'categories_image',
+                        type: 'string',
+                        format: 'binary',
+                        description: 'Main category image file'
+                    ),
+                    new OA\Property(
+                        property: 'categories_image_list',
+                        type: 'string',
+                        format: 'binary',
+                        description: 'List/thumbnail variant image file'
+                    ),
+                    new OA\Property(
+                        property: 'categories_image_mobile',
+                        type: 'string',
+                        format: 'binary',
+                        description: 'Mobile variant image file'
+                    )
+                ]
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

@@ -37,6 +37,18 @@ use OpenApi\Attributes as OA;
             description: 'coupons Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Columns of the coupons database table, sent flat (unlike POST /coupons, this '
+                    . 'endpoint does not nest fields under a "coupons" key). The exact set is '
+                    . 'installation-specific; discover it via GET /api/v1/schema/coupons.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,
@@ -72,6 +84,18 @@ use OpenApi\Attributes as OA;
             description: 'coupons Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Columns of the coupons database table, sent flat (unlike POST /coupons, this '
+                    . 'endpoint does not nest fields under a "coupons" key). The exact set is '
+                    . 'installation-specific; discover it via GET /api/v1/schema/coupons.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,

@@ -37,6 +37,31 @@ use OpenApi\Attributes as OA;
             description: 'category Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                properties: [
+                    new OA\Property(
+                        property: 'categories',
+                        type: 'object',
+                        description: 'Columns of the categories database table. The exact set is '
+                            . 'installation-specific; discover it via GET /api/v1/schema/categories.'
+                    ),
+                    new OA\Property(
+                        property: 'categories_description',
+                        type: 'object',
+                        description: 'Per-language category text, keyed by language code (e.g. "de", "en"). Each '
+                            . 'value is an object of categories_description columns. '
+                            . 'Discover the exact columns via GET /api/v1/schema/categories_description. Note: the '
+                            . 'category must already have a categories_description row for the request to succeed.'
+                    )
+                ]
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

@@ -26,6 +26,35 @@ use OpenApi\Attributes as OA;
     tags: ['Customer'],
     description: 'Insert single customer',
     operationId: 'InsertCustomer',
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                properties: [
+                    new OA\Property(
+                        property: 'customers',
+                        type: 'object',
+                        description: 'Columns of the customers database table. The exact set is '
+                            . 'installation-specific; discover it via GET /api/v1/schema/customers.'
+                    ),
+                    new OA\Property(
+                        property: 'customers_info',
+                        type: 'object',
+                        description: 'Columns of the customers_info database table. Discover the exact set via '
+                            . 'GET /api/v1/schema/customers_info.'
+                    ),
+                    new OA\Property(
+                        property: 'address_book',
+                        type: 'object',
+                        description: 'Columns of the address_book database table for the customer\'s primary '
+                            . 'address. Discover the exact set via GET /api/v1/schema/address_book.'
+                    )
+                ]
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

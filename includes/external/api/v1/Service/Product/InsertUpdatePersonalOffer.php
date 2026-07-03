@@ -37,6 +37,33 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['status_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'status_id',
+                        type: 'integer',
+                        description: 'Selects which personal-offer table this row is stored in (the shop '
+                            . 'maintains one such table per status_id); required on every request.'
+                    ),
+                    new OA\Property(
+                        property: 'price_id',
+                        type: 'integer',
+                        description: 'An existing row Id (in the table selected by status_id) to update (omit '
+                            . 'to insert a new one)'
+                    )
+                ],
+                description: 'Additional columns may be sent flat alongside status_id and price_id. The target '
+                    . 'table depends on status_id, so its exact column set cannot be discovered via a single '
+                    . 'fixed /api/v1/schema/{table} call ahead of time.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,
@@ -72,6 +99,33 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['status_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'status_id',
+                        type: 'integer',
+                        description: 'Selects which personal-offer table this row is stored in (the shop '
+                            . 'maintains one such table per status_id); required on every request.'
+                    ),
+                    new OA\Property(
+                        property: 'price_id',
+                        type: 'integer',
+                        description: 'An existing row Id (in the table selected by status_id) to update (omit '
+                            . 'to insert a new one)'
+                    )
+                ],
+                description: 'Additional columns may be sent flat alongside status_id and price_id. The target '
+                    . 'table depends on status_id, so its exact column set cannot be discovered via a single '
+                    . 'fixed /api/v1/schema/{table} call ahead of time.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,

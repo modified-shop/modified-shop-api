@@ -46,6 +46,17 @@ use OpenApi\Attributes as OA;
             description: 'address book Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Columns of the address_book database table, sent flat. Discover the exact set '
+                    . 'via GET /api/v1/schema/address_book.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,

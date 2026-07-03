@@ -37,6 +37,17 @@ use OpenApi\Attributes as OA;
             description: 'newsletters Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Columns of the newsletter_recipients database table, sent flat. The exact set is '
+                    . 'installation-specific; discover it via GET /api/v1/schema/newsletter_recipients.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

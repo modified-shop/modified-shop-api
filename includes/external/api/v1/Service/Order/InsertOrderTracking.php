@@ -37,6 +37,25 @@ use OpenApi\Attributes as OA;
             description: 'order Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['carrier_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'carrier_id',
+                        type: 'integer',
+                        description: 'The shipping carrier Id for this tracking entry'
+                    )
+                ],
+                description: 'Additional columns of the orders_tracking database table may be sent flat '
+                    . 'alongside carrier_id. Discover the exact set via GET /api/v1/schema/orders_tracking.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

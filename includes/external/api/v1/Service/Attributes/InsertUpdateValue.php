@@ -37,6 +37,18 @@ use OpenApi\Attributes as OA;
             description: 'values Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Per-language value text, keyed by language code (e.g. "de", "en"). Each value is '
+                    . 'an object of products_options_values columns. '
+                    . 'Discover the exact columns via GET /api/v1/schema/products_options_values.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

@@ -37,6 +37,24 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                properties: [
+                    new OA\Property(
+                        property: 'specials_id',
+                        type: 'integer',
+                        description: 'An existing specials row Id to update (omit to insert a new one)'
+                    )
+                ],
+                description: 'Additional columns of the specials database table may be sent flat. Discover the '
+                    . 'exact set via GET /api/v1/schema/specials.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,
@@ -72,6 +90,24 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                properties: [
+                    new OA\Property(
+                        property: 'specials_id',
+                        type: 'integer',
+                        description: 'An existing specials row Id to update (omit to insert a new one)'
+                    )
+                ],
+                description: 'Additional columns of the specials database table may be sent flat. Discover the '
+                    . 'exact set via GET /api/v1/schema/specials.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,

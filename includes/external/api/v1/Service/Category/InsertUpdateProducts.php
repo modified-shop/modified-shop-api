@@ -37,6 +37,25 @@ use OpenApi\Attributes as OA;
             description: 'category Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['products_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'products_id',
+                        type: 'integer',
+                        description: 'The product Id to assign to this category'
+                    )
+                ],
+                description: 'Additional columns of the products_to_categories database table may be sent flat '
+                    . 'alongside products_id. Discover the exact set via GET /api/v1/schema/products_to_categories.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,
@@ -72,6 +91,25 @@ use OpenApi\Attributes as OA;
             description: 'category Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['products_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'products_id',
+                        type: 'integer',
+                        description: 'The product Id to assign to this category'
+                    )
+                ],
+                description: 'Additional columns of the products_to_categories database table may be sent flat '
+                    . 'alongside products_id. Discover the exact set via GET /api/v1/schema/products_to_categories.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

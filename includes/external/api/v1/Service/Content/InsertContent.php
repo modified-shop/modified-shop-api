@@ -26,6 +26,18 @@ use OpenApi\Attributes as OA;
     tags: ['Content'],
     description: 'Insert single content',
     operationId: 'InsertContent',
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Per-language content text, keyed by language code (e.g. "de", "en"). Each value '
+                    . 'is an object of content_manager columns. Discover the exact columns via '
+                    . 'GET /api/v1/schema/content_manager.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

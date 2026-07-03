@@ -37,6 +37,18 @@ use OpenApi\Attributes as OA;
             description: 'category Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Per-language category text, keyed by language code (e.g. "de", "en"). Each value is '
+                    . 'an object of categories_description columns. Discover the exact '
+                    . 'columns via GET /api/v1/schema/categories_description.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,
@@ -72,6 +84,18 @@ use OpenApi\Attributes as OA;
             description: 'category Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Per-language category text, keyed by language code (e.g. "de", "en"). Each value is '
+                    . 'an object of categories_description columns. Discover the exact '
+                    . 'columns via GET /api/v1/schema/categories_description.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,
