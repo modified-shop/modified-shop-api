@@ -77,6 +77,49 @@ final class ProductAction extends BaseAction
     }
 
     /**
+     * Update a product by the given product id and options.
+     *
+     * @param int $productId The product id
+     * @param mixed[] $options
+     *
+     * @return array The product data
+     */
+    public function UpdateProduct(int $productId, array $options): array
+    {
+        // Input validation
+        if (empty($productId)) {
+            throw new Exception('Product ID required');
+        }
+
+        /* Store passed in options overwriting any defaults */
+        $this->hydrate($options);
+
+        $products_query = xtc_db_query("SELECT *
+                                            FROM " . TABLE_PRODUCTS . "
+                                           WHERE products_id = '" . (int)$productId . "'");
+        if (xtc_db_num_rows($products_query) < 1) {
+            return $this->errormessage(sprintf('Product not found: %s', $productId));
+        } else {
+            if (isset($this->options[TABLE_PRODUCTS])) {
+                $products = $this->InsertUpdateProduct($productId, $this->options[TABLE_PRODUCTS]);
+            }
+        }
+
+        $products_query = xtc_db_query("SELECT *
+                                            FROM " . TABLE_PRODUCTS_DESCRIPTION . "
+                                           WHERE products_id = '" . (int)$productId . "'");
+        if (xtc_db_num_rows($products_query) < 1) {
+            return $this->errormessage(sprintf('Product description not found: %s', $productId));
+        } else {
+            if (isset($this->options[TABLE_PRODUCTS_DESCRIPTION])) {
+                $products_description = $this->InsertUpdateDescription($productId, $this->options[TABLE_PRODUCTS_DESCRIPTION]);
+            }
+        }
+
+        return $this->GetProductDetails($productId);
+    }
+
+    /**
      * Insert or Update a product by the given product id.
      *
      * @param int $productId The product id
