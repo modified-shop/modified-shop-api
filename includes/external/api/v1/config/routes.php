@@ -101,6 +101,9 @@ return function (App $app) {
     $app->group(
         '/v1',
         function (RouteCollectorProxy $app) {
+            // me
+            include __DIR__ . '/me.php';
+
             // customers
             include __DIR__ . '/customers.php';
 
