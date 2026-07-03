@@ -62,11 +62,6 @@ class api_access
     {
         global $messageStack;
 
-        $check_query = xtc_db_query("SHOW COLUMNS FROM `api_refresh_tokens` LIKE 'revoked_at'");
-        if (xtc_db_num_rows($check_query) < 1) {
-            xtc_db_query("ALTER TABLE `api_refresh_tokens` ADD `revoked_at` int(11) NOT NULL DEFAULT '0'");
-        }
-
         // Customer
         $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Customer/');
         foreach ($column_array as $column) {
@@ -304,6 +299,14 @@ class api_access
                       PRIMARY KEY (`id`),
                       UNIQUE KEY `token_hash` (`token_hash`),
                       KEY `customers_id` (`customers_id`)
+                    )");
+
+        xtc_db_query("CREATE TABLE IF NOT EXISTS `api_rate_limit` (
+                      `rl_key` varchar(191) NOT NULL,
+                      `attempts` int(11) NOT NULL DEFAULT '0',
+                      `window_start` int(11) NOT NULL DEFAULT '0',
+                      `blocked_until` int(11) NOT NULL DEFAULT '0',
+                      PRIMARY KEY (`rl_key`)
                     )");
 
         $query_result = xtc_db_query("SHOW COLUMNS FROM `" . TABLE_ADMIN_ACCESS . "`");
