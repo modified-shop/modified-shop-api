@@ -49,8 +49,8 @@ class api_access
             if (defined('MODULE_API_ACCESS_STATUS')) {
                 $this->_check = true;
             } else {
-                $check_query = xtc_db_query("SELECT configuration_value 
-                                         FROM " . TABLE_CONFIGURATION . " 
+                $check_query = xtc_db_query("SELECT configuration_value
+                                         FROM " . TABLE_CONFIGURATION . "
                                         WHERE configuration_key = 'MODULE_API_ACCESS_STATUS'");
                 $this->_check = xtc_db_num_rows($check_query);
             }
@@ -61,6 +61,11 @@ class api_access
     function update()
     {
         global $messageStack;
+
+        $check_query = xtc_db_query("SHOW COLUMNS FROM `api_refresh_tokens` LIKE 'revoked_at'");
+        if (xtc_db_num_rows($check_query) < 1) {
+            xtc_db_query("ALTER TABLE `api_refresh_tokens` ADD `revoked_at` int(11) NOT NULL DEFAULT '0'");
+        }
 
         // Customer
         $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Customer/');
@@ -295,11 +300,12 @@ class api_access
                       `expires_at` int(11) NOT NULL,
                       `created_at` int(11) NOT NULL,
                       `revoked` tinyint(1) NOT NULL DEFAULT '0',
+                      `revoked_at` int(11) NOT NULL DEFAULT '0',
                       PRIMARY KEY (`id`),
                       UNIQUE KEY `token_hash` (`token_hash`),
                       KEY `customers_id` (`customers_id`)
                     )");
- 
+
         $query_result = xtc_db_query("SHOW COLUMNS FROM `" . TABLE_ADMIN_ACCESS . "`");
         $db_table_rows = array();
         while ($row = xtc_db_fetch_array($query_result)) {

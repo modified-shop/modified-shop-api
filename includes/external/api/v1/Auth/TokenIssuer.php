@@ -36,6 +36,20 @@ final class TokenIssuer
     public const REFRESH_TTL = 2592000;
 
     /**
+     * Odds of opportunistically purging expired refresh tokens when a new one
+     * is issued: on average one in this many issuances triggers the cleanup.
+     */
+    public const PURGE_ODDS = 100;
+
+    /**
+     * Grace period in seconds after a refresh token is rotated during which a
+     * repeat presentation is treated as a benign concurrent double-submit
+     * rather than token reuse. Prevents false-positive logouts from clients
+     * that fire two refreshes at once, while keeping the theft window tiny.
+     */
+    public const REUSE_GRACE = 15;
+
+    /**
      * @var RefreshTokenRepository
      */
     private $refreshTokens;
@@ -86,6 +100,12 @@ final class TokenIssuer
 
             $data['refresh_token'] = $refresh;
             $data['refresh_expires'] = $refreshExp;
+
+            /* Opportunistic, amortized cleanup of expired rows (no cron needed): */
+            /* only runs on a fraction of issuances to keep the table bounded. */
+            if (random_int(1, self::PURGE_ODDS) === 1) {
+                $this->refreshTokens->purgeExpired();
+            }
         }
 
         return $data;

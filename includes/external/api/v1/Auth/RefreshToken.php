@@ -16,6 +16,7 @@ namespace api\v1\Auth;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use api\v1\Utility\LoggerHandler;
 use OpenApi\Attributes as OA;
 
 #[OA\Post(
@@ -58,10 +59,18 @@ use OpenApi\Attributes as OA;
 final class RefreshToken
 {
     /**
-     * The constructor.
+     * @var LoggerHandler
      */
-    public function __construct()
+    private $loggerHandler;
+
+    /**
+     * The constructor.
+     *
+     * @param LoggerHandler $loggerHandler The logger factory
+     */
+    public function __construct(LoggerHandler $loggerHandler)
     {
+        $this->loggerHandler = $loggerHandler;
     }
 
     /**
@@ -94,13 +103,48 @@ final class RefreshToken
         }
 
         $repository = new RefreshTokenRepository();
-        $row = ($refresh === "") ? null : $repository->findValid($refresh);
+
+        /* Look the token up in any state so we can tell an unknown token apart */
+        /* from a known-but-already-rotated one (refresh token reuse). */
+        $row = ($refresh === "") ? null : $repository->findByToken($refresh);
 
         if ($row === null) {
+            /* Token was never issued (or already purged): nothing to act on. */
             return $this->unauthorized($response, "Invalid refresh token");
         }
 
+        $now = time();
         $customersId = (int)$row['customers_id'];
+
+        /* Expired token: reject, but this is not reuse. */
+        if ((int)$row['expires_at'] <= $now) {
+            return $this->unauthorized($response, "Invalid refresh token");
+        }
+
+        /* Revoked token presented again. */
+        if ((int)$row['revoked'] === 1) {
+            $revokedAt = isset($row['revoked_at']) ? (int)$row['revoked_at'] : 0;
+
+            /* Within the grace window this is a benign concurrent double-submit */
+            /* (client raced two refreshes); reject softly and keep the family. */
+            /* The newer token the client already received stays valid. */
+            if ($revokedAt > 0 && ($now - $revokedAt) <= TokenIssuer::REUSE_GRACE) {
+                return $this->unauthorized($response, "Invalid refresh token");
+            }
+
+            /* Otherwise a rotated token is being replayed: treat as theft, */
+            /* revoke every session of the account and log it for the merchant. */
+            $repository->revokeAllForCustomer($customersId);
+            $this->loggerHandler->createLogger()->warning(
+                'Refresh token reuse detected; revoked all sessions',
+                [
+                    'customers_id' => $customersId,
+                    'revoked_seconds_ago' => $revokedAt > 0 ? ($now - $revokedAt) : null,
+                ]
+            );
+
+            return $this->unauthorized($response, "Invalid refresh token");
+        }
 
         /* Re-check that the account still exists and still has API access; */
         /* the subject (email) is resolved fresh so it stays current. */
