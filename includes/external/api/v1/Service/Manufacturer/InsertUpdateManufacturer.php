@@ -37,6 +37,18 @@ use OpenApi\Attributes as OA;
             description: 'manufacturer Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Columns of the manufacturers database table, sent flat (unlike POST /manufacturers, '
+                    . 'this endpoint does not nest fields under a "manufacturers" key). The exact set is '
+                    . 'installation-specific; discover it via GET /api/v1/schema/manufacturers.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,

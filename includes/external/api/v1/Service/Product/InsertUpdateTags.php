@@ -37,6 +37,36 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['options_id', 'values_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'options_id',
+                        type: 'integer',
+                        description: 'The tag option Id (from /tags/options)'
+                    ),
+                    new OA\Property(
+                        property: 'values_id',
+                        type: 'integer',
+                        description: 'The tag value Id (from /tags/values), must be linked to options_id'
+                    ),
+                    new OA\Property(
+                        property: 'products_tags_id',
+                        type: 'integer',
+                        description: 'An existing products_tags row Id to update (omit to insert a new '
+                            . 'combination)'
+                    )
+                ],
+                description: 'Additional columns of the products_tags database table may be sent flat. '
+                    . 'Discover the exact set via GET /api/v1/schema/products_tags.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,
@@ -72,6 +102,36 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['options_id', 'values_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'options_id',
+                        type: 'integer',
+                        description: 'The tag option Id (from /tags/options)'
+                    ),
+                    new OA\Property(
+                        property: 'values_id',
+                        type: 'integer',
+                        description: 'The tag value Id (from /tags/values), must be linked to options_id'
+                    ),
+                    new OA\Property(
+                        property: 'products_tags_id',
+                        type: 'integer',
+                        description: 'An existing products_tags row Id to update (omit to insert a new '
+                            . 'combination)'
+                    )
+                ],
+                description: 'Additional columns of the products_tags database table may be sent flat. '
+                    . 'Discover the exact set via GET /api/v1/schema/products_tags.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,

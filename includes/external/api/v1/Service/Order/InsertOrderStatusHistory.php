@@ -37,6 +37,26 @@ use OpenApi\Attributes as OA;
             description: 'order Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['orders_status_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'orders_status_id',
+                        type: 'integer',
+                        description: 'The order status Id to record in the history'
+                    )
+                ],
+                description: 'Additional columns of the orders_status_history database table may be sent flat '
+                    . 'alongside orders_status_id. Discover the exact set via '
+                    . 'GET /api/v1/schema/orders_status_history.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

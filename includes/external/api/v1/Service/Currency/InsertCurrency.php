@@ -26,6 +26,17 @@ use OpenApi\Attributes as OA;
     tags: ['Currency'],
     description: 'Insert single currency',
     operationId: 'InsertCurrency',
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Columns of the currencies database table, sent flat. The exact set is '
+                    . 'installation-specific; discover it via GET /api/v1/schema/currencies.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

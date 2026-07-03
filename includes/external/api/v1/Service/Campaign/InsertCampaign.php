@@ -26,6 +26,18 @@ use OpenApi\Attributes as OA;
     tags: ['Campaign'],
     description: 'Insert single campaign',
     operationId: 'InsertCampaign',
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Columns of the campaigns database table, sent flat (e.g. campaigns_refID, which '
+                    . 'must be unique). The exact set is installation-specific; discover it via '
+                    . 'GET /api/v1/schema/campaigns.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

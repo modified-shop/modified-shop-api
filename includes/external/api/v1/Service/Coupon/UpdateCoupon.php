@@ -37,6 +37,31 @@ use OpenApi\Attributes as OA;
             description: 'coupons Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                properties: [
+                    new OA\Property(
+                        property: 'coupons',
+                        type: 'object',
+                        description: 'Columns of the coupons database table. The exact set is '
+                            . 'installation-specific; discover it via GET /api/v1/schema/coupons.'
+                    ),
+                    new OA\Property(
+                        property: 'coupons_description',
+                        type: 'object',
+                        description: 'Per-language coupon text, keyed by language code (e.g. "de", "en"). Each '
+                            . 'value is an object of coupons_description columns. Discover the exact columns '
+                            . 'via GET /api/v1/schema/coupons_description. Note: the coupon must already have a '
+                            . 'coupons_description row for the request to succeed.'
+                    )
+                ]
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

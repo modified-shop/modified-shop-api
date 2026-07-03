@@ -37,6 +37,26 @@ use OpenApi\Attributes as OA;
             description: 'order Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                required: ['orders_products_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'orders_products_id',
+                        type: 'integer',
+                        description: 'The orders_products row Id these attributes belong to'
+                    )
+                ],
+                description: 'Additional columns of the orders_products_attributes database table may be sent '
+                    . 'flat alongside orders_products_id. Discover the exact set via '
+                    . 'GET /api/v1/schema/orders_products_attributes.'
+            )
+        )
+    ),
     responses:[
         new OA\Response(
             response: 201,

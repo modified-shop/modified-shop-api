@@ -37,6 +37,23 @@ use OpenApi\Attributes as OA;
             description: 'manufacturer Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: false,
+        content: new OA\MediaType(
+            mediaType: 'multipart/form-data',
+            schema: new OA\Schema(
+                type: 'object',
+                properties: [
+                    new OA\Property(
+                        property: 'manufacturers_image',
+                        type: 'string',
+                        format: 'binary',
+                        description: 'Manufacturer image file'
+                    )
+                ]
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,
@@ -72,6 +89,23 @@ use OpenApi\Attributes as OA;
             description: 'manufacturer Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: false,
+        content: new OA\MediaType(
+            mediaType: 'multipart/form-data',
+            schema: new OA\Schema(
+                type: 'object',
+                properties: [
+                    new OA\Property(
+                        property: 'manufacturers_image',
+                        type: 'string',
+                        format: 'binary',
+                        description: 'Manufacturer image file'
+                    )
+                ]
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,

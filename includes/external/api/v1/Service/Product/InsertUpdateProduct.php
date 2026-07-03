@@ -37,6 +37,18 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Columns of the products database table, sent flat (unlike POST /products, this '
+                    . 'endpoint does not nest fields under a "products" key). The exact set is '
+                    . 'installation-specific; discover it via GET /api/v1/schema/products.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,

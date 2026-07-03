@@ -37,6 +37,20 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'multipart/form-data',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Per-language content body, keyed by language code (e.g. "de", "en"). Each value is '
+                    . 'an object of products_content columns; include content_id in it to update an existing '
+                    . 'entry (omit to insert a new one). Discover the exact columns via '
+                    . 'GET /api/v1/schema/products_content. A file may additionally be attached per language '
+                    . 'under that language\'s content_file field to set products_content.content_file.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,
@@ -72,6 +86,20 @@ use OpenApi\Attributes as OA;
             description: 'product Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'multipart/form-data',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Per-language content body, keyed by language code (e.g. "de", "en"). Each value is '
+                    . 'an object of products_content columns; include content_id in it to update an existing '
+                    . 'entry (omit to insert a new one). Discover the exact columns via '
+                    . 'GET /api/v1/schema/products_content. A file may additionally be attached per language '
+                    . 'under that language\'s content_file field to set products_content.content_file.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,

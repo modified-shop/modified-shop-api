@@ -37,6 +37,18 @@ use OpenApi\Attributes as OA;
             description: 'carrier Id'
         )
     ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                type: 'object',
+                description: 'Columns of the carriers database table, sent flat (e.g. carrier_name, which must '
+                    . 'be unique on insert). The exact set is installation-specific; discover it via '
+                    . 'GET /api/v1/schema/carriers.'
+            )
+        )
+    ),
     responses: [
         new OA\Response(
             response: 201,
