@@ -108,8 +108,10 @@ final class RefreshTokenRepository
     public function revokeById(int $id): void
     {
         xtc_db_query("UPDATE `api_refresh_tokens`
-                         SET revoked = 1
-                       WHERE id = '" . (int)$id . "'");
+                         SET revoked = 1,
+                             revoked_at = '" . time() . "'
+                       WHERE id = '" . (int)$id . "'
+                         AND revoked = 0");
     }
 
     /**
@@ -122,7 +124,24 @@ final class RefreshTokenRepository
     public function revokeAllForCustomer(int $customersId): void
     {
         xtc_db_query("UPDATE `api_refresh_tokens`
-                         SET revoked = 1
-                       WHERE customers_id = '" . (int)$customersId . "'");
+                         SET revoked = 1,
+                             revoked_at = '" . time() . "'
+                       WHERE customers_id = '" . (int)$customersId . "'
+                         AND revoked = 0");
+    }
+
+    /**
+     * Delete refresh tokens whose lifetime has ended.
+     *
+     * Only rows past their expiry are removed. Revoked-but-not-yet-expired
+     * tokens are intentionally kept until they expire, so the row remains
+     * available for refresh-token reuse detection.
+     *
+     * @return void
+     */
+    public function purgeExpired(): void
+    {
+        xtc_db_query("DELETE FROM `api_refresh_tokens`
+                       WHERE expires_at < '" . time() . "'");
     }
 }
