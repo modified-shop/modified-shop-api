@@ -50,6 +50,10 @@ $settings['jwt'] = [
     'secret' => ((defined('MODULE_API_ACCESS_SECRET')) ? MODULE_API_ACCESS_SECRET : 'supersecretkeyyoushouldnottellanyone'),
     'algorithm' => 'HS256',
     'secure' => true,
+    // Access token lifetime in seconds (default: 600 = 10 minutes).
+    'access_ttl' => 600,
+    // Refresh token lifetime in seconds (default: 2592000 = 30 days).
+    'refresh_ttl' => 2592000,
 ];
 
 // Error reporting

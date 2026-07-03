@@ -27,6 +27,7 @@ use Tuupola\Middleware\HttpBasicAuthentication;
 use Tuupola\Middleware\JwtAuthentication;
 use api\v1\Auth\Authentication;
 use api\v1\Auth\RateLimitMiddleware;
+use api\v1\Auth\TokenIssuer;
 use api\v1\Utility\LoggerHandler;
 use api\v1\Utility\ErrorHandler;
 
@@ -51,6 +52,12 @@ return [
 
     RateLimitMiddleware::class => function (ContainerInterface $container) {
         return new RateLimitMiddleware($container->get(ResponseFactoryInterface::class));
+    },
+
+    TokenIssuer::class => function (ContainerInterface $container) {
+        $jwt = $container->get('settings')['jwt'];
+
+        return new TokenIssuer((int)$jwt['access_ttl'], (int)$jwt['refresh_ttl']);
     },
 
     RouteParserInterface::class => function (ContainerInterface $container) {

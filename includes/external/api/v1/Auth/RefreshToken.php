@@ -25,7 +25,9 @@ use OpenApi\Attributes as OA;
     description: 'Exchange a valid refresh token for a new access token without re-sending the '
         . 'user credentials. The refresh token can be sent either as a request header (refresh_token) '
         . 'or as a form field (refresh_token). On success a brand new access token and a new refresh '
-        . 'token are returned; the presented refresh token is rotated (invalidated) in the process.',
+        . 'token are returned; the presented refresh token is rotated (invalidated) in the process. '
+        . 'If the token was issued with a device_id, the same device_id must be presented again here; '
+        . 'a mismatch is treated the same as refresh token reuse (all sessions of the account are revoked).',
     operationId: 'oauthRefresh',
     security: [],
     requestBody: new OA\RequestBody(
@@ -39,6 +41,11 @@ use OpenApi\Attributes as OA;
                         property: 'refresh_token',
                         type: 'string',
                         description: 'A refresh token previously returned by /api/v1/oauth'
+                    ),
+                    new OA\Property(
+                        property: 'device_id',
+                        type: 'string',
+                        description: 'Must match the device_id the refresh token was issued with, if any'
                     )
                 ]
             )
@@ -64,13 +71,20 @@ final class RefreshToken
     private $loggerHandler;
 
     /**
+     * @var TokenIssuer
+     */
+    private $tokenIssuer;
+
+    /**
      * The constructor.
      *
      * @param LoggerHandler $loggerHandler The logger factory
+     * @param TokenIssuer $tokenIssuer The access/refresh token issuer
      */
-    public function __construct(LoggerHandler $loggerHandler)
+    public function __construct(LoggerHandler $loggerHandler, TokenIssuer $tokenIssuer)
     {
         $this->loggerHandler = $loggerHandler;
+        $this->tokenIssuer = $tokenIssuer;
     }
 
     /**
@@ -99,6 +113,15 @@ final class RefreshToken
             $body = (array)$request->getParsedBody();
             if (isset($body["refresh_token"])) {
                 $refresh = (string)$body["refresh_token"];
+            }
+        }
+
+        /* Optional device binding: may be sent as a header or a body field. */
+        $deviceId = $request->getHeaderLine("device_id");
+        if ($deviceId === "") {
+            $body = (array)$request->getParsedBody();
+            if (isset($body["device_id"])) {
+                $deviceId = (string)$body["device_id"];
             }
         }
 
@@ -146,6 +169,23 @@ final class RefreshToken
             return $this->unauthorized($response, "Invalid refresh token");
         }
 
+        /* Device binding: a token issued with a device_id must be refreshed with */
+        /* the same one. An unbound token (no device_id at issuance) skips this */
+        /* check, keeping clients that never send device_id unaffected. A mismatch */
+        /* is treated like reuse: whoever presented it is not the original device. */
+        $boundDeviceId = isset($row['device_id']) ? (string)$row['device_id'] : '';
+        if ($boundDeviceId !== '' && $boundDeviceId !== $deviceId) {
+            $repository->revokeAllForCustomer($customersId);
+            $this->loggerHandler->createLogger()->warning(
+                'Refresh token device mismatch; revoked all sessions',
+                [
+                    'customers_id' => $customersId,
+                ]
+            );
+
+            return $this->unauthorized($response, "Invalid refresh token");
+        }
+
         /* Re-check that the account still exists and still has API access; */
         /* the subject (email) is resolved fresh so it stays current. */
         $customer_query = xtc_db_query("SELECT c.customers_email_address
@@ -164,9 +204,10 @@ final class RefreshToken
 
         /* Rotate: invalidate the presented refresh token and issue a fresh pair. */
         $repository->revokeById((int)$row['id']);
-        $data = (new TokenIssuer($repository))->issue(
+        $data = $this->tokenIssuer->issue(
             (string)$customer['customers_email_address'],
-            $customersId
+            $customersId,
+            $deviceId
         );
 
         $response->getBody()->write((string)json_encode($data));

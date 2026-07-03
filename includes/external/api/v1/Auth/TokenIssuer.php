@@ -26,14 +26,18 @@ use Tuupola\Base62;
 final class TokenIssuer
 {
     /**
-     * Access token lifetime in seconds (10 minutes).
+     * Default access token lifetime in seconds (10 minutes), used when no
+     * explicit lifetime is passed to the constructor. The live value normally
+     * comes from settings.php (jwt.access_ttl) via the DI container.
      */
-    public const ACCESS_TTL = 600;
+    public const DEFAULT_ACCESS_TTL = 600;
 
     /**
-     * Refresh token lifetime in seconds (30 days).
+     * Default refresh token lifetime in seconds (30 days), used when no
+     * explicit lifetime is passed to the constructor. The live value normally
+     * comes from settings.php (jwt.refresh_ttl) via the DI container.
      */
-    public const REFRESH_TTL = 2592000;
+    public const DEFAULT_REFRESH_TTL = 2592000;
 
     /**
      * Odds of opportunistically purging expired refresh tokens when a new one
@@ -50,6 +54,16 @@ final class TokenIssuer
     public const REUSE_GRACE = 15;
 
     /**
+     * @var int
+     */
+    private $accessTtl;
+
+    /**
+     * @var int
+     */
+    private $refreshTtl;
+
+    /**
      * @var RefreshTokenRepository
      */
     private $refreshTokens;
@@ -57,10 +71,17 @@ final class TokenIssuer
     /**
      * The constructor.
      *
+     * @param int $accessTtl Access token lifetime in seconds
+     * @param int $refreshTtl Refresh token lifetime in seconds
      * @param RefreshTokenRepository|null $refreshTokens The refresh token store
      */
-    public function __construct(?RefreshTokenRepository $refreshTokens = null)
-    {
+    public function __construct(
+        int $accessTtl = self::DEFAULT_ACCESS_TTL,
+        int $refreshTtl = self::DEFAULT_REFRESH_TTL,
+        ?RefreshTokenRepository $refreshTokens = null
+    ) {
+        $this->accessTtl = $accessTtl;
+        $this->refreshTtl = $refreshTtl;
         $this->refreshTokens = $refreshTokens ?? new RefreshTokenRepository();
     }
 
@@ -69,14 +90,16 @@ final class TokenIssuer
      *
      * @param string $sub The subject (customer email address) placed in the JWT
      * @param int $customersId The owning customer id (0 disables refresh issuance)
+     * @param string $deviceId Opaque client-supplied device identifier to bind
+     *                         the refresh token to (empty leaves it unbound)
      *
      * @return array<string,mixed> The OAuth token response payload
      */
-    public function issue(string $sub, int $customersId): array
+    public function issue(string $sub, int $customersId, string $deviceId = ''): array
     {
         $secret = self::secret();
         $now = time();
-        $exp = $now + self::ACCESS_TTL;
+        $exp = $now + $this->accessTtl;
 
         $payload = [
             'iat' => $now,
@@ -95,8 +118,8 @@ final class TokenIssuer
         /* be tied to an account and revoked later. */
         if ($customersId > 0) {
             $refresh = (new Base62())->encode(random_bytes(32));
-            $refreshExp = $now + self::REFRESH_TTL;
-            $this->refreshTokens->store($customersId, $refresh, $refreshExp, $now);
+            $refreshExp = $now + $this->refreshTtl;
+            $this->refreshTokens->store($customersId, $refresh, $refreshExp, $now, $deviceId);
 
             $data['refresh_token'] = $refresh;
             $data['refresh_expires'] = $refreshExp;
