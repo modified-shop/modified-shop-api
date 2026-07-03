@@ -25,7 +25,9 @@ use OpenApi\Attributes as OA;
         . '(username, password) or as form fields (username, password). The returned access token is '
         . 'valid for 10 minutes and must be sent as a Bearer token on all protected endpoints. '
         . 'The response also contains a longer-lived refresh_token which can be exchanged for a new '
-        . 'access token at /api/v1/oauth/refresh without re-sending the credentials.',
+        . 'access token at /api/v1/oauth/refresh without re-sending the credentials. '
+        . 'An optional device_id (header or form field) binds the refresh token to the calling device: '
+        . 'once set, /api/v1/oauth/refresh will only accept that same device_id on later refreshes.',
     operationId: 'oauth',
     security: [],
     requestBody: new OA\RequestBody(
@@ -44,6 +46,11 @@ use OpenApi\Attributes as OA;
                         property: 'password',
                         type: 'string',
                         description: 'Customer password'
+                    ),
+                    new OA\Property(
+                        property: 'device_id',
+                        type: 'string',
+                        description: 'Optional opaque device identifier to bind the refresh token to'
                     )
                 ]
             )
@@ -64,10 +71,18 @@ use OpenApi\Attributes as OA;
 final class JwtAuth
 {
     /**
-     * The constructor.
+     * @var TokenIssuer
      */
-    public function __construct()
+    private $tokenIssuer;
+
+    /**
+     * The constructor.
+     *
+     * @param TokenIssuer $tokenIssuer The access/refresh token issuer
+     */
+    public function __construct(TokenIssuer $tokenIssuer)
     {
+        $this->tokenIssuer = $tokenIssuer;
     }
 
     /**
@@ -105,6 +120,15 @@ final class JwtAuth
             }
         }
 
+        /* Optional device binding: may be sent as a header or a body field. */
+        $deviceId = $request->getHeaderLine("device_id");
+        if ($deviceId === "") {
+            $body = (array)$request->getParsedBody();
+            if (isset($body["device_id"])) {
+                $deviceId = (string)$body["device_id"];
+            }
+        }
+
         /* Resolve the customer id so the refresh token can be tied to the */
         /* account. Credentials are already verified by the Authentication */
         /* middleware, so the customer is guaranteed to exist here. */
@@ -115,7 +139,7 @@ final class JwtAuth
         $id_row = xtc_db_fetch_array($id_query);
         $customersId = isset($id_row['customers_id']) ? (int)$id_row['customers_id'] : 0;
 
-        $data = (new TokenIssuer())->issue($usr, $customersId);
+        $data = $this->tokenIssuer->issue($usr, $customersId, $deviceId);
 
         // Build the HTTP response
         $response->getBody()->write((string)json_encode($data));

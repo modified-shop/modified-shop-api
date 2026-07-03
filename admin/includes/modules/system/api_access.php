@@ -296,6 +296,7 @@ class api_access
                       `created_at` int(11) NOT NULL,
                       `revoked` tinyint(1) NOT NULL DEFAULT '0',
                       `revoked_at` int(11) NOT NULL DEFAULT '0',
+                      `device_id` varchar(191) NOT NULL DEFAULT '',
                       PRIMARY KEY (`id`),
                       UNIQUE KEY `token_hash` (`token_hash`),
                       KEY `customers_id` (`customers_id`)

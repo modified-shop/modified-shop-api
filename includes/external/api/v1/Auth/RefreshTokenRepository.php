@@ -41,17 +41,26 @@ final class RefreshTokenRepository
      * @param string $token The plain refresh token
      * @param int $expiresAt Absolute expiry as a unix timestamp
      * @param int $createdAt Creation time as a unix timestamp
+     * @param string $deviceId Opaque client-supplied device identifier; empty
+     *                         when the client did not send one, which leaves
+     *                         the token unbound (no device check on refresh)
      *
      * @return void
      */
-    public function store(int $customersId, string $token, int $expiresAt, int $createdAt): void
-    {
+    public function store(
+        int $customersId,
+        string $token,
+        int $expiresAt,
+        int $createdAt,
+        string $deviceId = ''
+    ): void {
         $data = [
             'customers_id' => $customersId,
             'token_hash' => self::hash($token),
             'expires_at' => $expiresAt,
             'created_at' => $createdAt,
             'revoked' => 0,
+            'device_id' => $deviceId,
         ];
 
         xtc_db_perform('api_refresh_tokens', $data);
