@@ -19,15 +19,15 @@ require_once(DIR_FS_INC . 'xtc_rand.inc.php');
 
 class api_access
 {
-    var $code;
-    var $title;
-    var $description;
-    var $sort_order;
-    var $enabled;
-    var $properties;
-    var $_check;
+    public $code;
+    public $title;
+    public $description;
+    public $sort_order;
+    public $enabled;
+    public $properties;
+    public $_check;
 
-    function __construct()
+    public function __construct()
     {
         $this->code = 'api_access';
         $this->title = MODULE_API_ACCESS_TEXT_TITLE;
@@ -38,12 +38,12 @@ class api_access
         $this->properties['button_update'] = '<a class="button btnbox" onclick="this.blur();" href="' . xtc_href_link(FILENAME_MODULE_EXPORT, 'set=' . $_GET['set'] . '&module=' . $this->code . '&action=update') . '">' . BUTTON_UPDATE . '</a>';
     }
 
-    function process($file)
+    public function process($file)
     {
       //do nothing
     }
 
-    function check()
+    public function check()
     {
         if (!isset($this->_check)) {
             if (defined('MODULE_API_ACCESS_STATUS')) {
@@ -58,7 +58,7 @@ class api_access
         return $this->_check;
     }
 
-    function update()
+    public function update()
     {
         global $messageStack;
 
@@ -255,7 +255,7 @@ class api_access
         }
     }
 
-    function get_dir_content($filedir)
+    public function get_dir_content($filedir)
     {
         $files = array();
         if ($dir = opendir($filedir)) {
@@ -271,7 +271,7 @@ class api_access
         return $files;
     }
 
-    function display()
+    public function display()
     {
         return array('text' => '<br />' .
                              '<br />' .
@@ -280,7 +280,7 @@ class api_access
                   );
     }
 
-    function install()
+    public function install()
     {
         xtc_db_query("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, set_function, date_added) VALUES ('MODULE_API_ACCESS_STATUS', 'true',  '6', '1', 'xtc_cfg_select_option(array(\'true\', \'false\'), ', now())");
         xtc_db_query("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, set_function, date_added) VALUES ('MODULE_API_ACCESS_SECRET', '" . md5(time() . xtc_rand(0, 99999)) . "',  '6', '1', '', now())");
@@ -322,13 +322,13 @@ class api_access
         $this->update();
     }
 
-    function remove()
+    public function remove()
     {
         xtc_db_query("DELETE FROM " . TABLE_CONFIGURATION . " WHERE configuration_key LIKE 'MODULE_API_ACCESS_%'");
     }
 
     // keys
-    function keys()
+    public function keys()
     {
         return array(
         'MODULE_API_ACCESS_STATUS',
