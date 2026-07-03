@@ -26,6 +26,12 @@ return function (App $app) {
     // oauth
     $app->post('/v1/oauth', \api\v1\Auth\JwtAuth::class)->add(Authentication::class);
 
+    // oauth token refresh (self-validating: no credentials / access token required)
+    $app->post('/v1/oauth/refresh', \api\v1\Auth\RefreshToken::class);
+
+    // oauth logout (revoke a refresh token; proof of possession is the token itself)
+    $app->post('/v1/oauth/logout', \api\v1\Auth\Logout::class);
+
     // docs
     $app->get('/v1/swagger.json', function ($request, $response, $args) use ($settings) {
         $swagger = (new OpenApiGenerator())->generate([

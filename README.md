@@ -69,18 +69,37 @@ curl https://your-shop.tld/api/v1/manufacturers \
 
 Access is granted per customer account in the shop backend (**Customers → API Access**), then used in two steps:
 
-1. **Get a token** - `POST /v1/oauth` with the credentials of a customer that has API access enabled. Credentials may be sent either as request headers (`user`/`username` + `password`) or as form fields (`username` + `password`, e.g. an OAuth2 *password* grant). Returns a JWT valid for 10 minutes:
+1. **Get a token** - `POST /v1/oauth` with the credentials of a customer that has API access enabled. Credentials may be sent either as request headers (`user`/`username` + `password`) or as form fields (`username` + `password`, e.g. an OAuth2 *password* grant). Returns a short-lived JWT access token (10 minutes) plus a long-lived refresh token (30 days):
    ```json
    {
      "access_token": "<JWT>",
      "token_type": "Bearer",
-     "expires": 1735000000
+     "expires": 1735000000,
+     "refresh_token": "<opaque-token>",
+     "refresh_expires": 1737592000
    }
    ```
-2. **Call the API** - send the token on every subsequent request:
+2. **Call the API** - send the access token on every subsequent request:
    ```
    Authorization: Bearer <JWT>
    ```
+3. **Refresh the token** - when the access token is about to expire, exchange the refresh token for a new pair via `POST /v1/oauth/refresh` (no credentials needed). The refresh token may be sent as a request header (`refresh_token`) or as a form field (`refresh_token`):
+   ```bash
+   curl -X POST https://your-shop.tld/api/v1/oauth/refresh \
+     -H "refresh_token: <opaque-token>"
+   ```
+   The response has the same shape as `/v1/oauth`. Refresh tokens are **rotated**: each refresh invalidates the presented token and returns a new one, so always store the latest `refresh_token`. Tokens are stored only as a hash in the shop database and can be revoked; a refresh is rejected if the account no longer exists or its API access was removed.
+4. **Log out** - revoke a refresh token via `POST /v1/oauth/logout` (the token itself is the proof of possession, so no credentials are needed). Add the `all` flag to revoke every refresh token of the account (log out on all devices):
+   ```bash
+   # revoke this session
+   curl -X POST https://your-shop.tld/api/v1/oauth/logout \
+     -H "refresh_token: <opaque-token>"
+
+   # revoke all sessions of the account
+   curl -X POST https://your-shop.tld/api/v1/oauth/logout \
+     -H "refresh_token: <opaque-token>" -H "all: true"
+   ```
+   The call is idempotent and returns `{"success": true}` whenever a token is supplied. The access token is stateless and simply expires on its own after 10 minutes.
 
 In the interactive docs you can skip the manual steps: click **Authorize**, enter the customer's username and password, and Swagger UI fetches the token and attaches it to every request automatically.
 
