@@ -26,6 +26,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Tuupola\Middleware\HttpBasicAuthentication;
 use Tuupola\Middleware\JwtAuthentication;
 use api\v1\Auth\Authentication;
+use api\v1\Auth\RateLimitMiddleware;
 use api\v1\Utility\LoggerHandler;
 use api\v1\Utility\ErrorHandler;
 
@@ -46,6 +47,10 @@ return [
 
     StreamFactoryInterface::class => function () {
         return new StreamFactory();
+    },
+
+    RateLimitMiddleware::class => function (ContainerInterface $container) {
+        return new RateLimitMiddleware($container->get(ResponseFactoryInterface::class));
     },
 
     RouteParserInterface::class => function (ContainerInterface $container) {
