@@ -288,6 +288,18 @@ class api_access
         xtc_db_query("INSERT INTO api_access (customers_id) VALUES (1)");
         xtc_db_query("INSERT INTO api_access (customers_id) VALUES ('groups')");
 
+        xtc_db_query("CREATE TABLE IF NOT EXISTS `api_refresh_tokens` (
+                      `id` int(11) NOT NULL AUTO_INCREMENT,
+                      `customers_id` int(11) NOT NULL,
+                      `token_hash` char(64) NOT NULL,
+                      `expires_at` int(11) NOT NULL,
+                      `created_at` int(11) NOT NULL,
+                      `revoked` tinyint(1) NOT NULL DEFAULT '0',
+                      PRIMARY KEY (`id`),
+                      UNIQUE KEY `token_hash` (`token_hash`),
+                      KEY `customers_id` (`customers_id`)
+                    )");
+ 
         $query_result = xtc_db_query("SHOW COLUMNS FROM `" . TABLE_ADMIN_ACCESS . "`");
         $db_table_rows = array();
         while ($row = xtc_db_fetch_array($query_result)) {
