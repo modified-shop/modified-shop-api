@@ -148,12 +148,11 @@ class api_access
         xtc_db_query("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, set_function, date_added) VALUES ('MODULE_API_ACCESS_SECRET', '" . md5(time() . xtc_rand(0, 99999)) . "',  '6', '1', '', now())");
 
         xtc_db_query("CREATE TABLE IF NOT EXISTS `api_access` (
-                      `customers_id` varchar(32) NOT NULL DEFAULT '0',
+                      `customers_id` int(11) NOT NULL DEFAULT '0',
                       PRIMARY KEY (`customers_id`)
                     )");
 
         xtc_db_query("INSERT INTO api_access (customers_id) VALUES (1)");
-        xtc_db_query("INSERT INTO api_access (customers_id) VALUES ('groups')");
 
         xtc_db_query("CREATE TABLE IF NOT EXISTS `api_refresh_tokens` (
                       `id` int(11) NOT NULL AUTO_INCREMENT,
