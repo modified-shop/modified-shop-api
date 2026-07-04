@@ -75,8 +75,13 @@ final class ArrayAuthenticator implements AuthenticatorInterface
             require_once (DIR_FS_INC.'xtc_validate_password.inc.php');
             return xtc_validate_password($password, $this->options["users"][$user]);
         } else {
-            if ($this->options["users"][$user] === $password || $this->options["users"][$user] === md5($password)) return true;
-            return false; 
+            if (
+                hash_equals($this->options["users"][$user], $password)
+                || hash_equals($this->options["users"][$user], md5($password))
+            ) {
+                return true;
+            }
+            return false;
         }
     }
 

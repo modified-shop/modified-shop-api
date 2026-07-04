@@ -874,11 +874,13 @@ final class ProductAction extends BaseAction
             if (!isset($this->options['status_id'])) {
                 throw new Exception('Status ID required');
             } else {
+                $statusId = (int)$this->options['status_id'];
+
                 $where = '';
                 if (isset($this->options['price_id'])) {
                     $where = "AND price_id = '" . (int)$this->options['price_id'] . "'";
                     $personal_offer_query = xtc_db_query("SELECT *
-                                                              FROM " . TABLE_PERSONAL_OFFERS_BY . $this->options['status_id'] . "
+                                                              FROM " . TABLE_PERSONAL_OFFERS_BY . $statusId . "
                                                              WHERE products_id = '" . (int)$productId . "'
                                                                    " . $where);
                     if (xtc_db_num_rows($personal_offer_query) < 1) {
@@ -889,7 +891,7 @@ final class ProductAction extends BaseAction
                     }
                 } else {
                     $action = 'insert';
-                    $personal_offer = $this->getDefaultTableValues(TABLE_PERSONAL_OFFERS_BY . $this->options['status_id']);
+                    $personal_offer = $this->getDefaultTableValues(TABLE_PERSONAL_OFFERS_BY . $statusId);
                     $personal_offer['products_id'] = (int)$productId;
                 }
 
@@ -900,8 +902,8 @@ final class ProductAction extends BaseAction
                 }
 
                 // Input validation
-                $this->checkTableData(TABLE_PERSONAL_OFFERS_BY . $this->options['status_id'], $personal_offer);
-                xtc_db_perform(TABLE_PERSONAL_OFFERS_BY . $this->options['status_id'], $personal_offer, $action, "products_id = '" . (int)$productId . "' " . $where);
+                $this->checkTableData(TABLE_PERSONAL_OFFERS_BY . $statusId, $personal_offer);
+                xtc_db_perform(TABLE_PERSONAL_OFFERS_BY . $statusId, $personal_offer, $action, "products_id = '" . (int)$productId . "' " . $where);
             }
         }
 

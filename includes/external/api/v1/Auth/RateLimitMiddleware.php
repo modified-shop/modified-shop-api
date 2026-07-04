@@ -69,14 +69,24 @@ final class RateLimitMiddleware implements MiddlewareInterface
     private $limiter;
 
     /**
+     * IPs of trusted reverse proxies/load balancers allowed to set
+     * X-Forwarded-For (see clientIp()).
+     *
+     * @var string[]
+     */
+    private $trustedProxies;
+
+    /**
      * The constructor.
      *
      * @param ResponseFactoryInterface $responseFactory The response factory
+     * @param string[] $trustedProxies IPs of trusted reverse proxies (empty = none, use REMOTE_ADDR as-is)
      */
-    public function __construct(ResponseFactoryInterface $responseFactory)
+    public function __construct(ResponseFactoryInterface $responseFactory, array $trustedProxies = [])
     {
         $this->responseFactory = $responseFactory;
         $this->limiter = new RateLimiter();
+        $this->trustedProxies = $trustedProxies;
     }
 
     /**
@@ -134,8 +144,14 @@ final class RateLimitMiddleware implements MiddlewareInterface
     /**
      * Resolve the client IP from the server parameters.
      *
-     * Note: behind a reverse proxy REMOTE_ADDR is the proxy; configure the proxy
-     * to pass the real client IP if per-IP throttling should be per-client.
+     * REMOTE_ADDR is only the real client when the request reached us
+     * directly. Behind a reverse proxy it's the proxy's own address, and the
+     * real client is in X-Forwarded-For instead - but that header is
+     * attacker-controlled input, so it's only honored when REMOTE_ADDR
+     * matches a proxy we explicitly configured to trust (see
+     * $settings['trusted_proxies']). Without that, every client would share
+     * one throttle key (self-inflicted lockout of all users), or worse, a
+     * client could spoof X-Forwarded-For to evade its own throttling.
      *
      * @param ServerRequestInterface $request The request
      *
@@ -144,8 +160,24 @@ final class RateLimitMiddleware implements MiddlewareInterface
     private function clientIp(ServerRequestInterface $request): string
     {
         $params = $request->getServerParams();
+        $remoteAddr = (string)($params['REMOTE_ADDR'] ?? '');
 
-        return (string)($params['REMOTE_ADDR'] ?? 'unknown');
+        if ($remoteAddr === '' || !in_array($remoteAddr, $this->trustedProxies, true)) {
+            return $remoteAddr !== '' ? $remoteAddr : 'unknown';
+        }
+
+        $forwardedFor = $request->getHeaderLine('X-Forwarded-For');
+        $chain = array_values(array_filter(array_map('trim', explode(',', $forwardedFor))));
+
+        /* Walk right-to-left (closest hop first): the first entry that isn't */
+        /* itself one of our trusted proxies is the real client. */
+        for ($i = count($chain) - 1; $i >= 0; $i--) {
+            if (!in_array($chain[$i], $this->trustedProxies, true)) {
+                return $chain[$i];
+            }
+        }
+
+        return $remoteAddr;
     }
 
     /**

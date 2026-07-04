@@ -108,6 +108,16 @@ final class ErrorHandler
         $errorMessage = $this->getErrorMessage($exception, $statusCode, $displayErrorDetails);
         $Message = $exception->getMessage();
 
+        // The API's own code always throws \Exception (or a subclass) for
+        // deliberate, client-safe validation/business errors (e.g. "Product not
+        // found", "Access for X required") - those messages are meant to reach
+        // the client. A \Error (TypeError, ArgumentCountError, ...) signals an
+        // unexpected bug instead, and may carry internal details (argument
+        // values, internal state), so never forward its message to the client.
+        if ($exception instanceof \Error) {
+            $Message = '';
+        }
+
         // Render response
         $response = $this->responseFactory->createResponse();
         $response = $this->responder->withJson($response, [

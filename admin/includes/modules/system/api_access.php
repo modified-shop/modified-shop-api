@@ -145,7 +145,7 @@ class api_access
     public function install()
     {
         xtc_db_query("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, set_function, date_added) VALUES ('MODULE_API_ACCESS_STATUS', 'true',  '6', '1', 'xtc_cfg_select_option(array(\'true\', \'false\'), ', now())");
-        xtc_db_query("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, set_function, date_added) VALUES ('MODULE_API_ACCESS_SECRET', '" . md5(time() . xtc_rand(0, 99999)) . "',  '6', '1', '', now())");
+        xtc_db_query("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, set_function, date_added) VALUES ('MODULE_API_ACCESS_SECRET', '" . bin2hex(random_bytes(32)) . "',  '6', '1', '', now())");
 
         xtc_db_query("CREATE TABLE IF NOT EXISTS `api_access` (
                       `customers_id` int(11) NOT NULL DEFAULT '0',

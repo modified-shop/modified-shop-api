@@ -51,7 +51,9 @@ return [
     },
 
     RateLimitMiddleware::class => function (ContainerInterface $container) {
-        return new RateLimitMiddleware($container->get(ResponseFactoryInterface::class));
+        $trustedProxies = (array)($container->get('settings')['trusted_proxies'] ?? []);
+
+        return new RateLimitMiddleware($container->get(ResponseFactoryInterface::class), $trustedProxies);
     },
 
     TokenIssuer::class => function (ContainerInterface $container) {
