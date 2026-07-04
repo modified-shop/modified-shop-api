@@ -62,190 +62,57 @@ class api_access
     {
         global $messageStack;
 
-        // Customer
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Customer/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 10 WHERE customers_id = 'groups'");
-            }
-        }
+        // API access groups
+        $resource_groups = array(
+            10  => array('name' => 'Customer',        'color' => '#eeeeee'),
+            20  => array('name' => 'Category',        'color' => '#ebbb97'),
+            30  => array('name' => 'Product',         'color' => '#aacfe2'),
+            31  => array('name' => 'Manufacturer',    'color' => '#ebd397'),
+            32  => array('name' => 'Attributes',      'color' => '#afd088'),
+            33  => array('name' => 'Tags',            'color' => '#d0af88'),
+            40  => array('name' => 'Order',           'color' => '#617d8d'),
+            50  => array('name' => 'Country',         'color' => '#666666'),
+            60  => array('name' => 'Shipping',        'color' => '#cb7272'),
+            70  => array('name' => 'Campaign',        'color' => '#8cd1ba'),
+            80  => array('name' => 'Currency',        'color' => '#c689ab'),
+            90  => array('name' => 'Language',        'color' => '#ffaaa5'),
+            100 => array('name' => 'Newsletter',      'color' => '#dcedc1'),
+            110 => array('name' => 'Configuration',   'color' => '#66545e'),
+            120 => array('name' => 'Content',         'color' => '#a39193'),
+            130 => array('name' => 'Coupon',          'color' => '#aa6f73'),
+            140 => array('name' => 'Schema',          'color' => '#ffecef'),
+            150 => array('name' => 'Dhl',             'color' => '#b8b8d1'),
+        );
 
-        // Category
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Category/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 20 WHERE customers_id = 'groups'");
-            }
-        }
+        xtc_db_query("CREATE TABLE IF NOT EXISTS `api_access_groups` (
+                      `group_id` int(11) NOT NULL,
+                      `resource_name` varchar(64) NOT NULL,
+                      `color` varchar(7) NOT NULL,
+                      PRIMARY KEY (`group_id`),
+                      UNIQUE KEY `idx_resource_name` (`resource_name`)
+                    )");
 
-        // Product
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Product/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 30 WHERE customers_id = 'groups'");
-            }
-        }
+        foreach ($resource_groups as $group_id => $group_info) {
+            $resource_name = $group_info['name'];
 
-        // Manufacturer
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Manufacturer/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
+            $check_query = xtc_db_query("SELECT group_id
+                                             FROM `api_access_groups`
+                                            WHERE group_id = '" . (int)$group_id . "'");
             if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 31 WHERE customers_id = 'groups'");
+                xtc_db_query("INSERT INTO `api_access_groups` (group_id, resource_name, color)
+                              VALUES ('" . (int)$group_id . "', '" . xtc_db_input($resource_name) . "', '" . xtc_db_input($group_info['color']) . "')");
             }
-        }
 
-        // Attributes
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Attributes/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 32 WHERE customers_id = 'groups'");
-            }
-        }
+            // Permission columns are qualified as `{group_id}_{action}`
+            $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/' . $resource_name . '/');
+            foreach ($column_array as $column) {
+                $qualified_column = $group_id . '_' . $column;
 
-        // Tags
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Tags/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 33 WHERE customers_id = 'groups'");
-            }
-        }
-
-        // Order
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Order/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 40 WHERE customers_id = 'groups'");
-            }
-        }
-
-        // Country
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Country/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 50 WHERE customers_id = 'groups'");
-            }
-        }
-
-        // Shipping
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Shipping/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 60 WHERE customers_id = 'groups'");
-            }
-        }
-
-        // Campaign
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Campaign/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 70 WHERE customers_id = 'groups'");
-            }
-        }
-
-        // Currency
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Currency/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 80 WHERE customers_id = 'groups'");
-            }
-        }
-
-        // Language
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Language/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 90 WHERE customers_id = 'groups'");
-            }
-        }
-
-        // Newsletter
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Newsletter/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 100 WHERE customers_id = 'groups'");
-            }
-        }
-
-        // Configuration
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Configuration/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 110 WHERE customers_id = 'groups'");
-            }
-        }
-
-        // Content
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Content/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 120 WHERE customers_id = 'groups'");
-            }
-        }
-
-        // Coupon
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Coupon/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 130 WHERE customers_id = 'groups'");
-            }
-        }
-
-        // Schema
-        $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/Schema/');
-        foreach ($column_array as $column) {
-            $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($column) . "'");
-            if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("ALTER TABLE `api_access` ADD " . $column . " int(1) NOT NULL DEFAULT '0'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 1  WHERE customers_id = '1'");
-                xtc_db_query("UPDATE `api_access` SET " . $column . " = 140 WHERE customers_id = 'groups'");
+                $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($qualified_column) . "'");
+                if (xtc_db_num_rows($check_query) < 1) {
+                    xtc_db_query("ALTER TABLE `api_access` ADD `" . xtc_db_input($qualified_column) . "` int(1) NOT NULL DEFAULT '0'");
+                    xtc_db_query("UPDATE `api_access` SET `" . xtc_db_input($qualified_column) . "` = 1 WHERE customers_id = '1'");
+                }
             }
         }
     }
@@ -298,8 +165,8 @@ class api_access
                       `revoked_at` int(11) NOT NULL DEFAULT '0',
                       `device_id` varchar(191) NOT NULL DEFAULT '',
                       PRIMARY KEY (`id`),
-                      UNIQUE KEY `token_hash` (`token_hash`),
-                      KEY `customers_id` (`customers_id`)
+                      UNIQUE KEY `idx_token_hash` (`token_hash`),
+                      KEY `idx_customers_id` (`customers_id`)
                     )");
 
         xtc_db_query("CREATE TABLE IF NOT EXISTS `api_rate_limit` (

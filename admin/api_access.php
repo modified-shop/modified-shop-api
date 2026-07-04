@@ -20,7 +20,7 @@ $confirm_submit = defined('CONFIRM_SAVE_ENTRY') && CONFIRM_SAVE_ENTRY == 'true' 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'save':
-          // reset values before writing
+            // reset values before writing
             $admin_access_query = xtc_db_query("SELECT *
                                                   FROM `api_access`
                                                  WHERE customers_id = '" . (int)$_GET['cID'] . "'");
@@ -61,71 +61,26 @@ if ($_GET['cID'] != '') {
     }
 }
 
-  $naming_array = array(
-    '10' => array(
-      'name' =>  TEXT_HEADING_CUSTOMERS,
-      'color' => '#eeeeee',
-    ),
-    '20' => array(
-      'name' =>  TEXT_HEADING_CATEGORIES,
-      'color' => '#ebbb97',
-    ),
-    '30' => array(
-      'name' =>  TEXT_HEADING_PRODUCTS,
-      'color' => '#aacfe2',
-    ),
-    '31' => array(
-      'name' =>  TEXT_HEADING_MANUFACTURERS,
-      'color' => '#ebd397',
-    ),
-    '32' => array(
-      'name' =>  TEXT_HEADING_ATTRIBUTES,
-      'color' => '#afd088',
-    ),
-    '40' => array(
-      'name' =>  TEXT_HEADING_ORDERS,
-      'color' => '#617d8d',
-    ),
-    '50' => array(
-      'name' =>  TEXT_HEADING_COUNTRIES,
-      'color' => '#666666',
-    ),
-    '60' => array(
-      'name' =>  TEXT_HEADING_SHIPPING,
-      'color' => '#cb7272',
-    ),
-    '70' => array(
-      'name' =>  TEXT_HEADING_CAMPAIGNS,
-      'color' => '#8cd1ba',
-    ),
-    '80' => array(
-      'name' =>  TEXT_HEADING_CURRENCIES,
-      'color' => '#c689ab',
-    ),
-    '90' => array(
-      'name' =>  TEXT_HEADING_LANGUAGES,
-      'color' => '#ffaaa5',
-    ),
-    '100' => array(
-      'name' =>  TEXT_HEADING_NEWSLETTER,
-      'color' => '#dcedc1',
-    ),
-    '110' => array(
-      'name' =>  TEXT_HEADING_CONFIGURATIONS,
-      'color' => '#66545e',
-    ),
-    '120' => array(
-      'name' =>  TEXT_HEADING_CONTENTS,
-      'color' => '#a39193',
-    ),
-    '130' => array(
-      'name' =>  TEXT_HEADING_COUPONS,
-      'color' => '#aa6f73',
-    ),
-    '140' => array(
-      'name' =>  TEXT_HEADING_SCHEMA,
-      'color' => '#ffecef',
-    ),
+  // Resource names and colors come from `api_access_groups` (populated by
+  // the API Access module's update(), keyed by the same group_id used to
+  // qualify each permission column as `{group_id}_{action}`) rather than
+  // being hardcoded here, so a new resource needs no change to this file.
+  $naming_array = array();
+  $group_names_query = xtc_db_query("SELECT group_id, 
+                                            resource_name, 
+                                            color 
+                                       FROM `api_access_groups` 
+                                   ORDER BY group_id");
+  while ($group_name_row = xtc_db_fetch_array($group_names_query)) {
+      $naming_array[(int)$group_name_row['group_id']] = array(
+          'name' => $group_name_row['resource_name'],
+          'color' => $group_name_row['color'],
+      );
+  }
+  // Bucket for legacy/unqualified columns (pre-migration installs only).
+  $naming_array[0] = array(
+      'name' => defined('TEXT_ACCOUNTING_OTHER') ? TEXT_ACCOUNTING_OTHER : 'Other',
+      'color' => '#d9d9d9',
   );
 
   require(DIR_WS_INCLUDES . 'head.php');
@@ -192,7 +147,7 @@ if ($_GET['cID'] != '') {
         <div class="pageHeading pdg2"><?php echo TEXT_ACCOUNTING . ' ' . $allow_edit['customers_lastname'] . ' ' . $allow_edit['customers_firstname'] . ' [' . (int)$_GET['cID'] . ']'; ?>
           <div class="main flt-r"><?php echo xtc_draw_checkbox_field('complete', false) . ' ' . BUTTON_SET; ?></div>
         </div>
-        <?php if ($_GET['cID'] == '1') { ?>
+        <?php if (((int)$_GET['cID']) == '1') { ?>
         <div class="main important_info" style="margin-top: 5px;">
             <?php  echo TEXT_ACCOUNTING_INFO ?> 
         </div>
@@ -204,23 +159,21 @@ if ($_GET['cID'] != '') {
             <tr>
               <td>
                 <?php
-                $customers_id = xtc_db_prepare_input($_GET['cID']);
+                $customers_id = (int)$_GET['cID'];
                 $admin_access_query = xtc_db_query("SELECT *
                                                       FROM `api_access`
-                                                     WHERE customers_id = '" . (int)$_GET['cID'] . "'");
+                                                     WHERE customers_id = '" . $customers_id . "'");
                 if (xtc_db_num_rows($admin_access_query) < 1) {
-                    xtc_db_query("INSERT INTO `api_access` (customers_id) VALUES ('" . (int)$_GET['cID'] . "')");
+                    xtc_db_query("INSERT INTO `api_access` (customers_id) VALUES ('" . $customers_id . "')");
                     $admin_access_query = xtc_db_query("SELECT *
                                                           FROM `api_access`
-                                                         WHERE customers_id = '" . (int)$_GET['cID'] . "'");
+                                                         WHERE customers_id = '" . $customers_id . "'");
                 }
                 $admin_access = xtc_db_fetch_array($admin_access_query);
 
-                $group_query = xtc_db_query("SELECT *
-                                               FROM `api_access`
-                                              WHERE customers_id = 'groups'");
-                $group_access = xtc_db_fetch_array($group_query);
+                $accounting_array = array();
 
+                // Permission columns are qualified as `{group_id}_{action}`
                 $fields = xtc_db_query("SHOW COLUMNS FROM `api_access` FROM `" . DB_DATABASE . "`");
                 while ($field = xtc_db_fetch_array($fields)) {
                     if ($field['Field'] != 'customers_id') {
@@ -231,19 +184,28 @@ if ($_GET['cID'] != '') {
                         $hidden_field = '';
                         if ($admin_access[$field['Field']] == '1') {
                             $checked = true;
-                            if ($_GET['cID'] == '1') {
+                            if ($customers_id == 1) {
                                 $params = ' disabled="disabled"';
                                 $hidden_field =  xtc_draw_hidden_field('access[]', $field['Field']) . PHP_EOL;
                             }
                         }
 
-                        $accounting_array[$group_access[$field['Field']]][$field['Field']] = array(
-                        'key' => $field['Field'],
-                        'hidden' => $hidden_field,
-                        'params' => $params,
-                        'checked' => $checked,
+                        if (preg_match('/^(\d+)_(.+)$/', $field['Field'], $field_match)) {
+                            $field_group_id = (int)$field_match[1];
+                            $field_label = $field_match[2];
+                        } else {
+                            $field_group_id = 0;
+                            $field_label = $field['Field'];
+                        }
+
+                        $accounting_array[$field_group_id][$field['Field']] = array(
+                            'key' => $field_label,
+                            'column' => $field['Field'],
+                            'hidden' => $hidden_field,
+                            'params' => $params,
+                            'checked' => $checked,
                         );
-                        ksort($accounting_array[$group_access[$field['Field']]]);
+                        ksort($accounting_array[$field_group_id]);
                     }
                 }
                 ksort($accounting_array);
@@ -253,31 +215,32 @@ if ($_GET['cID'] != '') {
                     unset($accounting_array[0]);
                     $accounting_array[0] = $accounting_tmp;
                 }
-                $accounting_array = array_values($accounting_array);
-                $naming_array = array_values($naming_array);
 
                 $total = count($accounting_array);
                 $divide = ceil($total / 2);
 
                 echo '<div class="accounting_container">';
                 echo '<div class="accounting_col">';
-                for ($i = 0; $i < $total; $i++) {
-                    $totalaccess = count($accounting_array[$i]);
-                    $totalchecked = array_sum(array_column($accounting_array[$i], 'checked'));
+                $i = 0;
+                foreach ($accounting_array as $group_id => $group_items) {
+                    $label = isset($naming_array[$group_id]) ? $naming_array[$group_id]['name'] : $naming_array[0]['name'];
+                    $color = isset($naming_array[$group_id]) ? $naming_array[$group_id]['color'] : $naming_array[0]['color'];
+                    $totalaccess = count($group_items);
+                    $totalchecked = array_sum(array_column($group_items, 'checked'));
                     ?>
                   <table class="tableBoxCenter collapse">
                     <tr class="dataTableHeadingRow">
-                      <td class="dataTableHeadingContent column<?php echo $i; ?>" colspan="2" style="vertical-align:middle;"><?php echo $naming_array[$i]['name']; ?></td>
+                      <td class="dataTableHeadingContent column<?php echo $i; ?>" colspan="2" style="vertical-align:middle;"><?php echo $label; ?></td>
                       <td class="dataTableHeadingContent txta-c column<?php echo $i; ?>" style="width:60px;vertical-align:middle;"><?php echo $totalchecked . '/' . $totalaccess; ?></td>
-                      <td class="dataTableHeadingContent" style="width:90px;vertical-align:middle;"><?php echo TEXT_ALLOWED . ' ' . xtc_draw_checkbox_field('checkall' . $i, '', ($totalchecked === $totalaccess), '', 'class="checkall' . $i . '" onclick="set_checkbox(' . $i . ', ' . $_GET['cID'] . ')"'); ?></td>
+                      <td class="dataTableHeadingContent" style="width:90px;vertical-align:middle;"><?php echo TEXT_ALLOWED . ' ' . xtc_draw_checkbox_field('checkall' . $i, '', ($totalchecked === $totalaccess), '', 'class="checkall' . $i . '" onclick="set_checkbox(' . $i . ', ' . $customers_id . ')"'); ?></td>
                     </tr>
                     <?php
-                    foreach ($accounting_array[$i] as $details) {
+                    foreach ($group_items as $details) {
                         ?>
                       <tr class="dataTableRow detail<?php echo $i; ?>" style="display:none;">
-                        <td class="dataTableContent" style="width:18px; background:<?php echo $naming_array[$i]['color']; ?>;"></td>
+                        <td class="dataTableContent" style="width:18px; background:<?php echo $color; ?>;"></td>
                         <td class="dataTableContent" colspan="2"><?php echo $details['key']; ?></td>
-                        <td class="dataTableContent txta-c" style="width:90px;"><?php echo xtc_draw_checkbox_field('access[]', $details['key'], $details['checked'], '', $details['params'] . ' class="access' . $i . '"') . $details['hidden']; ?></td>
+                        <td class="dataTableContent txta-c" style="width:90px;"><?php echo xtc_draw_checkbox_field('access[]', $details['column'], $details['checked'], '', $details['params'] . ' class="access' . $i . '"') . $details['hidden']; ?></td>
                       </tr>
                         <?php
                     }
@@ -285,9 +248,10 @@ if ($_GET['cID'] != '') {
                     <tr><td>&nbsp;</td></tr>
                   </table>
                     <?php
-                    if (($i + 1) % $divide == 0 || ($i + 1) == $total) {
+                    $i++;
+                    if ($i % $divide == 0 || $i == $total) {
                         echo '</div>';
-                        if (($i + 1) < $total) {
+                        if ($i < $total) {
                             echo '<div class="accounting_col">';
                         }
                     }

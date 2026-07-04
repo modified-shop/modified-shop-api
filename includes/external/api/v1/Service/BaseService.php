@@ -63,6 +63,17 @@ class BaseService
         $class = new \ReflectionClass(get_class($this));
         $className = $class->getShortName();
 
+        // The permission column is qualified as `{group_id}_{className}`
+        $namespaceParts = explode('\\', $class->getNamespaceName());
+        $resourceName = end($namespaceParts);
+
+        $group_query = xtc_db_query("SELECT group_id
+                                         FROM `api_access_groups`
+                                        WHERE resource_name = '" . xtc_db_input($resourceName) . "'");
+        $group = xtc_db_fetch_array($group_query);
+
+        $column = isset($group['group_id']) ? $group['group_id'] . '_' . $className : $className;
+
         $access_query = xtc_db_query("SELECT aa.*
                                           FROM " . TABLE_CUSTOMERS . " c
                                           JOIN `api_access` aa
@@ -71,8 +82,8 @@ class BaseService
         $access = xtc_db_fetch_array($access_query);
 
         if (
-            !isset($access[$className])
-            || $access[$className] == 0
+            !isset($access[$column])
+            || $access[$column] == 0
         ) {
             throw new Exception(sprintf('Access for %s required', $className));
         }
