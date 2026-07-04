@@ -58,37 +58,6 @@ final class Me
     ];
 
     /**
-     * Human-readable label per resource group id.
-     *
-     * These ids are the values written into the pseudo-customer row
-     * `api_access.customers_id = 'groups'` by the API Access module
-     * (admin/includes/modules/system/api_access.php, update()); they group the
-     * per-action permission columns by the resource they belong to. Kept in
-     * sync with that module's group id assignments.
-     *
-     * @var array<int,string>
-     */
-    private const GROUP_LABELS = [
-        10 => 'Customer',
-        20 => 'Category',
-        30 => 'Product',
-        31 => 'Manufacturer',
-        32 => 'Attributes',
-        33 => 'Tags',
-        40 => 'Order',
-        50 => 'Country',
-        60 => 'Shipping',
-        70 => 'Campaign',
-        80 => 'Currency',
-        90 => 'Language',
-        100 => 'Newsletter',
-        110 => 'Configuration',
-        120 => 'Content',
-        130 => 'Coupon',
-        140 => 'Schema',
-    ];
-
-    /**
      * Label used for a permission column with no (or an unmapped) group id.
      */
     private const UNGROUPED_LABEL = 'Other';
@@ -137,15 +106,12 @@ final class Me
             return $this->unauthorized($response, 'Invalid access token or API access revoked');
         }
 
-        /* The pseudo-customer row `customers_id = 'groups'` has no matching row */
-        /* in the customers table, so it needs its own (non-joined) lookup. Its */
-        /* column values are resource group ids rather than 0/1 access flags. */
-        $group_query = xtc_db_query("SELECT *
-                                         FROM `api_access`
-                                        WHERE customers_id = 'groups'
-                                        LIMIT 1");
-        $group_row = xtc_db_fetch_array($group_query);
-        $group_row = is_array($group_row) ? $group_row : [];
+        // Permission columns are qualified as `{group_id}_{action}`
+        $groups_query = xtc_db_query("SELECT group_id, resource_name FROM `api_access_groups`");
+        $groupLabels = [];
+        while ($groupRow = xtc_db_fetch_array($groups_query)) {
+            $groupLabels[(int)$groupRow['group_id']] = (string)$groupRow['resource_name'];
+        }
 
         $permissions = [];
         foreach ($row as $column => $value) {
@@ -156,10 +122,17 @@ final class Me
                 continue;
             }
 
-            $groupId = isset($group_row[$column]) ? (int)$group_row[$column] : 0;
-            $label = self::GROUP_LABELS[$groupId] ?? self::UNGROUPED_LABEL;
+            if (preg_match('/^(\d+)_(.+)$/', (string)$column, $m)) {
+                $label = $groupLabels[(int)$m[1]] ?? self::UNGROUPED_LABEL;
+                $action = $m[2];
+            } else {
+                /* Legacy, unqualified column left over on an install that has */
+                /* not run the "Update" migration yet. */
+                $label = self::UNGROUPED_LABEL;
+                $action = (string)$column;
+            }
 
-            $permissions[$label][] = $column;
+            $permissions[$label][] = $action;
         }
 
         foreach ($permissions as &$actions) {
