@@ -171,7 +171,7 @@ class BaseAction
     protected function getDefaultTableValues($table): array
     {
         $default_array = [];
-        $default_query = xtc_db_query("SHOW COLUMNS FROM " . $table . "");
+        $default_query = xtc_db_query("SHOW COLUMNS FROM `" . $table . "`");
         while ($default = xtc_db_fetch_array($default_query)) {
             $value = '';
             if ($default['Default'] != '') {
@@ -203,7 +203,7 @@ class BaseAction
     protected function getDefaultTableInfo($table): array
     {
         $default_array = [];
-        $default_query = xtc_db_query("SHOW COLUMNS FROM " . $table . "");
+        $default_query = xtc_db_query("SHOW COLUMNS FROM `" . $table . "`");
         while ($default = xtc_db_fetch_array($default_query)) {
             $default_array[$default['Field']] = [
                 'type' => ((strpos($default['Type'], '(') !== false) ? substr($default['Type'], 0, strpos($default['Type'], '(')) : $default['Type']),

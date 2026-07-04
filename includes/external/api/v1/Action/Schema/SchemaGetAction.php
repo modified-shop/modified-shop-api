@@ -40,9 +40,23 @@ trait SchemaGetAction
             throw new Exception('Table required');
         }
 
+        // Reject anything that isn't a plain identifier
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) {
+            return $this->errormessage('Table not found');
+        }
+
         $schema = [];
-        $schema_query = xtc_db_query("SHOW TABLES LIKE '" . xtc_db_input($table) . "'");
-        if (xtc_db_num_rows($schema_query) < 1) {
+
+        $tables_query = xtc_db_query("SHOW TABLES");
+        $table_exists = false;
+        while ($tables_row = xtc_db_fetch_array($tables_query)) {
+            if (reset($tables_row) === $table) {
+                $table_exists = true;
+                break;
+            }
+        }
+
+        if (!$table_exists) {
             return $this->errormessage(sprintf('Table not found: %s', $table));
         } else {
             $schema = $this->getDefaultTableInfo($table);

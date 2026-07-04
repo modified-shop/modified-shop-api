@@ -22,4 +22,5 @@ $app->post('/v1/oauth/refresh', \api\v1\Auth\RefreshToken::class)
     ->add(\api\v1\Auth\RateLimitMiddleware::class);
 
 // oauth logout
-$app->post('/v1/oauth/logout', \api\v1\Auth\Logout::class);
+$app->post('/v1/oauth/logout', \api\v1\Auth\Logout::class)
+    ->add(\api\v1\Auth\RateLimitMiddleware::class);

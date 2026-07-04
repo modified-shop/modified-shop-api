@@ -45,6 +45,13 @@ $settings['logger'] = [
     'file_permission' => 0775,
 ];
 
+// Reverse-proxy trust: IPs of proxies/load balancers that sit in front of this
+// API and are allowed to set X-Forwarded-For. Leave empty if the API is
+// reached directly - X-Forwarded-For is otherwise client-supplied and
+// trivially spoofable, and MUST NOT be trusted for rate limiting.
+// Example: ['10.0.0.1', '10.0.0.2']
+$settings['trusted_proxies'] = [];
+
 // JWT
 $settings['jwt'] = [
     'secret' => ((defined('MODULE_API_ACCESS_SECRET')) ? MODULE_API_ACCESS_SECRET : 'supersecretkeyyoushouldnottellanyone'),

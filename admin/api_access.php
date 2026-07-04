@@ -29,19 +29,24 @@ if (isset($_GET['action'])) {
             $fields = xtc_db_query("SHOW COLUMNS FROM ``api_access`` FROM `" . DB_DATABASE . "`");
             $columns = xtc_db_num_rows($fields);
 
+            $valid_columns = array();
             while ($field = xtc_db_fetch_array($fields)) {
                 if ($field['Field'] != 'customers_id') {
+                    $valid_columns[] = $field['Field'];
+
                     xtc_db_query("UPDATE `api_access`
-                             SET " . $field['Field'] . " = '0'
+                             SET `" . $field['Field'] . "` = '0'
                            WHERE customers_id = '" . (int)$_GET['cID'] . "'");
                 }
             }
 
             if (isset($_POST['access'])) {
                 foreach ($_POST['access'] as $key) {
-                              xtc_db_query("UPDATE `api_access`
-                           SET " . $key . " = '1'
-                         WHERE customers_id = '" . (int)$_GET['cID'] . "'");
+                    if (in_array($key, $valid_columns, true)) {
+                        xtc_db_query("UPDATE `api_access`
+                                 SET `" . $key . "` = '1'
+                               WHERE customers_id = '" . (int)$_GET['cID'] . "'");
+                    }
                 }
             }
             xtc_redirect(xtc_href_link(FILENAME_CUSTOMERS, xtc_get_all_get_params(array('cID','action')) . 'cID=' . (int)$_GET['cID'], 'NONSSL'));
@@ -61,15 +66,12 @@ if ($_GET['cID'] != '') {
     }
 }
 
-  // Resource names and colors come from `api_access_groups` (populated by
-  // the API Access module's update(), keyed by the same group_id used to
-  // qualify each permission column as `{group_id}_{action}`) rather than
-  // being hardcoded here, so a new resource needs no change to this file.
+  // Resource names and colors
   $naming_array = array();
-  $group_names_query = xtc_db_query("SELECT group_id, 
-                                            resource_name, 
-                                            color 
-                                       FROM `api_access_groups` 
+  $group_names_query = xtc_db_query("SELECT group_id,
+                                            resource_name,
+                                            color
+                                       FROM `api_access_groups`
                                    ORDER BY group_id");
   while ($group_name_row = xtc_db_fetch_array($group_names_query)) {
       $naming_array[(int)$group_name_row['group_id']] = array(
@@ -105,12 +107,12 @@ if ($_GET['cID'] != '') {
   padding: 10px;
   box-sizing: border-box;
 }
- 
+
 .accounting_col .tableBoxCenter.collapse .dataTableHeadingRow {
   cursor:pointer;
 }
 .accounting_col .tableBoxCenter.collapse .dataTableHeadingRow:hover .dataTableHeadingContent {
-  background-color:#ddd; 
+  background-color:#ddd;
 }
 .accounting_col .tableBoxCenter.collapse .dataTableHeadingRow em {
   position:relative;
@@ -149,7 +151,7 @@ if ($_GET['cID'] != '') {
         </div>
         <?php if (((int)$_GET['cID']) == '1') { ?>
         <div class="main important_info" style="margin-top: 5px;">
-            <?php  echo TEXT_ACCOUNTING_INFO ?> 
+            <?php  echo TEXT_ACCOUNTING_INFO ?>
         </div>
         <?php } ?>
         <br/>
@@ -265,7 +267,7 @@ if ($_GET['cID'] != '') {
           <a class="button" id="collapseall" href="#"><?php echo BUTTON_DISPLAY_ALL; ?></a>
           <input type="submit" class="button flt-r" value="<?php echo BUTTON_SAVE; ?>" <?php echo $confirm_save_entry;?>>
         </form>
-          
+
       </div>
     </td>
   </tr>
@@ -276,7 +278,7 @@ if ($_GET['cID'] != '') {
 <?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
 <!-- footer_eof //-->
 <script>
-  $('input[name="complete"]').on('click', function () {    
+  $('input[name="complete"]').on('click', function () {
     $('input[name*="checkall"]').prop('checked', this.checked);
     $('input[name*="access"]').prop('checked', this.checked);
   });
@@ -284,7 +286,7 @@ if ($_GET['cID'] != '') {
     $("[class*=detail]").show();
   });
   $("[class*=column]").on('click', function () {
-    var num = $(this).attr('class').replace(/^\D+/g, ''); 
+    var num = $(this).attr('class').replace(/^\D+/g, '');
     $('.detail'+num).toggle();
   });
 </script>
