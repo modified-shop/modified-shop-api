@@ -64,49 +64,54 @@ class api_access
 
         // API access groups
         $resource_groups = array(
-            10  => array('name' => 'Customer',        'color' => '#eeeeee'),
-            20  => array('name' => 'Category',        'color' => '#ebbb97'),
-            30  => array('name' => 'Product',         'color' => '#aacfe2'),
-            31  => array('name' => 'Manufacturer',    'color' => '#ebd397'),
-            32  => array('name' => 'Attributes',      'color' => '#afd088'),
-            33  => array('name' => 'Tags',            'color' => '#d0af88'),
-            40  => array('name' => 'Order',           'color' => '#617d8d'),
-            50  => array('name' => 'Country',         'color' => '#666666'),
-            60  => array('name' => 'Shipping',        'color' => '#cb7272'),
-            70  => array('name' => 'Campaign',        'color' => '#8cd1ba'),
-            80  => array('name' => 'Currency',        'color' => '#c689ab'),
-            90  => array('name' => 'Language',        'color' => '#ffaaa5'),
-            100 => array('name' => 'Newsletter',      'color' => '#dcedc1'),
-            110 => array('name' => 'Configuration',   'color' => '#66545e'),
-            120 => array('name' => 'Content',         'color' => '#a39193'),
-            130 => array('name' => 'Coupon',          'color' => '#aa6f73'),
-            140 => array('name' => 'Schema',          'color' => '#ffecef'),
-            150 => array('name' => 'Dhl',             'color' => '#b8b8d1'),
+            array('name' => 'Customer',      'color' => '#eeeeee', 'sort_order' => 10),
+            array('name' => 'Category',      'color' => '#ebbb97', 'sort_order' => 20),
+            array('name' => 'Product',       'color' => '#aacfe2', 'sort_order' => 30),
+            array('name' => 'Manufacturer',  'color' => '#ebd397', 'sort_order' => 31),
+            array('name' => 'Attributes',    'color' => '#afd088', 'sort_order' => 32),
+            array('name' => 'Tags',          'color' => '#d0af88', 'sort_order' => 33),
+            array('name' => 'Order',         'color' => '#617d8d', 'sort_order' => 40),
+            array('name' => 'Country',       'color' => '#666666', 'sort_order' => 50),
+            array('name' => 'Shipping',      'color' => '#cb7272', 'sort_order' => 60),
+            array('name' => 'Campaign',      'color' => '#8cd1ba', 'sort_order' => 70),
+            array('name' => 'Currency',      'color' => '#c689ab', 'sort_order' => 80),
+            array('name' => 'Language',      'color' => '#ffaaa5', 'sort_order' => 90),
+            array('name' => 'Newsletter',    'color' => '#dcedc1', 'sort_order' => 100),
+            array('name' => 'Configuration', 'color' => '#66545e', 'sort_order' => 110),
+            array('name' => 'Content',       'color' => '#a39193', 'sort_order' => 120),
+            array('name' => 'Coupon',        'color' => '#aa6f73', 'sort_order' => 130),
+            array('name' => 'Schema',        'color' => '#ffecef', 'sort_order' => 140),
+            array('name' => 'Dhl',           'color' => '#b8b8d1', 'sort_order' => 150),
         );
 
         xtc_db_query("CREATE TABLE IF NOT EXISTS `api_access_groups` (
-                      `group_id` int(11) NOT NULL,
+                      `group_id` int(11) NOT NULL AUTO_INCREMENT,
                       `resource_name` varchar(64) NOT NULL,
                       `color` varchar(7) NOT NULL,
+                      `sort_order` int(11) NOT NULL DEFAULT '0',
                       PRIMARY KEY (`group_id`),
                       UNIQUE KEY `idx_resource_name` (`resource_name`)
                     )");
 
-        foreach ($resource_groups as $group_id => $group_info) {
+        foreach ($resource_groups as $group_info) {
             $resource_name = $group_info['name'];
 
             $check_query = xtc_db_query("SELECT group_id
                                              FROM `api_access_groups`
-                                            WHERE group_id = '" . (int)$group_id . "'");
+                                            WHERE resource_name = '" . xtc_db_input($resource_name) . "'");
             if (xtc_db_num_rows($check_query) < 1) {
-                xtc_db_query("INSERT INTO `api_access_groups` (group_id, resource_name, color)
-                              VALUES ('" . (int)$group_id . "', '" . xtc_db_input($resource_name) . "', '" . xtc_db_input($group_info['color']) . "')");
+                $sql_data_array = array(
+                    'resource_name' => $resource_name,
+                    'color' => $group_info['color'],
+                    'sort_order' => (int)$group_info['sort_order'],
+                );
+                xtc_db_perform('api_access_groups', $sql_data_array);
             }
 
-            // Permission columns are qualified as `{group_id}_{action}`
+            // Permission columns are qualified as `{ResourceName}{Action}`
             $column_array = $this->get_dir_content(DIR_FS_EXTERNAL . 'api/v1/Service/' . $resource_name . '/');
             foreach ($column_array as $column) {
-                $qualified_column = $group_id . '_' . $column;
+                $qualified_column = $resource_name . $column;
 
                 $check_query = xtc_db_query("SHOW COLUMNS FROM `api_access` LIKE '" . xtc_db_input($qualified_column) . "'");
                 if (xtc_db_num_rows($check_query) < 1) {

@@ -106,12 +106,15 @@ final class Me
             return $this->unauthorized($response, 'Invalid access token or API access revoked');
         }
 
-        // Permission columns are qualified as `{group_id}_{action}`
-        $groups_query = xtc_db_query("SELECT group_id, resource_name FROM `api_access_groups`");
-        $groupLabels = [];
+        // Permission columns are qualified as `{ResourceName}{Action}`
+        $groups_query = xtc_db_query("SELECT resource_name FROM `api_access_groups`");
+        $resourceNames = [];
         while ($groupRow = xtc_db_fetch_array($groups_query)) {
-            $groupLabels[(int)$groupRow['group_id']] = (string)$groupRow['resource_name'];
+            $resourceNames[] = (string)$groupRow['resource_name'];
         }
+        /* Longest names first, so one resource name can't shadow another that */
+        /* starts with the same letters (e.g. "Product" vs "Products"). */
+        usort($resourceNames, fn($a, $b) => strlen($b) <=> strlen($a));
 
         $permissions = [];
         foreach ($row as $column => $value) {
@@ -122,14 +125,20 @@ final class Me
                 continue;
             }
 
-            if (preg_match('/^(\d+)_(.+)$/', (string)$column, $m)) {
-                $label = $groupLabels[(int)$m[1]] ?? self::UNGROUPED_LABEL;
-                $action = $m[2];
-            } else {
-                /* Legacy, unqualified column left over on an install that has */
-                /* not run the "Update" migration yet. */
-                $label = self::UNGROUPED_LABEL;
-                $action = (string)$column;
+            $column = (string)$column;
+            $label = self::UNGROUPED_LABEL;
+            $action = $column;
+            foreach ($resourceNames as $resourceName) {
+                $len = strlen($resourceName);
+                if (
+                    strncmp($column, $resourceName, $len) === 0
+                    && strlen($column) > $len
+                    && ctype_upper($column[$len])
+                ) {
+                    $label = $resourceName;
+                    $action = substr($column, $len);
+                    break;
+                }
             }
 
             $permissions[$label][] = $action;
