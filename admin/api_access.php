@@ -66,21 +66,31 @@ if ($_GET['cID'] != '') {
     }
 }
 
-  // Resource names and colors
+  // Resource names and colors, keyed by resource_name directly (group_id is
+  // now a database-managed auto-increment id with no meaning to the app -
+  // display order comes from the dedicated sort_order column instead).
   $naming_array = array();
-  $group_names_query = xtc_db_query("SELECT group_id,
-                                            resource_name,
+  $group_names_query = xtc_db_query("SELECT resource_name,
                                             color
                                        FROM `api_access_groups`
-                                   ORDER BY group_id");
+                                   ORDER BY sort_order");
   while ($group_name_row = xtc_db_fetch_array($group_names_query)) {
-      $naming_array[(int)$group_name_row['group_id']] = array(
+      $naming_array[$group_name_row['resource_name']] = array(
           'name' => $group_name_row['resource_name'],
           'color' => $group_name_row['color'],
       );
   }
-  // Bucket for legacy/unqualified columns (pre-migration installs only).
-  $naming_array[0] = array(
+
+  // Longest names first, so one resource name can't shadow another that
+  // starts with the same letters (e.g. "Product" vs "Products").
+  $resource_name_list = array_keys($naming_array);
+  usort($resource_name_list, function ($a, $b) {
+      return strlen($b) - strlen($a);
+  });
+
+  // Bucket for legacy/unrecognized columns - added after building
+  // $resource_name_list above so "Other" itself is never matched as a prefix.
+  $naming_array['Other'] = array(
       'name' => defined('TEXT_ACCOUNTING_OTHER') ? TEXT_ACCOUNTING_OTHER : 'Other',
       'color' => '#d9d9d9',
   );
@@ -175,7 +185,7 @@ if ($_GET['cID'] != '') {
 
                 $accounting_array = array();
 
-                // Permission columns are qualified as `{group_id}_{action}`
+                // Permission columns are qualified as `{ResourceName}{Action}`
                 $fields = xtc_db_query("SHOW COLUMNS FROM `api_access` FROM `" . DB_DATABASE . "`");
                 while ($field = xtc_db_fetch_array($fields)) {
                     if ($field['Field'] != 'customers_id') {
@@ -192,41 +202,47 @@ if ($_GET['cID'] != '') {
                             }
                         }
 
-                        if (preg_match('/^(\d+)_(.+)$/', $field['Field'], $field_match)) {
-                            $field_group_id = (int)$field_match[1];
-                            $field_label = $field_match[2];
-                        } else {
-                            $field_group_id = 0;
-                            $field_label = $field['Field'];
+                        $field_label_key = 'Other';
+                        $field_label = $field['Field'];
+                        foreach ($resource_name_list as $resource_name) {
+                            $name_length = strlen($resource_name);
+                            if (
+                                strncmp($field['Field'], $resource_name, $name_length) === 0
+                                && strlen($field['Field']) > $name_length
+                                && ctype_upper($field['Field'][$name_length])
+                            ) {
+                                $field_label_key = $resource_name;
+                                $field_label = substr($field['Field'], $name_length);
+                                break;
+                            }
                         }
 
-                        $accounting_array[$field_group_id][$field['Field']] = array(
+                        $accounting_array[$field_label_key][$field['Field']] = array(
                             'key' => $field_label,
                             'column' => $field['Field'],
                             'hidden' => $hidden_field,
                             'params' => $params,
                             'checked' => $checked,
                         );
-                        ksort($accounting_array[$field_group_id]);
+                        ksort($accounting_array[$field_label_key]);
                     }
                 }
-                ksort($accounting_array);
 
-                if (isset($accounting_array[0])) {
-                    $accounting_tmp = $accounting_array[0];
-                    unset($accounting_array[0]);
-                    $accounting_array[0] = $accounting_tmp;
-                }
-
+                // Render in $naming_array's order (sort_order, "Other" last),
+                // not the arbitrary order columns happened to be returned in.
                 $total = count($accounting_array);
                 $divide = ceil($total / 2);
 
                 echo '<div class="accounting_container">';
                 echo '<div class="accounting_col">';
                 $i = 0;
-                foreach ($accounting_array as $group_id => $group_items) {
-                    $label = isset($naming_array[$group_id]) ? $naming_array[$group_id]['name'] : $naming_array[0]['name'];
-                    $color = isset($naming_array[$group_id]) ? $naming_array[$group_id]['color'] : $naming_array[0]['color'];
+                foreach ($naming_array as $field_label_key => $naming_info) {
+                    if (!isset($accounting_array[$field_label_key])) {
+                        continue;
+                    }
+                    $group_items = $accounting_array[$field_label_key];
+                    $label = $naming_info['name'];
+                    $color = $naming_info['color'];
                     $totalaccess = count($group_items);
                     $totalchecked = array_sum(array_column($group_items, 'checked'));
                     ?>
