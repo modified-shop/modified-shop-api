@@ -40,7 +40,7 @@ class api_access
 
     public function process($file)
     {
-      //do nothing
+        //do nothing
     }
 
     public function check()
@@ -144,7 +144,7 @@ class api_access
                              '<br />' .
                              xtc_button(BUTTON_SAVE) .
                              xtc_button_link(BUTTON_CANCEL, xtc_href_link(FILENAME_MODULE_EXPORT, 'set=' . $_GET['set'] . '&module=' . $this->code))
-                  );
+        );
     }
 
     public function install()
@@ -190,7 +190,7 @@ class api_access
         if (!in_array('api_access', $db_table_rows)) {
             xtc_db_query("ALTER TABLE `" . TABLE_ADMIN_ACCESS . "` ADD `api_access` INT(1) NOT NULL DEFAULT 0");
             xtc_db_query("UPDATE `" . TABLE_ADMIN_ACCESS . "` SET `api_access` = 1 WHERE `customers_id` = 1");
-            xtc_db_query("UPDATE `" . TABLE_ADMIN_ACCESS . "` SET `api_access` = 1 WHERE `customers_id` = " . $_SESSION['customer_id']);
+            xtc_db_query("UPDATE `" . TABLE_ADMIN_ACCESS . "` SET `api_access` = 1 WHERE `customers_id` = " . (int)$_SESSION['customer_id']);
             xtc_db_query("UPDATE `" . TABLE_ADMIN_ACCESS . "` SET `api_access` = 2 WHERE `customers_id` = 'groups'");
         }
 
@@ -206,7 +206,7 @@ class api_access
     public function keys()
     {
         return array(
-        'MODULE_API_ACCESS_STATUS',
+            'MODULE_API_ACCESS_STATUS',
         );
     }
 }
