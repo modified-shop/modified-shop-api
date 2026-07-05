@@ -112,9 +112,8 @@ final class Me
         while ($groupRow = xtc_db_fetch_array($groups_query)) {
             $resourceNames[] = (string)$groupRow['resource_name'];
         }
-        /* Longest names first, so one resource name can't shadow another that */
-        /* starts with the same letters (e.g. "Product" vs "Products"). */
-        usort($resourceNames, fn($a, $b) => strlen($b) <=> strlen($a));
+        // Longest names first, so one resource name can't shadow another
+        usort($resourceNames, fn ($a, $b) => strlen($b) <=> strlen($a));
 
         $permissions = [];
         foreach ($row as $column => $value) {

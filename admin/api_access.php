@@ -26,7 +26,7 @@ if (isset($_GET['action'])) {
                                                  WHERE customers_id = '" . (int)$_GET['cID'] . "'");
             $admin_access = xtc_db_fetch_array($admin_access_query);
 
-            $fields = xtc_db_query("SHOW COLUMNS FROM ``api_access`` FROM `" . DB_DATABASE . "`");
+            $fields = xtc_db_query("SHOW COLUMNS FROM `api_access` FROM `" . DB_DATABASE . "`");
             $columns = xtc_db_num_rows($fields);
 
             $valid_columns = array();
@@ -66,9 +66,6 @@ if ($_GET['cID'] != '') {
     }
 }
 
-  // Resource names and colors, keyed by resource_name directly (group_id is
-  // now a database-managed auto-increment id with no meaning to the app -
-  // display order comes from the dedicated sort_order column instead).
   $naming_array = array();
   $group_names_query = xtc_db_query("SELECT resource_name,
                                             color
@@ -81,15 +78,13 @@ if ($_GET['cID'] != '') {
       );
   }
 
-  // Longest names first, so one resource name can't shadow another that
-  // starts with the same letters (e.g. "Product" vs "Products").
+  // Longest names first, so one resource name can't shadow another
   $resource_name_list = array_keys($naming_array);
   usort($resource_name_list, function ($a, $b) {
       return strlen($b) - strlen($a);
   });
 
-  // Bucket for legacy/unrecognized columns - added after building
-  // $resource_name_list above so "Other" itself is never matched as a prefix.
+  // Bucket for legacy/unrecognized columns
   $naming_array['Other'] = array(
       'name' => defined('TEXT_ACCOUNTING_OTHER') ? TEXT_ACCOUNTING_OTHER : 'Other',
       'color' => '#d9d9d9',
