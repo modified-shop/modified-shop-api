@@ -14,9 +14,7 @@
 
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
-use Tuupola\Middleware\HttpBasicAuthentication;
 use Tuupola\Middleware\JwtAuthentication;
-use Symfony\Component\Finder\Finder;
 
 return function (App $app) {
     $settings = $app->getContainer()->get('settings');

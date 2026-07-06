@@ -24,10 +24,8 @@ use Psr\Http\Message\ResponseInterface;
 use SplStack;
 use Tuupola\Http\Factory\ResponseFactory;
 use Tuupola\Middleware\DoublePassTrait;
-use Tuupola\Middleware\HttpBasicAuthentication\AuthenticatorInterface;
 use Tuupola\Middleware\HttpBasicAuthentication\ArrayAuthenticator;
 use Tuupola\Middleware\HttpBasicAuthentication\RequestMethodRule;
-use Tuupola\Middleware\HttpBasicAuthentication\RequestPathRule;
 use Tuupola\Middleware\HttpBasicAuthentication\RuleInterface;
 
 /**

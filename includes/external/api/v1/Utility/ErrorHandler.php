@@ -14,8 +14,6 @@
 
 namespace api\v1\Utility;
 
-use api\v1\Utility\LoggerHandler;
-use api\v1\Utility\Responder;
 use DomainException;
 use Fig\Http\Message\StatusCodeInterface;
 use InvalidArgumentException;

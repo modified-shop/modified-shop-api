@@ -15,8 +15,6 @@
 namespace api\v1\Action\Product;
 
 use api\v1\Action\BaseAction;
-use api\v1\Utility\LoggerHandler;
-use Psr\Log\LoggerInterface;
 use Exception;
 
 // include needed functions
