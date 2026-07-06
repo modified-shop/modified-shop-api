@@ -15,9 +15,6 @@
 namespace api\v1\Action\Newsletter;
 
 use api\v1\Action\BaseAction;
-use api\v1\Utility\LoggerHandler;
-use Psr\Log\LoggerInterface;
-use Exception;
 
 /**
  * Service.

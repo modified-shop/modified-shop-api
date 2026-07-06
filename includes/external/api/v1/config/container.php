@@ -23,7 +23,6 @@ use Selective\Validation\Middleware\ValidationExceptionMiddleware;
 use Selective\Validation\Transformer\ErrorDetailsResultTransformer;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Tuupola\Middleware\HttpBasicAuthentication;
 use Tuupola\Middleware\JwtAuthentication;
 use api\v1\Auth\Authentication;
 use api\v1\Auth\RateLimitMiddleware;
