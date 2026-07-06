@@ -14,7 +14,6 @@
 
 namespace api\v1\Action\Configuration;
 
-
 /**
  * Service.
  */
