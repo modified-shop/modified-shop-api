@@ -53,6 +53,8 @@ $app->get('/v1/swagger.json', function ($request, $response, $args) use ($settin
         ],
     ];
 
+    $spec['tags'][] = ['name' => 'Meta', 'description' => 'API version information'];
+
     $spec['servers'] = [['url' => $prefix === '' ? '/' : $prefix]];
     if (isset($spec['components']['securitySchemes']['modified_auth']['flows']['password'])) {
         $spec['components']['securitySchemes']['modified_auth']['flows']['password'] = [
