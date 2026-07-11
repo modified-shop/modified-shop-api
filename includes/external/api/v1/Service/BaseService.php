@@ -41,6 +41,28 @@ use Exception;
         )
     ]
 )]
+// Declared tags override the auto-generated ones (AugmentTags would otherwise
+// set each description to the tag name); order here defines the section order
+// in Swagger UI.
+#[OA\Tag(name: 'Auth', description: 'Obtain, refresh and revoke JWT access tokens')]
+#[OA\Tag(name: 'Attributes', description: 'Manage product options, option values and their assignments')]
+#[OA\Tag(name: 'Campaign', description: 'Manage campaigns and their IP statistics')]
+#[OA\Tag(name: 'Category', description: 'Manage categories, their descriptions, images and product assignments')]
+#[OA\Tag(name: 'Configuration', description: 'Read shop configuration values and configuration groups')]
+#[OA\Tag(name: 'Content', description: 'Manage content manager entries and their localized contents')]
+#[OA\Tag(name: 'Country', description: 'Read countries, zones, geo zones, tax classes and tax rates')]
+#[OA\Tag(name: 'Coupon', description: 'Manage coupons and their descriptions')]
+#[OA\Tag(name: 'Currency', description: 'Manage currencies')]
+#[OA\Tag(name: 'Customer', description: 'Manage customers, address books, baskets, wishlists, memos and status history')]
+#[OA\Tag(name: 'Dhl', description: 'Create and delete DHL parcel labels for orders')]
+#[OA\Tag(name: 'Language', description: 'Manage shop languages')]
+#[OA\Tag(name: 'Manufacturer', description: 'Manage manufacturers, their descriptions, images and product assignments')]
+#[OA\Tag(name: 'Newsletter', description: 'Manage newsletter recipients and their history')]
+#[OA\Tag(name: 'Order', description: 'Manage orders, order products, totals, tracking and status history')]
+#[OA\Tag(name: 'Product', description: 'Manage products, their descriptions, images, attributes, categories, specials, tags and cross-selling')]
+#[OA\Tag(name: 'Schema', description: 'Inspect database table schemas')]
+#[OA\Tag(name: 'Shipping', description: 'Manage shipping carriers and shipping status')]
+#[OA\Tag(name: 'Tags', description: 'Manage tags options and values')]
 
 class BaseService
 {
