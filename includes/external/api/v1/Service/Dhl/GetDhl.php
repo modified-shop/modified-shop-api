@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/dhl/{Id}',
     tags: ['Dhl'],
+    summary: 'Create a DHL parcel label for an order',
     description: 'Create a DHL parcel label for the given order Id. All query parameters are optional and '
         . 'override the shop\'s DHL module configuration for this label only.',
     operationId: 'GetDhl',

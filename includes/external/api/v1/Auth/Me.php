@@ -21,6 +21,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/me',
     tags: ['Auth'],
+    summary: 'Get current token identity and enabled API actions',
     description: 'Get the identity of the customer the current access token belongs to, plus the '
         . 'set of API actions enabled for that account (Customers -> API Access in the shop backend), '
         . 'grouped by resource (Customer, Product, Order, ...). '

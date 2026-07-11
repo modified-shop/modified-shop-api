@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/languages',
     tags: ['Language'],
+    summary: 'Get languages data',
     description: 'Get languages data',
     operationId: 'Getlanguages',
     parameters: [

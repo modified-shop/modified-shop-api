@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/campaigns/{Id}',
     tags: ['Campaign'],
+    summary: 'Update single campaigns data',
     description: 'Update single campaigns data by given Id',
     operationId: 'InsertUpdateCampaign',
     parameters: [

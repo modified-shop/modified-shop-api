@@ -24,7 +24,8 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/categories/{Id}/categories',
     tags: ['Category'],
-    description: 'Update categories data by given Id',
+    summary: 'Update categories base data (categories database table only)',
+    description: 'Update categories base data (categories database table only) by given Id',
     operationId: 'InsertUpdateCategory',
     parameters: [
         new OA\Parameter(

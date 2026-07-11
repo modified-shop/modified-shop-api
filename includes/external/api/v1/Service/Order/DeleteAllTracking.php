@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/orders/{Id}/tracking',
     tags: ['Order'],
+    summary: 'Delete all tracking from an order',
     description: 'Delete all tracking from an order by given Id',
     operationId: 'DeleteAllTracking',
     parameters: [

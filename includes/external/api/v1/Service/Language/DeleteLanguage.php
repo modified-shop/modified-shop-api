@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/languages/{Id}',
     tags: ['Language'],
+    summary: 'Delete single language data',
     description: 'Delete single language data by given Id',
     operationId: 'DeleteLanguage',
     parameters: [

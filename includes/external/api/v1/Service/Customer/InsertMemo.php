@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/customers/{Id}/memo',
     tags: ['Customer'],
+    summary: 'Insert customer memo',
     description: 'Insert customer memo by given Id',
     operationId: 'InsertMemo',
     parameters: [

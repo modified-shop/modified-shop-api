@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/shipping/carrier/{Id}',
     tags: ['Shipping'],
+    summary: 'Get single carriers data',
     description: 'Get single carriers data by given Id',
     operationId: 'GetSingleCarrier',
     parameters: [

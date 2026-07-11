@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/currencies/{Id}',
     tags: ['Currency'],
+    summary: 'Get single currency data',
     description: 'Get single currency data by given Id',
     operationId: 'GetSingleCurrency',
     parameters: [

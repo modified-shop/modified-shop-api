@@ -24,7 +24,8 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/tags/options/{Id}',
     tags: ['Tags'],
-    description: 'Delete single option by given Id',
+    summary: 'Delete single tags option',
+    description: 'Delete single tags option by given Id',
     operationId: 'DeleteTagsOption',
     parameters: [
         new OA\Parameter(

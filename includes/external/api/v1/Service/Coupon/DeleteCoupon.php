@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/coupons/{Id}',
     tags: ['Coupon'],
+    summary: 'Delete single coupons data',
     description: 'Delete single coupons data by given Id',
     operationId: 'DeleteCoupon',
     parameters: [

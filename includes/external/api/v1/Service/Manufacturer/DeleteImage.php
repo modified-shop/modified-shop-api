@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/manufacturers/{Id}/image',
     tags: ['Manufacturer'],
+    summary: 'Delete image from a manufacturer',
     description: 'Delete image from a manufacturer by given Id',
     operationId: 'DeleteImage',
     parameters: [

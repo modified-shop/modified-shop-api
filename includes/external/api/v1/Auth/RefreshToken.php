@@ -22,6 +22,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/oauth/refresh',
     tags: ['Auth'],
+    summary: 'Exchange a refresh token for a new access token',
     description: 'Exchange a valid refresh token for a new access token without re-sending the '
         . 'user credentials. The refresh token can be sent either as a request header (refresh_token) '
         . 'or as a form field (refresh_token). On success a brand new access token and a new refresh '

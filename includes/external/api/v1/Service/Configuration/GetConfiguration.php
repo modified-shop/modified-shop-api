@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/configurations/{Id}',
     tags: ['Configuration'],
+    summary: 'Get configuration data',
     description: 'Get configuration data by given Id',
     operationId: 'GetConfiguration',
     parameters: [

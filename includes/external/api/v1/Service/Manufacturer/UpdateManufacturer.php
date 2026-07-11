@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/manufacturers/{Id}',
     tags: ['Manufacturer'],
+    summary: 'Update single manufacturer',
     description: 'Update single manufacturer by given manufacturer Id',
     operationId: 'UpdateManufacturer',
     parameters: [

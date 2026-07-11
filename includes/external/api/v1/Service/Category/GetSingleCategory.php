@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/categories/{Id}',
     tags: ['Category'],
+    summary: 'Get single category data',
     description: 'Get single category data by given Id',
     operationId: 'GetSingleCategory',
     parameters: [

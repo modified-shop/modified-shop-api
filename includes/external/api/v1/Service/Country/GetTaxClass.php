@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/countries/tax_class',
     tags: ['Country'],
+    summary: 'Get tax classes data',
     description: 'Get tax classes data',
     operationId: 'GetTaxClass',
     parameters: [

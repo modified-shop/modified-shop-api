@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/shipping/status/{Id}',
     tags: ['Shipping'],
+    summary: 'Delete single shipping status',
     description: 'Delete single shipping status by given Id',
     operationId: 'DeleteShippingStatus',
     parameters: [

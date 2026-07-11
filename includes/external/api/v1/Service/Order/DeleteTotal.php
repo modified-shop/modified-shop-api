@@ -25,6 +25,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/orders/{Id}/total/{tId}',
     tags: ['Order'],
+    summary: 'Delete single order total',
     description: 'Delete single order total by given Id',
     operationId: 'DeleteTotal',
     parameters: [

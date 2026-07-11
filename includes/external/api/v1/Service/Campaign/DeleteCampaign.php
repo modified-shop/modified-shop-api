@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/campaigns/{Id}',
     tags: ['Campaign'],
+    summary: 'Delete single campaign data',
     description: 'Delete single campaign data by given Id',
     operationId: 'DeleteCampaign',
     parameters: [

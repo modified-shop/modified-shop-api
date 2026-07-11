@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/newsletters/recipients/{Id}',
     tags: ['Newsletter'],
+    summary: 'Update newsletters recipients data',
     description: 'Update newsletters recipients data by given Id',
     operationId: 'InsertUpdateNewsletter',
     parameters:[

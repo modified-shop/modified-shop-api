@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/orders/{Id}/tracking',
     tags: ['Order'],
+    summary: 'Get order tracking data',
     description: 'Get order tracking data by given Id',
     operationId: 'GetOrderTracking',
     parameters: [

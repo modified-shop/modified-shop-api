@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/coupons/{Id}/description',
     tags: ['Coupon'],
+    summary: 'Insert coupons description',
     description: 'Insert coupons description by given Id',
     operationId: 'InsertCouponsDescription',
     parameters: [
@@ -71,6 +72,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/coupons/{Id}/description',
     tags: ['Coupon'],
+    summary: 'Update coupons description',
     description: 'Update coupons description by given Id',
     operationId: 'UpdateCouponsDescription',
     parameters: [

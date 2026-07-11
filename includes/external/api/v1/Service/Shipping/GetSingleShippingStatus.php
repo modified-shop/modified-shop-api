@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/shipping/status/{Id}',
     tags: ['Shipping'],
+    summary: 'Get single shipping status data',
     description: 'Get single shipping status data by given Id',
     operationId: 'GetSingleShippingStatus',
     parameters: [

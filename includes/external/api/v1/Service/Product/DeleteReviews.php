@@ -25,6 +25,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/products/{Id}/reviews/{rId}',
     tags: ['Product'],
+    summary: 'Delete single review from a product',
     description: 'Delete single review from a product by given Id',
     operationId: 'DeleteReviews',
     parameters: [

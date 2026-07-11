@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/campaigns',
     tags: ['Campaign'],
+    summary: 'Get campaigns data',
     description: 'Get campaigns data',
     operationId: 'GetCampaigns',
     parameters: [

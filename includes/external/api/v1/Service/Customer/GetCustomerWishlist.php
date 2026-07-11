@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/customers/{Id}/wishlist',
     tags: ['Customer'],
+    summary: 'Get customer wishlist data',
     description: 'Get customer wishlist data by given Id',
     operationId: 'GetCustomerWishlist',
     parameters: [

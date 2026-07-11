@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/newsletters/recipients/history/{Id}',
     tags: ['Newsletter'],
+    summary: 'Get single newsletters recipients history data',
     description: 'Get single newsletters recipients history data by given Id',
     operationId: 'GetSingleNewsletterRecipientsHistory',
     parameters: [

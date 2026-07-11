@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/categories/{Id}',
     tags: ['Category'],
+    summary: 'Delete category data',
     description: 'Delete category data by given Id',
     operationId: 'DeleteCategory',
     parameters: [

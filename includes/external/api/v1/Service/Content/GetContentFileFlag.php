@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/contents/fileflag',
     tags: ['Content'],
+    summary: 'Get content file flag data',
     description: 'Get content file flag data',
     operationId: 'GetContentFileFlag',
     parameters: [

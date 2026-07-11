@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/customers/{Id}/address_book/{aId}',
     tags: ['Customer'],
+    summary: 'Update customer address book data',
     description: 'Update customer address book data by given Id',
     operationId: 'InsertUpdateAddressBook',
     parameters: [

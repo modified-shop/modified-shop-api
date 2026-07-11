@@ -24,7 +24,8 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/attributes/options/{Id}',
     tags: ['Attributes'],
-    description: 'Update single attribute options',
+    summary: 'Update single attributes option',
+    description: 'Update single attributes option by given Id',
     operationId: 'InsertUpdateAttributesOption',
     parameters: [
         new OA\Parameter(

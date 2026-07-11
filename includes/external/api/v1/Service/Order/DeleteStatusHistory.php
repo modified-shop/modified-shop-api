@@ -25,7 +25,8 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/orders/{Id}/status_history/{hId}',
     tags: ['Order'],
-    description: 'Delete single order histroy by given Id',
+    summary: 'Delete single order status history entry',
+    description: 'Delete single order status history entry by given Ids',
     operationId: 'DeleteOrderStatusHistory',
     parameters: [
         new OA\Parameter(

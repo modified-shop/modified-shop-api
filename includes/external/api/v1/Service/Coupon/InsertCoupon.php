@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/coupons',
     tags: ['Coupon'],
+    summary: 'Insert single coupon data',
     description: 'Insert single coupon data',
     operationId: 'InsertCoupon',
     requestBody: new OA\RequestBody(

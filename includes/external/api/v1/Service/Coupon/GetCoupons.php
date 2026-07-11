@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/coupons',
     tags: ['Coupon'],
+    summary: 'Get coupons data',
     description: 'Get coupons data',
     operationId: 'GetCoupons',
     parameters: [

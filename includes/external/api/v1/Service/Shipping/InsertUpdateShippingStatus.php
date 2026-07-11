@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/shipping/status/{Id}',
     tags: ['Shipping'],
+    summary: 'Update shipping status data',
     description: 'Update shipping status data by given Id',
     operationId: 'InsertUpdateShippingStatus',
     parameters: [

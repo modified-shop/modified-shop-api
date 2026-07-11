@@ -25,6 +25,7 @@ use Exception;
 #[OA\Delete(
     path: '/api/v1/contents/{Id}/content/{cId}',
     tags: ['Content'],
+    summary: 'Delete single content from a content',
     description: 'Delete single content from a content by given Id',
     operationId: 'DeleteContentContent',
     parameters: [

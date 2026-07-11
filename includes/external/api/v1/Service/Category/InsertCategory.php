@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/categories',
     tags: ['Category'],
+    summary: 'Insert single category',
     description: 'Insert single category',
     operationId: 'InsertCategory',
     requestBody: new OA\RequestBody(

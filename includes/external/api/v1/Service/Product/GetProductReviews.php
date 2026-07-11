@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/products/{Id}/reviews',
     tags: ['Product'],
+    summary: 'Get products review data',
     description: 'Get products review data by given Id',
     operationId: 'GetProductReviews',
     parameters: [

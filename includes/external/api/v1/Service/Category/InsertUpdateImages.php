@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/categories/{Id}/image',
     tags: ['Category'],
+    summary: 'Insert categories image',
     description: 'Insert categories image by given Id',
     operationId: 'InsertCategoriesImage',
     parameters: [
@@ -88,6 +89,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/categories/{Id}/image',
     tags: ['Category'],
+    summary: 'Update categories image',
     description: 'Update categories image by given Id',
     operationId: 'UpdateCategoriesImage',
     parameters: [

@@ -25,7 +25,8 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/attributes/{Id}/values/{vId}',
     tags: ['Attributes'],
-    description: 'Delete a values from a attributes by given Ids',
+    summary: 'Delete a single value from an option',
+    description: 'Delete a single value from an option by given Ids',
     operationId: 'DeleteAttributes',
     parameters: [
         new OA\Parameter(

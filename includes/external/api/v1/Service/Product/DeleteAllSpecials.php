@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/products/{Id}/specials',
     tags: ['Product'],
+    summary: 'Delete all specials from a product',
     description: 'Delete all specials from a product by given Id',
     operationId: 'DeleteAllSpecials',
     parameters: [
