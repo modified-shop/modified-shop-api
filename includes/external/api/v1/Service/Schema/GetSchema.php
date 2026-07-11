@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/schema/{Table}',
     tags: ['Schema'],
+    summary: 'Get database schema by given table',
     description: 'Get database schema by given table',
     operationId: 'GetSchema',
     parameters: [

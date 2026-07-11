@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/orders/status/{Id}',
     tags: ['Order'],
+    summary: 'Get single orders status data',
     description: 'Get single orders status data by given Id',
     operationId: 'GetSingleOrderStatus',
     parameters: [

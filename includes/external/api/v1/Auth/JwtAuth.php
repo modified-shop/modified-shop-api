@@ -21,6 +21,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/oauth',
     tags: ['Auth'],
+    summary: 'Obtain a JWT access token',
     description: 'Obtain a JWT access token. Credentials can be sent either as request headers '
         . '(username, password) or as form fields (username, password). The returned access token is '
         . 'valid for 10 minutes and must be sent as a Bearer token on all protected endpoints. '

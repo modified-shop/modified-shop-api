@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/currencies/{Id}',
     tags: ['Currency'],
+    summary: 'Update single currency data',
     description: 'Update single currency data by given Id',
     operationId: 'InsertUpdateCurrency',
     parameters: [

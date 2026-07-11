@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/orders/{Id}/products/{pId}',
     tags: ['Order'],
+    summary: 'Update order products data',
     description: 'Update order products data by given Id',
     operationId: 'InsertUpdateOrderProduct',
     parameters: [

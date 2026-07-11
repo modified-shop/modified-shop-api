@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/languages',
     tags: ['Language'],
+    summary: 'Insert single language',
     description: 'Insert single language',
     operationId: 'Insertlanguage',
     requestBody: new OA\RequestBody(

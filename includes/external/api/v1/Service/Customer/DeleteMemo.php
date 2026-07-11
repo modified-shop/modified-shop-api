@@ -25,6 +25,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/customers/{Id}/memo/{mId}',
     tags: ['Customer'],
+    summary: 'Delete single customer memo',
     description: 'Delete single customer memo by given Id',
     operationId: 'DeleteMemo',
     parameters: [

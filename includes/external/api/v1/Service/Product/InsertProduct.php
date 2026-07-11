@@ -24,7 +24,8 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/products',
     tags: ['Product'],
-    description: 'Insert single order',
+    summary: 'Insert single product',
+    description: 'Insert single product',
     operationId: 'InsertProduct',
     requestBody: new OA\RequestBody(
         required: true,

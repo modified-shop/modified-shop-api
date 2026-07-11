@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/contents',
     tags: ['Content'],
+    summary: 'Insert single content',
     description: 'Insert single content',
     operationId: 'InsertContent',
     requestBody: new OA\RequestBody(

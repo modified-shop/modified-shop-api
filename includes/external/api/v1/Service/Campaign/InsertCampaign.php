@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/campaigns',
     tags: ['Campaign'],
+    summary: 'Insert single campaign',
     description: 'Insert single campaign',
     operationId: 'InsertCampaign',
     requestBody: new OA\RequestBody(

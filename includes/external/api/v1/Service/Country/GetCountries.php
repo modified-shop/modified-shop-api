@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/countries',
     tags: ['Country'],
+    summary: 'Get countries data',
     description: 'Get countries data',
     operationId: 'GetCountries',
     parameters: [

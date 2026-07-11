@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/contents/{Id}',
     tags: ['Content'],
+    summary: 'Update content data',
     description: 'Update content data by given Id',
     operationId: 'InsertUpdateContent',
     parameters: [

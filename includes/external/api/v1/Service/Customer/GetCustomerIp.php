@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/customers/{Id}/ip',
     tags: ['Customer'],
+    summary: 'Get customer ip data',
     description: 'Get customer ip data by given Id',
     operationId: 'GetCustomerIp',
     parameters: [

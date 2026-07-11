@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/newsletters/recipients',
     tags: ['Newsletter'],
+    summary: 'Get newsletters recipients data',
     description: 'Get newsletters recipients data',
     operationId: 'GetNewsletterRecipients',
     parameters: [

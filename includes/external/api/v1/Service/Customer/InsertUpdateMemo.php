@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/customers/{Id}/memo/{mId}',
     tags: ['Customer'],
+    summary: 'Update customer memo data',
     description: 'Update customer memo data by given Id',
     operationId: 'InsertUpdateMemo',
     parameters: [

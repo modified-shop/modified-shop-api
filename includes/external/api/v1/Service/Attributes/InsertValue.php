@@ -24,7 +24,8 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/attributes/values',
     tags: ['Attributes'],
-    description: 'Insert single attribute values',
+    summary: 'Insert single attributes value',
+    description: 'Insert single attributes value',
     operationId: 'InsertAttributesValue',
     requestBody: new OA\RequestBody(
         required: true,

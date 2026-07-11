@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/manufacturers/{Id}/products',
     tags: ['Manufacturer'],
+    summary: 'Get manufacturers products',
     description: 'Get manufacturers products by given Id',
     operationId: 'GetManufacturerProducts',
     parameters: [

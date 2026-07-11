@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/customers/{Id}/address_book',
     tags: ['Customer'],
+    summary: 'Get customer address book data',
     description: 'Get customer address book data by given Id',
     operationId: 'GetCustomerAddressBooks',
     parameters: [

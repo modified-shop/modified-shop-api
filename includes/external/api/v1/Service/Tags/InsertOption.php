@@ -24,7 +24,8 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/tags/options',
     tags: ['Tags'],
-    description: 'Insert single option',
+    summary: 'Insert single tags option',
+    description: 'Insert single tags option',
     operationId: 'InsertTagsOption',
     requestBody: new OA\RequestBody(
         required: true,

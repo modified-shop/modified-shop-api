@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/countries/tax_rates/{Id}',
     tags: ['Country'],
+    summary: 'Get tax rates data',
     description: 'Get tax rates data by given Id',
     operationId: 'GetSingleTaxRate',
     parameters: [

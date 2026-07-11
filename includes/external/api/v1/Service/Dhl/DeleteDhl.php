@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/dhl/{Id}',
     tags: ['Dhl'],
+    summary: 'Delete a DHL parcel label for an order',
     description: 'Delete a DHL parcel label for the given order Id. Exactly one of tracking_id or parcel_id '
         . 'must be given to identify which label to delete.',
     operationId: 'DeleteDhl',

@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/manufacturers/{Id}',
     tags: ['Manufacturer'],
+    summary: 'Delete single manufacturer',
     description: 'Delete single manufacturer by given Id',
     operationId: 'DeleteManufacturer',
     parameters: [

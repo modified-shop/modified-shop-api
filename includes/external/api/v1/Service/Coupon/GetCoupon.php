@@ -24,7 +24,8 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/coupons/{Id}/coupons',
     tags: ['Coupon'],
-    description: 'Get coupons data',
+    summary: 'Get coupons base data (coupons database table only)',
+    description: 'Get coupons base data (coupons database table only) by given Id',
     operationId: 'GetCoupon',
     parameters: [
         new OA\Parameter(

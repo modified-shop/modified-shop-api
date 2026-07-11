@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/customers/{Id}/info',
     tags: ['Customer'],
+    summary: 'Insert customer info',
     description: 'Insert customer info by given Id',
     operationId: 'InsertCustomerInfo',
     parameters: [
@@ -70,6 +71,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/customers/{Id}/info',
     tags: ['Customer'],
+    summary: 'Update customer info',
     description: 'Update customer info by given Id',
     operationId: 'UpdateCustomerInfo',
     parameters: [

@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/orders/{Id}/products_download',
     tags: ['Order'],
+    summary: 'Insert product download to order',
     description: 'Insert product download to order by given Id',
     operationId: 'InsertOrderProductDownload',
     parameters: [

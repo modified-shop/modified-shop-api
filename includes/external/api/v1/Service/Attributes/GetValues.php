@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/attributes/values',
     tags: ['Attributes'],
+    summary: 'Get attributes values',
     description: 'Get attributes values',
     operationId: 'GetAttributesValues',
     parameters: [

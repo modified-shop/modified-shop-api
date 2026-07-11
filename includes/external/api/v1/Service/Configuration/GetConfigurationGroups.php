@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/configurations/groups',
     tags: ['Configuration'],
+    summary: 'Get configuration group data',
     description: 'Get configuration group data',
     operationId: 'GetConfigurationGroups',
     parameters: [

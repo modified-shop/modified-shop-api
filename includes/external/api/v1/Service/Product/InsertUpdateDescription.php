@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/products/{Id}/description',
     tags: ['Product'],
+    summary: 'Insert products description',
     description: 'Insert products description by given Id',
     operationId: 'UpdateProductsDescription',
     parameters: [
@@ -71,6 +72,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/products/{Id}/description',
     tags: ['Product'],
+    summary: 'Update products description',
     description: 'Update products description by given Id',
     operationId: 'InsertProductsDescription',
     parameters: [

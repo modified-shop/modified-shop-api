@@ -21,6 +21,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/oauth/logout',
     tags: ['Auth'],
+    summary: 'Revoke a refresh token (logout)',
     description: 'Revoke a refresh token. The access token is short-lived and self-expires, so a '
         . 'logout revokes the refresh token: send it as a request header (refresh_token) or as a '
         . 'form field (refresh_token). Set the optional "all" flag to revoke every refresh token of '

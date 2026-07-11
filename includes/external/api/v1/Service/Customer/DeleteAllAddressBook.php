@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/customers/{Id}/address_book',
     tags: ['Customer'],
+    summary: 'Delete all address book from a customer',
     description: 'Delete all address book from a customer by given Id',
     operationId: 'DeleteAllAddressBook',
     parameters: [

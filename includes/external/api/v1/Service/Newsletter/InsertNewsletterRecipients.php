@@ -24,7 +24,8 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/newsletters/recipients',
     tags: ['Newsletter'],
-    description: 'Insert single newsletter recipients',
+    summary: 'Insert single newsletter recipient',
+    description: 'Insert single newsletter recipient',
     operationId: 'InsertNewsletterRecipients',
     requestBody: new OA\RequestBody(
         required: true,

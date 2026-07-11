@@ -24,7 +24,8 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/countries/{Id}/zones',
     tags: ['Country'],
-    description: 'Get zones data by given Id',
+    summary: 'Get zones data',
+    description: 'Get zones data by given country Id',
     operationId: 'GetZones',
     parameters: [
         new OA\Parameter(

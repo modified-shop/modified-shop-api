@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/languages/{Id}',
     tags: ['Language'],
+    summary: 'Update single language data',
     description: 'Update single language data by given Id',
     operationId: 'InsertUpdatelanguage',
     parameters: [

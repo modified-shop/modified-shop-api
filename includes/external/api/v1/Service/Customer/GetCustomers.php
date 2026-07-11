@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/customers',
     tags: ['Customer'],
+    summary: 'Get customers data',
     description: 'Get customers data',
     operationId: 'GetCustomers',
     parameters: [

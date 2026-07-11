@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/currencies/{Id}',
     tags: ['Currency'],
+    summary: 'Delete single currency data',
     description: 'Delete single currency data by given Id',
     operationId: 'DeleteCurrency',
     parameters: [

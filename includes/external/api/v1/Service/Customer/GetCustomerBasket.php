@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/customers/{Id}/basket',
     tags: ['Customer'],
+    summary: 'Get customer basket data',
     description: 'Get customer basket data by given Id',
     operationId: 'GetCustomerBasket',
     parameters: [

@@ -24,7 +24,8 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/newsletters/recipients/{Id}',
     tags: ['Newsletter'],
-    description: 'Delete single newsletter data by given Id',
+    summary: 'Delete single newsletter recipient',
+    description: 'Delete single newsletter recipient by given Id',
     operationId: 'DeleteNewsletterRecipients',
     parameters: [
         new OA\Parameter(

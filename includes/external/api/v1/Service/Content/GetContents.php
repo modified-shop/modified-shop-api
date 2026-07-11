@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/contents',
     tags: ['Content'],
+    summary: 'Get contents data',
     description: 'Get contents data',
     operationId: 'GetContents',
     parameters: [

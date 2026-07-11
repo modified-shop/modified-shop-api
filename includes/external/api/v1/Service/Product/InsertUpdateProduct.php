@@ -24,7 +24,8 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/products/{Id}/products',
     tags: ['Product'],
-    description: 'Update products data by given Id',
+    summary: 'Update products base data (products database table only)',
+    description: 'Update products base data (products database table only) by given Id',
     operationId: 'InsertUpdateProduct',
     parameters: [
         new OA\Parameter(

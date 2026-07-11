@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/shipping/carriers/{Id}',
     tags: ['Shipping'],
+    summary: 'Delete single carrier',
     description: 'Delete single carrier by given Id',
     operationId: 'DeleteCarrier',
     parameters: [

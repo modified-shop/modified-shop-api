@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Put(
     path: '/api/v1/coupons/{Id}',
     tags: ['Coupon'],
+    summary: 'Update single coupon data',
     description: 'Update single coupon data by given Id',
     operationId: 'UpdateCoupon',
     parameters: [

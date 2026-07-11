@@ -24,7 +24,8 @@ use OpenApi\Attributes as OA;
 #[OA\Get(
     path: '/api/v1/tags/values/{Id}',
     tags: ['Tags'],
-    description: 'Get single values data by given Id',
+    summary: 'Get single tags values data',
+    description: 'Get single tags values data by given Id',
     operationId: 'GetSingleTagsValue',
     parameters: [
         new OA\Parameter(

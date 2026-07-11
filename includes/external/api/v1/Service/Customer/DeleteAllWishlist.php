@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Delete(
     path: '/api/v1/customers/{Id}/wishlist',
     tags: ['Customer'],
+    summary: 'Delete wishlist from a customer',
     description: 'Delete wishlist from a customer by given Id',
     operationId: 'DeleteAllWishlist',
     parameters: [

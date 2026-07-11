@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/orders/{Id}/tracking',
     tags: ['Order'],
+    summary: 'Insert tracking to order',
     description: 'Insert tracking to order by given Id',
     operationId: 'InsertOrderTracking',
     parameters: [

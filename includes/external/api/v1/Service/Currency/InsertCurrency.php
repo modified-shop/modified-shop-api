@@ -24,6 +24,7 @@ use OpenApi\Attributes as OA;
 #[OA\Post(
     path: '/api/v1/currencies',
     tags: ['Currency'],
+    summary: 'Insert single currency',
     description: 'Insert single currency',
     operationId: 'InsertCurrency',
     requestBody: new OA\RequestBody(
