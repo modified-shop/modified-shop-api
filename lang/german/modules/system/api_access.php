@@ -17,3 +17,6 @@ define('MODULE_API_ACCESS_TEXT_DESCRIPTION', 'API Zugriffsberechtigungen');
 
 define('MODULE_API_ACCESS_STATUS_TITLE', 'Status');
 define('MODULE_API_ACCESS_STATUS_DESC', 'Modul aktivieren');
+
+define('MODULE_API_ACCESS_WEBHOOKS_STATUS_TITLE', 'Webhooks');
+define('MODULE_API_ACCESS_WEBHOOKS_STATUS_DESC', 'Webhook-Benachrichtigungen aktivieren (Ereignisse wie neue Bestellungen werden an abonnierte URLs gesendet)');

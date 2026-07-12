@@ -14,6 +14,7 @@
 
 namespace api\v1\Action;
 
+use api\v1\Utility\Hydrator;
 use api\v1\Utility\LoggerHandler;
 use Psr\Log\LoggerInterface;
 use Exception;
@@ -32,6 +33,10 @@ require_once(DIR_WS_CLASSES . 'upload.php');
  */
 class BaseAction
 {
+    use Hydrator {
+        hydrate as private hydrateOptions;
+    }
+
     /**
      * @var mixed[]
      */
@@ -136,7 +141,7 @@ class BaseAction
     }
 
     /**
-     * Hydrate options from given array.
+     * Hydrate options from given array and clamp the pagination options.
      *
      * @param mixed[] $data
      *
@@ -144,16 +149,7 @@ class BaseAction
      */
     protected function hydrate(array $data = []): void
     {
-        foreach ($data as $key => $value) {
-            $key = str_replace(".", " ", $key);
-            $method = lcfirst(ucwords($key));
-            $method = str_replace(" ", "", $method);
-            if (method_exists($this, $method)) {
-                call_user_func([$this, $method], $value);
-            } else {
-                $this->options[$key] = $value;
-            }
-        }
+        $this->hydrateOptions($data);
 
         if ($this->options['limit'] > 50) {
             $this->options['limit'] = 50;

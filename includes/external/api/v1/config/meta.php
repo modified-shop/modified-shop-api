@@ -19,6 +19,7 @@ $app->get('/v1/swagger.json', function ($request, $response, $args) use ($settin
     $swagger = (new OpenApiGenerator())->generate([
         DIR_FS_EXTERNAL . 'api/v1/Service/',
         DIR_FS_EXTERNAL . 'api/v1/Auth/',
+        DIR_FS_EXTERNAL . 'api/v1/Webhook/',
     ]);
 
     $prefix = (string)preg_replace(
