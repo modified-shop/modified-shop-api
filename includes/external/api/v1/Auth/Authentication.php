@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace api\v1\Auth;
 
+use api\v1\Utility\Hydrator;
 use Closure;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -34,6 +35,7 @@ use Tuupola\Middleware\HttpBasicAuthentication\RuleInterface;
 final class Authentication implements MiddlewareInterface
 {
     use DoublePassTrait;
+    use Hydrator;
 
     /**
      * @var SplStack<RuleInterface>
@@ -194,27 +196,6 @@ final class Authentication implements MiddlewareInterface
         }
 
         return $response;
-    }
-
-    /**
-     * Hydrate options from given array.
-     *
-     * @param mixed[] $data
-     *
-     * @return void
-     */
-    protected function hydrate(array $data = []): void
-    {
-        foreach ($data as $key => $value) {
-            $key = str_replace(".", " ", $key);
-            $method = lcfirst(ucwords($key));
-            $method = str_replace(" ", "", $method);
-            if (method_exists($this, $method)) {
-                call_user_func([$this, $method], $value);
-            } else {
-                $this->options[$key] = $value;
-            }
-        }
     }
 
     /**

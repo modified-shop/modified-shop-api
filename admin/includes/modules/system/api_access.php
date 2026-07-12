@@ -14,9 +14,6 @@
 
 defined('_VALID_XTC') or die('Direct Access to this location is not allowed.');
 
-// include needed functions
-require_once(DIR_FS_INC . 'xtc_rand.inc.php');
-
 class api_access
 {
     public $code;
@@ -82,6 +79,7 @@ class api_access
             array('name' => 'Coupon',        'color' => '#aa6f73', 'sort_order' => 130),
             array('name' => 'Schema',        'color' => '#ffecef', 'sort_order' => 140),
             array('name' => 'Dhl',           'color' => '#b8b8d1', 'sort_order' => 150),
+            array('name' => 'Webhook',       'color' => '#9fb4c7', 'sort_order' => 160),
         );
 
         xtc_db_query("CREATE TABLE IF NOT EXISTS `api_access_groups` (
@@ -151,6 +149,8 @@ class api_access
     {
         xtc_db_query("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, set_function, date_added) VALUES ('MODULE_API_ACCESS_STATUS', 'true',  '6', '1', 'xtc_cfg_select_option(array(\'true\', \'false\'), ', now())");
         xtc_db_query("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, set_function, date_added) VALUES ('MODULE_API_ACCESS_SECRET', '" . bin2hex(random_bytes(32)) . "',  '6', '1', '', now())");
+        xtc_db_query("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, set_function, date_added) VALUES ('MODULE_API_ACCESS_WEBHOOKS_STATUS', 'false',  '6', '1', 'xtc_cfg_select_option(array(\'true\', \'false\'), ', now())");
+        xtc_db_query("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, set_function, date_added) VALUES ('MODULE_API_ACCESS_WEBHOOKS_CRON_SECRET', '" . bin2hex(random_bytes(32)) . "',  '6', '1', '', now())");
 
         xtc_db_query("CREATE TABLE IF NOT EXISTS `api_access` (
                       `customers_id` int(11) NOT NULL DEFAULT '0',
@@ -181,6 +181,55 @@ class api_access
                       PRIMARY KEY (`rl_key`)
                     )");
 
+        xtc_db_query("CREATE TABLE IF NOT EXISTS `api_events` (
+                      `event_id` int(11) NOT NULL AUTO_INCREMENT,
+                      `event_type` varchar(64) NOT NULL,
+                      `entity_id` int(11) NOT NULL DEFAULT '0',
+                      `payload` text NOT NULL,
+                      `fanned_out` tinyint(1) NOT NULL DEFAULT '0',
+                      `created_at` int(11) NOT NULL,
+                      PRIMARY KEY (`event_id`),
+                      KEY `idx_fanned_out` (`fanned_out`),
+                      KEY `idx_created_at` (`created_at`)
+                    )");
+
+        xtc_db_query("CREATE TABLE IF NOT EXISTS `api_subscriptions` (
+                      `subscription_id` int(11) NOT NULL AUTO_INCREMENT,
+                      `customers_id` int(11) NOT NULL,
+                      `transport` varchar(16) NOT NULL DEFAULT 'webhook',
+                      `url` varchar(2048) NOT NULL,
+                      `label` varchar(64) NOT NULL DEFAULT '',
+                      `secret` char(64) NOT NULL,
+                      `event_types` text NOT NULL,
+                      `active` tinyint(1) NOT NULL DEFAULT '1',
+                      `consecutive_failures` int(11) NOT NULL DEFAULT '0',
+                      `disabled_reason` varchar(255) NOT NULL DEFAULT '',
+                      `last_success_at` int(11) NOT NULL DEFAULT '0',
+                      `last_failure_at` int(11) NOT NULL DEFAULT '0',
+                      `created_at` int(11) NOT NULL,
+                      `updated_at` int(11) NOT NULL DEFAULT '0',
+                      PRIMARY KEY (`subscription_id`),
+                      KEY `idx_customers_id` (`customers_id`),
+                      KEY `idx_active` (`active`)
+                    )");
+
+        xtc_db_query("CREATE TABLE IF NOT EXISTS `api_event_deliveries` (
+                      `delivery_id` int(11) NOT NULL AUTO_INCREMENT,
+                      `event_id` int(11) NOT NULL,
+                      `subscription_id` int(11) NOT NULL,
+                      `delivery_uid` char(32) NOT NULL,
+                      `status` varchar(16) NOT NULL DEFAULT 'pending',
+                      `attempts` int(11) NOT NULL DEFAULT '0',
+                      `next_attempt_at` int(11) NOT NULL DEFAULT '0',
+                      `last_http_status` int(11) NOT NULL DEFAULT '0',
+                      `last_error` varchar(255) NOT NULL DEFAULT '',
+                      `created_at` int(11) NOT NULL,
+                      `updated_at` int(11) NOT NULL DEFAULT '0',
+                      PRIMARY KEY (`delivery_id`),
+                      UNIQUE KEY `idx_event_subscription` (`event_id`,`subscription_id`),
+                      KEY `idx_due` (`status`,`next_attempt_at`)
+                    )");
+
         $query_result = xtc_db_query("SHOW COLUMNS FROM `" . TABLE_ADMIN_ACCESS . "`");
         $db_table_rows = array();
         while ($row = xtc_db_fetch_array($query_result)) {
@@ -207,6 +256,7 @@ class api_access
     {
         return array(
             'MODULE_API_ACCESS_STATUS',
+            'MODULE_API_ACCESS_WEBHOOKS_STATUS',
         );
     }
 }

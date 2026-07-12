@@ -77,12 +77,13 @@ final class RateLimiter
 
         /* First failure for this key. */
         if ($row === null) {
-            xtc_db_perform('api_rate_limit', [
+            $sql_data_array = [
                 'rl_key' => $key,
                 'attempts' => 1,
                 'window_start' => $now,
                 'blocked_until' => 0,
-            ]);
+            ];
+            xtc_db_perform('api_rate_limit', $sql_data_array);
             return;
         }
 

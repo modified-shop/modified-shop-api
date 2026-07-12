@@ -63,6 +63,7 @@ use Exception;
 #[OA\Tag(name: 'Schema', description: 'Inspect database table schemas')]
 #[OA\Tag(name: 'Shipping', description: 'Manage shipping carriers and shipping status')]
 #[OA\Tag(name: 'Tags', description: 'Manage tags options and values')]
+#[OA\Tag(name: 'Webhook', description: 'Manage webhook subscriptions for event push notifications')]
 
 class BaseService
 {

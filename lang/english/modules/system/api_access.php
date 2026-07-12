@@ -17,3 +17,6 @@ define('MODULE_API_ACCESS_TEXT_DESCRIPTION', 'API Access');
 
 define('MODULE_API_ACCESS_STATUS_TITLE', 'Status');
 define('MODULE_API_ACCESS_STATUS_DESC', 'Module activate');
+
+define('MODULE_API_ACCESS_WEBHOOKS_STATUS_TITLE', 'Webhooks');
+define('MODULE_API_ACCESS_WEBHOOKS_STATUS_DESC', 'Enable webhook notifications (events like new orders are sent to subscribed URLs)');

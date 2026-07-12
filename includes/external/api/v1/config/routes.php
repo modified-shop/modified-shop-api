@@ -25,6 +25,9 @@ return function (App $app) {
     // meta
     include __DIR__ . '/meta.php';
 
+    // events
+    include __DIR__ . '/events.php';
+
     // routes
     $app->group(
         '/v1',
@@ -85,6 +88,9 @@ return function (App $app) {
 
             // schema
             include __DIR__ . '/schema.php';
+
+            // webhooks
+            include __DIR__ . '/webhooks.php';
         }
     )->add(JwtAuthentication::class);
 };
