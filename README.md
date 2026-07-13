@@ -19,6 +19,7 @@ The API lets merchants and developers connect modified to external systems - ERP
 
 - 🔐 JWT-based authentication with short-lived access tokens
 - 🧩 Resource-oriented endpoints for customers, products, categories, orders, manufacturers, attributes, tags, coupons, campaigns, shipping, countries, contents, newsletters, currencies, languages, configurations and DHL
+- 🔔 Signed webhooks that push shop events (e.g. new orders) to external systems, with automatic retries
 - 📜 Auto-generated OpenAPI/Swagger documentation with an interactive Swagger UI (`/api/v1/docs/`)
 - 🧱 Built on Slim 4 (PSR-7/PSR-15) with dependency injection
 - 👤 Per-customer, per-endpoint access management via the shop backend
@@ -129,6 +130,71 @@ All routes are served under `/api/v1/` (Slim group `/v1`). Resources cover full 
 | Coupons | `/coupons` |
 | DHL | `/dhl` |
 | Schema | `/schema/{table}` |
+| Webhooks | `/webhooks` (subscriptions, event types, delivery log) |
+
+## Webhooks
+
+Instead of polling, external systems (ERPs, apps) can subscribe to shop events and get notified by a signed HTTP POST. Currently available event type: `order.created` (fired when an order is placed in the checkout).
+
+### Setup (shop side)
+
+1. Enable webhooks in the module settings (**Modules → System → API Access → Webhooks: true**). Events are only recorded while this is enabled.
+2. **Set up a cron job** - this is required, without it nothing is ever delivered. The dispatcher endpoint is protected by a static secret, stored as `MODULE_API_ACCESS_WEBHOOKS_CRON_SECRET` in the shop's `configuration` table:
+   ```
+   */5 * * * * curl -fsS -H "X-Dispatch-Secret: <cron-secret>" https://your-shop.tld/api/v1/events/dispatch >/dev/null
+   ```
+   The secret may alternatively be passed as `?secret=` query parameter for cron panels that cannot set headers - prefer the header, query strings end up in server access logs. Hosts that can run PHP directly can use `includes/external/api/v1/bin/dispatch.php` instead. Concurrent runs are safe (a database lock makes extra calls no-ops).
+3. Grant the `Webhook*` permissions to the API account (**Customers → API Access**). Subscribing to an event additionally requires the matching read permission (e.g. `order.created` requires *OrderGetOrders*) - `GET /v1/webhooks/event_types` shows all event types and whether the account may subscribe.
+
+### Subscribing (consumer side)
+
+```bash
+curl -X POST https://your-shop.tld/api/v1/webhooks \
+  -H "Authorization: Bearer <JWT>" -H "Content-Type: application/json" \
+  -d '{"url": "https://erp.example.com/hooks/shop", "event_types": ["order.created"]}'
+```
+
+The URL must be `https` and publicly reachable. The response contains the signing `secret` **exactly once** - store it immediately, it cannot be retrieved again (create a new subscription if it is lost). Manage subscriptions via `GET/PUT/DELETE /v1/webhooks/{id}`; `GET /v1/webhooks/{id}/deliveries` shows the recent delivery attempts with status and errors for debugging.
+
+### Receiving and verifying deliveries
+
+Each delivery is a JSON POST with these headers:
+
+```
+X-Modified-Event: order.created
+X-Modified-Delivery: <unique id, stable across retries - use it to deduplicate>
+X-Modified-Timestamp: <unix time of this attempt>
+X-Modified-Signature: sha256=<hex digest>
+```
+
+```json
+{
+  "id": 123,
+  "event": "order.created",
+  "created": 1766999940,
+  "attempt": 1,
+  "data": { "orders_id": 4711 },
+  "links": { "order": "/api/v1/orders/4711" }
+}
+```
+
+Payloads are deliberately thin (ids only) - fetch the full entity through the regular REST API using the `links`. Verify every delivery before processing it:
+
+```php
+$expected = 'sha256=' . hash_hmac(
+    'sha256',
+    $_SERVER['HTTP_X_MODIFIED_TIMESTAMP'] . '.' . file_get_contents('php://input'),
+    $secret
+);
+$valid = hash_equals($expected, $_SERVER['HTTP_X_MODIFIED_SIGNATURE'] ?? '')
+    && abs(time() - (int)$_SERVER['HTTP_X_MODIFIED_TIMESTAMP']) < 300;
+```
+
+Respond with any `2xx` status within 10 seconds to acknowledge.
+
+### Retries and cleanup
+
+Failed deliveries are retried up to 6 times with increasing backoff (2 min → 10 min → 1 h → 6 h → 24 h). After 10 consecutively failed deliveries a subscription is disabled automatically (`disabled_reason` says so); fix the receiver and re-enable it via `PUT /v1/webhooks/{id}` with `{"active": true}`. Processed events and delivery records are cleaned up automatically after ~30 days.
 
 ## Documentation
 

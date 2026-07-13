@@ -12,6 +12,8 @@ window.onload = function() {
     dom_id: '#swagger-ui',
     deepLinking: true,
     persistAuthorization: true,
+    // Disable the validator.swagger.io badge
+    validatorUrl: null,
     presets: [
       SwaggerUIBundle.presets.apis,
       SwaggerUIStandalonePreset.slice(1)
