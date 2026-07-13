@@ -96,6 +96,12 @@ final class Dispatcher
             return ['locked' => true];
         }
 
+        /* Worst case is MAX_RUNTIME_SECONDS plus one full request timeout; */
+        /* make sure a tight hosting max_execution_time cannot kill the run */
+        /* mid-delivery (the lock would auto-release, but the attempt would */
+        /* not be recorded). Suppressed: some hosts disable set_time_limit. */
+        @set_time_limit(self::MAX_RUNTIME_SECONDS + (2 * self::REQUEST_TIMEOUT_SECONDS) + 30);
+
         $started = microtime(true);
         try {
             $this->fanOut();

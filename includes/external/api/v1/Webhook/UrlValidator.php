@@ -51,7 +51,6 @@ final class UrlValidator
             || str_ends_with($host, '.localhost')
             || str_ends_with($host, '.local')
             || str_ends_with($host, '.internal')
-            || str_ends_with($host, '.site')
         ) {
             return 'url host is not allowed';
         }
