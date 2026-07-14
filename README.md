@@ -36,7 +36,7 @@ The API lets merchants and developers connect modified to external systems - ERP
 ## Requirements
 
 - modified eCommerce Shopsoftware **3.2.0** or higher
-- PHP **8.4** or higher
+- PHP **8.2** or higher
 
 The minimum shop version is enforced at runtime and reported by the [`/v1/version`](#version) endpoint. Both the API version and the minimum shop version are defined in one place in the API (`version` / `min_shop_version` in `config/settings.php`).
 
